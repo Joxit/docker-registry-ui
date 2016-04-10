@@ -1,0 +1,72 @@
+<!--
+ Copyright (C) 2016  Jones Magloire @Joxit
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+ 
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<LINK href="node_modules/dialog-polyfill/dialog-polyfill.css" rel="stylesheet" type="text/css">
+<LINK href="node_modules/material-design-lite/dist/material.min.css" rel="stylesheet" type="text/css">
+<LINK href="node_modules/leaflet/dist/leaflet.css" rel="stylesheet" type="text/css">
+<LINK href="node_modules/material-design-icons/iconfont/material-icons.css" rel="stylesheet" type="text/css">
+<LINK href="style.css" rel="stylesheet" type="text/css">
+<title>Docker Registry UI</title>
+</head>
+<body>
+ <!-- Always shows a header, even in smaller screens. -->
+ <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+   <div class="mdl-layout__header-row">
+    <!-- Title -->
+    <span class="mdl-layout-title">Docker Registry UI</span>
+    <!-- Add spacer, to align navigation to the right -->
+    <div class="mdl-layout-spacer"></div>
+    <!-- Navigation. We hide it in small screens. -->
+    <nav class="mdl-navigation mdl-layout--large-screen-only">
+     <a class="mdl-navigation__link" href="">Name spaces</a><a class="mdl-navigation__link" href="index.html">Home</a>
+    </nav>
+   </div>
+  </header>
+  <div class="mdl-layout__drawer">
+   <span class="mdl-layout-title">Docker Registry UI</span>
+   <nav class="mdl-navigation">
+    <a class="mdl-navigation__link" href="">Home</a>
+    <a class="mdl-navigation__link" href="">Name spaces</a>
+    <a class="mdl-navigation__link" href="">Change URL</a>
+   </nav>
+  </div>
+  <main class="mdl-layout__content">
+  <div class="page-content">
+   <catalog></catalog>
+  </div>
+  </main>
+  <footer class="mdl-mini-footer">
+   <div class="mdl-mini-footer__left-section">
+    <div class="mdl-logo">Docker Registry UI</div>
+    <ul class="mdl-mini-footer__link-list">
+     <li><a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a></li>
+     <li><a href="https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE">Privacy &amp; Terms</a></li>
+    </ul>
+   </div>
+  </footer>
+ </div>
+ <script src="catalog.tag" type="riot/tag"></script>
+ <script src="node_modules/riot/riot+compiler.min.js"></script>
+ <script src="node_modules/dialog-polyfill/dialog-polyfill.js"></script>
+ <script src="node_modules/material-design-lite/dist/material.min.js"></script>
+ <script src="script.js"></script>
+</body>
+</html>

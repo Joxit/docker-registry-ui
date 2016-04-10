@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "material-design-lite": "^1.1",
+    "material-design-icons": "^2.2",
+    "dialog-polyfill": "^0.4",
+    "riot": "^2.3"
+  }
+}

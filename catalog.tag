@@ -23,7 +23,7 @@
     </div>
     <li class="mdl-list__item" each="{ item in catalog.repositories }">
       <span class="mdl-list__item-primary-content">
-       { item }
+       <i class="material-icons mdl-list__item-icon">insert_link</i> { item }
       </span>
     </li>
   </ul>

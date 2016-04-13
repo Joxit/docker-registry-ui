@@ -15,34 +15,32 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog>
- <div class="catalog">
-  <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
-  <ul class="mdl-list">
-    <div class="mdl-card__title">
-     <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
-    </div>
-    <li class="mdl-list__item" each="{ item in catalog.repositories }">
-      <span class="mdl-list__item-primary-content">
-       <i class="material-icons mdl-list__item-icon">insert_link</i> { item }
-      </span>
-    </li>
-  </ul>
+<!-- Begin of tag -->
+<div class="catalog">
+ <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
+  <div class="mdl-card__title">
+   <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
   </div>
+  <div id="catalog-spinner" class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
+  <ul class="mdl-list">
+   <li class="mdl-list__item" each="{ item in catalog.repositories }"><span class="mdl-list__item-primary-content">
+     <i class="material-icons mdl-list__item-icon">insert_link</i> { item }
+   </span></li>
+  </ul>
  </div>
-
- <script>
-catalog.instance = this;
-var oReq = new XMLHttpRequest();
-oReq.addEventListener("load", function () {
-  catalog.repositories = JSON.parse(this.responseText).repositories;
+</div>
+<script>
+  catalog.instance = this;
+  var oReq = new XMLHttpRequest();
+  oReq.addEventListener("load", function () {
+    catalog.repositories = JSON.parse(this.responseText).repositories;
+    document.querySelector("#catalog-spinner").style.display = 'none';
+    catalog.instance.update();
+  });
+  oReq.open("GET", registryUI.url() + "/v/_catalog", true);
+  oReq.withCredentials = false;
+  oReq.send();
   catalog.instance.update();
-});
-oReq.open("GET", registryUI.url() + "/v2/_catalog", true);
-oReq.setRequestHeader('Origin', '*');
-oReq.withCredentials = false;
-oReq.send();
-catalog.inst
-this.update();
- </script>
-
+</script> 
+<!-- End of tag -->
 </catalog>

@@ -21,23 +21,51 @@
   <div class="mdl-card__title">
    <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
   </div>
-  <div id="catalog-spinner" class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
+  <div id="catalog-spinner" style="{ catalog.loadend ? 'display:none;': '' }"
+       class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
   <ul class="mdl-list">
    <li class="mdl-list__item" each="{ item in catalog.repositories }"><span class="mdl-list__item-primary-content">
      <i class="material-icons mdl-list__item-icon">insert_link</i> { item }
    </span></li>
   </ul>
+  </div>
+  <div id="error-snackbar" class="mdl-js-snackbar mdl-snackbar">
+   <div class="mdl-snackbar__text"></div>
+   <button class="mdl-snackbar__action" type="button"></button>
+  </div>
  </div>
-</div>
-<script>
+
+ <script>
   catalog.instance = this;
   var oReq = new XMLHttpRequest();
+  catalog.createSnackbar = function (msg) {
+    var snackbar = document.querySelector('#error-snackbar');
+    catalog.error = msg;
+    var data = {
+      message: catalog.error,
+      timeout: 100000,
+      actionHandler: function(){
+        snackbar.classList.remove('mdl-snackbar--active');
+      },
+     actionText: 'Undo'
+    };
+    snackbar.MaterialSnackbar.showSnackbar(data);
+  }
   oReq.addEventListener("load", function () {
-    catalog.repositories = JSON.parse(this.responseText).repositories;
-    document.querySelector("#catalog-spinner").style.display = 'none';
+    if (this.status == 200) {
+      catalog.repositories = JSON.parse(this.responseText).repositories;
+    } else {
+      catalog.createSnackbar(this.responseText);
+    }
+  });
+  oReq.addEventListener("error", function () {
+    catalog.createSnackbar('An error occured');
+  });
+  oReq.addEventListener("loadend", function () {
+    catalog.loadend = true;
     catalog.instance.update();
   });
-  oReq.open("GET", registryUI.url() + "/v/_catalog", true);
+  oReq.open("GET", registryUI.url() + "/v2/_catalog");
   oReq.withCredentials = false;
   oReq.send();
   catalog.instance.update();

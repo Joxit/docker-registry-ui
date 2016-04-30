@@ -29,7 +29,7 @@
    </span></li>
   </ul>
   </div>
-  <div id="error-snackbar" class="mdl-js-snackbar mdl-snackbar">
+  <div id="error-snackbar" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-js-snackbar mdl-snackbar">
    <div class="mdl-snackbar__text"></div>
    <button class="mdl-snackbar__action" type="button"></button>
   </div>
@@ -50,22 +50,24 @@
      actionText: 'Undo'
     };
     snackbar.MaterialSnackbar.showSnackbar(data);
-  }
-  oReq.addEventListener("load", function () {
+  };
+  oReq.addEventListener('load', function () {
     if (this.status == 200) {
       catalog.repositories = JSON.parse(this.responseText).repositories;
+    } else if (this.status == 404) {
+      catalog.createSnackbar('Server not found');
     } else {
       catalog.createSnackbar(this.responseText);
     }
   });
-  oReq.addEventListener("error", function () {
+  oReq.addEventListener('error', function () {
     catalog.createSnackbar('An error occured');
   });
-  oReq.addEventListener("loadend", function () {
+  oReq.addEventListener('loadend', function () {
     catalog.loadend = true;
     catalog.instance.update();
   });
-  oReq.open("GET", registryUI.url() + "/v2/_catalog");
+  oReq.open('GET', registryUI.url() + '/v2/_catalog');
   oReq.withCredentials = false;
   oReq.send();
   catalog.instance.update();

@@ -19,6 +19,7 @@
 <div class="taglist" if="{ registryUI.content == 'taglist' }">
  <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
   <div class="mdl-card__title">
+   <a href="#" onclick="catalog.display();"><i class="material-icons mdl-list__item-icon">arrow_back</i></a>
    <h2 class="mdl-card__title-text">Tags of { registryUI.url() + '/' + registryUI.taglist.name  }</h2>
   </div>
   <div id="taglist-spinner" style="{ registryUI.taglist.loadend ? 'display:none;': '' }"

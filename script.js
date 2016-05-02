@@ -20,6 +20,6 @@ registryUI.url = function () {
 }
 var catalog = {};
 registryUI.taglist = {};
-registryUI.content = 'catalog';
 riot.mount('catalog');
 riot.mount('taglist');
+

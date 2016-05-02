@@ -16,7 +16,7 @@
 -->
 <catalog>
 <!-- Begin of tag -->
-<div class="catalog">
+<div class="catalog" if="{ registryUI.content == 'catalog' }">
  <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
   <div class="mdl-card__title">
    <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
@@ -25,7 +25,7 @@
        class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
   <ul class="mdl-list">
    <li class="mdl-list__item" each="{ item in catalog.repositories }"><span class="mdl-list__item-primary-content">
-     <i class="material-icons mdl-list__item-icon">insert_link</i> { item }
+     <a href="#" onclick="registryUI.taglist.display('{item}');"><i class="material-icons mdl-list__item-icon">insert_link</i></a> { item }
    </span></li>
   </ul>
   </div>

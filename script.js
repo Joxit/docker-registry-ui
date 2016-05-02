@@ -19,6 +19,7 @@ registryUI.url = function () {
   return localStorage.getItem('registryServer');
 }
 var catalog = {};
-
-
+registryUI.taglist = {};
+registryUI.content = 'catalog';
 riot.mount('catalog');
+riot.mount('taglist');

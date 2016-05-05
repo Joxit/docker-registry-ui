@@ -14,18 +14,19 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<catalog>
+<taglist>
 <!-- Begin of tag -->
-<div class="catalog" if="{ registryUI.content == 'catalog' }">
+<div class="taglist" if="{ registryUI.content == 'taglist' }">
  <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
   <div class="mdl-card__title">
-   <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
+   <a href="#" onclick="catalog.display();"><i class="material-icons mdl-list__item-icon">arrow_back</i></a>
+   <h2 class="mdl-card__title-text">Tags of { registryUI.url() + '/' + registryUI.taglist.name  }</h2>
   </div>
-  <div id="catalog-spinner" style="{ catalog.loadend ? 'display:none;': '' }"
+  <div id="taglist-spinner" style="{ registryUI.taglist.loadend ? 'display:none;': '' }"
        class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
   <ul class="mdl-list">
-   <li class="mdl-list__item" each="{ item in catalog.repositories }"><span class="mdl-list__item-primary-content">
-     <a href="#" onclick="registryUI.taglist.display('{item}');"><i class="material-icons mdl-list__item-icon">insert_link</i></a> { item }
+   <li class="mdl-list__item" each="{ item in registryUI.taglist.tags }"><span class="mdl-list__item-primary-content">
+     { item }
    </span></li>
   </ul>
   </div>
@@ -36,15 +37,17 @@
  </div>
 
  <script>
-  catalog.instance = this;
-  catalog.display = function () {
-    registryUI.content = 'catalog';
+  registryUI.taglist.instance = this;
+  registryUI.taglist.instance.update();
+  registryUI.taglist.display = function (name){
+    registryUI.content = 'taglist';
     var oReq = new XMLHttpRequest();
-    catalog.createSnackbar = function (msg) {
+    registryUI.taglist.name = name;
+    registryUI.taglist.createSnackbar = function (msg) {
       var snackbar = document.querySelector('#error-snackbar');
-      catalog.error = msg;
+      registryUI.taglist.error = msg;
       var data = {
-        message: catalog.error,
+        message: registryUI.taglist.error,
         timeout: 100000,
         actionHandler: function(){
           snackbar.classList.remove('mdl-snackbar--active');
@@ -55,26 +58,25 @@
     };
     oReq.addEventListener('load', function () {
       if (this.status == 200) {
-        catalog.repositories = JSON.parse(this.responseText).repositories;
+        registryUI.taglist.tags = JSON.parse(this.responseText).tags;
       } else if (this.status == 404) {
-        catalog.createSnackbar('Server not found');
+        registryUI.taglist.createSnackbar('Server not found');
       } else {
-        catalog.createSnackbar(this.responseText);
+        registryUI.taglist.createSnackbar(this.responseText);
       }
     });
     oReq.addEventListener('error', function () {
-      catalog.createSnackbar('An error occured');
+      registryUI.taglist.createSnackbar('An error occured');
     });
     oReq.addEventListener('loadend', function () {
-      catalog.loadend = true;
-      catalog.instance.update();
+      registryUI.taglist.loadend = true;
+      registryUI.taglist.instance.update();
     });
-    oReq.open('GET', registryUI.url() + '/v2/_catalog');
+    oReq.open('GET', registryUI.url() + '/v2/' + name + '/tags/list');
     oReq.withCredentials = false;
     oReq.send();
     riot.update();
-  };
-  catalog.display();
+  }
 </script> 
 <!-- End of tag -->
-</catalog>
+</taglist>

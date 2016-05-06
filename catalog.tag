@@ -24,9 +24,11 @@
   <div id="catalog-spinner" style="{ catalog.loadend ? 'display:none;': '' }"
        class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
   <ul class="mdl-list">
-   <li class="mdl-list__item" each="{ item in catalog.repositories }"><span class="mdl-list__item-primary-content">
-     <a href="#" onclick="registryUI.taglist.display('{item}');"><i class="material-icons mdl-list__item-icon">insert_link</i></a> { item }
-   </span></li>
+   <li class="mdl-list__item mdl-menu__item" style="opacity: 1;" each="{ item in catalog.repositories }" onclick="registryUI.taglist.display('{item}');">
+    <span class="mdl-list__item-primary-content">
+     <i class="material-icons mdl-list__item-icon">send</i> { item }
+    </span>
+   </li>
   </ul>
   </div>
   <div id="error-snackbar" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-js-snackbar mdl-snackbar">

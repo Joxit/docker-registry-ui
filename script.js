@@ -22,4 +22,4 @@ var catalog = {};
 registryUI.taglist = {};
 riot.mount('catalog');
 riot.mount('taglist');
-
+riot.mount('menu');

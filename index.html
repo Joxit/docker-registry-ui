@@ -32,22 +32,9 @@
    <div class="mdl-layout__header-row">
     <!-- Title -->
     <span class="mdl-layout-title">Docker Registry UI</span>
-    <!-- Add spacer, to align navigation to the right -->
-    <div class="mdl-layout-spacer"></div>
-    <!-- Navigation. We hide it in small screens. -->
-    <nav class="mdl-navigation mdl-layout--large-screen-only">
-     <a class="mdl-navigation__link" href="">Name spaces</a><a class="mdl-navigation__link" href="index.html">Home</a>
-    </nav>
+    <menu></menu>
    </div>
   </header>
-  <div class="mdl-layout__drawer">
-   <span class="mdl-layout-title">Docker Registry UI</span>
-   <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="">Home</a>
-    <a class="mdl-navigation__link" href="">Name spaces</a>
-    <a class="mdl-navigation__link" href="">Change URL</a>
-   </nav>
-  </div>
   <main class="mdl-layout__content">
   <div class="page-content">
    <catalog></catalog>
@@ -66,6 +53,7 @@
  </div>
  <script src="catalog.tag" type="riot/tag"></script>
  <script src="taglist.tag" type="riot/tag"></script>
+ <script src="menu.tag" type="riot/tag"></script>
  <script src="node_modules/riot/riot+compiler.min.js"></script>
  <script src="node_modules/dialog-polyfill/dialog-polyfill.js"></script>
  <script src="node_modules/material-design-lite/dist/material.min.js"></script>

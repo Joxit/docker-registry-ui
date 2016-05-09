@@ -16,7 +16,7 @@
 -->
 <taglist>
 <!-- Begin of tag -->
-<div class="taglist" if="{ registryUI.content == 'taglist' }">
+<div id="taglist-tag" class="taglist" if="{ registryUI.content == 'taglist' }">
  <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
   <div class="mdl-card__title">
    <a href="#" onclick="catalog.display();"><i class="material-icons mdl-list__item-icon">arrow_back</i></a>
@@ -24,7 +24,7 @@
   </div>
   <div id="taglist-spinner" style="{ registryUI.taglist.loadend ? 'display:none;': '' }"
        class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
-   <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-data-table--selectable full-table" style="border: none;">
+   <table class="mdl-data-table mdl-js-data-table full-table" style="border: none;">
     <thead>
      <tr>
       <th class="mdl-data-table__cell--non-numeric">Repository</th>
@@ -48,6 +48,9 @@
  <script>
   registryUI.taglist.instance = this;
   registryUI.taglist.instance.update();
+  this.on('updated', function() {
+    componentHandler.upgradeElements(this['taglist-tag']);
+  })
   registryUI.taglist.display = function (name){
     registryUI.content = 'taglist';
     var oReq = new XMLHttpRequest();
@@ -87,7 +90,6 @@
     riot.update();
   }
   registryUI.taglist.reverse = function (th){
-    console.log(th)
     if (th.className == 'mdl-data-table__header--sorted-ascending') {
       th.className = 'mdl-data-table__header--sorted-descending';
     } else {

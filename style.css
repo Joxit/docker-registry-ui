@@ -16,30 +16,30 @@
  */
  
 html > body {
-    font-family: 'Roboto','Helvetica','Arial',sans-serif !important;
+  font-family: 'Roboto','Helvetica','Arial',sans-serif !important;
 }
 
 .mdl-mini-footer {
- padding-top: 8px;
- padding-bottom: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .catalog, .taglist {
- padding: 16px;
+  padding: 16px;
 }
 
 .section-centerd {
- margin: auto;
+  margin: auto;
 }
 .mdl-data-table th {
- font-size: 20px;
+  font-size: 18px;
 }
 
 .mdl-data-table td {
- font-size: 18px;
+  font-size: 16px;
 }
 
 .full-table {
- width: 100%;
- border: none;
+  width: 100%;
+  border: none;
 }

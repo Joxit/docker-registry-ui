@@ -16,7 +16,7 @@
 -->
 <taglist>
 <!-- Begin of tag -->
-<div class="taglist" if="{ registryUI.content == 'taglist' }">
+<div id="taglist-tag" class="taglist" if="{ registryUI.content == 'taglist' }">
  <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
   <div class="mdl-card__title">
    <a href="#" onclick="catalog.display();"><i class="material-icons mdl-list__item-icon">arrow_back</i></a>
@@ -24,11 +24,20 @@
   </div>
   <div id="taglist-spinner" style="{ registryUI.taglist.loadend ? 'display:none;': '' }"
        class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
-  <ul class="mdl-list">
-   <li class="mdl-list__item" each="{ item in registryUI.taglist.tags }"><span class="mdl-list__item-primary-content">
-     { item }
-   </span></li>
-  </ul>
+   <table class="mdl-data-table mdl-js-data-table full-table" style="border: none;">
+    <thead>
+     <tr>
+      <th class="mdl-data-table__cell--non-numeric">Repository</th>
+      <th class="mdl-data-table__header--sorted-ascending" onclick="registryUI.taglist.reverse(this);">Tag</th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr each="{ item in registryUI.taglist.tags }">
+      <td class="mdl-data-table__cell--non-numeric">{ registryUI.taglist.name }</td>
+      <td>{ item }</td>
+     </tr>
+    </tbody>
+   </table>
   </div>
   <div id="error-snackbar" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-js-snackbar mdl-snackbar">
    <div class="mdl-snackbar__text"></div>
@@ -39,6 +48,9 @@
  <script>
   registryUI.taglist.instance = this;
   registryUI.taglist.instance.update();
+  this.on('updated', function() {
+    componentHandler.upgradeElements(this['taglist-tag']);
+  })
   registryUI.taglist.display = function (name){
     registryUI.content = 'taglist';
     var oReq = new XMLHttpRequest();
@@ -58,7 +70,7 @@
     };
     oReq.addEventListener('load', function () {
       if (this.status == 200) {
-        registryUI.taglist.tags = JSON.parse(this.responseText).tags;
+        registryUI.taglist.tags = JSON.parse(this.responseText).tags.sort();
       } else if (this.status == 404) {
         registryUI.taglist.createSnackbar('Server not found');
       } else {
@@ -77,6 +89,15 @@
     oReq.send();
     riot.update();
   }
+  registryUI.taglist.reverse = function (th){
+    if (th.className == 'mdl-data-table__header--sorted-ascending') {
+      th.className = 'mdl-data-table__header--sorted-descending';
+    } else {
+      th.className = 'mdl-data-table__header--sorted-ascending';
+    }
+    registryUI.taglist.tags.reverse();
+    registryUI.taglist.instance.update();
+  };
 </script> 
 <!-- End of tag -->
 </taglist>

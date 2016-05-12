@@ -20,7 +20,7 @@
   <i class="material-icons">more_vert</i>
  </button>
  <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="registry-menu">
-  <li class="mdl-menu__item">Add URL</li>
+  <li class="mdl-menu__item" onclick="registryUI.addTag.show();">Add URL</li>
   <li class="mdl-menu__item" onclick="registryUI.changeTag.show();">Change URL</li>
  </ul>
 </div>

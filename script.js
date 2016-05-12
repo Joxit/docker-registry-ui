@@ -22,10 +22,20 @@ registryUI.getRegistryServer = function (i) {
   try {
     var res = JSON.parse(localStorage.getItem('registryServer'));
     if (res instanceof Array) {
-      return i ? res[i] : res;
+      return (!isNaN(i)) ? res[i] : res;
     }
   } catch (e) {}
-  return i ? '' : [];
+  return (!isNaN(i)) ? '' : [];
+}
+registryUI.addServer = function (url) {
+  var registryServer = registryUI.getRegistryServer();
+  url = url.trim();
+  var index = registryServer.indexOf(url);
+  if (index != -1) {
+    return;
+  }
+  registryServer.push(url);
+  localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
 registryUI.changeServer = function (url) {
   var registryServer = registryUI.getRegistryServer();
@@ -44,5 +54,6 @@ registryUI.taglist = {};
 
 riot.mount('catalog');
 riot.mount('taglist');
+riot.mount('add');
 riot.mount('change');
 riot.mount('menu');

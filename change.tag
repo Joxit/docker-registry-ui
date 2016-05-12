@@ -20,7 +20,7 @@
 <div class="mdl-dialog__content">
  <div class="mdl-textfield mdl-js-textfield">
   <select class="mdl-textfield__input mdl-textfield__select" name="server-list" id="server-list">
-   <option each="{ url in registryUI.url() }" value={url}>{url}</option>
+   <option each="{ url in registryUI.getRegistryServer() }" value={url}>{url}</option>
   </select>
  </div>
 </div>
@@ -35,16 +35,21 @@ this.on('updated', function () {
   componentHandler.upgradeElements(this['change-server-dialog']);
   registryUI.changeTag.dialog = registryUI.changeTag.dialog
       || document.querySelector('#change-server-dialog');
-  registryUI.changeTag.tileServerList = registryUI.changeTag.tileServerList
+  registryUI.changeTag.serverList = registryUI.changeTag.serverList
       || registryUI.changeTag.dialog.querySelector('#server-list');
   if (!registryUI.changeTag.dialog.showModal) {
     dialogPolyfill.registerDialog(registryUI.changeTag.dialog);
   }
 });
 registryUI.changeTag.show = function() {
+  registryUI.changeTag.update();
   registryUI.changeTag.dialog.showModal();
 };
 registryUI.changeTag.change = function() {
+  if (registryUI.changeTag.serverList.value && registryUI.changeTag.serverList.value.length > 0) {
+    registryUI.changeServer(registryUI.changeTag.serverList.value);
+  }
+  registryUI.changeTag.serverList.value = '';
   registryUI.changeTag.dialog.close();
 };
 registryUI.changeTag.close = function() {

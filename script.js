@@ -16,10 +16,44 @@
  */
 var registryUI = {}
 registryUI.url = function () {
-  return localStorage.getItem('registryServer');
+  return registryUI.getRegistryServer(0);
+}
+registryUI.getRegistryServer = function (i) {
+  try {
+    var res = JSON.parse(localStorage.getItem('registryServer'));
+    if (res instanceof Array) {
+      return (!isNaN(i)) ? res[i] : res;
+    }
+  } catch (e) {}
+  return (!isNaN(i)) ? '' : [];
+}
+registryUI.addServer = function (url) {
+  var registryServer = registryUI.getRegistryServer();
+  url = url.trim();
+  var index = registryServer.indexOf(url);
+  if (index != -1) {
+    return;
+  }
+  registryServer.push(url);
+  localStorage.setItem('registryServer', JSON.stringify(registryServer));
+}
+registryUI.changeServer = function (url) {
+  var registryServer = registryUI.getRegistryServer();
+  url = url.trim();
+  var index = registryServer.indexOf(url);
+  if (index == -1) {
+    return;
+  }
+  registryServer.splice(index, 1);
+  registryServer = [ url ].concat(registryServer);
+  registryUI.registryServer.servers = registryServer;
+  localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
 var catalog = {};
 registryUI.taglist = {};
+
 riot.mount('catalog');
 riot.mount('taglist');
-
+riot.mount('add');
+riot.mount('change');
+riot.mount('menu');

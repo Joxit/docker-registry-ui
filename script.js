@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 var registryUI = {}
-registryUI.url = function () {
+registryUI.url = function() {
   return registryUI.getRegistryServer(0);
 }
-registryUI.getRegistryServer = function (i) {
+registryUI.getRegistryServer = function(i) {
   try {
     var res = JSON.parse(localStorage.getItem('registryServer'));
     if (res instanceof Array) {
@@ -27,7 +27,7 @@ registryUI.getRegistryServer = function (i) {
   } catch (e) {}
   return (!isNaN(i)) ? '' : [];
 }
-registryUI.addServer = function (url) {
+registryUI.addServer = function(url) {
   var registryServer = registryUI.getRegistryServer();
   url = url.trim();
   var index = registryServer.indexOf(url);
@@ -37,7 +37,7 @@ registryUI.addServer = function (url) {
   registryServer.push(url);
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
-registryUI.changeServer = function (url) {
+registryUI.changeServer = function(url) {
   var registryServer = registryUI.getRegistryServer();
   url = url.trim();
   var index = registryServer.indexOf(url);
@@ -45,7 +45,7 @@ registryUI.changeServer = function (url) {
     return;
   }
   registryServer.splice(index, 1);
-  registryServer = [ url ].concat(registryServer);
+  registryServer = [url].concat(registryServer);
   registryUI.registryServer.servers = registryServer;
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }

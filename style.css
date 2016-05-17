@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 html > body {
-  font-family: 'Roboto','Helvetica','Arial',sans-serif !important;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
 
 .mdl-mini-footer {
@@ -31,6 +31,7 @@ html > body {
 .section-centerd {
   margin: auto;
 }
+
 .mdl-data-table th {
   font-size: 18px;
 }

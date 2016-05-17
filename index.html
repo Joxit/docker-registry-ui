@@ -1,67 +1,70 @@
 <!--
  Copyright (C) 2016  Jones Magloire @Joxit
- 
+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Affero General Public License for more details.
- 
+
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<LINK href="node_modules/dialog-polyfill/dialog-polyfill.css" rel="stylesheet" type="text/css">
-<LINK href="node_modules/material-design-lite/dist/material.min.css" rel="stylesheet" type="text/css">
-<LINK href="node_modules/leaflet/dist/leaflet.css" rel="stylesheet" type="text/css">
-<LINK href="node_modules/material-design-icons/iconfont/material-icons.css" rel="stylesheet" type="text/css">
-<LINK href="style.css" rel="stylesheet" type="text/css">
-<LINK href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet" type="text/css">
-<title>Docker Registry UI</title>
+  <meta charset="UTF-8">
+  <LINK href="node_modules/dialog-polyfill/dialog-polyfill.css" rel="stylesheet" type="text/css">
+  <LINK href="node_modules/material-design-lite/dist/material.min.css" rel="stylesheet" type="text/css">
+  <LINK href="node_modules/leaflet/dist/leaflet.css" rel="stylesheet" type="text/css">
+  <LINK href="node_modules/material-design-icons/iconfont/material-icons.css" rel="stylesheet" type="text/css">
+  <LINK href="style.css" rel="stylesheet" type="text/css">
+  <LINK href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet" type="text/css">
+  <title>Docker Registry UI</title>
 </head>
+
 <body>
- <!-- Always shows a header, even in smaller screens. -->
- <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <header class="mdl-layout__header">
-   <div class="mdl-layout__header-row">
-    <!-- Title -->
-    <span class="mdl-layout-title">Docker Registry UI</span>
-    <menu></menu>
-   </div>
-  </header>
-  <main class="mdl-layout__content">
-  <div class="page-content">
-   <catalog></catalog>
-   <taglist></taglist>
+  <!-- Always shows a header, even in smaller screens. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Docker Registry UI</span>
+        <menu></menu>
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <catalog></catalog>
+        <taglist></taglist>
+      </div>
+    </main>
+    <change></change>
+    <add></add>
+    <footer class="mdl-mini-footer">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">Docker Registry UI</div>
+        <ul class="mdl-mini-footer__link-list">
+          <li><a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a></li>
+          <li><a href="https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE">Privacy &amp; Terms</a></li>
+        </ul>
+      </div>
+    </footer>
   </div>
-  </main>
-  <change></change>
-  <add></add>
-  <footer class="mdl-mini-footer">
-   <div class="mdl-mini-footer__left-section">
-    <div class="mdl-logo">Docker Registry UI</div>
-    <ul class="mdl-mini-footer__link-list">
-     <li><a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a></li>
-     <li><a href="https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE">Privacy &amp; Terms</a></li>
-    </ul>
-   </div>
-  </footer>
- </div>
- <script src="catalog.tag" type="riot/tag"></script>
- <script src="taglist.tag" type="riot/tag"></script>
- <script src="add.tag" type="riot/tag"></script>
- <script src="change.tag" type="riot/tag"></script>
- <script src="menu.tag" type="riot/tag"></script>
- <script src="node_modules/riot/riot+compiler.min.js"></script>
- <script src="node_modules/dialog-polyfill/dialog-polyfill.js"></script>
- <script src="node_modules/material-design-lite/dist/material.min.js"></script>
- <script src="script.js"></script>
+  <script src="catalog.tag" type="riot/tag"></script>
+  <script src="taglist.tag" type="riot/tag"></script>
+  <script src="add.tag" type="riot/tag"></script>
+  <script src="change.tag" type="riot/tag"></script>
+  <script src="menu.tag" type="riot/tag"></script>
+  <script src="node_modules/riot/riot+compiler.min.js"></script>
+  <script src="node_modules/dialog-polyfill/dialog-polyfill.js"></script>
+  <script src="node_modules/material-design-lite/dist/material.min.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>

@@ -16,14 +16,14 @@
 -->
 <catalog>
   <!-- Begin of tag -->
-  <div id="catalog-tag" class="catalog" if="{ registryUI.content == 'catalog' }">
+  <div id="catalog-tag" class="catalog">
     <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
       </div>
       <div id="catalog-spinner" style="{ catalog.loadend ? 'display:none;': '' }" class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
       <ul class="mdl-list">
-        <li class="mdl-list__item mdl-menu__item" style="opacity: 1;" each="{ item in catalog.repositories }" onclick="registryUI.taglist.display('{item}');">
+        <li class="mdl-list__item mdl-menu__item" style="opacity: 1;" each="{ item in catalog.repositories }" onclick="catalog.go('{item}');">
           <span class="mdl-list__item-primary-content">
             <i class="material-icons mdl-list__item-icon">send</i>
             { item }
@@ -39,6 +39,7 @@
 
   <script>
     catalog.instance = this;
+    this.mixin('rg.router');
     catalog.display = function () {
       registryUI.content = 'catalog';
       var oReq = new XMLHttpRequest();
@@ -74,11 +75,17 @@
       oReq.open('GET', registryUI.url() + '/v2/_catalog');
       oReq.withCredentials = false;
       oReq.send();
-      riot.update();
     };
     this.on('updated', function () {
       componentHandler.upgradeElements(this['catalog-tag']);
     });
+    catalog.go = function (image) {
+      rg.router.go('taglist',
+      {
+        repository: image.split('/')[0],
+        image: image.split('/')[1]
+      });
+    };
     catalog.display();
   </script>
   <!-- End of tag -->

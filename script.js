@@ -57,3 +57,4 @@ riot.mount('taglist');
 riot.mount('add');
 riot.mount('change');
 riot.mount('menu');
+riot.mount('app');

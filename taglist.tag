@@ -48,10 +48,7 @@
 
   <script>
     registryUI.taglist.instance = this;
-
-    registryUI.taglist.instance.update();
-    this.on('updated', function () {
-      componentHandler.upgradeElements(this['taglist-tag']);
+    registryUI.taglist.display = function () {
       if (rg.router.current && rg.router.current.name == 'taglist') {
         name = rg.router.current.params.repository + (rg.router.current.params.image
           ? '/' + rg.router.current.params.image
@@ -92,8 +89,13 @@
         oReq.withCredentials = false;
         oReq.send();
       }
-
+    };
+    registryUI.taglist.display();
+    registryUI.taglist.instance.update();
+    this.on('updated', function () {
+      componentHandler.upgradeElements(this['taglist-tag']);
     });
+
     registryUI.taglist.reverse = function (th) {
       if (th.className == 'mdl-data-table__header--sorted-ascending') {
         th.className = 'mdl-data-table__header--sorted-descending';

@@ -80,8 +80,7 @@
       componentHandler.upgradeElements(this['catalog-tag']);
     });
     catalog.go = function (image) {
-      rg.router.go('taglist',
-      {
+      rg.router.go('taglist', {
         repository: image.split('/')[0],
         image: image.split('/')[1]
       });

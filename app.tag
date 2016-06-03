@@ -19,10 +19,25 @@
   <taglist if="{rg.router.current.name == 'taglist'}"></taglist>
   <script>
 
-  this.mixin('rg.router');
-  this.router.add({name: 'home', url: ''});
-  this.router.add({name: 'taglist', url: '/taglist/:repository/:image'});
-  
-this.router.start();
+    this.mixin('rg.router');
+    this.router.add({name: 'home', url: ''});
+    this.router.add({name: 'taglist', url: '/taglist/:repository/:image'});
+    this.router.on('go', state => {
+      switch (state.name) {
+        case 'taglist':
+          if (registryUI.taglist.display) {
+            registryUI.taglist.display();
+          }
+          break;
+        case 'home':
+          if (catalog.display) {
+            catalog.display();
+          }
+          break;
+        default:
+
+      }
+    })
+    this.router.start();
   </script>
 </app>

@@ -53,7 +53,6 @@
         name = rg.router.current.params.repository + (rg.router.current.params.image
           ? '/' + rg.router.current.params.image
           : '');
-        registryUI.content = 'taglist';
         var oReq = new XMLHttpRequest();
         registryUI.taglist.name = name;
         registryUI.taglist.createSnackbar = function (msg) {

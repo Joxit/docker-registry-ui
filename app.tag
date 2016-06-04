@@ -30,12 +30,10 @@
           }
           break;
         case 'home':
-          if (catalog.display) {
-            catalog.display();
+          if (registryUI.catalog.display) {
+            registryUI.catalog.display();
           }
           break;
-        default:
-
       }
     })
     this.router.start();

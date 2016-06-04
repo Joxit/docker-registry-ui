@@ -46,10 +46,9 @@ registryUI.changeServer = function(url) {
   }
   registryServer.splice(index, 1);
   registryServer = [url].concat(registryServer);
-  registryUI.registryServer.servers = registryServer;
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
-var catalog = {};
+registryUI.catalog = {};
 registryUI.taglist = {};
 
 riot.mount('catalog');

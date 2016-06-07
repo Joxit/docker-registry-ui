@@ -22,14 +22,16 @@ registryUI.getRegistryServer = function(i) {
   try {
     var res = JSON.parse(localStorage.getItem('registryServer'));
     if (res instanceof Array) {
-      return (!isNaN(i)) ? res[i] : res;
+      return (!isNaN(i)) ? res[i] : res.map(function(url) {
+        return url.trim().replace(/\/*$/, '');
+      });
     }
   } catch (e) {}
   return (!isNaN(i)) ? '' : [];
 }
 registryUI.addServer = function(url) {
   var registryServer = registryUI.getRegistryServer();
-  url = url.trim();
+  url = url.trim().replace(/\/*$/, '');
   var index = registryServer.indexOf(url);
   if (index != -1) {
     return;
@@ -39,7 +41,7 @@ registryUI.addServer = function(url) {
 }
 registryUI.changeServer = function(url) {
   var registryServer = registryUI.getRegistryServer();
-  url = url.trim();
+  url = url.trim().replace(/\/*$/, '');
   var index = registryServer.indexOf(url);
   if (index == -1) {
     return;

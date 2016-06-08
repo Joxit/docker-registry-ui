@@ -47,6 +47,7 @@
         registryUI.addServer(registryUI.addTag.addServer.value);
       }
       registryUI.addTag.addServer.value = '';
+      rg.router.go('home');
       registryUI.addTag.dialog.close();
     };
     registryUI.addTag.close = function () {

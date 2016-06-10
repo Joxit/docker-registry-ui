@@ -39,6 +39,12 @@
       if (!registryUI.changeTag.dialog.showModal) {
         dialogPolyfill.registerDialog(registryUI.changeTag.dialog);
       }
+      this['server-list'].onkeyup = function (e) {
+        // if keyCode is Enter
+        if (e.keyCode == 13) {
+          registryUI.changeTag.change();
+        }
+      };
     });
     registryUI.changeTag.show = function () {
       registryUI.changeTag.update();

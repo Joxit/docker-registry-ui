@@ -38,6 +38,12 @@
       if (!registryUI.addTag.dialog.showModal) {
         dialogPolyfill.registerDialog(registryUI.addTag.dialog);
       }
+      this['add-server-input'].onkeyup = function (e) {
+        // if keyCode is Enter
+        if (e.keyCode == 13) {
+          registryUI.addTag.add();
+        }
+      };
     });
     registryUI.addTag.show = function () {
       registryUI.addTag.dialog.showModal();
@@ -51,6 +57,7 @@
       registryUI.addTag.dialog.close();
     };
     registryUI.addTag.close = function () {
+      registryUI.addTag.addServer.value = '';
       registryUI.addTag.dialog.close();
     };
     registryUI.addTag.update();

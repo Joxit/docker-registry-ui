@@ -85,7 +85,7 @@
           registryUI.taglist.instance.update();
         });
         oReq.open('GET', registryUI.url() + '/v2/' + name + '/tags/list');
-        oReq.withCredentials = false;
+        oReq.withCredentials = true;
         oReq.send();
       }
     };

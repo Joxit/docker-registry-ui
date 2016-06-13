@@ -16,6 +16,7 @@ This web user interface use [Riot](https://github.com/Riot/riot) the react-like 
  * List all tags for a repository/image
  * Sort the tag list
  * One interface for many registry
+ * Use a secured docker registry
 
 ## Getting Started
 ### Basic
@@ -59,4 +60,20 @@ docker pull joxit/docker-registry-ui
 To run the docker and see the website on your 8080 port, try this :
 ```sh
 docker run -d -p 8080:8080 joxit/docker-registry-ui
+```
+
+## Using CORS
+
+Your server should be configured to accept CORS.
+
+If your docker registry does not need credentials, you will need to send this HEADER :
+```
+Access-Control-Allow-Origin: '*'
+```
+
+If your docker registry need credentials, you will need to send these HEADERS :
+```
+Access-Control-Allow-Origin: '<your docker-registry-ui url>'
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional
 ```

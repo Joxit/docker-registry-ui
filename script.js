@@ -50,6 +50,16 @@ registryUI.changeServer = function(url) {
   registryServer = [url].concat(registryServer);
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
+registryUI.removeServer = function(url) {
+  var registryServer = registryUI.getRegistryServer();
+  url = url.trim().replace(/\/*$/, '');
+  var index = registryServer.indexOf(url);
+  if (index == -1) {
+    return;
+  }
+  registryServer.splice(index, 1);
+  localStorage.setItem('registryServer', JSON.stringify(registryServer));
+}
 registryUI.catalog = {};
 registryUI.taglist = {};
 
@@ -57,5 +67,6 @@ riot.mount('catalog');
 riot.mount('taglist');
 riot.mount('add');
 riot.mount('change');
+riot.mount('remove');
 riot.mount('menu');
 riot.mount('app');

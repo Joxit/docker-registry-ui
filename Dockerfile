@@ -29,6 +29,7 @@ RUN npm install \
       ! -name material-design-icons \
       ! -name material-design-* \
       ! -name dialog-polyfill \
+      ! -name riotgear-router \
       -exec rm -rf {} \; \
     && find node_modules/material-design-* \
       -maxdepth 1 -mindepth 1 \

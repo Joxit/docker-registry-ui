@@ -44,3 +44,8 @@ html > body {
   width: 100%;
   border: none;
 }
+
+.url {
+  font-size: 14px;
+  word-break: break-all;
+}

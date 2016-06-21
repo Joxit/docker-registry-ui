@@ -21,7 +21,7 @@
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
       </div>
-      <div id="catalog-spinner" style="{ registryUI.catalog.loadend ? 'display:none;': '' }" class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
+      <div id="catalog-spinner" hide="{ registryUI.catalog.loadend }" class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
       <ul class="mdl-list">
         <li class="mdl-list__item mdl-menu__item" style="opacity: 1;" each="{ item in registryUI.catalog.repositories }" onclick="registryUI.catalog.go('{item}');">
           <span class="mdl-list__item-primary-content">

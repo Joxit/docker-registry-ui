@@ -24,7 +24,7 @@
         </a>
         <h2 class="mdl-card__title-text">Tags of { registryUI.url() + '/' + registryUI.taglist.name }</h2>
       </div>
-      <div id="taglist-spinner" style="{ registryUI.taglist.loadend ? 'display:none;': '' }" class="mdl-spinner mdl-js-spinner section-centerd"></div>
+      <div id="taglist-spinner" hide="{ registryUI.taglist.loadend }" class="mdl-spinner mdl-js-spinner section-centerd"></div>
       <table class="mdl-data-table mdl-js-data-table full-table" style="border: none;">
         <thead>
           <tr>

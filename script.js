@@ -63,8 +63,6 @@ registryUI.removeServer = function(url) {
 registryUI.catalog = {};
 registryUI.taglist = {};
 
-riot.mount('catalog');
-riot.mount('taglist');
 riot.mount('add');
 riot.mount('change');
 riot.mount('remove');

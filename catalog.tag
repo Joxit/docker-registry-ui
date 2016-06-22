@@ -41,7 +41,7 @@
     registryUI.catalog.instance = this;
     this.mixin('rg.router');
     registryUI.catalog.display = function () {
-      var oReq = new XMLHttpRequest();
+      var oReq = new Http();
       registryUI.catalog.createSnackbar = function (msg) {
         var snackbar = document.querySelector('#error-snackbar');
         registryUI.catalog.error = msg;
@@ -72,7 +72,6 @@
         registryUI.catalog.instance.update();
       });
       oReq.open('GET', registryUI.url() + '/v2/_catalog');
-      oReq.withCredentials = true;
       oReq.send();
     };
     this.on('updated', function () {

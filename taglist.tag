@@ -53,7 +53,7 @@
         name = rg.router.current.params.repository + (rg.router.current.params.image
           ? '/' + rg.router.current.params.image
           : '');
-        var oReq = new XMLHttpRequest();
+        var oReq = new Http();
         registryUI.taglist.name = name;
         registryUI.taglist.createSnackbar = function (msg) {
           var snackbar = document.querySelector('#error-snackbar');
@@ -85,7 +85,6 @@
           registryUI.taglist.instance.update();
         });
         oReq.open('GET', registryUI.url() + '/v2/' + name + '/tags/list');
-        oReq.withCredentials = true;
         oReq.send();
       }
     };

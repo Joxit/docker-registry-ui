@@ -21,10 +21,11 @@ function Http() {
 
 Http.prototype.addEventListener = function(e, f) {
   this._events[e] = f;
+  var self = this;
   switch (e) {
     case 'loadend':
       {
-        this.oReq.addEventListener('loadend', function() {
+        self.oReq.addEventListener('loadend', function() {
           if (this.status == 401) {
             var req = new XMLHttpRequest();
             for (key in this.http._events) {
@@ -34,15 +35,15 @@ Http.prototype.addEventListener = function(e, f) {
             req.open(this.http._method, this.http._url);
             req.send();
           } else {
-            f.bind(this.oReq);
+            f.bind(this);
           }
         });
         break;
       }
     default:
       {
-        this.oReq.addEventListener(e, function() {
-          f.bind(this.oReq);
+        self.oReq.addEventListener(e, function() {
+          f.bind(this);
         });
         break;
       }

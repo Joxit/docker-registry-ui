@@ -35,7 +35,7 @@ Http.prototype.addEventListener = function(e, f) {
             req.open(this.http._method, this.http._url);
             req.send();
           } else {
-            f.bind(this);
+            f.bind(this)();
           }
         });
         break;
@@ -43,7 +43,7 @@ Http.prototype.addEventListener = function(e, f) {
     default:
       {
         self.oReq.addEventListener(e, function() {
-          f.bind(this);
+          f.bind(this)();
         });
         break;
       }

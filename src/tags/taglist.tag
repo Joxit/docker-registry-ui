@@ -36,6 +36,11 @@
           <tr each="{ item in registryUI.taglist.tags }">
             <td class="mdl-data-table__cell--non-numeric">{ registryUI.taglist.name }</td>
             <td>{ item }</td>
+            <td>
+              <a href="#" onclick="registryUI.taglist.remove('{ registryUI.taglist.name }', '{ item }')">
+                <i class="material-icons mdl-list__item-icon">delete</i>
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -109,6 +114,35 @@
     };
     registryUI.taglist.back = function () {
       rg.router.go('home');
+    };
+    registryUI.taglist.remove = function (name, tag) {
+      var oReq = new Http();
+      oReq.addEventListener('load', function () {
+        if (this.status == 200) {
+          var digest = JSON.parse(this.responseText).config.digest;
+          var oReq = new Http();
+          oReq.addEventListener('load', function () {
+            if (this.status == 200) {
+              registryUI.taglist.instance.update();
+            } else if (this.status == 404) {
+              registryUI.taglist.createSnackbar('Server not found');
+            } else {
+              registryUI.taglist.createSnackbar(this.responseText);
+            }
+          });
+          oReq.open('DELETE', registryUI.url() + '/v2/' + name + '/manifests/' + digest);
+          oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+          oReq.send();
+        } else if (this.status == 404) {
+          registryUI.taglist.createSnackbar('Server not found');
+        } else {
+          registryUI.taglist.createSnackbar(this.responseText);
+        }
+      });
+      console.log(name, tag);
+      oReq.open('GET', registryUI.url() + '/v2/' + name + '/manifests/' + tag);
+      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+      oReq.send();
     };
   </script>
   <!-- End of tag -->

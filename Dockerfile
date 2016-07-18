@@ -12,41 +12,10 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-FROM node:slim
+FROM nginx:alpine
 
 MAINTAINER Jones MAGLOIRE @Joxit
 
-WORKDIR /usr/src/app
+WORKDIR /usr/share/nginx/html/
 
-RUN npm install -g http-server && npm cache clean
-
-COPY package.json /usr/src/app
-
-RUN npm install \
-    && find node_modules/ \
-      -maxdepth 1 -mindepth 1 -type d \
-      ! -name riot \
-      ! -name material-design-icons \
-      ! -name material-design-* \
-      ! -name dialog-polyfill \
-      ! -name riotgear-router \
-      -exec rm -rf {} \; \
-    && find node_modules/material-design-* \
-      -maxdepth 1 -mindepth 1 \
-      ! -name package.json \
-      ! -name iconfont \
-      ! -name LICENSE \
-      ! -name material* \
-      ! -name dist \
-      -exec rm -rf {} \; \
-    && find node_modules/material-design-lite/dist/ -maxdepth 1 -mindepth 1 \
-      ! -name "*.js*" \
-      ! -name "*.css*" \
-      -exec rm -rf {} \; \
-    && npm cache clean
-
-COPY . /usr/src/app
-
-EXPOSE 8080
-
-ENTRYPOINT http-server
+COPY dist/ /usr/share/nginx/html/

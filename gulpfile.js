@@ -43,8 +43,34 @@ gulp.task('riot-tag', ['html'], function() {
     .pipe(gulp.dest('dist/scripts'));
 });
 
+gulp.task('riot-static-tag', ['html'], function() {
+  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag'])
+    .pipe(concat('tags-static.js'))
+    .pipe(riot())
+    .pipe(license('agpl3', {
+      tiny: false,
+      project: 'docker-registry-ui',
+      year: '2016',
+      organization: 'Jones Magloire @Joxit'
+    }))
+    .pipe(gulp.dest('dist/scripts'));
+});
+
+gulp.task('scripts-static', ['html'], function() {
+  return gulp.src(['src/scripts/http.js', 'src/scripts/static.js'])
+    .pipe(concat('script-static.js'))
+    .pipe(uglify())
+    .pipe(license('agpl3', {
+      tiny: false,
+      project: 'docker-registry-ui',
+      year: '2016',
+      organization: 'Jones Magloire @Joxit'
+    }))
+    .pipe(gulp.dest('dist/scripts'));
+});
+
 gulp.task('scripts', ['html'], function() {
-  return gulp.src(['src/scripts/http.js','src/scripts/script.js'])
+  return gulp.src(['src/scripts/http.js', 'src/scripts/script.js'])
     .pipe(concat('script.js'))
     .pipe(uglify())
     .pipe(license('agpl3', {
@@ -59,7 +85,9 @@ gulp.task('scripts', ['html'], function() {
 gulp.task('styles', ['html'], function() {
   return gulp.src(['src/*.css'])
     .pipe(concat('style.css'))
-    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(cleanCSS({
+      compatibility: 'ie8'
+    }))
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
@@ -75,7 +103,7 @@ gulp.task('fonts', function() {
     .pipe(gulp.dest('dist/fonts'));
 });
 
-gulp.task('sources', ['riot-tag', 'scripts', 'styles'], function() {
+gulp.task('sources', ['riot-tag', 'riot-static-tag', 'scripts', 'scripts-static', 'styles'], function() {
   gulp.start();
 });
 

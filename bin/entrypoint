@@ -1,4 +1,9 @@
 #!/bin/bash
-sed -i "s,\${URL},${URL}," script.js
+$@
+sed -i "s,\${URL},${URL}," scripts/script.js
 
-http-server $@
+if [ -z "$@" ]; then
+  nginx -g "daemon off;"
+else
+  $@
+fi

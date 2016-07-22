@@ -1,4 +1,13 @@
 {
+  "name": "docker-registry-ui",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Joxit/docker-registry-ui.git"
+  },
+  "author": "Jones Magloire (Joxit)",
+  "license": "AGPLv3",
+  "description": "A web UI for private docker registry",
   "dependencies": {
     "material-design-lite": "^1.1",
     "material-design-icons": "^2.2",

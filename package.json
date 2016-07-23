@@ -1,6 +1,9 @@
 {
   "name": "docker-registry-ui",
   "version": "0.1.0",
+  "scripts": {
+    "build": "./node_modules/gulp/bin/gulp.js build"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Joxit/docker-registry-ui.git"

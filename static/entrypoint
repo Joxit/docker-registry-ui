@@ -1,4 +1,0 @@
-#!/bin/bash
-sed -i "s,\${URL},${URL}," script.js
-
-http-server $@

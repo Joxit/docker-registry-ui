@@ -1,0 +1,18 @@
+/*!
+ * docker-registry-ui
+ * Copyright (C) 2016  Jones Magloire @Joxit
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;src:url(MaterialIcons-Regular.eot);src:local('fonts/Material Icons'),local('fonts/MaterialIcons-Regular'),url(fonts/MaterialIcons-Regular.woff2) format('woff2'),url(fonts/MaterialIcons-Regular.woff) format('woff'),url(fonts/MaterialIcons-Regular.ttf) format('truetype')}.material-icons{font-family:'Material Icons';font-weight:400;font-style:normal;font-size:24px;display:inline-block;width:1em;height:1em;line-height:1;text-transform:none;letter-spacing:normal;word-wrap:normal;white-space:nowrap;direction:ltr;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:'liga'}html>body{font-family:Roboto,Helvetica,Arial,sans-serif!important}.mdl-mini-footer{padding-top:8px;padding-bottom:8px}.catalog,.taglist{padding:16px}.section-centerd{margin:auto}.mdl-data-table th{font-size:18px}.mdl-data-table td{font-size:16px}.full-table{width:100%;border:none}.url{font-size:14px;word-break:break-all}

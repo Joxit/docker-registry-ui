@@ -19,10 +19,14 @@
 
 <head>
   <meta charset="UTF-8">
-  <LINK href="node_modules/dialog-polyfill/dialog-polyfill.css" rel="stylesheet" type="text/css">
-  <LINK href="node_modules/material-design-lite/dist/material.min.css" rel="stylesheet" type="text/css">
-  <LINK href="node_modules/material-design-icons/iconfont/material-icons.css" rel="stylesheet" type="text/css">
+  <!-- build:css vendor.css -->
+  <LINK href="../node_modules/dialog-polyfill/dialog-polyfill.css" rel="stylesheet" type="text/css">
+  <LINK href="../node_modules/material-design-lite/dist/material.min.css" rel="stylesheet" type="text/css">
+  <!-- endbuild -->
+  <!-- build:css style.css -->
   <LINK href="style.css" rel="stylesheet" type="text/css">
+  <LINK href="material-icons.css" rel="stylesheet" type="text/css">
+  <!-- endbuild -->
   <LINK href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet" type="text/css">
   <title>Docker Registry UI</title>
 </head>
@@ -55,19 +59,25 @@
       </div>
     </footer>
   </div>
-  <script src="catalog.tag" type="riot/tag"></script>
-  <script src="taglist.tag" type="riot/tag"></script>
-  <script src="add.tag" type="riot/tag"></script>
-  <script src="change.tag" type="riot/tag"></script>
-  <script src="remove.tag" type="riot/tag"></script>
-  <script src="menu.tag" type="riot/tag"></script>
-  <script src="app.tag" type="riot/tag"></script>
-  <script src="node_modules/riot/riot+compiler.min.js"></script>
-  <script src="node_modules/riotgear-router/dist/rg-router.min.js"></script>
-  <script src="node_modules/dialog-polyfill/dialog-polyfill.js"></script>
-  <script src="node_modules/material-design-lite/dist/material.min.js"></script>
-  <script src="script.js"></script>
-  <script src="http.js"></script>
+  <!-- build:js scripts/vendor.js -->
+  <script src="../node_modules/riot/riot+compiler.min.js"></script>
+  <script src="../node_modules/riotgear-router/dist/rg-router.min.js"></script>
+  <script src="../node_modules/dialog-polyfill/dialog-polyfill.js"></script>
+  <script src="../node_modules/material-design-lite/dist/material.min.js"></script>
+  <!-- endbuild -->
+  <!-- build:js scripts/tags.js -->
+  <script src="tags/catalog.tag" type="riot/tag"></script>
+  <script src="tags/taglist.tag" type="riot/tag"></script>
+  <script src="tags/add.tag" type="riot/tag"></script>
+  <script src="tags/change.tag" type="riot/tag"></script>
+  <script src="tags/remove.tag" type="riot/tag"></script>
+  <script src="tags/menu.tag" type="riot/tag"></script>
+  <script src="tags/app.tag" type="riot/tag"></script>
+  <!-- endbuild -->
+  <!-- build:js scripts/script.js -->
+  <script src="scripts/http.js"></script>
+  <script src="scripts/script.js"></script>
+  <!-- endbuild -->
 </body>
 
 </html>

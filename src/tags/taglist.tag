@@ -29,7 +29,7 @@
         <thead>
           <tr>
             <th class="mdl-data-table__cell--non-numeric">Repository</th>
-            <th class="mdl-data-table__header--sorted-ascending" onclick="registryUI.taglist.reverse(this);">Tag</th>
+            <th class="{ registryUI.taglist.asc ? 'mdl-data-table__header--sorted-ascending' : 'mdl-data-table__header--sorted-descending' }" onclick="registryUI.taglist.reverse();">Tag</th>
           </tr>
         </thead>
         <tbody>
@@ -86,6 +86,7 @@
         });
         oReq.open('GET', registryUI.url() + '/v2/' + name + '/tags/list');
         oReq.send();
+        registryUI.taglist.asc = true;
       }
     };
     registryUI.taglist.display();
@@ -94,13 +95,14 @@
       componentHandler.upgradeElements(this['taglist-tag']);
     });
 
-    registryUI.taglist.reverse = function (th) {
-      if (th.className == 'mdl-data-table__header--sorted-ascending') {
-        th.className = 'mdl-data-table__header--sorted-descending';
+    registryUI.taglist.reverse = function () {
+      if (registryUI.taglist.asc) {
+        registryUI.taglist.tags.reverse();
+        registryUI.taglist.asc = false;
       } else {
-        th.className = 'mdl-data-table__header--sorted-ascending';
+        registryUI.taglist.tags.sort();
+        registryUI.taglist.asc = true;
       }
-      registryUI.taglist.tags.reverse();
       registryUI.taglist.instance.update();
     };
     registryUI.taglist.back = function () {

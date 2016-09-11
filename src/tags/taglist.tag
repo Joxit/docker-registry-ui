@@ -24,8 +24,8 @@
         </a>
         <h2 class="mdl-card__title-text">Tags of { registryUI.url() + '/' + registryUI.taglist.name }</h2>
       </div>
-      <div id="taglist-spinner" hide="{ registryUI.taglist.loadend }" class="mdl-spinner mdl-js-spinner section-centerd"></div>
-      <table class="mdl-data-table mdl-js-data-table full-table" style="border: none;">
+      <div id="taglist-spinner" hide="{ registryUI.taglist.loadend }" class="mdl-spinner mdl-js-spinner section-centerd is-active"></div>
+      <table class="mdl-data-table mdl-js-data-table full-table" show="{ registryUI.taglist.loadend }" style="border: none;">
         <thead>
           <tr>
             <th class="mdl-data-table__cell--non-numeric">Repository</th>
@@ -55,6 +55,7 @@
           : '');
         var oReq = new Http();
         registryUI.taglist.name = name;
+        registryUI.taglist.instance.update();
         registryUI.taglist.createSnackbar = function (msg) {
           var snackbar = document.querySelector('#error-snackbar');
           registryUI.taglist.error = msg;

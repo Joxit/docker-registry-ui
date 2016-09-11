@@ -26,11 +26,13 @@
       switch (state.name) {
         case 'taglist':
           if (registryUI.taglist.display) {
+            registryUI.taglist.loadend = false;
             registryUI.taglist.display();
           }
           break;
         case 'home':
           if (registryUI.catalog.display) {
+            registryUI.catalog.loadend = false;
             registryUI.catalog.display();
           }
           break;

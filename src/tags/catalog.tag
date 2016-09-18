@@ -57,7 +57,8 @@
       };
       oReq.addEventListener('load', function () {
         if (this.status == 200) {
-          registryUI.catalog.repositories = JSON.parse(this.responseText).repositories.sort();
+          registryUI.catalog.repositories = JSON.parse(this.responseText).repositories || [];
+          registryUI.catalog.repositories.sort();
         } else if (this.status == 404) {
           registryUI.catalog.createSnackbar('Server not found');
         } else {

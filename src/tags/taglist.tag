@@ -71,7 +71,8 @@
         };
         oReq.addEventListener('load', function () {
           if (this.status == 200) {
-            registryUI.taglist.tags = JSON.parse(this.responseText).tags.sort();
+            registryUI.taglist.tags = JSON.parse(this.responseText).tags || [];
+            registryUI.taglist.tags.sort();
           } else if (this.status == 404) {
             registryUI.taglist.createSnackbar('Server not found');
           } else {

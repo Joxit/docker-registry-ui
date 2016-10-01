@@ -119,13 +119,14 @@
       var oReq = new Http();
       oReq.addEventListener('load', function () {
         if (this.status == 200) {
-          var digest = JSON.parse(this.responseText).config.digest;
+          var digest = this.getResponseHeader('Docker-Content-Digest');
           var oReq = new Http();
           oReq.addEventListener('load', function () {
-            if (this.status == 200) {
-              registryUI.taglist.instance.update();
+            if (this.status == 200 || this.status == 202) {
+            registryUI.taglist.createSnackbar('Deleting '+ name+ ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
+              rg.router.go(rg.router.current.name, rg.router.current.params);
             } else if (this.status == 404) {
-              registryUI.taglist.createSnackbar('Server not found');
+              registryUI.taglist.createSnackbar('Digest not found');
             } else {
               registryUI.taglist.createSnackbar(this.responseText);
             }
@@ -134,13 +135,12 @@
           oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
           oReq.send();
         } else if (this.status == 404) {
-          registryUI.taglist.createSnackbar('Server not found');
+          registryUI.taglist.createSnackbar('Manifest for' + name + ':' + tag + 'not found');
         } else {
           registryUI.taglist.createSnackbar(this.responseText);
         }
       });
-      console.log(name, tag);
-      oReq.open('GET', registryUI.url() + '/v2/' + name + '/manifests/' + tag);
+      oReq.open('HEAD', registryUI.url() + '/v2/' + name + '/manifests/' + tag);
       oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
       oReq.send();
     };

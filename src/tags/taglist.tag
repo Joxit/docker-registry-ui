@@ -115,16 +115,23 @@
     registryUI.taglist.back = function () {
       rg.router.go('home');
     };
+    registryUI.taglist.refresh = function () {
+      rg.router.go(rg.router.current.name, rg.router.current.params);
+    }
     registryUI.taglist.remove = function (name, tag) {
       var oReq = new Http();
       oReq.addEventListener('load', function () {
+        registryUI.taglist.refresh();
         if (this.status == 200) {
+          if (!this.getAllResponseHeaders().includes('Docker-Content-Digest')) {
+            registryUI.taglist.createSnackbar('You need tu add Access-Control-Expose-Headers: [\'Docker-Content-Digest\'] in your server configuration.');
+            return;
+          }
           var digest = this.getResponseHeader('Docker-Content-Digest');
           var oReq = new Http();
           oReq.addEventListener('load', function () {
             if (this.status == 200 || this.status == 202) {
-            registryUI.taglist.createSnackbar('Deleting '+ name+ ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
-              rg.router.go(rg.router.current.name, rg.router.current.params);
+              registryUI.taglist.createSnackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
             } else if (this.status == 404) {
               registryUI.taglist.createSnackbar('Digest not found');
             } else {
@@ -133,6 +140,9 @@
           });
           oReq.open('DELETE', registryUI.url() + '/v2/' + name + '/manifests/' + digest);
           oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+          oReq.addEventListener('error', function () {
+            registryUI.taglist.createSnackbar('An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].');
+          });
           oReq.send();
         } else if (this.status == 404) {
           registryUI.taglist.createSnackbar('Manifest for' + name + ':' + tag + 'not found');

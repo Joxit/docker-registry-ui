@@ -2,6 +2,10 @@
 $@
 sed -i "s,\${URL},${URL}," scripts/script.js
 
+if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
+  sed -i "s/registryUI.isImageRemoveActivated *= *[^,;]*/registryUI.isImageRemoveActivated=false/" scripts/script.js
+fi
+
 if [ -z "$@" ]; then
   nginx -g "daemon off;"
 else

@@ -51,26 +51,40 @@ From sources with this command :
 ```sh
 git clone https://github.com/Joxit/docker-registry-ui.git
 docker build -t joxit/docker-registry-ui docker-registry-ui
+docker build -t joxit/docker-registry-ui -f docker-registry-ui/Dockerfile.static docker-registry-ui
 ```
 
 Or build with the url :
 
 ```sh
 docker build -t joxit/docker-registry-ui github.com/Joxit/docker-registry-ui
+docker build -t joxit/docker-registry-ui -f Dockerfile.static github.com/Joxit/docker-registry-ui
 ```
 
 Or pull the image from [docker hub](https://hub.docker.com/r/joxit/docker-registry-ui/) :
 
 ```sh
 docker pull joxit/docker-registry-ui
+docker pull joxit/docker-registry-ui:static
 ```
 
 #### Run the docker
 
-To run the docker and see the website on your 8080 port, try this :
+To run the docker and see the website on your 80 port, try this :
 
 ```sh
-docker run -d -p 8080:8080 joxit/docker-registry-ui
+docker run -d -p 80:80 joxit/docker-registry-ui
+```
+
+#### Run the static docker
+
+Some env options are available for use this interface for only one server.
+
+-   `URL`: set the static URL to use. (`Required`)
+-   `DELETE_IMAGES`: if this variable is empty or `false`, delete feature is desactivated. It is activated otherwise.
+
+```sh
+docker run -d -p 80:80 -e URL=http://127.0.0.1:5000 -e DELETE_IMAGES=true joxit/docker-registry-ui:static
 ```
 
 ## Using CORS

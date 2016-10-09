@@ -17,7 +17,8 @@
 var registryUI = {}
 registryUI.url = function() {
   return '${URL}';
-}
+};
+registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};
 

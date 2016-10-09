@@ -49,7 +49,7 @@ gulp.task('riot-tag', ['html'], function() {
 });
 
 gulp.task('riot-static-tag', ['html'], function() {
-  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag'])
+  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag', 'src/tags/remove-image.tag'])
     .pipe(concat('tags-static.js'))
     .pipe(riot())
     .pipe(minifier({}, uglify))

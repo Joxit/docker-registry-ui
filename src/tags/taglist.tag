@@ -30,12 +30,16 @@
           <tr>
             <th class="mdl-data-table__cell--non-numeric">Repository</th>
             <th class="{ registryUI.taglist.asc ? 'mdl-data-table__header--sorted-ascending' : 'mdl-data-table__header--sorted-descending' }" onclick="registryUI.taglist.reverse();">Tag</th>
+            <th show="{ registryUI.isImageRemoveActivated }" ></th>
           </tr>
         </thead>
         <tbody>
           <tr each="{ item in registryUI.taglist.tags }">
             <td class="mdl-data-table__cell--non-numeric">{ registryUI.taglist.name }</td>
             <td>{ item }</td>
+            <td show="{ registryUI.isImageRemoveActivated }" >
+              <remove-image name={ registryUI.taglist.name } tag={ item } />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -109,6 +113,9 @@
     };
     registryUI.taglist.back = function () {
       rg.router.go('home');
+    };
+    registryUI.taglist.refresh = function () {
+      rg.router.go(rg.router.current.name, rg.router.current.params);
     };
   </script>
   <!-- End of tag -->

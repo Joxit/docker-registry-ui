@@ -60,6 +60,7 @@ registryUI.removeServer = function(url) {
   registryServer.splice(index, 1);
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
+registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};
 

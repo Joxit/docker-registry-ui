@@ -9,6 +9,8 @@ All registry will be stored in the [local storage](https://en.wikipedia.org/wiki
 
 This web user interface use [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [Material Design Lite](https://github.com/google/material-design-lite) components.
 
+## [GitHub Page](https://joxit.github.io/docker-registry-ui) and [Live Demo](https://joxit.github.io/docker-registry-ui/demo/)
+
 ![screenshot](https://raw.github.com/Joxit/docker-registry-ui/master/screenshot.png "Screenshot of Docker Registry UI")
 
 ## Features

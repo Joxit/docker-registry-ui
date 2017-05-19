@@ -1,0 +1,76 @@
+<!--
+ Copyright (C) 2016  Jones Magloire @Joxit
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../dist/vendor.css">
+  <link rel="stylesheet" href="../dist/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet" type="text/css">
+  <title>Docker Registry UI</title>
+</head>
+
+<body>
+  <!-- Always shows a header, even in smaller screens. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title --><span class="mdl-layout-title">Docker Registry UI</span>
+        <menu></menu>
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <app></app>
+      </div>
+    </main>
+    <change></change>
+    <add></add>
+    <remove></remove>
+    <footer class="mdl-mini-footer">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">Docker Registry UI</div>
+        <ul class="mdl-mini-footer__link-list">
+          <li><a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a></li>
+          <li><a href="https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE">Privacy &amp; Terms</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+  <script src="../dist/scripts/vendor.js"></script>
+  <script src="../dist/scripts/tags.js"></script>
+  <script src="../dist/scripts/script.js"></script>
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-99119327-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+
+</html>

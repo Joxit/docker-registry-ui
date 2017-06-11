@@ -29,16 +29,25 @@ Http.prototype.addEventListener = function(e, f) {
         self.oReq.addEventListener('loadend', function() {
           if (this.status == 401) {
             var req = new XMLHttpRequest();
-            for (key in this.http._events) {
-              req.addEventListener(key, this.http._events[key]);
+            for (key in self._events) {
+              req.addEventListener(key, self._events[key]);
             }
-            for (key in this.http._headers) {
-              req.setRequestHeader(key, this.http._headers[key]);
+            for (key in self._headers) {
+              req.setRequestHeader(key, self._headers[key]);
             }
             req.withCredentials = true;
-            req.open(this.http._method, this.http._url);
+            req.open(self._method, self._url);
             req.send();
           } else {
+            f.bind(this)();
+          }
+        });
+        break;
+      }
+    case 'load':
+      {
+        self.oReq.addEventListener('load', function() {
+          if (this.status !== 401) {
             f.bind(this)();
           }
         });
@@ -66,6 +75,5 @@ Http.prototype.open = function(m, u) {
 };
 
 Http.prototype.send = function() {
-  this.oReq.http = this;
   this.oReq.send();
 };

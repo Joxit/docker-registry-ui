@@ -82,6 +82,6 @@ Http.prototype.send = function() {
 
 Http.hasHeader = function(header) {
   return this.getAllResponseHeaders().split('\n').some(function(h) {
-    return h.match(new RegExp('^' + header + ':'), 'i');
+    return new RegExp('^' + header + ':', 'i').test(h);
   });
 };

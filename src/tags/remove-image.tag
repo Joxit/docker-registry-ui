@@ -24,16 +24,16 @@
     
     registryUI.removeImage.remove = function (name, tag) {
       var oReq = new Http();
-      oReq.addEventListener('load', function () {
+      oReq.addEventListener('loadend', function () {
         registryUI.taglist.refresh();
         if (this.status == 200) {
-          if (!this.getAllResponseHeaders().includes('Docker-Content-Digest')) {
-            registryUI.taglist.createSnackbar('You need tu add Access-Control-Expose-Headers: [\'Docker-Content-Digest\'] in your server configuration.');
+          if (!this.hasHeader('Docker-Content-Digest')) {
+            registryUI.taglist.createSnackbar('You need to add Access-Control-Expose-Headers: [\'Docker-Content-Digest\'] in your server configuration.');
             return;
           }
           var digest = this.getResponseHeader('Docker-Content-Digest');
           var oReq = new Http();
-          oReq.addEventListener('load', function () {
+          oReq.addEventListener('loadend', function () {
             if (this.status == 200 || this.status == 202) {
               registryUI.taglist.refresh();
               registryUI.taglist.createSnackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');

@@ -16,6 +16,7 @@
  */
 function Http() {
   this.oReq = new XMLHttpRequest();
+  this.oReq.hasHeader = Http.hasHeader;
   this._events = {};
   this._headers = {};
 }
@@ -29,6 +30,7 @@ Http.prototype.addEventListener = function(e, f) {
         self.oReq.addEventListener('loadend', function() {
           if (this.status == 401) {
             var req = new XMLHttpRequest();
+            req.open(self._method, self._url);
             for (key in self._events) {
               req.addEventListener(key, self._events[key]);
             }
@@ -36,7 +38,7 @@ Http.prototype.addEventListener = function(e, f) {
               req.setRequestHeader(key, self._headers[key]);
             }
             req.withCredentials = true;
-            req.open(self._method, self._url);
+            req.hasHeader = Http.hasHeader;
             req.send();
           } else {
             f.bind(this)();
@@ -76,4 +78,10 @@ Http.prototype.open = function(m, u) {
 
 Http.prototype.send = function() {
   this.oReq.send();
+};
+
+Http.hasHeader = function(header) {
+  return this.getAllResponseHeaders().split('\n').some(function(h) {
+    return h.match(new RegExp('^' + header + ':'), 'i');
+  });
 };

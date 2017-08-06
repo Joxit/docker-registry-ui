@@ -12,11 +12,11 @@ dialog {
   padding: 1em;
   background: white;
   color: black;
-  display: none;
+  display: block;
 }
 
-dialog[open] {
-  display: block;
+dialog:not([open]) {
+  display: none;
 }
 
 dialog + .backdrop {

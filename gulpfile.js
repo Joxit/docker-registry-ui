@@ -14,7 +14,7 @@ var uglify = require('uglify-js-harmony');
 var useref = require('gulp-useref');
 
 gulp.task('html', function() {
-  var htmlFilter = filter('**/*.html');
+  var htmlFilter = filter('**/*.html', {restore: true});
   return gulp.src(['src/index.html'])
     .pipe(useref())
     .pipe(gIf(['*.js', '!*.min.js'], minifier({}, uglify))) // FIXME
@@ -26,12 +26,12 @@ gulp.task('html', function() {
       removeEmptyAttributes: true,
       minifyJS: uglify
     }))
-    .pipe(htmlFilter.restore())
+    .pipe(htmlFilter.restore)
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('clean', function(done) {
-  del(['dist'], done);
+  return del(['dist']);
 });
 
 gulp.task('riot-tag', ['html'], function() {

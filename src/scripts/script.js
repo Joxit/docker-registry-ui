@@ -96,11 +96,11 @@ registryUI.getUrlQueryParam = function () {
 };
 
 registryUI.encodeURI = function(url) {
-  return url.indexOf('&') < 0 ? window.encodeURI(url) : btoa(url);
+  return url.indexOf('&') < 0 ? window.encodeURIComponent(url) : btoa(url);
 };
 
 registryUI.decodeURI = function(url) {
-  return url.startsWith('http') ? window.decodeURI(url) : atob(url);
+  return url.startsWith('http') ? window.decodeURIComponent(url) : atob(url);
 };
 
 registryUI.isImageRemoveActivated = true;

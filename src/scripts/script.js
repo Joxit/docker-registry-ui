@@ -15,8 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 var registryUI = {}
+registryUI.URL_QUERY_PARAM_REGEX = /[&?]url=/;
+registryUI.URL_PARAM_REGEX = /^url=/;
+
 registryUI.url = function() {
-  return registryUI.getRegistryServer(0);
+  if (!registryUI._url) {
+    var url = registryUI.getUrlQueryParam();
+    if (url) {
+      try {
+        registryUI._url = registryUI.decodeURI(url);
+        return registryUI._url;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    registryUI._url = registryUI.getRegistryServer(0);
+  }
+  return registryUI._url;
 }
 registryUI.getRegistryServer = function(i) {
   try {
@@ -37,6 +52,9 @@ registryUI.addServer = function(url) {
     return;
   }
   registryServer.push(url);
+  if (!registryUI._url) {
+    registryUI.updateHistory(url);
+  }
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
 registryUI.changeServer = function(url) {
@@ -48,6 +66,7 @@ registryUI.changeServer = function(url) {
   }
   registryServer.splice(index, 1);
   registryServer = [url].concat(registryServer);
+  registryUI.updateHistory(url);
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
 registryUI.removeServer = function(url) {
@@ -60,6 +79,30 @@ registryUI.removeServer = function(url) {
   registryServer.splice(index, 1);
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
 }
+
+registryUI.updateHistory = function(url) {
+  history.pushState(null, '', '?url=' + registryUI.encodeURI(url) + window.location.hash);
+  registryUI._url = url;
+}
+
+registryUI.getUrlQueryParam = function () {
+  var search = window.location.search;
+  if (registryUI.URL_QUERY_PARAM_REGEX.test(search)) {
+    var param = search.split(/^\?|&/).find(function(param) {
+      return param && registryUI.URL_PARAM_REGEX.test(param);
+    });
+    return param ? param.replace(registryUI.URL_PARAM_REGEX, '') : param;
+  }
+};
+
+registryUI.encodeURI = function(url) {
+  return url.indexOf('&') < 0 ? window.encodeURIComponent(url) : btoa(url);
+};
+
+registryUI.decodeURI = function(url) {
+  return url.startsWith('http') ? window.decodeURIComponent(url) : atob(url);
+};
+
 registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};

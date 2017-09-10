@@ -15,11 +15,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <add>
-  <dialog id="add-server-dialog" class="mdl-dialog">
+  <dialog ref="add-server-dialog" class="mdl-dialog">
     <h4 class="mdl-dialog__title">Add your Server ?</h4>
     <div class="mdl-dialog__content">
       <div class="mdl-textfield mdl-js-textfield">
-        <input class="mdl-textfield__input" type="text" id="add-server-input">
+        <input class="mdl-textfield__input" type="text" ref="add-server-input">
         <label class="mdl-textfield__label" for="add-server-input">Server url</label>
       </div>
     </div>
@@ -32,13 +32,13 @@
     registryUI.addTag = registryUI.addTag || {};
     registryUI.addTag.update = this.update;
     this.on('updated', function () {
-      componentHandler.upgradeElements(this['add-server-dialog']);
-      registryUI.addTag.dialog = registryUI.addTag.dialog || document.querySelector('#add-server-dialog');
-      registryUI.addTag.addServer = registryUI.addTag.tileServerList || registryUI.addTag.dialog.querySelector('#add-server-input');
+      registryUI.addTag.dialog = this.refs['add-server-dialog'];
+      registryUI.addTag.addServer = this.refs['add-server-input'];
+      componentHandler.upgradeElements(registryUI.addTag.dialog);
       if (!registryUI.addTag.dialog.showModal) {
         dialogPolyfill.registerDialog(registryUI.addTag.dialog);
       }
-      this['add-server-input'].onkeyup = function (e) {
+      this.refs['add-server-input'].onkeyup = function (e) {
         // if keyCode is Enter
         if (e.keyCode == 13) {
           registryUI.addTag.add();

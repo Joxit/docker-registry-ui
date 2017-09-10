@@ -16,7 +16,7 @@
 -->
 <app>
   <catalog if="{!rg.router.current || rg.router.current.name == 'home'}"></catalog>
-  <taglist if="{rg.router.current.name == 'taglist'}"></taglist>
+  <taglist if="{rg.router.current && rg.router.current.name == 'taglist'}"></taglist>
   <script>
 
     this.mixin('rg.router');

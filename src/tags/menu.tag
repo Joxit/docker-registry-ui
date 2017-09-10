@@ -15,8 +15,8 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <menu>
-  <div id="card-menu" class="mdl-card__menu">
-    <button id="registry-menu" name="registry-menu" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+  <div ref="card-menu" id="card-menu" class="mdl-card__menu">
+    <button ref="registry-menu" name="registry-menu" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">more_vert</i>
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="registry-menu">
@@ -30,7 +30,7 @@
     registryUI.menuTag = registryUI.menuTag || {};
     registryUI.menuTag.update = this.update;
     this.on('updated', function () {
-      componentHandler.upgradeElements(this['card-menu']);
+      componentHandler.upgradeElements(this.refs['card-menu']);
     });
     registryUI.menuTag.update();
   </script>

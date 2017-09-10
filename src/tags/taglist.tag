@@ -16,7 +16,7 @@
 -->
 <taglist>
   <!-- Begin of tag -->
-  <div id="taglist-tag" class="taglist">
+  <div ref="taglist-tag" class="taglist">
     <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
       <div class="mdl-card__title">
         <a href="#" onclick="registryUI.taglist.back();">
@@ -24,7 +24,7 @@
         </a>
         <h2 class="mdl-card__title-text">Tags of { registryUI.url() + '/' + registryUI.taglist.name }</h2>
       </div>
-      <div id="taglist-spinner" hide="{ registryUI.taglist.loadend }" class="mdl-spinner mdl-js-spinner section-centerd is-active"></div>
+      <div ref="taglist-spinner" hide="{ registryUI.taglist.loadend }" class="mdl-spinner mdl-js-spinner section-centerd is-active"></div>
       <table class="mdl-data-table mdl-js-data-table full-table" show="{ registryUI.taglist.loadend }" style="border: none;">
         <thead>
           <tr>
@@ -44,7 +44,7 @@
         </tbody>
       </table>
     </div>
-    <div id="error-snackbar" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-js-snackbar mdl-snackbar">
+    <div ref="error-snackbar" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-js-snackbar mdl-snackbar">
       <div class="mdl-snackbar__text"></div>
       <button class="mdl-snackbar__action" type="button"></button>
     </div>
@@ -61,7 +61,7 @@
         registryUI.taglist.name = name;
         registryUI.taglist.instance.update();
         registryUI.taglist.createSnackbar = function (msg) {
-          var snackbar = document.querySelector('#error-snackbar');
+          var snackbar = registryUI.taglist.instance['error-snackbar'];
           registryUI.taglist.error = msg;
           var data = {
             message: registryUI.taglist.error,
@@ -98,7 +98,7 @@
     registryUI.taglist.display();
     registryUI.taglist.instance.update();
     this.on('updated', function () {
-      componentHandler.upgradeElements(this['taglist-tag']);
+      componentHandler.upgradeElements(this.refs['taglist-tag']);
     });
 
     registryUI.taglist.reverse = function () {

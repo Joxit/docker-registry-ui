@@ -15,7 +15,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove>
-  <dialog id="remove-server-dialog" class="mdl-dialog">
+  <dialog ref="remove-server-dialog" class="mdl-dialog">
     <h4 class="mdl-dialog__title">Remove your Registry Server ?</h4>
     <div class="mdl-dialog__content">
       <div class="mdl-textfield mdl-js-textfield">
@@ -55,7 +55,7 @@
     };
 
     this.on('updated', function () {
-      registryUI.removeTag.dialog = this['remove-server-dialog'];
+      registryUI.removeTag.dialog = this.refs['remove-server-dialog'];
       if (!registryUI.removeTag.dialog.showModal) {
         dialogPolyfill.registerDialog(registryUI.removeTag.dialog);
       }

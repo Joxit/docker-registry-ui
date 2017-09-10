@@ -15,11 +15,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <change>
-  <dialog id="change-server-dialog" class="mdl-dialog">
+  <dialog ref="change-server-dialog" class="mdl-dialog">
     <h4 class="mdl-dialog__title">Change your Server ?</h4>
     <div class="mdl-dialog__content">
       <div class="mdl-textfield mdl-js-textfield">
-        <select class="mdl-textfield__input mdl-textfield__select" name="server-list" id="server-list">
+        <select class="mdl-textfield__input mdl-textfield__select" name="server-list" ref="server-list">
           <option each="{ url in registryUI.getRegistryServer() }" value={url}>{url}</option>
         </select>
       </div>
@@ -33,13 +33,13 @@
     registryUI.changeTag = registryUI.changeTag || {};
     registryUI.changeTag.update = this.update;
     this.on('updated', function () {
-      componentHandler.upgradeElements(this['change-server-dialog']);
-      registryUI.changeTag.dialog = registryUI.changeTag.dialog || document.querySelector('#change-server-dialog');
-      registryUI.changeTag.serverList = registryUI.changeTag.serverList || registryUI.changeTag.dialog.querySelector('#server-list');
+      componentHandler.upgradeElements(this.refs['change-server-dialog']);
+      registryUI.changeTag.dialog = registryUI.changeTag.dialog || this.refs['change-server-dialog'];
+      registryUI.changeTag.serverList = registryUI.changeTag.serverList || this.refs['server-list'];
       if (!registryUI.changeTag.dialog.showModal) {
         dialogPolyfill.registerDialog(registryUI.changeTag.dialog);
       }
-      this['server-list'].onkeyup = function (e) {
+      this.refs['server-list'].onkeyup = function (e) {
         // if keyCode is Enter
         if (e.keyCode == 13) {
           registryUI.changeTag.change();

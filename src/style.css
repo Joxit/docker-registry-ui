@@ -24,10 +24,6 @@ html > body {
   padding-bottom: 8px;
 }
 
-.catalog, .taglist {
-  padding: 16px;
-}
-
 .section-centerd {
   margin: auto;
 }
@@ -54,4 +50,75 @@ html > body {
   color: inherit;
   text-decoration: none;
   font-weight: inherit;
+}
+
+material-card {
+  min-height: 200px;
+  max-width: 75%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+material-spinner {
+  align-self: center;
+}
+
+.spinner-wrapper {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+material-navbar {
+  height: 64px;
+}
+.logo {
+  padding: 0 16px 0 72px;
+  text-decoration: none;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: .02em;
+  font-weight: 400;
+}
+h2 {
+  padding: 16px;
+  margin: auto;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: normal;
+  overflow: hidden;
+}
+.list {
+  display: block;
+  padding: 8px 0;
+  list-style: none;
+}
+.list>li:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+.list>li {
+  box-sizing: border-box;
+  line-height: 1;
+  height: 48px;
+  padding: 0 16px;
+  overflow: hidden;
+}
+.list>li i.material-icons {
+  margin-right: 32px;
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
+  box-sizing: border-box;
+  color: #757575;
+}
+.list>li>span {
+  height: 100%;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
 }

@@ -15,8 +15,18 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <app>
+  <header>
+    <material-navbar>
+      <div class="logo">Docker Registry UI</div>
+      <menu></menu>
+    </material-navbar>
+  </header>
   <catalog if="{!rg.router.current || rg.router.current.name == 'home'}"></catalog>
   <taglist if="{rg.router.current && rg.router.current.name == 'taglist'}"></taglist>
+  <change></change>
+  <add></add>
+  <remove></remove>
+  <material-snackbar></material-snackbar>
   <script>
 
     this.mixin('rg.router');
@@ -37,7 +47,11 @@
           }
           break;
       }
-    })
+    });
+    registryUI.appTag = this;
+    registryUI.snackbar = function (message, isError) {
+      registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError});
+    };
     this.router.start();
   </script>
 </app>

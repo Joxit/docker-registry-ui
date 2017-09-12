@@ -22,6 +22,7 @@
   <!-- build:css vendor.css -->
   <LINK href="../node_modules/dialog-polyfill/dialog-polyfill.css" rel="stylesheet" type="text/css">
   <LINK href="../node_modules/material-design-lite/dist/material.min.css" rel="stylesheet" type="text/css">
+  <LINK href="../node_modules/riot-mui/build/styles/riot-mui.min.css" rel="stylesheet" type="text/css">
   <!-- endbuild -->
   <!-- build:css style.css -->
   <LINK href="style.css" rel="stylesheet" type="text/css">
@@ -34,21 +35,11 @@
 <body>
   <!-- Always shows a header, even in smaller screens. -->
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
-        <!-- Title -->
-        <span class="mdl-layout-title">Docker Registry UI</span>
-        <menu></menu>
-      </div>
-    </header>
     <main class="mdl-layout__content">
       <div class="page-content">
         <app></app>
       </div>
     </main>
-    <change></change>
-    <add></add>
-    <remove></remove>
     <footer class="mdl-mini-footer">
       <div class="mdl-mini-footer__left-section">
         <div class="mdl-logo"><a href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI</a></div>
@@ -64,6 +55,7 @@
   <script src="../node_modules/riotgear-router/dist/rg-router.min.js"></script>
   <script src="../node_modules/dialog-polyfill/dialog-polyfill.js"></script>
   <script src="../node_modules/material-design-lite/dist/material.min.js"></script>
+  <script src="../node_modules/riot-mui/build/js/riot-mui.js"></script>
   <!-- endbuild -->
   <!-- build:js scripts/tags.js -->
   <script src="tags/catalog.tag" type="riot/tag"></script>

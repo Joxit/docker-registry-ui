@@ -107,8 +107,4 @@ registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};
 
-riot.mount('add');
-riot.mount('change');
-riot.mount('remove');
-riot.mount('menu');
-riot.mount('app');
+riot.mount('*');

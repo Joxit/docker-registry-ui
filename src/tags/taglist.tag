@@ -16,40 +16,35 @@
 -->
 <taglist>
   <!-- Begin of tag -->
-  <div ref="taglist-tag" class="taglist">
-    <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
-      <div class="mdl-card__title">
-        <a href="#" onclick="registryUI.taglist.back();">
-          <i class="material-icons mdl-list__item-icon">arrow_back</i>
-        </a>
-        <h2 class="mdl-card__title-text">Tags of { registryUI.url() + '/' + registryUI.taglist.name }</h2>
-      </div>
-      <div ref="taglist-spinner" hide="{ registryUI.taglist.loadend }" class="mdl-spinner mdl-js-spinner section-centerd is-active"></div>
-      <table class="mdl-data-table mdl-js-data-table full-table" show="{ registryUI.taglist.loadend }" style="border: none;">
-        <thead>
-          <tr>
-            <th class="mdl-data-table__cell--non-numeric">Repository</th>
-            <th class="{ registryUI.taglist.asc ? 'mdl-data-table__header--sorted-ascending' : 'mdl-data-table__header--sorted-descending' }" onclick="registryUI.taglist.reverse();">Tag</th>
-            <th show="{ registryUI.isImageRemoveActivated }" ></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr each="{ item in registryUI.taglist.tags }">
-            <td class="mdl-data-table__cell--non-numeric">{ registryUI.taglist.name }</td>
-            <td>{ item }</td>
-            <td show="{ registryUI.isImageRemoveActivated }" >
-              <remove-image name={ registryUI.taglist.name } tag={ item } />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <material-card ref="taglist-tag" class="taglist">
+    <div class="material-card-title-action">
+      <a href="#" onclick="registryUI.taglist.back();">
+        <i class="material-icons">arrow_back</i>
+      </a>
+      <h2>Tags of { registryUI.url() + '/' + registryUI.taglist.name }</h2>
     </div>
-    <div ref="error-snackbar" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-js-snackbar mdl-snackbar">
-      <div class="mdl-snackbar__text"></div>
-      <button class="mdl-snackbar__action" type="button"></button>
+    <div hide="{ registryUI.taglist.loadend }" class="spinner-wrapper">
+      <material-spinner></material-spinner>
     </div>
-  </div>
-
+    <table show="{ registryUI.taglist.loadend }" style="border: none;">
+      <thead>
+        <tr>
+          <th class="material-card-th-left">Repository</th>
+          <th class="{ registryUI.taglist.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }" onclick="registryUI.taglist.reverse();">Tag</th>
+          <th show="{ registryUI.isImageRemoveActivated }"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr each="{ item in registryUI.taglist.tags }">
+          <td class="material-card-th-left">{ registryUI.taglist.name }</td>
+          <td>{ item }</td>
+          <td show="{ registryUI.isImageRemoveActivated }">
+            <remove-image name={ registryUI.taglist.name } tag={ item }/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </material-card>
   <script>
     registryUI.taglist.instance = this;
     registryUI.taglist.display = function () {
@@ -60,31 +55,18 @@
         var oReq = new Http();
         registryUI.taglist.name = name;
         registryUI.taglist.instance.update();
-        registryUI.taglist.createSnackbar = function (msg) {
-          var snackbar = registryUI.taglist.instance['error-snackbar'];
-          registryUI.taglist.error = msg;
-          var data = {
-            message: registryUI.taglist.error,
-            timeout: 100000,
-            actionHandler: function () {
-              snackbar.classList.remove('mdl-snackbar--active');
-            },
-            actionText: 'Undo'
-          };
-          snackbar.MaterialSnackbar.showSnackbar(data);
-        };
         oReq.addEventListener('load', function () {
           if (this.status == 200) {
             registryUI.taglist.tags = JSON.parse(this.responseText).tags || [];
             registryUI.taglist.tags.sort();
           } else if (this.status == 404) {
-            registryUI.taglist.createSnackbar('Server not found');
+            registryUI.snackbar('Server not found', true);
           } else {
-            registryUI.taglist.createSnackbar(this.responseText);
+            registryUI.snackbar(this.responseText, true);
           }
         });
         oReq.addEventListener('error', function () {
-          registryUI.taglist.createSnackbar('An error occured');
+          registryUI.snackbar('An error occured', true);
         });
         oReq.addEventListener('loadend', function () {
           registryUI.taglist.loadend = true;
@@ -97,9 +79,6 @@
     };
     registryUI.taglist.display();
     registryUI.taglist.instance.update();
-    this.on('updated', function () {
-      componentHandler.upgradeElements(this.refs['taglist-tag']);
-    });
 
     registryUI.taglist.reverse = function () {
       if (registryUI.taglist.asc) {

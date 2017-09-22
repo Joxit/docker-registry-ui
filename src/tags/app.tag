@@ -52,6 +52,9 @@
     registryUI.snackbar = function (message, isError) {
       registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError});
     };
+    registryUI.errorSnackbar = function(message) {
+      return registryUI.snackbar(message, true);
+    }
     this.router.start();
   </script>
 </app>

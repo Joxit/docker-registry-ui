@@ -212,3 +212,11 @@ material-card table th.material-card-th-sorted-descending:before {
 material-card table th.material-card-th-sorted-descending:before {
   content: "\e5db";
 }
+
+.material-icons {
+  color: #777;
+}
+
+material-snackbar .toast {
+  height: auto;
+}

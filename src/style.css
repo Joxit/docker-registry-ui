@@ -273,3 +273,16 @@ dropdown-item, #menu-control-dropdown p {
 #menu-control-dropdown p:active, .material-button-active:active {
   background-color: #e0e0e0;
 }
+
+material-popup material-button {
+  background-color: #fff;
+  color: #000;
+}
+
+material-popup material-button:hover material-waves {
+  background-color: hsla(0,0%,75%,.2);
+}
+
+material-popup .popup {
+  max-width: 450px;
+}

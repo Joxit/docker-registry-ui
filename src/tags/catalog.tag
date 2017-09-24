@@ -17,7 +17,9 @@
 <catalog>
   <!-- Begin of tag -->
   <material-card ref="catalog-tag" class="catalog">
-    <h2>Repositories of { registryUI.url() }</h2>
+    <div class="material-card-title-action">
+      <h2>Repositories of { registryUI.url() }</h2>
+    </div>
     <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
       <material-spinner></material-spinner>
     </div>
@@ -56,8 +58,6 @@
       oReq.open('GET', registryUI.url() + '/v2/_catalog');
       oReq.send();
     };
-    this.on('updated', function () {
-    });
     registryUI.catalog.go = function (image) {
       rg.router.go('taglist', {
         repository: image.split('/')[0],

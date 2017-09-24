@@ -23,11 +23,11 @@
     <p onclick="registryUI.changeTag.show(); registryUI.menuTag.close();">Change URL</p>
     <p onclick="registryUI.removeTag.show(); registryUI.menuTag.close();">Remove URL</p>
   </material-dropdown>
-  <div class="overlay" onclick="registryUI.menuTag.close();" show="{ registryUI.menuTag.isOpen() }"></div>
+  <div class="overlay" onclick="registryUI.menuTag.close();" show="{ registryUI.menuTag.isOpen && registryUI.menuTag.isOpen() }"></div>
   <script type="text/javascript">
     registryUI.menuTag = registryUI.menuTag || {};
     registryUI.menuTag.update = this.update;
-    this.on('mount', function(args) {
+    this.one('mount', function(args) {
       var self = this;
       registryUI.menuTag.close = function() {
         self.tags['material-dropdown'].close();

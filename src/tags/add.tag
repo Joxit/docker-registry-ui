@@ -31,14 +31,16 @@
     registryUI.addTag.update = this.update;
     this.one('mount', function () {
       registryUI.addTag.dialog = this.tags['material-popup'];
-      registryUI.addTag.dialog.one('updated', function() {
-        registryUI.addTag.addServer = registryUI.addTag.dialog.tags['material-input'];
-        registryUI.addTag.addServer.onkeyup = function (e) {
-          // if keyCode is Enter
-          if (e.keyCode == 13) {
-            registryUI.addTag.add();
-          }
-        };
+      registryUI.addTag.dialog.on('updated', function() {
+        if (!registryUI.addTag.addServer && registryUI.addTag.dialog.tags['material-input']) {
+          registryUI.addTag.addServer = registryUI.addTag.dialog.tags['material-input'].root;
+          registryUI.addTag.addServer.onkeyup = function (e) {
+            // if keyCode is Enter
+            if (e.keyCode == 13) {
+              registryUI.addTag.add();
+            }
+          };
+        }
       });
     });
     registryUI.addTag.show = function () {

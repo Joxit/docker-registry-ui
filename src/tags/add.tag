@@ -18,7 +18,7 @@
   <material-popup>
    <div class="material-popup-title">Add your Server ?</div>
    <div class="material-popup-content">
-     <material-input ref="test" placeholder="Server URL"></material-input>
+     <material-input onkeyup="{ registryUI.addTag.onkeyup }" placeholder="Server URL"></material-input>
    </div>
    <div class="material-popup-action">
      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.addTag.add();">Add</material-button>
@@ -28,34 +28,30 @@
 
   <script type="text/javascript">
     registryUI.addTag = registryUI.addTag || {};
-    registryUI.addTag.update = this.update;
     this.one('mount', function () {
       registryUI.addTag.dialog = this.tags['material-popup'];
-      registryUI.addTag.dialog.on('updated', function() {
-        if (!registryUI.addTag.addServer && registryUI.addTag.dialog.tags['material-input']) {
-          registryUI.addTag.addServer = registryUI.addTag.dialog.tags['material-input'].root;
-          registryUI.addTag.addServer.onkeyup = function (e) {
-            // if keyCode is Enter
-            if (e.keyCode == 13) {
-              registryUI.addTag.add();
-            }
-          };
-        }
-      });
+      registryUI.addTag.dialog.getAddServer = function() {
+        return this.tags['material-input'] ? this.tags['material-input'].value : '';
+      }
     });
+    registryUI.addTag.onkeyup = function (e) {
+      // if keyCode is Enter
+      if (e.keyCode == 13) {
+        registryUI.addTag.add();
+      }
+    };
     registryUI.addTag.show = function () {
       registryUI.addTag.dialog.open();
     };
     registryUI.addTag.add = function () {
-      if (registryUI.addTag.addServer.value && registryUI.addTag.addServer.value.length > 0) {
-        registryUI.addServer(registryUI.addTag.addServer.value);
+      if (registryUI.addTag.dialog.getAddServer().length > 0) {
+        registryUI.addServer(registryUI.addTag.dialog.getAddServer());
       }
-      registryUI.addTag.addServer.value = '';
       rg.router.go('home');
-      registryUI.addTag.dialog.close();
+      registryUI.addTag.close();
     };
     registryUI.addTag.close = function () {
-      registryUI.addTag.addServer.value = '';
+      registryUI.addTag.dialog.tags['material-input'].value = '';
       registryUI.addTag.dialog.close();
     };
   </script>

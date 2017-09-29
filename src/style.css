@@ -93,7 +93,7 @@ h2 {
   padding: 8px 0;
   list-style: none;
 }
-.list>li:hover {
+.list.highlight>li:hover {
   background-color: #eee;
   cursor: pointer;
 }

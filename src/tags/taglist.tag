@@ -56,6 +56,7 @@
         registryUI.taglist.name = name;
         registryUI.taglist.instance.update();
         oReq.addEventListener('load', function () {
+          registryUI.taglist.tags = [];
           if (this.status == 200) {
             registryUI.taglist.tags = JSON.parse(this.responseText).tags || [];
             registryUI.taglist.tags.sort();
@@ -67,6 +68,7 @@
         });
         oReq.addEventListener('error', function () {
           registryUI.snackbar('An error occured', true);
+            registryUI.taglist.tags = [];
         });
         oReq.addEventListener('loadend', function () {
           registryUI.taglist.loadend = true;

@@ -23,7 +23,7 @@
     <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
       <material-spinner></material-spinner>
     </div>
-    <ul class="list" show="{ registryUI.catalog.loadend }">
+    <ul class="list highlight" show="{ registryUI.catalog.loadend }">
       <li each="{ item in registryUI.catalog.repositories }" onclick="registryUI.catalog.go('{item}');">
         <span>
           <i class="material-icons">send</i>
@@ -39,6 +39,7 @@
     registryUI.catalog.display = function () {
       var oReq = new Http();
       oReq.addEventListener('load', function () {
+        registryUI.catalog.repositories = [];
         if (this.status == 200) {
           registryUI.catalog.repositories = JSON.parse(this.responseText).repositories || [];
           registryUI.catalog.repositories.sort();
@@ -50,6 +51,7 @@
       });
       oReq.addEventListener('error', function () {
         registryUI.snackbar('An error occured', true);
+        registryUI.catalog.repositories = [];
       });
       oReq.addEventListener('loadend', function () {
         registryUI.catalog.loadend = true;

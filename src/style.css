@@ -18,22 +18,17 @@
 html > body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
+html, body {
+  margin: 0;
+  height: 100%;
+}
 
-.mdl-mini-footer {
-  padding-top: 8px;
-  padding-bottom: 8px;
+main {
+  margin-bottom: 100px;
 }
 
 .section-centerd {
   margin: auto;
-}
-
-.mdl-data-table th {
-  font-size: 18px;
-}
-
-.mdl-data-table td {
-  font-size: 16px;
 }
 
 .full-table {
@@ -46,7 +41,6 @@ html > body {
   word-break: break-all;
 }
 
-.mdl-logo a,
 .material-card-title-action a {
   color: inherit;
   text-decoration: none;
@@ -58,6 +52,7 @@ material-card {
   max-width: 75%;
   margin: auto;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 material-spinner {
@@ -285,4 +280,10 @@ material-popup material-button:hover material-waves {
 
 material-popup .popup {
   max-width: 450px;
+}
+
+footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
 }

@@ -9,12 +9,11 @@
     "url": "https://github.com/Joxit/docker-registry-ui.git"
   },
   "author": "Jones Magloire (Joxit)",
-  "license": "AGPLv3",
+  "license": "AGPL-3.0",
   "description": "A web UI for private docker registry",
   "dependencies": {},
   "devDependencies": {
     "del": "^3.0.0",
-    "dialog-polyfill": "^0.4",
     "gulp": "^3.9",
     "gulp-clean-css": "^3.7.0",
     "gulp-concat": "^2.6.0",
@@ -25,7 +24,6 @@
     "gulp-riot": "^1.1.1",
     "gulp-uglify": "^2.1.2",
     "gulp-useref": "^3.0.0",
-    "material-design-lite": "^1.1",
     "pump": "^1.0.2",
     "riot": "^3.7.0",
     "riot-mui": "^0.1.1",

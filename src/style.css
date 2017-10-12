@@ -287,3 +287,24 @@ footer {
   position: fixed;
   bottom: 0;
 }
+
+.select-padding {
+  padding: 20px 0;
+}
+
+select {
+  position: relative;
+  outline: 0;
+  box-shadow: none;
+  padding: 0;
+  width: 100%;
+  background: 0 0;
+  border: none;
+  font-weight: 400;
+  line-height: 24px;
+  height: 24px;
+  border-bottom: 1px solid #2f6975;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}

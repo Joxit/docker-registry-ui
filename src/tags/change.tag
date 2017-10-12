@@ -16,26 +16,29 @@
 -->
 <change>
   <material-popup>
-   <div class="material-popup-title">Change your Server ?</div>
-   <div class="material-popup-content">
-     <select class="mdl-textfield__input mdl-textfield__select" name="server-list" ref="server-list">
-       <option each="{ url in registryUI.getRegistryServer() }" value={url}>{url}</option>
-     </select>
-   </div>
-   <div class="material-popup-action">
-     <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.changeTag.change();">Change</material-button>
-     <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.changeTag.close();">Cancel</material-button>
-   </div>
+    <div class="material-popup-title">Change your Server ?</div>
+    <div class="material-popup-content">
+      <div class="select-padding">
+        <select class="mdl-textfield__input mdl-textfield__select" name="server-list" ref="server-list">
+          <option each="{ url in registryUI.getRegistryServer() }" value={url}>{url}</option>
+        </select>
+      </div>
+    </div>
+    <div class="material-popup-action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.changeTag.change();">Change</material-button>
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.changeTag.close();">Cancel</material-button>
+    </div>
   </material-popup>
-  </dialog>
   <script type="text/javascript">
     registryUI.changeTag = registryUI.changeTag || {};
     this.one('mount', function () {
       registryUI.changeTag.dialog = this.tags['material-popup'];
-      registryUI.changeTag.dialog.getServerUrl = function() {
-        return this.refs['server-list'] ? this.refs['server-list'].value : '';
+      registryUI.changeTag.dialog.getServerUrl = function () {
+        return this.refs['server-list']
+          ? this.refs['server-list'].value
+          : '';
       };
-      registryUI.changeTag.dialog.on('updated', function() {
+      registryUI.changeTag.dialog.on('updated', function () {
         if (this.refs['server-list']) {
           this.refs['server-list'].value = registryUI.url();
         }

@@ -19,6 +19,7 @@
    <div class="material-popup-title">Add your Server ?</div>
    <div class="material-popup-content">
      <material-input onkeyup="{ registryUI.addTag.onkeyup }" placeholder="Server URL"></material-input>
+     <span>Write your URL without /v2</span>
    </div>
    <div class="material-popup-action">
      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.addTag.add();">Add</material-button>

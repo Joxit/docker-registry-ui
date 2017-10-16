@@ -15,23 +15,31 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <menu>
-  <div ref="card-menu" id="card-menu" class="mdl-card__menu">
-    <button ref="registry-menu" name="registry-menu" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-      <i class="material-icons">more_vert</i>
-    </button>
-    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="registry-menu">
-      <li class="mdl-menu__item" onclick="registryUI.addTag.show();">Add URL</li>
-      <li class="mdl-menu__item" onclick="registryUI.changeTag.show();">Change URL</li>
-      <li class="mdl-menu__item" onclick="registryUI.removeTag.show();">Remove URL</li>
-    </ul>
-  </div>
-
+  <material-button id="menu-control-button" onclick="registryUI.menuTag.toggle();" waves-center="true" rounded="true" waves-opacity="0.6" waves-duration="600">
+    <i class="material-icons">more_vert</i>
+  </material-button>
+  <material-dropdown id="menu-control-dropdown">
+    <p onclick="registryUI.addTag.show(); registryUI.menuTag.close();">Add URL</p>
+    <p onclick="registryUI.changeTag.show(); registryUI.menuTag.close();">Change URL</p>
+    <p onclick="registryUI.removeTag.show(); registryUI.menuTag.close();">Remove URL</p>
+  </material-dropdown>
+  <div class="overlay" onclick="registryUI.menuTag.close();" show="{ registryUI.menuTag.isOpen && registryUI.menuTag.isOpen() }"></div>
   <script type="text/javascript">
     registryUI.menuTag = registryUI.menuTag || {};
     registryUI.menuTag.update = this.update;
-    this.on('updated', function () {
-      componentHandler.upgradeElements(this.refs['card-menu']);
+    this.one('mount', function(args) {
+      var self = this;
+      registryUI.menuTag.close = function() {
+        self.tags['material-dropdown'].close();
+        self.update();
+      }
+      registryUI.menuTag.isOpen = function() {
+        return self.tags['material-dropdown'].opened;
+      }
+      registryUI.menuTag.toggle = function() {
+        self.tags['material-dropdown'].opened ? self.tags['material-dropdown'].close() : self.tags['material-dropdown'].open();
+        self.update();
+      };
     });
-    registryUI.menuTag.update();
   </script>
 </menu>

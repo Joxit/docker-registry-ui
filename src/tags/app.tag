@@ -15,8 +15,34 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <app>
-  <catalog if="{!rg.router.current || rg.router.current.name == 'home'}"></catalog>
-  <taglist if="{rg.router.current && rg.router.current.name == 'taglist'}"></taglist>
+  <header>
+    <material-navbar>
+      <div class="logo">Docker Registry UI</div>
+      <menu></menu>
+    </material-navbar>
+  </header>
+  <main>
+    <catalog if="{!rg.router.current || rg.router.current.name == 'home'}"></catalog>
+    <taglist if="{rg.router.current && rg.router.current.name == 'taglist'}"></taglist>
+    <change></change>
+    <add></add>
+    <remove></remove>
+    <material-snackbar></material-snackbar>
+  </main>
+  <footer>
+    <material-footer>
+      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI</a>
+      <ul class="material-footer-link-list">
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
+        </li>
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui/blob/master/LICENSE">Privacy &amp; Terms</a>
+        </li>
+      </ul>
+
+    </material-footer>
+  </footer>
   <script>
 
     this.mixin('rg.router');
@@ -37,7 +63,14 @@
           }
           break;
       }
-    })
+    });
+    registryUI.appTag = this;
+    registryUI.snackbar = function (message, isError) {
+      registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError});
+    };
+    registryUI.errorSnackbar = function (message) {
+      return registryUI.snackbar(message, true);
+    }
     this.router.start();
   </script>
 </app>

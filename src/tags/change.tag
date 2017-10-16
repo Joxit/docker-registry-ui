@@ -15,47 +15,42 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <change>
-  <dialog ref="change-server-dialog" class="mdl-dialog">
-    <h4 class="mdl-dialog__title">Change your Server ?</h4>
-    <div class="mdl-dialog__content">
-      <div class="mdl-textfield mdl-js-textfield">
+  <material-popup>
+    <div class="material-popup-title">Change your Server ?</div>
+    <div class="material-popup-content">
+      <div class="select-padding">
         <select class="mdl-textfield__input mdl-textfield__select" name="server-list" ref="server-list">
           <option each="{ url in registryUI.getRegistryServer() }" value={url}>{url}</option>
         </select>
       </div>
     </div>
-    <div class="mdl-dialog__actions">
-      <button type="button" class="mdl-button change" onClick="registryUI.changeTag.change();">Change</button>
-      <button type="button" class="mdl-button close" onClick="registryUI.changeTag.close();">Cancel</button>
+    <div class="material-popup-action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.changeTag.change();">Change</material-button>
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.changeTag.close();">Cancel</material-button>
     </div>
-  </dialog>
+  </material-popup>
   <script type="text/javascript">
     registryUI.changeTag = registryUI.changeTag || {};
-    registryUI.changeTag.update = this.update;
-    this.on('updated', function () {
-      componentHandler.upgradeElements(this.refs['change-server-dialog']);
-      registryUI.changeTag.dialog = registryUI.changeTag.dialog || this.refs['change-server-dialog'];
-      registryUI.changeTag.serverList = registryUI.changeTag.serverList || this.refs['server-list'];
-      if (!registryUI.changeTag.dialog.showModal) {
-        dialogPolyfill.registerDialog(registryUI.changeTag.dialog);
-      }
-      this.refs['server-list'].onkeyup = function (e) {
-        // if keyCode is Enter
-        if (e.keyCode == 13) {
-          registryUI.changeTag.change();
-        }
+    this.one('mount', function () {
+      registryUI.changeTag.dialog = this.tags['material-popup'];
+      registryUI.changeTag.dialog.getServerUrl = function () {
+        return this.refs['server-list']
+          ? this.refs['server-list'].value
+          : '';
       };
+      registryUI.changeTag.dialog.on('updated', function () {
+        if (this.refs['server-list']) {
+          this.refs['server-list'].value = registryUI.url();
+        }
+      });
     });
     registryUI.changeTag.show = function () {
-      registryUI.changeTag.update();
-      registryUI.changeTag.serverList.value = registryUI.url();;
-      registryUI.changeTag.dialog.showModal();
+      registryUI.changeTag.dialog.open();
     };
     registryUI.changeTag.change = function () {
-      if (registryUI.changeTag.serverList.value && registryUI.changeTag.serverList.value.length > 0) {
-        registryUI.changeServer(registryUI.changeTag.serverList.value);
+      if (registryUI.changeTag.dialog.getServerUrl().length > 0) {
+        registryUI.changeServer(registryUI.changeTag.dialog.getServerUrl());
       }
-      registryUI.changeTag.serverList.value = '';
       rg.router.go('home');
       registryUI.changeTag.dialog.close();
     };

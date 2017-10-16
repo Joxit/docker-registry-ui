@@ -16,57 +16,42 @@
 -->
 <catalog>
   <!-- Begin of tag -->
-  <div ref="catalog-tag" class="catalog">
-    <div class="section-centerd mdl-card mdl-shadow--2dp mdl-cell--6-col">
-      <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">Repositories of { registryUI.url() }</h2>
-      </div>
-      <div ref="catalog-spinner" hide="{ registryUI.catalog.loadend }" class="mdl-spinner mdl-js-spinner is-active section-centerd"></div>
-      <ul class="mdl-list" show="{ registryUI.catalog.loadend }">
-        <li class="mdl-list__item mdl-menu__item" style="opacity: 1;" each="{ item in registryUI.catalog.repositories }" onclick="registryUI.catalog.go('{item}');">
-          <span class="mdl-list__item-primary-content">
-            <i class="material-icons mdl-list__item-icon">send</i>
-            { item }
-          </span>
-        </li>
-      </ul>
+  <material-card ref="catalog-tag" class="catalog">
+    <div class="material-card-title-action">
+      <h2>Repositories of { registryUI.url() }</h2>
     </div>
-    <div ref="error-snackbar" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-js-snackbar mdl-snackbar">
-      <div class="mdl-snackbar__text"></div>
-      <button class="mdl-snackbar__action" type="button"></button>
+    <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
+      <material-spinner></material-spinner>
     </div>
-  </div>
+    <ul class="list highlight" show="{ registryUI.catalog.loadend }">
+      <li each="{ item in registryUI.catalog.repositories }" onclick="registryUI.catalog.go('{item}');">
+        <span>
+          <i class="material-icons">send</i>
+          { item }
+        </span>
+      </li>
+    </ul>
+  </material-card>
 
   <script>
     registryUI.catalog.instance = this;
     this.mixin('rg.router');
     registryUI.catalog.display = function () {
       var oReq = new Http();
-      registryUI.catalog.createSnackbar = function (msg) {
-        var snackbar = registryUI.catalog.instance.refs['error-snackbar'];
-        registryUI.catalog.error = msg;
-        var data = {
-          message: registryUI.catalog.error,
-          timeout: 100000,
-          actionHandler: function () {
-            snackbar.classList.remove('mdl-snackbar--active');
-          },
-          actionText: 'Undo'
-        };
-        snackbar.MaterialSnackbar.showSnackbar(data);
-      };
       oReq.addEventListener('load', function () {
+        registryUI.catalog.repositories = [];
         if (this.status == 200) {
           registryUI.catalog.repositories = JSON.parse(this.responseText).repositories || [];
           registryUI.catalog.repositories.sort();
         } else if (this.status == 404) {
-          registryUI.catalog.createSnackbar('Server not found');
+          registryUI.snackbar('Server not found', true);
         } else {
-          registryUI.catalog.createSnackbar(this.responseText);
+          registryUI.snackbar(this.responseText);
         }
       });
       oReq.addEventListener('error', function () {
-        registryUI.catalog.createSnackbar('An error occured');
+        registryUI.snackbar('An error occured', true);
+        registryUI.catalog.repositories = [];
       });
       oReq.addEventListener('loadend', function () {
         registryUI.catalog.loadend = true;
@@ -75,9 +60,6 @@
       oReq.open('GET', registryUI.url() + '/v2/_catalog');
       oReq.send();
     };
-    this.on('updated', function () {
-      componentHandler.upgradeElements(this.refs['catalog-tag']);
-    });
     registryUI.catalog.go = function (image) {
       rg.router.go('taglist', {
         repository: image.split('/')[0],

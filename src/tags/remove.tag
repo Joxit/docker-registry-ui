@@ -15,33 +15,32 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove>
-  <dialog ref="remove-server-dialog" class="mdl-dialog">
-    <h4 class="mdl-dialog__title">Remove your Registry Server ?</h4>
-    <div class="mdl-dialog__content">
-      <div class="mdl-textfield mdl-js-textfield">
-        <ul class="mdl-list">
-          <li class="mdl-list__item" each="{ url in registryUI.getRegistryServer() }">
-            <span class="mdl-list__item-primary-content">
-              <a href="#" onClick="registryUI.removeTag.removeUrl('{url}');">
-                <i class="material-icons mdl-list__item-icon">delete</i>
-              </a>
-              <span class="url">{url}</span>
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="mdl-dialog__actions">
-      <button type="button" class="mdl-button close" onClick="registryUI.removeTag.close();">Close</button>
-    </div>
-  </dialog>
+  
+  <material-popup>
+   <div class="material-popup-title">Remove your Registry Server ?</div>
+   <div class="material-popup-content">
+     <ul class="list">
+       <li each="{ url in registryUI.getRegistryServer() }">
+         <span>
+           <a href="#" onClick="registryUI.removeTag.removeUrl('{url}');">
+             <i class="material-icons">delete</i>
+           </a>
+           <span class="url">{ url }</span>
+         </span>
+       </li>
+     </ul>
+   </div>
+   <div class="material-popup-action">
+     <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="registryUI.removeTag.close();">Close</material-button>
+   </div>
+  </material-popup>
   <script type="text/javascript">
     registryUI.removeTag = registryUI.removeTag || {}
     registryUI.removeTag.update = this.update;
 
     registryUI.removeTag.removeUrl = function (url) {
       registryUI.removeServer(url);
-      registryUI.removeTag.update();
+      registryUI.removeTag.close();
     };
 
     registryUI.removeTag.close = function () {
@@ -50,15 +49,11 @@
     };
 
     registryUI.removeTag.show = function () {
-      registryUI.removeTag.update();
-      registryUI.removeTag.dialog.showModal();
+      registryUI.removeTag.dialog.open();
     };
 
-    this.on('updated', function () {
-      registryUI.removeTag.dialog = this.refs['remove-server-dialog'];
-      if (!registryUI.removeTag.dialog.showModal) {
-        dialogPolyfill.registerDialog(registryUI.removeTag.dialog);
-      }
+    this.one('mount', function () {
+      registryUI.removeTag.dialog = this.tags['material-popup'];
     });
   </script>
 </remove>

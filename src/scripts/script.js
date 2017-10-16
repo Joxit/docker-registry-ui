@@ -18,7 +18,7 @@ var registryUI = {}
 registryUI.URL_QUERY_PARAM_REGEX = /[&?]url=/;
 registryUI.URL_PARAM_REGEX = /^url=/;
 
-registryUI.url = function() {
+registryUI.url = function(byPassQueryParam) {
   if (!registryUI._url) {
     var url = registryUI.getUrlQueryParam();
     if (url) {
@@ -78,10 +78,14 @@ registryUI.removeServer = function(url) {
   }
   registryServer.splice(index, 1);
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
+  if (url == registryUI.url()) {
+    registryUI.updateHistory(registryUI.getRegistryServer(0));
+    rg.router.go('home');
+  }
 }
 
 registryUI.updateHistory = function(url) {
-  history.pushState(null, '', '?url=' + registryUI.encodeURI(url) + window.location.hash);
+  history.pushState(null, '', (url ? '?url=' + registryUI.encodeURI(url) : '?') + window.location.hash);
   registryUI._url = url;
 }
 

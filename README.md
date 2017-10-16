@@ -7,7 +7,7 @@ There is no default registry on this UI, you should add your own with the UI.
 You can manage more than one registry server.
 All registry will be stored in the [local storage](https://en.wikipedia.org/wiki/Web_storage#Local_and_session_storage) of your browser.
 
-This web user interface use [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [Material Design Lite](https://github.com/google/material-design-lite) components.
+This web user interface use [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
 
 ## [GitHub Page](https://joxit.github.io/docker-registry-ui) and [Live Demo](https://joxit.github.io/docker-registry-ui/demo/)
 
@@ -20,6 +20,7 @@ This web user interface use [Riot](https://github.com/Riot/riot) the react-like 
 -   Sort the tag list
 -   One interface for many registry
 -   Use a secured docker registry
+-   Share your docker registry with query parameter `url` (e.g. `https://joxit.github.io/docker-registry-ui/demo?url=https://registry.example.com`)
 
 ## Getting Started
 

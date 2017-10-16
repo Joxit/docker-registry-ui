@@ -16,7 +16,7 @@
 -->
 <remove-image>
   <a href="#" onclick="registryUI.removeImage.remove('{ opts.name }', '{ opts.tag }')">
-    <i class="material-icons mdl-list__item-icon">delete</i>
+    <i class="material-icons">delete</i>
   </a>
   <script type="text/javascript">
     registryUI.removeImage = registryUI.removeImage || {}
@@ -28,7 +28,7 @@
         registryUI.taglist.refresh();
         if (this.status == 200) {
           if (!this.hasHeader('Docker-Content-Digest')) {
-            registryUI.taglist.createSnackbar('You need to add Access-Control-Expose-Headers: [\'Docker-Content-Digest\'] in your server configuration.');
+            registryUI.errorSnackbar('You need to add Access-Control-Expose-Headers: [\'Docker-Content-Digest\'] in your server configuration.');
             return;
           }
           var digest = this.getResponseHeader('Docker-Content-Digest');
@@ -36,23 +36,23 @@
           oReq.addEventListener('loadend', function () {
             if (this.status == 200 || this.status == 202) {
               registryUI.taglist.refresh();
-              registryUI.taglist.createSnackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
+              registryUI.snackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
             } else if (this.status == 404) {
-              registryUI.taglist.createSnackbar('Digest not found');
+              registryUI.errorSnackbar('Digest not found');
             } else {
-              registryUI.taglist.createSnackbar(this.responseText);
+              registryUI.snackbar(this.responseText);
             }
           });
           oReq.open('DELETE', registryUI.url() + '/v2/' + name + '/manifests/' + digest);
           oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
           oReq.addEventListener('error', function () {
-            registryUI.taglist.createSnackbar('An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].');
+            registryUI.errorSnackbar('An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].');
           });
           oReq.send();
         } else if (this.status == 404) {
-          registryUI.taglist.createSnackbar('Manifest for' + name + ':' + tag + 'not found');
+          registryUI.errorSnackbar('Manifest for ' + name + ':' + tag + ' not found');
         } else {
-          registryUI.taglist.createSnackbar(this.responseText);
+          registryUI.snackbar(this.responseText);
         }
       });
       oReq.open('HEAD', registryUI.url() + '/v2/' + name + '/manifests/' + tag);

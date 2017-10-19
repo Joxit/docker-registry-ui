@@ -5,9 +5,9 @@
 This project aims to provide a user interface for your private docker registry v2.
 There is no default registry on this UI, you should add your own with the UI.
 You can manage more than one registry server.
-All registry will be stored in the [local storage](https://en.wikipedia.org/wiki/Web_storage#Local_and_session_storage) of your browser.
+All registries will be stored in the [local storage](https://en.wikipedia.org/wiki/Web_storage#Local_and_session_storage) of your browser.
 
-This web user interface use [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
+This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
 
 ## [GitHub Page](https://joxit.github.io/docker-registry-ui) and [Live Demo](https://joxit.github.io/docker-registry-ui/demo/)
 
@@ -18,7 +18,7 @@ This web user interface use [Riot](https://github.com/Riot/riot) the react-like 
 -   List all your repositories/images.
 -   List all tags for a repository/image
 -   Sort the tag list
--   One interface for many registry
+-   One interface for many registries
 -   Use a secured docker registry
 -   Share your docker registry with query parameter `url` (e.g. `https://joxit.github.io/docker-registry-ui/demo?url=https://registry.example.com`)
 
@@ -49,7 +49,7 @@ The docker contains the source code and a node webserver in order to serve the d
 
 You can get the image in three ways
 
-From sources with this command :
+From sources with this command:
 
 ```sh
 git clone https://github.com/Joxit/docker-registry-ui.git
@@ -57,14 +57,14 @@ docker build -t joxit/docker-registry-ui docker-registry-ui
 docker build -t joxit/docker-registry-ui -f docker-registry-ui/Dockerfile.static docker-registry-ui
 ```
 
-Or build with the url :
+Or build with the url:
 
 ```sh
 docker build -t joxit/docker-registry-ui github.com/Joxit/docker-registry-ui
 docker build -t joxit/docker-registry-ui -f Dockerfile.static github.com/Joxit/docker-registry-ui
 ```
 
-Or pull the image from [docker hub](https://hub.docker.com/r/joxit/docker-registry-ui/) :
+Or pull the image from [docker hub](https://hub.docker.com/r/joxit/docker-registry-ui/):
 
 ```sh
 docker pull joxit/docker-registry-ui
@@ -73,7 +73,7 @@ docker pull joxit/docker-registry-ui:static
 
 #### Run the docker
 
-To run the docker and see the website on your 80 port, try this :
+To run the docker and see the website on your 80 port, try this:
 
 ```sh
 docker run -d -p 80:80 joxit/docker-registry-ui
@@ -94,11 +94,11 @@ docker run -d -p 80:80 -e URL=http://127.0.0.1:5000 -e DELETE_IMAGES=true joxit/
 
 Your server should be configured to accept CORS.
 
-If your docker registry does not need credentials, you will need to send this HEADER :
+If your docker registry does not need credentials, you will need to send this HEADER:
 
     Access-Control-Allow-Origin: '*'
 
-If your docker registry need credentials, you will need to send these HEADERS :
+If your docker registry need credentials, you will need to send these HEADERS:
 
 ```yml
 http:
@@ -110,7 +110,7 @@ http:
 
 ## Using delete
 
-For deleting images, you need to activate the delete feature in your registry :
+For deleting images, you need to activate the delete feature in your registry:
 
 ```yml
 storage:
@@ -118,7 +118,7 @@ storage:
       enabled: true
 ```
 
-And you need to add these HEADERS :
+And you need to add these HEADERS:
 
 ```yml
 http:

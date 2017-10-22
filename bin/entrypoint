@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 $@
 sed -i "s,\${URL},${URL}," scripts/script.js
 

@@ -51,7 +51,7 @@
       if (registryUI.changeTag.dialog.getServerUrl().length > 0) {
         registryUI.changeServer(registryUI.changeTag.dialog.getServerUrl());
       }
-      rg.router.go('home');
+      registryUI.home();
       registryUI.changeTag.dialog.close();
     };
     registryUI.changeTag.close = function () {

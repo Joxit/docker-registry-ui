@@ -35,8 +35,8 @@
 
   <script>
     registryUI.catalog.instance = this;
-    this.mixin('rg.router');
     registryUI.catalog.display = function () {
+      registryUI.catalog.repositories = [];
       var oReq = new Http();
       oReq.addEventListener('load', function () {
         registryUI.catalog.repositories = [];
@@ -61,10 +61,7 @@
       oReq.send();
     };
     registryUI.catalog.go = function (image) {
-      rg.router.go('taglist', {
-        repository: image.split('/')[0],
-        image: image.split('/')[1]
-      });
+      route('taglist/' + image);
     };
     registryUI.catalog.display();
   </script>

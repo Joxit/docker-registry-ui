@@ -89,7 +89,7 @@ gulp.task('scripts', ['html'], function() {
 });
 
 gulp.task('vendor', ['html'], function() {
-  return gulp.src(['node_modules/riot/riot.min.js', 'node_modules/riotgear-router/dist/rg-router.min.js', 'node_modules/riot-mui/build/js/riot-mui-min.js'])
+  return gulp.src(['node_modules/riot/riot.min.js', 'node_modules/riot-route/dist/route.min.js', 'node_modules/riot-mui/build/js/riot-mui-min.js'])
     .pipe(concat('vendor.js'))
     .pipe(gulp.dest('dist/scripts'));
 });

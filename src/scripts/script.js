@@ -80,7 +80,7 @@ registryUI.removeServer = function(url) {
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
   if (url == registryUI.url()) {
     registryUI.updateHistory(registryUI.getRegistryServer(0));
-    rg.router.go('home');
+    route('');
   }
 }
 

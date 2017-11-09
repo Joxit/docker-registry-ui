@@ -18,7 +18,7 @@
   <!-- Begin of tag -->
   <material-card ref="taglist-tag" class="taglist">
     <div class="material-card-title-action">
-      <a href="#" onclick="registryUI.taglist.back();">
+      <a href="#!" onclick="registryUI.home();">
         <i class="material-icons">arrow_back</i>
       </a>
       <h2>Tags of { registryUI.url() + '/' + registryUI.taglist.name }</h2>
@@ -48,12 +48,9 @@
   <script>
     registryUI.taglist.instance = this;
     registryUI.taglist.display = function () {
-      if (rg.router.current && rg.router.current.name == 'taglist') {
-        name = rg.router.current.params.repository + (rg.router.current.params.image
-          ? '/' + rg.router.current.params.image
-          : '');
+      registryUI.taglist.tags = [];
+      if (route.routeName == 'taglist') {
         var oReq = new Http();
-        registryUI.taglist.name = name;
         registryUI.taglist.instance.update();
         oReq.addEventListener('load', function () {
           registryUI.taglist.tags = [];
@@ -74,7 +71,7 @@
           registryUI.taglist.loadend = true;
           registryUI.taglist.instance.update();
         });
-        oReq.open('GET', registryUI.url() + '/v2/' + name + '/tags/list');
+        oReq.open('GET', registryUI.url() + '/v2/' + registryUI.taglist.name + '/tags/list');
         oReq.send();
         registryUI.taglist.asc = true;
       }
@@ -92,11 +89,8 @@
       }
       registryUI.taglist.instance.update();
     };
-    registryUI.taglist.back = function () {
-      rg.router.go('home');
-    };
     registryUI.taglist.refresh = function () {
-      rg.router.go(rg.router.current.name, rg.router.current.params);
+      route(registryUI.taglist.name);
     };
   </script>
   <!-- End of tag -->

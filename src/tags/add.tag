@@ -48,7 +48,7 @@
       if (registryUI.addTag.dialog.getAddServer().length > 0) {
         registryUI.addServer(registryUI.addTag.dialog.getAddServer());
       }
-      rg.router.go('home');
+      registryUI.home();
       registryUI.addTag.close();
     };
     registryUI.addTag.close = function () {

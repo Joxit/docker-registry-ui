@@ -22,8 +22,8 @@
     </material-navbar>
   </header>
   <main>
-    <catalog if="{!rg.router.current || rg.router.current.name == 'home'}"></catalog>
-    <taglist if="{rg.router.current && rg.router.current.name == 'taglist'}"></taglist>
+    <catalog if="{route.routeName == 'home'}"></catalog>
+    <taglist if="{route.routeName == 'taglist'}"></taglist>
     <change></change>
     <add></add>
     <remove></remove>
@@ -45,32 +45,47 @@
   </footer>
   <script>
 
-    this.mixin('rg.router');
-    this.router.add({name: 'home', url: ''});
-    this.router.add({name: 'taglist', url: '/taglist/:repository/:image'});
-    this.router.on('go', state => {
-      switch (state.name) {
-        case 'taglist':
-          if (registryUI.taglist.display) {
-            registryUI.taglist.loadend = false;
-            registryUI.taglist.display();
-          }
-          break;
-        case 'home':
-          if (registryUI.catalog.display) {
-            registryUI.catalog.loadend = false;
-            registryUI.catalog.display();
-          }
-          break;
-      }
-    });
     registryUI.appTag = this;
+    route.base('#!')
+    route('', function() {
+      route.routeName = 'home';
+      if (registryUI.catalog.display) {
+        registryUI.catalog.loadend = false;
+        registryUI.catalog.display();
+      }
+      registryUI.appTag.update();
+    });
+    route('/taglist/*', function(image) {
+      route.routeName = 'taglist';
+      registryUI.taglist.name = image
+      if (registryUI.taglist.display) {
+        registryUI.taglist.loadend = false;
+        registryUI.taglist.display();
+      }
+      registryUI.appTag.update();
+    });
+    registryUI.home = function() {
+      if(route.routeName == 'home') {
+        registryUI.catalog.display();
+      } else {
+        route('');
+      }
+    };
     registryUI.snackbar = function (message, isError) {
       registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError});
     };
     registryUI.errorSnackbar = function (message) {
       return registryUI.snackbar(message, true);
     }
-    this.router.start();
+    route.parser(null, function(path, filter) {
+      const f = filter
+        .replace(/\?/g, '\\?')
+        .replace(/\*/g, '([^?#]+?)')
+        .replace(/\.\./, '.*')
+      const re = new RegExp('^' + f + '$')
+      const args = path.match(re)
+      if (args) return args.slice(1)
+    });
+    route.start(true);
   </script>
 </app>

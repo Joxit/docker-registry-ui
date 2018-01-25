@@ -21,6 +21,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   One interface for many registries
 -   Use a secured docker registry
 -   Share your docker registry with query parameter `url` (e.g. `https://joxit.github.io/docker-registry-ui/demo?url=https://registry.example.com`)
+-   Use `joxit/docker-registry-ui:static` as reverse proxy to your docker registry (This will avoid CORS).
 
 ## Getting Started
 
@@ -83,11 +84,24 @@ docker run -d -p 80:80 joxit/docker-registry-ui
 
 Some env options are available for use this interface for only one server.
 
--   `URL`: set the static URL to use. (`Required`)
--   `DELETE_IMAGES`: if this variable is empty or `false`, delete feature is desactivated. It is activated otherwise.
+-   `URL`: set the static URL to use (You will need CORS configuration). Example: `http://127.0.0.1:5000`. (`Required`)
+-   `REGISTRY_URL`: your docker registry URL to contact (CORS configuration is not needed). Example: `http://my-docker-container:5000`. (Can't be used with `URL`, since 0.3.2).
+-   `DELETE_IMAGES`: if this variable is empty or `false`, delete feature is deactivated. It is activated otherwise.
+
+Example with `URL` option.
 
 ```sh
 docker run -d -p 80:80 -e URL=http://127.0.0.1:5000 -e DELETE_IMAGES=true joxit/docker-registry-ui:static
+```
+
+Example with `REGISTRY_URL`, this will add a proxy to your registry.
+Your registry will be accessible here : `http://127.0.0.1/v2`, this will avoid CORS errors (see #25).
+Be careful, `joxit/docker-registry-ui` and `registry:2` will communicate, both containers should be in the same network or use your private IP.
+
+```sh
+docker network create registry-ui-net
+docker run -d --net registry-ui-net --name registry-srv registry:2
+docker run -d --net registry-ui-net -p 80:80 -e REGISTRY_URL=http://registry-srv:5000 -e DELETE_IMAGES=true joxit/docker-registry-ui:static
 ```
 
 ## Using CORS

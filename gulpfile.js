@@ -42,21 +42,21 @@ gulp.task('riot-tag', ['html'], function() {
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016',
+      year: '2016-2018',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(gulp.dest('dist/scripts'));
 });
 
 gulp.task('riot-static-tag', ['html'], function() {
-  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag', 'src/tags/remove-image.tag'])
+  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag', 'src/tags/remove-image.tag', 'src/tags/image-size.tag'])
     .pipe(concat('tags-static.js'))
     .pipe(riot())
     .pipe(minifier({}, uglify))
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016',
+      year: '2016-2018',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(gulp.dest('dist/scripts'));
@@ -69,7 +69,7 @@ gulp.task('scripts-static', ['html'], function() {
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016',
+      year: '2016-2018',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(gulp.dest('dist/scripts'));
@@ -82,7 +82,7 @@ gulp.task('scripts', ['html'], function() {
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016',
+      year: '2016-2018',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(gulp.dest('dist/scripts'));
@@ -103,7 +103,7 @@ gulp.task('styles', ['html'], function() {
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016',
+      year: '2016-2018',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(gulp.dest('dist/'));

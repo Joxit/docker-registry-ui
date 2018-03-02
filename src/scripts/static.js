@@ -18,6 +18,9 @@ var registryUI = {}
 registryUI.url = function() {
   return '${URL}';
 };
+registryUI.name = function() {
+  return '${REGISTRY_TITLE}' || registryUI.url();
+};
 registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};

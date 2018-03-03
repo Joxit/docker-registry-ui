@@ -30,6 +30,7 @@
       <thead>
         <tr>
           <th class="material-card-th-left">Repository</th>
+          <th>Size</th>
           <th class="{ registryUI.taglist.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }" onclick="registryUI.taglist.reverse();">Tag</th>
           <th show="{ registryUI.isImageRemoveActivated }"></th>
         </tr>
@@ -37,6 +38,7 @@
       <tbody>
         <tr each="{ item in registryUI.taglist.tags }">
           <td class="material-card-th-left">{ registryUI.taglist.name }</td>
+          <td><image-size name={ registryUI.taglist.name } tag={ item } /></td>
           <td>{ item }</td>
           <td show="{ registryUI.isImageRemoveActivated }">
             <remove-image name={ registryUI.taglist.name } tag={ item }/>

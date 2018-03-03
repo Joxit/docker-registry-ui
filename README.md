@@ -22,6 +22,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Use a secured docker registry
 -   Share your docker registry with query parameter `url` (e.g. `https://joxit.github.io/docker-registry-ui/demo?url=https://registry.example.com`)
 -   Use `joxit/docker-registry-ui:static` as reverse proxy to your docker registry (This will avoid CORS).
+-   Display image size (see #30)
 
 ## Getting Started
 

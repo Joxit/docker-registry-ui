@@ -18,7 +18,7 @@ var registryUI = {}
 registryUI.URL_QUERY_PARAM_REGEX = /[&?]url=/;
 registryUI.URL_PARAM_REGEX = /^url=/;
 
-registryUI.url = function(byPassQueryParam) {
+registryUI.name = registryUI.url = function(byPassQueryParam) {
   if (!registryUI._url) {
     var url = registryUI.getUrlQueryParam();
     if (url) {

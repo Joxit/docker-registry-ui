@@ -21,7 +21,7 @@
       <a href="#!" onclick="registryUI.home();">
         <i class="material-icons">arrow_back</i>
       </a>
-      <h2>Tags of { registryUI.url() + '/' + registryUI.taglist.name }</h2>
+      <h2>Tags of { registryUI.name() + '/' + registryUI.taglist.name }</h2>
     </div>
     <div hide="{ registryUI.taglist.loadend }" class="spinner-wrapper">
       <material-spinner></material-spinner>

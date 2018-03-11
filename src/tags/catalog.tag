@@ -18,7 +18,7 @@
   <!-- Begin of tag -->
   <material-card ref="catalog-tag" class="catalog">
     <div class="material-card-title-action">
-      <h2>Repositories of { registryUI.url() }</h2>
+      <h2>Repositories of { registryUI.name() }</h2>
     </div>
     <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
       <material-spinner></material-spinner>

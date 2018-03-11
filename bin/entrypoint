@@ -1,6 +1,7 @@
 #!/bin/sh
 $@
 sed -i "s,\${URL},${URL}," scripts/script.js
+sed -i "s,\${REGISTRY_TITLE},${REGISTRY_TITLE}," scripts/script.js
 
 if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
   sed -i "s/registryUI.isImageRemoveActivated *= *[^,;]*/registryUI.isImageRemoveActivated=false/" scripts/script.js

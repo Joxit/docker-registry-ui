@@ -18,4 +18,10 @@ LABEL maintainer="Jones MAGLOIRE @Joxit"
 
 WORKDIR /usr/share/nginx/html/
 
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY dist/ /usr/share/nginx/html/
+COPY dist/scripts/script-static.js /usr/share/nginx/html/scripts/script.js
+COPY dist/scripts/tags-static.js /usr/share/nginx/html/scripts/tags.js
+COPY bin/entrypoint /bin
+
+ENTRYPOINT entrypoint

@@ -23,6 +23,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Share your docker registry with query parameter `url` (e.g. `https://joxit.github.io/docker-registry-ui/demo?url=https://registry.example.com`)
 -   Use `joxit/docker-registry-ui:static` as reverse proxy to your docker registry (This will avoid CORS).
 -   Display image size (see #30)
+-   Alpine and Debian based images
 
 ## Getting Started
 
@@ -55,22 +56,34 @@ From sources with this command:
 
 ```sh
 git clone https://github.com/Joxit/docker-registry-ui.git
-docker build -t joxit/docker-registry-ui docker-registry-ui
-docker build -t joxit/docker-registry-ui -f docker-registry-ui/Dockerfile.static docker-registry-ui
+# Alpine
+docker build -t joxit/docker-registry-ui:latest docker-registry-ui
+docker build -t joxit/docker-registry-ui:static -f docker-registry-ui/static.dockerfile docker-registry-ui
+# Debian
+docker build -t joxit/docker-registry-ui:debian -f docker-registry-ui/debian.dockerfile docker-registry-ui
+docker build -t joxit/docker-registry-ui:static -f docker-registry-ui/debian-static.dockerfile docker-registry-ui
 ```
 
 Or build with the url:
 
 ```sh
-docker build -t joxit/docker-registry-ui github.com/Joxit/docker-registry-ui
-docker build -t joxit/docker-registry-ui -f Dockerfile.static github.com/Joxit/docker-registry-ui
+# Alpine
+docker build -t joxit/docker-registry-ui:latest github.com/Joxit/docker-registry-ui
+docker build -t joxit/docker-registry-ui:static -f static.dockerfile github.com/Joxit/docker-registry-ui
+# Debian
+docker build -t joxit/docker-registry-ui:debian -f debian.dockerfile github.com/Joxit/docker-registry-ui
+docker build -t joxit/docker-registry-ui:debian-static -f debian-static.dockerfile github.com/Joxit/docker-registry-ui
 ```
 
 Or pull the image from [docker hub](https://hub.docker.com/r/joxit/docker-registry-ui/):
 
 ```sh
-docker pull joxit/docker-registry-ui
+# Alpine
+docker pull joxit/docker-registry-ui:latest
 docker pull joxit/docker-registry-ui:static
+# Debian
+docker pull joxit/docker-registry-ui:debian
+docker pull joxit/docker-registry-ui:debian-static
 ```
 
 #### Run the docker

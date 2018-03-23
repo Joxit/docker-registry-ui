@@ -23,6 +23,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Share your docker registry with query parameter `url` (e.g. `https://joxit.github.io/docker-registry-ui/demo?url=https://registry.example.com`)
 -   Use `joxit/docker-registry-ui:static` as reverse proxy to your docker registry (This will avoid CORS).
 -   Display image size (see #30)
+-   Add Title when using REGISTRY_URL (see #28)
 -   Alpine and Debian based images
 
 ## Getting Started
@@ -101,6 +102,7 @@ Some env options are available for use this interface for only one server.
 -   `URL`: set the static URL to use (You will need CORS configuration). Example: `http://127.0.0.1:5000`. (`Required`)
 -   `REGISTRY_URL`: your docker registry URL to contact (CORS configuration is not needed). Example: `http://my-docker-container:5000`. (Can't be used with `URL`, since 0.3.2).
 -   `DELETE_IMAGES`: if this variable is empty or `false`, delete feature is deactivated. It is activated otherwise.
+-   `REGISTRY_TITLE`: Set a custom title for your user interface when using `REGISTRY_URL` (since 0.3.4)
 
 Example with `URL` option.
 
@@ -115,7 +117,7 @@ Be careful, `joxit/docker-registry-ui` and `registry:2` will communicate, both c
 ```sh
 docker network create registry-ui-net
 docker run -d --net registry-ui-net --name registry-srv registry:2
-docker run -d --net registry-ui-net -p 80:80 -e REGISTRY_URL=http://registry-srv:5000 -e DELETE_IMAGES=true joxit/docker-registry-ui:static
+docker run -d --net registry-ui-net -p 80:80 -e REGISTRY_URL=http://registry-srv:5000 -e DELETE_IMAGES=true -e REGISTRY_TITLE="My registry" joxit/docker-registry-ui:static
 ```
 
 ## Using CORS

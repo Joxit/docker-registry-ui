@@ -24,7 +24,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Use `joxit/docker-registry-ui:static` as reverse proxy to your docker registry (This will avoid CORS).
 -   Display image size (see #30)
 -   Add Title when using REGISTRY_URL (see #28)
--   Alpine and Debian based images
+-   Alpine and Debian based images with supports for arm32v7
 
 ## Getting Started
 

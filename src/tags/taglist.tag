@@ -66,7 +66,7 @@
           }
         });
         oReq.addEventListener('error', function () {
-          registryUI.snackbar('An error occured', true);
+          registryUI.snackbar(this.getErrorMessage(), true);
             registryUI.taglist.tags = [];
         });
         oReq.addEventListener('loadend', function () {

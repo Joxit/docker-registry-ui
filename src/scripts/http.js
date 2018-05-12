@@ -17,6 +17,7 @@
 function Http() {
   this.oReq = new XMLHttpRequest();
   this.oReq.hasHeader = Http.hasHeader;
+  this.oReq.getErrorMessage = Http.getErrorMessage;
   this._events = {};
   this._headers = {};
 }
@@ -39,6 +40,7 @@ Http.prototype.addEventListener = function(e, f) {
             }
             req.withCredentials = true;
             req.hasHeader = Http.hasHeader;
+            req.getErrorMessage = Http.getErrorMessage;
             req.send();
           } else {
             f.bind(this)();
@@ -84,4 +86,13 @@ Http.hasHeader = function(header) {
   return this.getAllResponseHeaders().split('\n').some(function(h) {
     return new RegExp('^' + header + ':', 'i').test(h);
   });
+};
+
+Http.getErrorMessage = function() {
+  if (registryUI.url() && registryUI.url().match('^http://') && window.location.protocol === 'https:') {
+    return 'Mixed Content: The page at `' + window.location.origin + '` was loaded over HTTPS, but requested an insecure server endpoint `' + registryUI.url() + '`. This request has been blocked; the content must be served over HTTPS.';
+  } else if (!registryUI.url()) {
+    return 'Incorrect server endpoint.'
+  }
+  return 'An error occured';
 };

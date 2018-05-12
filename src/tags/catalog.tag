@@ -50,7 +50,7 @@
         }
       });
       oReq.addEventListener('error', function () {
-        registryUI.snackbar('An error occured', true);
+        registryUI.snackbar(this.getErrorMessage(), true);
         registryUI.catalog.repositories = [];
       });
       oReq.addEventListener('loadend', function () {

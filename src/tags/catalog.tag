@@ -57,7 +57,7 @@
         registryUI.catalog.loadend = true;
         registryUI.catalog.instance.update();
       });
-      oReq.open('GET', registryUI.url() + '/v2/_catalog');
+      oReq.open('GET', registryUI.url() + '/v2/_catalog?n=100000');
       oReq.send();
     };
     registryUI.catalog.go = function (image) {

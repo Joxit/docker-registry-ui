@@ -77,6 +77,13 @@
     registryUI.errorSnackbar = function (message) {
       return registryUI.snackbar(message, true);
     }
+    registryUI.cleanName = function() {
+      var url = registryUI.url() || registryUI.name();
+      if (url) {
+        return url.startsWith('http') ? url.replace(/https?:\/\//, '') : url;
+      }
+      return '';
+    }
     route.parser(null, function(path, filter) {
       const f = filter
         .replace(/\?/g, '\\?')

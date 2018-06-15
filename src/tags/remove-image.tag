@@ -15,7 +15,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
-  <a href="#" onclick="registryUI.removeImage.remove('{ opts.name }', '{ opts.tag }')">
+  <a href="#" title="Delete image." onclick="registryUI.removeImage.remove('{ opts.name }', '{ opts.tag }')">
     <i class="material-icons">delete</i>
   </a>
   <script type="text/javascript">

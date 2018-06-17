@@ -14,21 +14,14 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<copy-to-clipboard>
-  <input ref="input" style="display: none; width: 1px; height: 1px;" value="{ this.dockerCmd }">
-  <a onclick="{ this.copy }" title="Copy pull command.">
-    <i class="material-icons">content_copy</i>
-  </a>
+<image-tag>
+  <div title="{ this.sha256 }">{ opts.image.tag }</div>
   <script type="text/javascript">
-    this.dockerCmd = 'docker pull ' + registryUI.cleanName() + '/' + opts.image.name + ':' + opts.image.tag;
-    this.copy = function () {
-      var copyText = this.refs['input'];
-      copyText.style.display = 'block';
-      copyText.select();
-      document.execCommand('copy');
-      copyText.style.display = 'none';
-      
-      registryUI.snackbar('`' + this.dockerCmd + '` has been copied to clipbloard.')
-    };
+    var self = this;
+    opts.image.on('sha256', function(sha256) {
+      self.sha256 = sha256.substring(0, 19);
+      self.update();
+    });
+    opts.image.trigger('get-sha256');
   </script>
-</copy-to-clipboard>
+</image-tag>

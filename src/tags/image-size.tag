@@ -15,7 +15,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-size>
-  <div>{ this.bytesToSize(this.size) }</div>
+  <div title="Compressed size of your image.">{ this.bytesToSize(this.size) }</div>
   <script type="text/javascript">
     var self = this;
     this.bytesToSize = function (bytes) {
@@ -28,21 +28,10 @@
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
       return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
     };
-    var oReq = new Http();
-    oReq.addEventListener('loadend', function () {
-      if (this.status == 200 || this.status == 202) {
-        self.size = JSON.parse(this.responseText).layers.reduce(function (acc, e) {
-          return acc + e.size;
-        }, 0);
-        self.update();
-      } else if (this.status == 404) {
-        registryUI.errorSnackbar('Manifest for ' + opts.name + ':' + opts.tag + ' not found');
-      } else {
-        registryUI.snackbar(this.responseText);
-      }
+    opts.image.on('size', function(size) {
+      self.size = size;
+      self.update();
     });
-    oReq.open('GET', registryUI.url() + '/v2/' + opts.name + '/manifests/' + opts.tag);
-    oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
-    oReq.send();
+    opts.image.trigger('get-size');
   </script>
 </image-size>

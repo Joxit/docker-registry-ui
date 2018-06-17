@@ -15,13 +15,12 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
-  <a href="#" title="Delete image." onclick="registryUI.removeImage.remove('{ opts.name }', '{ opts.tag }')">
+  <a href="#" title="This will delete the image." onclick="registryUI.removeImage.remove('{ opts.image.name }', '{ opts.image.tag }')">
     <i class="material-icons">delete</i>
   </a>
   <script type="text/javascript">
-    registryUI.removeImage = registryUI.removeImage || {}
-    registryUI.removeImage.update = this.update;
-    
+    registryUI.removeImage = registryUI.removeImage || {};
+
     registryUI.removeImage.remove = function (name, tag) {
       var oReq = new Http();
       oReq.addEventListener('loadend', function () {

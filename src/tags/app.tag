@@ -93,6 +93,55 @@
       const args = path.match(re)
       if (args) return args.slice(1)
     });
+
+    registryUI.DockerImage = function (name, tag) {
+      this.name = name;
+      this.tag = tag;
+      riot.observable(this);
+      this.on('get-size', function() {
+        if (this.size !== undefined) {
+          return this.trigger('size', this.size);
+        }
+        return this.fillInfo();
+      });
+      this.on('get-sha256', function() {
+        if (this.size !== undefined) {
+          return this.trigger('sha256', this.sha256);
+        }
+        return this.fillInfo();
+      });
+    };
+
+    registryUI.DockerImage.compare = function(e1, e2) {
+      return e1.tag.localeCompare(e2);
+    };
+
+    registryUI.DockerImage.prototype.fillInfo = function() {
+      if (this._fillInfoWaiting) {
+        return;
+      }
+      this._fillInfoWaiting = true;
+      var oReq = new Http();
+      var self = this;
+      oReq.addEventListener('loadend', function () {
+        if (this.status == 200 || this.status == 202) {
+          var response = JSON.parse(this.responseText);
+          self.size = response.layers.reduce(function (acc, e) {
+            return acc + e.size;
+          }, 0);
+          self.sha256 = response.config.digest; 
+          self.trigger('size', self.size);
+          self.trigger('sha256', self.sha256);
+        } else if (this.status == 404) {
+          registryUI.errorSnackbar('Manifest for ' + self.name + ':' + self.tag + ' not found');
+        } else {
+          registryUI.snackbar(this.responseText);
+        }
+      });
+      oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/manifests/' + self.tag);
+      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+      oReq.send();
+    }
     route.start(true);
   </script>
 </app>

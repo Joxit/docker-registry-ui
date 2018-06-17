@@ -49,7 +49,7 @@ gulp.task('riot-tag', ['html'], function() {
 });
 
 gulp.task('riot-static-tag', ['html'], function() {
-  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag', 'src/tags/copy-to-clipboard.tag', 'src/tags/remove-image.tag', 'src/tags/image-size.tag'])
+  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag', 'src/tags/copy-to-clipboard.tag', 'src/tags/remove-image.tag', 'src/tags/image-size.tag', 'src/tags/image-tag.tag'])
     .pipe(concat('tags-static.js'))
     .pipe(riot())
     .pipe(minifier({}, uglify))

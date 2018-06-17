@@ -37,15 +37,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr each="{ item in registryUI.taglist.tags }">
-          <td class="material-card-th-left">{ registryUI.taglist.name }</td>
+        <tr each="{ image in registryUI.taglist.tags }">
+          <td class="material-card-th-left">{ image.name }</td>
           <td class="copy-to-clipboard">
-            <copy-to-clipboard name={ registryUI.taglist.name } tag={ item }/>
+            <copy-to-clipboard image={ image }/>
           </td>
-          <td><image-size name={ registryUI.taglist.name } tag={ item } /></td>
-          <td>{ item }</td>
+          <td><image-size image="{ image }" /></td>
+          <td><image-tag image="{ image }" /></td>
           <td show="{ registryUI.isImageRemoveActivated }">
-            <remove-image name={ registryUI.taglist.name } tag={ item }/>
+            <remove-image image={ image }/>
           </td>
         </tr>
       </tbody>
@@ -62,7 +62,9 @@
           registryUI.taglist.tags = [];
           if (this.status == 200) {
             registryUI.taglist.tags = JSON.parse(this.responseText).tags || [];
-            registryUI.taglist.tags.sort();
+            registryUI.taglist.tags = registryUI.taglist.tags.map(function(tag) {
+              return new registryUI.DockerImage(registryUI.taglist.name, tag);
+            }).sort(registryUI.DockerImage.compare);
           } else if (this.status == 404) {
             registryUI.snackbar('Server not found', true);
           } else {
@@ -90,7 +92,7 @@
         registryUI.taglist.tags.reverse();
         registryUI.taglist.asc = false;
       } else {
-        registryUI.taglist.tags.sort();
+        registryUI.taglist.tags.sort(registryUI.DockerImage.compare);
         registryUI.taglist.asc = true;
       }
       registryUI.taglist.instance.update();

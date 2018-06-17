@@ -322,6 +322,6 @@ select {
   padding: 12px 5px;
 }
 
-.copy-to-clipboard a {
+.copy-to-clipboard a:hover {
   cursor: pointer;
 }

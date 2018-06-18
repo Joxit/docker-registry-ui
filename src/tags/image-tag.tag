@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2018  Jones Magloire @Joxit
+ Copyright (C) 2016-2018  Jones Magloire @Joxit
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -14,24 +14,14 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<image-size>
-  <div title="Compressed size of your image.">{ this.bytesToSize(this.size) }</div>
+<image-tag>
+  <div title="{ this.sha256 }">{ opts.image.tag }</div>
   <script type="text/javascript">
     var self = this;
-    this.bytesToSize = function (bytes) {
-      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-      if (bytes == undefined || isNaN(bytes)) {
-        return '?';
-      } else if (bytes == 0) {
-        return '0 Byte';
-      }
-      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-      return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
-    };
-    opts.image.on('size', function(size) {
-      self.size = size;
+    opts.image.on('sha256', function(sha256) {
+      self.sha256 = sha256.substring(0, 19);
       self.update();
     });
-    opts.image.trigger('get-size');
+    opts.image.trigger('get-sha256');
   </script>
-</image-size>
+</image-tag>

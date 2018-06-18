@@ -15,9 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-html > body {
+html>body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
+
 html, body {
   margin: 0;
   height: 100%;
@@ -64,9 +65,11 @@ material-spinner {
   display: flex;
   flex-direction: column;
 }
+
 material-navbar {
   height: 64px;
 }
+
 .logo {
   padding: 0 16px 0 72px;
   text-decoration: none;
@@ -75,6 +78,7 @@ material-navbar {
   letter-spacing: .02em;
   font-weight: 400;
 }
+
 h2 {
   padding: 16px;
   margin: auto;
@@ -83,15 +87,18 @@ h2 {
   line-height: normal;
   overflow: hidden;
 }
+
 .list {
   display: block;
   padding: 8px 0;
   list-style: none;
 }
+
 .list.highlight>li:hover {
   background-color: #eee;
   cursor: pointer;
 }
+
 .list>li {
   box-sizing: border-box;
   line-height: 1;
@@ -99,6 +106,7 @@ h2 {
   padding: 0 16px;
   overflow: hidden;
 }
+
 .list>li i.material-icons {
   margin-right: 32px;
   height: 24px;
@@ -107,6 +115,7 @@ h2 {
   box-sizing: border-box;
   color: #757575;
 }
+
 .list>li>span {
   height: 100%;
   text-decoration: none;
@@ -138,7 +147,7 @@ material-card table {
   width: 100%;
   border: none;
   position: relative;
-  border: 1px solid rgba(0,0,0,.12);
+  border: 1px solid rgba(0, 0, 0, .12);
   border-collapse: collapse;
   white-space: nowrap;
   font-size: 13px;
@@ -151,7 +160,7 @@ material-card table th {
   vertical-align: bottom;
   line-height: 24px;
   height: 48px;
-  color: rgba(0,0,0,.54);
+  color: rgba(0, 0, 0, .54);
   box-sizing: border-box;
   padding: 0 18px 12px 18px;
   text-align: right;
@@ -169,7 +178,7 @@ material-card table tbody tr {
   position: relative;
   height: 48px;
   transition-duration: .28s;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-property: background-color;
 }
 
@@ -177,24 +186,23 @@ material-card table td {
   font-size: 16px;
   position: relative;
   height: 48px;
-  border-top: 1px solid rgba(0,0,0,.12);
-  border-bottom: 1px solid rgba(0,0,0,.12);
+  border-top: 1px solid rgba(0, 0, 0, .12);
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
   padding: 12px 18px;
   box-sizing: border-box;
   vertical-align: middle;
   text-align: right;
 }
-material-card table th.material-card-th-sorted-ascending:hover,
-material-card table th.material-card-th-sorted-descending:hover {
+
+material-card table th.material-card-th-sorted-ascending:hover, material-card table th.material-card-th-sorted-descending:hover {
   cursor: pointer;
 }
-material-card table th.material-card-th-sorted-ascending:hover:before,
-material-card table th.material-card-th-sorted-descending:hover:before {
-  color: rgba(0,0,0,.26);
+
+material-card table th.material-card-th-sorted-ascending:hover:before, material-card table th.material-card-th-sorted-descending:hover:before {
+  color: rgba(0, 0, 0, .26);
 }
 
-material-card table th.material-card-th-sorted-ascending:before,
-material-card table th.material-card-th-sorted-descending:before {
+material-card table th.material-card-th-sorted-ascending:before, material-card table th.material-card-th-sorted-descending:before {
   font-family: 'Material Icons';
   font-weight: 400;
   font-style: normal;
@@ -204,6 +212,7 @@ material-card table th.material-card-th-sorted-descending:before {
   margin-right: 5px;
   vertical-align: sub;
 }
+
 material-card table th.material-card-th-sorted-descending:before {
   content: "\e5db";
 }
@@ -233,7 +242,7 @@ menu .overlay {
 }
 
 #menu-control-button {
-  background: rgba(255,255,255,0);
+  background: rgba(255, 255, 255, 0);
   float: right;
 }
 
@@ -275,7 +284,7 @@ material-popup material-button {
 }
 
 material-popup material-button:hover material-waves {
-  background-color: hsla(0,0%,75%,.2);
+  background-color: hsla(0, 0%, 75%, .2);
 }
 
 material-popup .popup {
@@ -307,4 +316,12 @@ select {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
+}
+
+.copy-to-clipboard {
+  padding: 12px 5px;
+}
+
+.copy-to-clipboard a:hover {
+  cursor: pointer;
 }

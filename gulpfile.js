@@ -12,6 +12,7 @@ var riot = require('gulp-riot');
 var minifier = require('gulp-uglify/minifier');
 var uglify = require('uglify-js-harmony');
 var useref = require('gulp-useref');
+var injectVersion = require('gulp-inject-version');
 
 gulp.task('html', function() {
   var htmlFilter = filter('**/*.html', {restore: true});
@@ -45,6 +46,7 @@ gulp.task('riot-tag', ['html'], function() {
       year: '2016-2018',
       organization: 'Jones Magloire @Joxit'
     }))
+    .pipe(injectVersion())
     .pipe(gulp.dest('dist/scripts'));
 });
 
@@ -59,6 +61,7 @@ gulp.task('riot-static-tag', ['html'], function() {
       year: '2016-2018',
       organization: 'Jones Magloire @Joxit'
     }))
+    .pipe(injectVersion())
     .pipe(gulp.dest('dist/scripts'));
 });
 

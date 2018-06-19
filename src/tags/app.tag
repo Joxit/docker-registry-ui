@@ -31,7 +31,7 @@
   </main>
   <footer>
     <material-footer>
-      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI</a>
+      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI %%GULP_INJECT_VERSION%%</a>
       <ul class="material-footer-link-list">
         <li>
           <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>

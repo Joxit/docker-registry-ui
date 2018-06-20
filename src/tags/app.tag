@@ -78,7 +78,7 @@
       return registryUI.snackbar(message, true);
     }
     registryUI.cleanName = function() {
-      var url = registryUI.url() || registryUI.name();
+      var url = (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
       if (url) {
         return url.startsWith('http') ? url.replace(/https?:\/\//, '') : url;
       }
@@ -113,7 +113,7 @@
     };
 
     registryUI.DockerImage.compare = function(e1, e2) {
-      return e1.tag.localeCompare(e2);
+      return e1.tag.localeCompare(e2.tag);
     };
 
     registryUI.DockerImage.prototype.fillInfo = function() {
@@ -129,7 +129,7 @@
           self.size = response.layers.reduce(function (acc, e) {
             return acc + e.size;
           }, 0);
-          self.sha256 = response.config.digest; 
+          self.sha256 = response.config.digest;
           self.trigger('size', self.size);
           self.trigger('sha256', self.sha256);
         } else if (this.status == 404) {

@@ -27,8 +27,8 @@
       copyText.select();
       document.execCommand('copy');
       copyText.style.display = 'none';
-      
-      registryUI.snackbar('`' + this.dockerCmd + '` has been copied to clipbloard.')
+
+      registryUI.snackbar('`' + this.dockerCmd + '` has been copied to clipboard.')
     };
   </script>
 </copy-to-clipboard>

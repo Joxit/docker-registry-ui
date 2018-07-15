@@ -72,7 +72,7 @@
       }
     };
     registryUI.snackbar = function (message, isError) {
-      registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError});
+      registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError}, 15000);
     };
     registryUI.errorSnackbar = function (message) {
       return registryUI.snackbar(message, true);

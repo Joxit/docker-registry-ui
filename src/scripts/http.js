@@ -92,7 +92,9 @@ Http.getErrorMessage = function() {
   if (registryUI.url() && registryUI.url().match('^http://') && window.location.protocol === 'https:') {
     return 'Mixed Content: The page at `' + window.location.origin + '` was loaded over HTTPS, but requested an insecure server endpoint `' + registryUI.url() + '`. This request has been blocked; the content must be served over HTTPS.';
   } else if (!registryUI.url()) {
-    return 'Incorrect server endpoint.'
+    return 'Incorrect server endpoint.';
+  } else if (this.withCredentials && !this.hasHeader('Access-Control-Allow-Credentials')) {
+    return 'The `Access-Control-Allow-Credentials` header in the response is missing and must be set to `true` when the request\'s credentials mode is on. Origin `'+ registryUI.url() +'` is therefore not allowed access.';
   }
-  return 'An error occured';
+  return 'An error occured: Check your connection and your registry must have `Access-Control-Allow-Origin` header set to `' + window.location.origin + '`';
 };

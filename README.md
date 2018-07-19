@@ -122,6 +122,8 @@ docker run -d --net registry-ui-net --name registry-srv registry:2
 docker run -d --net registry-ui-net -p 80:80 -e REGISTRY_URL=http://registry-srv:5000 -e DELETE_IMAGES=true -e REGISTRY_TITLE="My registry" joxit/docker-registry-ui:static
 ```
 
+There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/master/examples/ui-as-proxy/).
+
 ## Using CORS
 
 Your server should be configured to accept CORS.

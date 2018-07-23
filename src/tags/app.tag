@@ -94,6 +94,10 @@
       if (args) return args.slice(1)
     });
 
+    registryUI.isDigit = function(char) {
+      return char >= '0' && char <= '9';
+    }
+
     registryUI.DockerImage = function (name, tag) {
       this.name = name;
       this.tag = tag;
@@ -112,8 +116,31 @@
       });
     };
 
+    registryUI.DockerImage._tagReduce = function (acc, e) {
+      if (acc.length > 0 && registryUI.isDigit(acc[acc.length - 1].charAt(0)) == registryUI.isDigit(e)) {
+        acc[acc.length - 1] += e;
+      } else {
+        acc.push(e);
+      }
+      return acc;
+    }
+
     registryUI.DockerImage.compare = function(e1, e2) {
-      return e1.tag.localeCompare(e2.tag);
+      var tag1 = e1.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
+      var tag2 = e2.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
+
+      for (var i = 0; i < tag1.length && i < tag2.length; i++) {
+        var compare = tag1[i].localeCompare(tag2[i]);
+        if (registryUI.isDigit(tag1[i].charAt(0)) && registryUI.isDigit(tag2[i].charAt(0))) {
+          var diff = tag1[i] - tag2[i];
+          if (diff != 0) {
+            return diff;
+          }
+        } else if (compare != 0) {
+          return compare;
+        }
+      }
+      return e1.tag.length - e2.tag.length;
     };
 
     registryUI.DockerImage.prototype.fillInfo = function() {

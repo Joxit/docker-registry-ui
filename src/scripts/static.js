@@ -25,6 +25,6 @@ registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};
 
-riot.mount('catalog');
-riot.mount('taglist');
-riot.mount('app');
+window.addEventListener('DOMContentLoaded', function() {
+  riot.mount('*');
+});

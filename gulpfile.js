@@ -1,24 +1,47 @@
 'use strict';
-var cleanCSS = require('gulp-clean-css');
-var concat = require('gulp-concat');
-var del = require('del');
-var filter = require('gulp-filter');
-var fs = require('fs');
-var gIf = require('gulp-if');
-var gulp = require('gulp');
-var htmlmin = require('gulp-htmlmin');
-var license = require('gulp-license');
-var riot = require('gulp-riot');
-var minifier = require('gulp-uglify/minifier');
-var uglify = require('uglify-js-harmony');
-var useref = require('gulp-useref');
-var injectVersion = require('gulp-inject-version');
+const cleanCSS = require('gulp-clean-css');
+const concat = require('gulp-concat');
+const del = require('del');
+const filter = require('gulp-filter');
+const fs = require('fs');
+const gIf = require('gulp-if');
+const gulp = require('gulp');
+const htmlmin = require('gulp-htmlmin');
+const license = require('gulp-license');
+const riot = require('gulp-riot');
+const uglify = require('uglify-es');
+const minifier = require('gulp-uglify/composer')(uglify);
+const useref = require('gulp-useref');
+const injectVersion = require('gulp-inject-version');
+const merge = require('stream-series');
+
+const allTags = 'src/tags/*.tag';
+
+const allScripts = [
+  'src/scripts/http.js',
+  'src/scripts/script.js'
+];
+
+const staticTags = [
+  'src/tags/catalog.tag',
+  'src/tags/app.tag',
+  'src/tags/taglist.tag',
+  'src/tags/copy-to-clipboard.tag',
+  'src/tags/remove-image.tag',
+  'src/tags/image-size.tag',
+  'src/tags/image-tag.tag'
+];
+
+const staticScripts = [
+  'src/scripts/http.js',
+  'src/scripts/static.js'
+];
 
 gulp.task('html', function() {
   var htmlFilter = filter('**/*.html', {restore: true});
   return gulp.src(['src/index.html'])
     .pipe(useref())
-    .pipe(gIf(['*.js', '!*.min.js'], minifier({}, uglify))) // FIXME
+    .pipe(gIf(['*.js', '!*.min.js'], minifier())) // FIXME
     .pipe(htmlFilter)
     .pipe(htmlmin({
       removeComments: false,
@@ -35,11 +58,10 @@ gulp.task('clean', function(done) {
   return del(['dist']);
 });
 
-gulp.task('riot-tag', ['html'], function() {
-  return gulp.src('src/tags/*.tag')
-    .pipe(concat('tags.js'))
-    .pipe(riot())
-    .pipe(minifier({}, uglify))
+gulp.task('docker-registry-ui-static', ['html'], function() {
+  return merge(gulp.src(staticScripts), gulp.src(staticTags).pipe(riot()))
+    .pipe(concat('docker-registry-ui-static.js'))
+    .pipe(minifier())
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
@@ -50,11 +72,10 @@ gulp.task('riot-tag', ['html'], function() {
     .pipe(gulp.dest('dist/scripts'));
 });
 
-gulp.task('riot-static-tag', ['html'], function() {
-  return gulp.src(['src/tags/catalog.tag', 'src/tags/app.tag', 'src/tags/taglist.tag', 'src/tags/copy-to-clipboard.tag', 'src/tags/remove-image.tag', 'src/tags/image-size.tag', 'src/tags/image-tag.tag'])
-    .pipe(concat('tags-static.js'))
-    .pipe(riot())
-    .pipe(minifier({}, uglify))
+gulp.task('docker-registry-ui', ['html'], function() {
+  return merge(gulp.src(allScripts), gulp.src(allTags).pipe(riot()))
+    .pipe(concat('docker-registry-ui.js'))
+    .pipe(minifier())
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
@@ -62,32 +83,6 @@ gulp.task('riot-static-tag', ['html'], function() {
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(injectVersion())
-    .pipe(gulp.dest('dist/scripts'));
-});
-
-gulp.task('scripts-static', ['html'], function() {
-  return gulp.src(['src/scripts/http.js', 'src/scripts/static.js'])
-    .pipe(concat('script-static.js'))
-    .pipe(minifier({}, uglify))
-    .pipe(license('agpl3', {
-      tiny: false,
-      project: 'docker-registry-ui',
-      year: '2016-2018',
-      organization: 'Jones Magloire @Joxit'
-    }))
-    .pipe(gulp.dest('dist/scripts'));
-});
-
-gulp.task('scripts', ['html'], function() {
-  return gulp.src(['src/scripts/http.js', 'src/scripts/script.js'])
-    .pipe(concat('script.js'))
-    .pipe(minifier({}, uglify))
-    .pipe(license('agpl3', {
-      tiny: false,
-      project: 'docker-registry-ui',
-      year: '2016-2018',
-      organization: 'Jones Magloire @Joxit'
-    }))
     .pipe(gulp.dest('dist/scripts'));
 });
 
@@ -118,7 +113,7 @@ gulp.task('fonts', function() {
     .pipe(gulp.dest('dist/fonts'));
 });
 
-gulp.task('sources', ['riot-tag', 'riot-static-tag', 'scripts', 'vendor', 'scripts-static', 'styles'], function() {
+gulp.task('sources', ['docker-registry-ui', 'vendor', 'docker-registry-ui-static', 'styles'], function() {
   gulp.start();
 });
 

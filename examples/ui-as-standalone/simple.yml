@@ -1,0 +1,19 @@
+version: '2.0'
+services:
+  registry:
+    image: registry:2.6.2
+    ports:
+      - 5000:5000
+    volumes:
+      - ./registry-data:/var/lib/registry
+      - ./registry-config/simple.yml:/etc/docker/registry/config.yml
+
+  ui:
+    image: joxit/docker-registry-ui:static
+    ports:
+      - 80:80
+    environment:
+      - REGISTRY_TITLE=My Private Docker Registry
+      - URL=http://localhost:5000
+    depends_on:
+      - registry

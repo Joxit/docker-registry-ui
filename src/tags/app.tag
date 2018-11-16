@@ -78,7 +78,7 @@
       return registryUI.snackbar(message, true);
     }
     registryUI.cleanName = function() {
-      var url = (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
+      const url = (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
       if (url) {
         return url.startsWith('http') ? url.replace(/https?:\/\//, '') : url;
       }
@@ -114,6 +114,12 @@
         }
         return this.fillInfo();
       });
+      this.on('get-date', function() {
+        if (this.date !== undefined) {
+          return this.trigger('date', this.date);
+        }
+        return this.fillInfo();
+      });
     };
 
     registryUI.DockerImage._tagReduce = function (acc, e) {
@@ -126,13 +132,13 @@
     }
 
     registryUI.DockerImage.compare = function(e1, e2) {
-      var tag1 = e1.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
-      var tag2 = e2.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
+      const tag1 = e1.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
+      const tag2 = e2.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
 
       for (var i = 0; i < tag1.length && i < tag2.length; i++) {
-        var compare = tag1[i].localeCompare(tag2[i]);
+        const compare = tag1[i].localeCompare(tag2[i]);
         if (registryUI.isDigit(tag1[i].charAt(0)) && registryUI.isDigit(tag2[i].charAt(0))) {
-          var diff = tag1[i] - tag2[i];
+          const diff = tag1[i] - tag2[i];
           if (diff != 0) {
             return diff;
           }
@@ -148,17 +154,18 @@
         return;
       }
       this._fillInfoWaiting = true;
-      var oReq = new Http();
-      var self = this;
+      const oReq = new Http();
+      const self = this;
       oReq.addEventListener('loadend', function () {
         if (this.status == 200 || this.status == 202) {
-          var response = JSON.parse(this.responseText);
+          const response = JSON.parse(this.responseText);
           self.size = response.layers.reduce(function (acc, e) {
             return acc + e.size;
           }, 0);
           self.sha256 = response.config.digest;
           self.trigger('size', self.size);
           self.trigger('sha256', self.sha256);
+          self.getBlobs(response.config.digest)
         } else if (this.status == 404) {
           registryUI.errorSnackbar('Manifest for ' + self.name + ':' + self.tag + ' not found');
         } else {
@@ -169,6 +176,25 @@
       oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
       oReq.send();
     }
+
+    registryUI.DockerImage.prototype.getBlobs = function(blob) {
+      const oReq = new Http();
+      const self = this;
+      oReq.addEventListener('loadend', function () {
+        if (this.status == 200 || this.status == 202) {
+          const response = JSON.parse(this.responseText);
+          self.creationDate = new Date(response.created);
+          self.trigger('creation-date', self.creationDate);
+        } else if (this.status == 404) {
+          registryUI.errorSnackbar('Blobs for ' + self.name + ':' + self.tag + ' not found');
+        } else {
+          registryUI.snackbar(this.responseText);
+        }
+      });
+      oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/blobs/' + blob);
+      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+      oReq.send();
+    };
     route.start(true);
   </script>
 </app>

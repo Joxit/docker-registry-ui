@@ -31,6 +31,7 @@
         <tr>
           <th class="material-card-th-left">Repository</th>
           <th></th>
+          <th>Creation date</th>
           <th>Size</th>
           <th class="{ registryUI.taglist.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }" onclick="registryUI.taglist.reverse();">Tag</th>
           <th show="{ registryUI.isImageRemoveActivated }"></th>
@@ -42,6 +43,7 @@
           <td class="copy-to-clipboard">
             <copy-to-clipboard image={ image }/>
           </td>
+          <td><image-date image="{ image }" /></td>
           <td><image-size image="{ image }" /></td>
           <td><image-tag image="{ image }" /></td>
           <td show="{ registryUI.isImageRemoveActivated }">

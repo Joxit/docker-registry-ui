@@ -27,6 +27,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Alpine and Debian based images with supports for arm32v7 and arm64v8
 -   Copy `docker pull` command to clipbloard
 -   Show sha256 for specific tag (hover image tag)
+-   Display image creation date (see #49)
 
 ## Getting Started
 

@@ -30,7 +30,8 @@ const staticTags = [
   'src/tags/copy-to-clipboard.tag',
   'src/tags/remove-image.tag',
   'src/tags/image-size.tag',
-  'src/tags/image-tag.tag'
+  'src/tags/image-tag.tag',
+  'src/tags/image-date.tag'
 ];
 
 const staticScripts = [

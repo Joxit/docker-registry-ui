@@ -322,6 +322,17 @@ select {
   padding: 12px 5px;
 }
 
+.show-tag-history {
+  width: 30px;
+  text-align: center;
+}
+
+.remove-tag {
+  padding: 12px 5px;
+  width: 30px;
+  text-align: center;
+}
+
 .copy-to-clipboard a:hover {
   cursor: pointer;
 }

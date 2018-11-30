@@ -57,7 +57,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <image-tag image="{ image }"/>
                 </td>
                 <td class="show-tag-history">
-                    <tag-history image={ image } />
+                    <tag-history-button image={ image } />
                 </td>
                 <td show="{ registryUI.isImageRemoveActivated }">
                     <remove-image image={ image }/>

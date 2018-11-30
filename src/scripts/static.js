@@ -24,6 +24,7 @@ registryUI.name = function() {
 registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};
+registryUI.taghistory = {};
 
 window.addEventListener('DOMContentLoaded', function() {
   riot.mount('*');

@@ -110,6 +110,7 @@ registryUI.decodeURI = function(url) {
 registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};
+registryUI.taghistory = {};
 
 window.addEventListener('DOMContentLoaded', function() {
   riot.mount('*');

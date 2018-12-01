@@ -30,7 +30,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </div>
 
     <div show="{ registryUI.taghistory.loadend }">
-
+      <div class="material-card-title-action">
+        <p>Nested v1Compatibility history elements:</p>
+      </div>
       <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
         <div each="{ entry in guiElement }" class="{ entry.key }">
           <div class="headline"><i class="material-icons"></i>

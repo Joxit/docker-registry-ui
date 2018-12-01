@@ -51,20 +51,49 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             oReq.addEventListener('load', function () {
                 console.log("taghistory addEventListener::load");
                 registryUI.taghistory.elements = [];
+
+                function modifySpecificAttributeTypes(value) {
+                    if (attribute == "created") {
+                        let date = new Date(value);
+                        let year = date.getFullYear();
+                        let month = date.getMonth();
+                        let day = date.getDay();
+                        let minutes = date.getMinutes();
+                        let hours = date.getUTCHours();
+                        let seconds = date.getSeconds();
+                        let milliSeconds = date.getMilliseconds();
+
+                        if (month < 10) {
+                            month = '0' + month;
+                        }
+
+                        if (minutes < 10) {
+                            minutes = '0' + minutes;
+                        }
+                        if (hours < 10) {
+                            hours = '0' + hours;
+                        }
+
+                        value = day + "." + month + "." + year+ " | " + hours + ":" + minutes + ":" + seconds + "." + milliSeconds;
+                    } else if (attribute == "container_config" || attribute == "config") {
+                        value = "";
+                    }
+                    return value;
+                }
+
                 if (this.status == 200) {
                     var elements = JSON.parse(this.responseText).history || [];
                     for(var index in elements){
                         var parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
+
                         var guiElements = [];
                         var guiElement = {};
+
                         for(var attribute in parsedNestedElements){
                             if(parsedNestedElements.hasOwnProperty(attribute)){
                                 var value = parsedNestedElements[attribute];
-                                if(attribute == "created"){
-                                    // Todo this must be parsed correctly
-                                }else if(attribute == "container_config" || attribute == "config"){
-                                    value = "";
-                                }
+
+                                value = modifySpecificAttributeTypes(value);
                                 guiElement = {
                                     "key": attribute,
                                     "value": value

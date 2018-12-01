@@ -51,11 +51,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       var oReq = new Http();
       registryUI.taghistory.instance.update();
       oReq.addEventListener('load', function () {
-        console.log("taghistory addEventListener::load");
         registryUI.taghistory.elements = [];
 
         function modifySpecificAttributeTypes(value) {
-          if (attribute == "created") {
+          if (attribute === "created") {
             let date = new Date(value);
             let year = date.getFullYear();
             let month = date.getMonth();

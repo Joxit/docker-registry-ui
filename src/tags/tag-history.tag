@@ -44,11 +44,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
 
   <script type="text/javascript">
-    console.log("taghistory script area");
 
     registryUI.taghistory.instance = this;
     registryUI.taghistory.display = function () {
-      var oReq = new Http();
+      let oReq = new Http();
       registryUI.taghistory.instance.update();
       oReq.addEventListener('load', function () {
         registryUI.taghistory.elements = [];
@@ -76,23 +75,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             }
 
             value = day + "." + month + "." + year + " | " + hours + ":" + minutes + ":" + seconds + "." + milliSeconds;
-          } else if (attribute == "container_config" || attribute == "config") {
+          } else if (attribute === "container_config" || attribute === "config") {
             value = "";
           }
           return value;
         }
 
         if (this.status == 200) {
-          var elements = JSON.parse(this.responseText).history || [];
+          let elements = JSON.parse(this.responseText).history || [];
           for (var index in elements) {
-            var parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
+            let parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
 
-            var guiElements = [];
-            var guiElement = {};
+            let guiElements = [];
+            let guiElement = {};
 
             for (var attribute in parsedNestedElements) {
               if (parsedNestedElements.hasOwnProperty(attribute)) {
-                var value = parsedNestedElements[attribute];
+                let value = parsedNestedElements[attribute];
 
                 value = modifySpecificAttributeTypes(value);
                 guiElement = {
@@ -120,7 +119,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         registryUI.taghistory.loadend = true;
         registryUI.taghistory.instance.update();
       });
-      console.log("Trying to create GET call with image='" + registryUI.taghistory.image + "' and tag='" + registryUI.taghistory.tag + "'")
       oReq.open('GET', registryUI.url() + '/v2/' + registryUI.taghistory.image + '/manifests/' + registryUI.taghistory.tag);
       oReq.send();
     };

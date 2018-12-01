@@ -26,9 +26,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <div show="{ registryUI.taghistory.loadend }">
 
             <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
-                <p each="{ entry in guiElement }">
-                    { entry.key } { entry.value }
-                </p>
+                <div each="{ entry in guiElement }" class="{ entry.key }">
+                    <strong>{ entry.key }</strong><br> <span> { entry.value } </span>
+                </div>
 
             </material-card>
         </div>
@@ -37,6 +37,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     <script type="text/javascript">
         console.log("taghistory script area");
+
+
 
         registryUI.taghistory.instance = this;
         registryUI.taghistory.display = function () {
@@ -49,12 +51,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     var elements = JSON.parse(this.responseText).history || [];
                     for(var index in elements){
                         var parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
-                        console.log(parsedNestedElements);
-
                         var guiElements = [];
                         var guiElement = {};
                         for(var attribute in parsedNestedElements){
                             if(parsedNestedElements.hasOwnProperty(attribute)){
+                                var value = parsedNestedElements[attribute];
+                                if(attribute == "created"){
+                                    // Todo this must be parsed correctly
+                                }else if(attribute == "container_config" || attribute == "config"){
+                                    console.log(value.cmd);
+                                }
                                 guiElement = {
                                     "key": attribute,
                                     "value": parsedNestedElements[attribute]
@@ -84,6 +90,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             oReq.open('GET', registryUI.url() + '/v2/' + registryUI.taghistory.image + '/manifests/' + registryUI.taghistory.tag);
             oReq.send();
         };
+
 
         registryUI.taghistory.display();
         registryUI.taghistory.instance.update();

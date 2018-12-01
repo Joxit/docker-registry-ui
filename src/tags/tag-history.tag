@@ -23,31 +23,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <material-spinner></material-spinner>
         </div>
 
-        <table show="{ registryUI.taghistory.loadend }" style="border: none;">
-            <thead>
-            <tr>
-                <th class="material-card-th-left">One</th>
-                <th>Two</th>
-                <th>Three</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr each="{ historyelement in registryUI.taghistory.elements }">
-                <td class="material-card-th-left">
-                    { historyelement.v1Compatibility }
-                </td>
-                <td class="copy-to-clipboard">
-                </td>
-                <td>
+        <div show="{ registryUI.taghistory.loadend }">
 
-                </td>
-            </tr>
-            </tbody>
-        </table>
+            <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
+                <p each="{ entry in guiElement }">
+                    { entry.key } { entry.value }
+                </p>
+
+            </material-card>
+        </div>
 
     </material-card>
 
-    <script>
+    <script type="text/javascript">
         console.log("taghistory script area");
 
         registryUI.taghistory.instance = this;
@@ -58,12 +46,26 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 console.log("taghistory addEventListener::load");
                 registryUI.taghistory.elements = [];
                 if (this.status == 200) {
-                    var history = JSON.parse(this.responseText).history || [];
+                    var elements = JSON.parse(this.responseText).history || [];
+                    for(var index in elements){
+                        var parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
+                        console.log(parsedNestedElements);
 
-                    for(historyElement in history){
-                        historyElement
+                        var guiElements = [];
+                        var guiElement = {};
+                        for(var attribute in parsedNestedElements){
+                            if(parsedNestedElements.hasOwnProperty(attribute)){
+                                guiElement = {
+                                    "key": attribute,
+                                    "value": parsedNestedElements[attribute]
+                                };
+                                guiElements.push(guiElement);
+                            }
+
+                        }
+
+                        registryUI.taghistory.elements.push(guiElements);
                     }
-
                 } else if (this.status == 404) {
                     registryUI.snackbar('Manifest could not be fetched', true);
                 } else {

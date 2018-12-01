@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">history</i>
     </a>
 
-    <script>
+    <script type="text/javascript">
         registryUI.taghistory.instance = this;
         registryUI.taghistory.go = function (image, tag) {
             route('taglist/joxit/docker-registry-ui');

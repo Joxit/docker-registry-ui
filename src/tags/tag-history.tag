@@ -15,117 +15,119 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history>
-    <material-card ref="tag-history-tag" class="tag-history">
-        <div class="material-card-title-action">
-            <a href="#!taglist/{registryUI.taghistory.image}" onclick="registryUI.home();">
-                <i class="material-icons">arrow_back</i>
-            </a>
-            <h2>History of Image Tag | { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i> </h2>
+  <material-card ref="tag-history-tag" class="tag-history">
+    <div class="material-card-title-action">
+      <a href="#!taglist/{registryUI.taghistory.image}" onclick="registryUI.home();">
+        <i class="material-icons">arrow_back</i>
+      </a>
+      <h2>
+        History of Image Tag |
+        { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i>
+      </h2>
+    </div>
+    <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
+      <material-spinner></material-spinner>
+    </div>
+
+    <div show="{ registryUI.taghistory.loadend }">
+
+      <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
+        <div each="{ entry in guiElement }" class="{ entry.key }">
+          <div class="headline"><i class="material-icons"></i>
+            <p>{ entry.key }</p></div>
+          <div class="value"> { entry.value }</div>
         </div>
-        <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
-            <material-spinner></material-spinner>
-        </div>
 
-        <div show="{ registryUI.taghistory.loadend }">
+      </material-card>
+    </div>
 
-            <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
-                <div each="{ entry in guiElement }" class="{ entry.key }">
-                    <div class="headline"><i class="material-icons"></i> <p>{ entry.key }</p></div>
-                    <div class="value"> { entry.value } </div>
-                </div>
+  </material-card>
 
-            </material-card>
-        </div>
+  <script type="text/javascript">
+    console.log("taghistory script area");
 
-    </material-card>
+    registryUI.taghistory.instance = this;
+    registryUI.taghistory.display = function () {
+      var oReq = new Http();
+      registryUI.taghistory.instance.update();
+      oReq.addEventListener('load', function () {
+        console.log("taghistory addEventListener::load");
+        registryUI.taghistory.elements = [];
 
-    <script type="text/javascript">
-        console.log("taghistory script area");
+        function modifySpecificAttributeTypes(value) {
+          if (attribute == "created") {
+            let date = new Date(value);
+            let year = date.getFullYear();
+            let month = date.getMonth();
+            let day = date.getDay();
+            let minutes = date.getMinutes();
+            let hours = date.getUTCHours();
+            let seconds = date.getSeconds();
+            let milliSeconds = date.getMilliseconds();
 
+            if (month < 10) {
+              month = '0' + month;
+            }
 
+            if (minutes < 10) {
+              minutes = '0' + minutes;
+            }
+            if (hours < 10) {
+              hours = '0' + hours;
+            }
 
-        registryUI.taghistory.instance = this;
-        registryUI.taghistory.display = function () {
-            var oReq = new Http();
-            registryUI.taghistory.instance.update();
-            oReq.addEventListener('load', function () {
-                console.log("taghistory addEventListener::load");
-                registryUI.taghistory.elements = [];
+            value = day + "." + month + "." + year + " | " + hours + ":" + minutes + ":" + seconds + "." + milliSeconds;
+          } else if (attribute == "container_config" || attribute == "config") {
+            value = "";
+          }
+          return value;
+        }
 
-                function modifySpecificAttributeTypes(value) {
-                    if (attribute == "created") {
-                        let date = new Date(value);
-                        let year = date.getFullYear();
-                        let month = date.getMonth();
-                        let day = date.getDay();
-                        let minutes = date.getMinutes();
-                        let hours = date.getUTCHours();
-                        let seconds = date.getSeconds();
-                        let milliSeconds = date.getMilliseconds();
+        if (this.status == 200) {
+          var elements = JSON.parse(this.responseText).history || [];
+          for (var index in elements) {
+            var parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
 
-                        if (month < 10) {
-                            month = '0' + month;
-                        }
+            var guiElements = [];
+            var guiElement = {};
 
-                        if (minutes < 10) {
-                            minutes = '0' + minutes;
-                        }
-                        if (hours < 10) {
-                            hours = '0' + hours;
-                        }
+            for (var attribute in parsedNestedElements) {
+              if (parsedNestedElements.hasOwnProperty(attribute)) {
+                var value = parsedNestedElements[attribute];
 
-                        value = day + "." + month + "." + year+ " | " + hours + ":" + minutes + ":" + seconds + "." + milliSeconds;
-                    } else if (attribute == "container_config" || attribute == "config") {
-                        value = "";
-                    }
-                    return value;
-                }
+                value = modifySpecificAttributeTypes(value);
+                guiElement = {
+                  "key": attribute,
+                  "value": value
+                };
+                guiElements.push(guiElement);
+              }
 
-                if (this.status == 200) {
-                    var elements = JSON.parse(this.responseText).history || [];
-                    for(var index in elements){
-                        var parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
+            }
 
-                        var guiElements = [];
-                        var guiElement = {};
-
-                        for(var attribute in parsedNestedElements){
-                            if(parsedNestedElements.hasOwnProperty(attribute)){
-                                var value = parsedNestedElements[attribute];
-
-                                value = modifySpecificAttributeTypes(value);
-                                guiElement = {
-                                    "key": attribute,
-                                    "value": value
-                                };
-                                guiElements.push(guiElement);
-                            }
-
-                        }
-
-                        registryUI.taghistory.elements.push(guiElements);
-                    }
-                } else if (this.status == 404) {
-                    registryUI.snackbar('Manifest could not be fetched', true);
-                } else {
-                    registryUI.snackbar(this.responseText);
-                }
-            });
-            oReq.addEventListener('error', function () {
-                registryUI.snackbar(this.getErrorMessage(), true);
-                registryUI.taghistory.elements = [];
-            });
-            oReq.addEventListener('loadend', function () {
-                registryUI.taghistory.loadend = true;
-                registryUI.taghistory.instance.update();
-            });
-            console.log("Trying to create GET call with image='" + registryUI.taghistory.image + "' and tag='" + registryUI.taghistory.tag + "'")
-            oReq.open('GET', registryUI.url() + '/v2/' + registryUI.taghistory.image + '/manifests/' + registryUI.taghistory.tag);
-            oReq.send();
-        };
-
-
-        registryUI.taghistory.display();
+            registryUI.taghistory.elements.push(guiElements);
+          }
+        } else if (this.status == 404) {
+          registryUI.snackbar('Manifest could not be fetched', true);
+        } else {
+          registryUI.snackbar(this.responseText);
+        }
+      });
+      oReq.addEventListener('error', function () {
+        registryUI.snackbar(this.getErrorMessage(), true);
+        registryUI.taghistory.elements = [];
+      });
+      oReq.addEventListener('loadend', function () {
+        registryUI.taghistory.loadend = true;
         registryUI.taghistory.instance.update();
-    </script>
+      });
+      console.log("Trying to create GET call with image='" + registryUI.taghistory.image + "' and tag='" + registryUI.taghistory.tag + "'")
+      oReq.open('GET', registryUI.url() + '/v2/' + registryUI.taghistory.image + '/manifests/' + registryUI.taghistory.tag);
+      oReq.send();
+    };
+
+
+    registryUI.taghistory.display();
+    registryUI.taghistory.instance.update();
+  </script>
 </tag-history>

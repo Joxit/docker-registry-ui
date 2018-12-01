@@ -15,15 +15,15 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history-button>
-    <a href="#" title="This will show the history of given tag" onclick="registryUI.taghistory.go('{ opts.image.name }', '{ opts.image.tag }');">
-        <i class="material-icons">history</i>
-    </a>
+  <a href="#" title="This will show the history of given tag"
+     onclick="registryUI.taghistory.go('{ opts.image.name }', '{ opts.image.tag }');">
+    <i class="material-icons">history</i>
+  </a>
 
-    <script type="text/javascript">
-        registryUI.taghistory.instance = this;
-        registryUI.taghistory.go = function (image, tag) {
-            route('taglist/joxit/docker-registry-ui');
-        };
-    </script>
+  <script type="text/javascript">
+    registryUI.taghistory.go = function (image, tag) {
+      route('/taghistory/image/' + image + '/tag/' + tag);
+    };
+  </script>
 
 </tag-history-button>

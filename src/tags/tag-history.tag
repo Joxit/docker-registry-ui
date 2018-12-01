@@ -17,7 +17,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-history>
     <material-card ref="tag-history-tag" class="tag-history">
         <div class="material-card-title-action">
-            <h2>History of { registryUI.taghistory.image }:{ registryUI.taghistory.tag }</h2>
+            <a href="#!taglist/{registryUI.taghistory.image}" onclick="registryUI.home();">
+                <i class="material-icons">arrow_back</i>
+            </a>
+            <h2>History of Image Tag | { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i> </h2>
         </div>
         <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
             <material-spinner></material-spinner>
@@ -27,7 +30,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
             <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
                 <div each="{ entry in guiElement }" class="{ entry.key }">
-                    <strong>{ entry.key }</strong><br> <span> { entry.value } </span>
+                    <div class="headline"><i class="material-icons"></i> <p>{ entry.key }</p></div>
+                    <div class="value"> { entry.value } </div>
                 </div>
 
             </material-card>
@@ -59,11 +63,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                 if(attribute == "created"){
                                     // Todo this must be parsed correctly
                                 }else if(attribute == "container_config" || attribute == "config"){
-                                    console.log(value.cmd);
+                                    value = "";
                                 }
                                 guiElement = {
                                     "key": attribute,
-                                    "value": parsedNestedElements[attribute]
+                                    "value": value
                                 };
                                 guiElements.push(guiElement);
                             }

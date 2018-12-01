@@ -348,20 +348,84 @@ select {
     min-width: 100px;
 }
 
-.tag-history-element .id {
-    position: absolute;
-    top: 15px;
-    right: 15px;
+.tag-history-element i{
+    font-size: 20px;
+    padding: 0px;
 }
 
-.tag-history-element .created {
-    position: absolute;
-    top: 70px;
-    right: 15px;
+.tag-history-element .created i:after {
+    content: 'event';
 }
 
-.tag-history-element .id span,
-.tag-history-element .container span,
-.tag-history-element .parent span{
+.tag-history-element .config i:after {
+    content: 'build';
+}
+
+
+.tag-history-element .config .value:after,
+.tag-history-element .container_config .value:after{
+    content: 'WIP for display of config value';
+    font-style: italic;
+    font-size: 12px;
+}
+
+.tag-history-element .container_config i:after {
+    content: 'code';
+}
+
+.tag-history-element .throwaway i:after {
+    content: 'eject';
+}
+
+.tag-history-element .parent i:after {
+    content: 'supervisor_account';
+}
+
+.tag-history-element .architecture i:after {
+    content: 'memory';
+}
+
+.tag-history-element .os i:after {
+     content: 'developer_board';
+ }
+
+.tag-history-element .container i:after {
+    content: 'dns';
+}
+
+.tag-history-element .id i:after {
+    content: 'settings_ethernet';
+}
+
+.tag-history-element .docker_version {
+    background-size: 35px auto;
+    background-image: url("images/docker-logo.svg");
+    background-repeat: no-repeat;
+    background-position: 7px 10px;
+}
+
+
+.tag-history-element > div{
+    display: block;
+    width: 420px;
+    float: left;
+}
+
+.tag-history-element .docker_version div.headline {
+    padding-left: 10px;
+}
+
+
+.tag-history-element .headline p{
+    font-weight: bold;
+    line-height: 20px;
+    position: relative;
+    display: inline;
+    top: -4px;
+}
+
+.tag-history-element .id div.value,
+.tag-history-element .container div.value,
+.tag-history-element .parent div.value {
     font-size: 12px;
 }

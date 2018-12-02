@@ -35,10 +35,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <script>
     registryUI.catalog.instance = this;
-    registryUI.catalog.display = function () {
+    registryUI.catalog.display = function() {
       registryUI.catalog.repositories = [];
       var oReq = new Http();
-      oReq.addEventListener('load', function () {
+      oReq.addEventListener('load', function() {
         registryUI.catalog.repositories = [];
         if (this.status == 200) {
           registryUI.catalog.repositories = JSON.parse(this.responseText).repositories || [];
@@ -49,18 +49,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           registryUI.snackbar(this.responseText);
         }
       });
-      oReq.addEventListener('error', function () {
+      oReq.addEventListener('error', function() {
         registryUI.snackbar(this.getErrorMessage(), true);
         registryUI.catalog.repositories = [];
       });
-      oReq.addEventListener('loadend', function () {
+      oReq.addEventListener('loadend', function() {
         registryUI.catalog.loadend = true;
         registryUI.catalog.instance.update();
       });
       oReq.open('GET', registryUI.url() + '/v2/_catalog?n=100000');
       oReq.send();
     };
-    registryUI.catalog.go = function (image) {
+    registryUI.catalog.go = function(image) {
       route('taglist/' + image);
     };
     registryUI.catalog.display();

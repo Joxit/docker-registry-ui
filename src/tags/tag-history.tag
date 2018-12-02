@@ -48,10 +48,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <script type="text/javascript">
 
     registryUI.taghistory.instance = this;
-    registryUI.taghistory.display = function () {
+    registryUI.taghistory.display = function() {
       let oReq = new Http();
       registryUI.taghistory.instance.update();
-      oReq.addEventListener('load', function () {
+      oReq.addEventListener('load', function() {
         registryUI.taghistory.elements = [];
 
         function modifySpecificAttributeTypes(value) {
@@ -113,11 +113,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           registryUI.snackbar(this.responseText);
         }
       });
-      oReq.addEventListener('error', function () {
+      oReq.addEventListener('error', function() {
         registryUI.snackbar(this.getErrorMessage(), true);
         registryUI.taghistory.elements = [];
       });
-      oReq.addEventListener('loadend', function () {
+      oReq.addEventListener('loadend', function() {
         registryUI.taghistory.loadend = true;
         registryUI.taghistory.instance.update();
       });

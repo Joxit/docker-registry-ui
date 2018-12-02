@@ -69,16 +69,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
   <script>
     registryUI.taglist.instance = this;
-    registryUI.taglist.display = function () {
+    registryUI.taglist.display = function() {
       registryUI.taglist.tags = [];
       if (route.routeName == 'taglist') {
         var oReq = new Http();
         registryUI.taglist.instance.update();
-        oReq.addEventListener('load', function () {
+        oReq.addEventListener('load', function() {
           registryUI.taglist.tags = [];
           if (this.status == 200) {
             registryUI.taglist.tags = JSON.parse(this.responseText).tags || [];
-            registryUI.taglist.tags = registryUI.taglist.tags.map(function (tag) {
+            registryUI.taglist.tags = registryUI.taglist.tags.map(function(tag) {
               return new registryUI.DockerImage(registryUI.taglist.name, tag);
             }).sort(registryUI.DockerImage.compare);
           } else if (this.status == 404) {
@@ -87,11 +87,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             registryUI.snackbar(this.responseText, true);
           }
         });
-        oReq.addEventListener('error', function () {
+        oReq.addEventListener('error', function() {
           registryUI.snackbar(this.getErrorMessage(), true);
           registryUI.taglist.tags = [];
         });
-        oReq.addEventListener('loadend', function () {
+        oReq.addEventListener('loadend', function() {
           registryUI.taglist.loadend = true;
           registryUI.taglist.instance.update();
         });
@@ -103,7 +103,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     registryUI.taglist.display();
     registryUI.taglist.instance.update();
 
-    registryUI.taglist.reverse = function () {
+    registryUI.taglist.reverse = function() {
       if (registryUI.taglist.asc) {
         registryUI.taglist.tags.reverse();
         registryUI.taglist.asc = false;
@@ -113,7 +113,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
       registryUI.taglist.instance.update();
     };
-    registryUI.taglist.refresh = function () {
+    registryUI.taglist.refresh = function() {
       route(registryUI.taglist.name);
     };
   </script>

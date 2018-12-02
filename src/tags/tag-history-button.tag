@@ -21,7 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </a>
 
   <script type="text/javascript">
-    go = function (image, tag) {
+    go = function(image, tag) {
       route('/taghistory/image/' + image + '/tag/' + tag);
     };
   </script>

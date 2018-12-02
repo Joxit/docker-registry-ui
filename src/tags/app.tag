@@ -49,7 +49,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     registryUI.appTag = this;
     route.base('#!');
-    route('', function () {
+    route('', function() {
       route.routeName = 'home';
       if (registryUI.catalog.display) {
         registryUI.catalog.loadend = false;
@@ -57,7 +57,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
       registryUI.appTag.update();
     });
-    route('/taglist/*', function (image) {
+    route('/taglist/*', function(image) {
       route.routeName = 'taglist';
       registryUI.taglist.name = image;
       if (registryUI.taglist.display) {
@@ -66,7 +66,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
       registryUI.appTag.update();
     });
-    route('/taghistory/image/*/tag/*', function (image, tag) {
+    route('/taghistory/image/*/tag/*', function(image, tag) {
       route.routeName = 'taghistory';
 
       registryUI.taghistory.image = image;
@@ -78,27 +78,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
       registryUI.appTag.update();
     });
-    registryUI.home = function () {
+    registryUI.home = function() {
       if (route.routeName == 'home') {
         registryUI.catalog.display;
       } else {
         route('');
       }
     };
-    registryUI.snackbar = function (message, isError) {
+    registryUI.snackbar = function(message, isError) {
       registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError}, 15000);
     };
-    registryUI.errorSnackbar = function (message) {
+    registryUI.errorSnackbar = function(message) {
       return registryUI.snackbar(message, true);
     }
-    registryUI.cleanName = function () {
+    registryUI.cleanName = function() {
       const url = (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
       if (url) {
         return url.startsWith('http') ? url.replace(/https?:\/\//, '') : url;
       }
       return '';
     }
-    route.parser(null, function (path, filter) {
+    route.parser(null, function(path, filter) {
       const f = filter
         .replace(/\?/g, '\\?')
         .replace(/\*/g, '([^?#]+?)')
@@ -108,27 +108,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       if (args) return args.slice(1)
     });
 
-    registryUI.isDigit = function (char) {
+    registryUI.isDigit = function(char) {
       return char >= '0' && char <= '9';
     }
 
-    registryUI.DockerImage = function (name, tag) {
+    registryUI.DockerImage = function(name, tag) {
       this.name = name;
       this.tag = tag;
       riot.observable(this);
-      this.on('get-size', function () {
+      this.on('get-size', function() {
         if (this.size !== undefined) {
           return this.trigger('size', this.size);
         }
         return this.fillInfo();
       });
-      this.on('get-sha256', function () {
+      this.on('get-sha256', function() {
         if (this.size !== undefined) {
           return this.trigger('sha256', this.sha256);
         }
         return this.fillInfo();
       });
-      this.on('get-date', function () {
+      this.on('get-date', function() {
         if (this.date !== undefined) {
           return this.trigger('date', this.date);
         }
@@ -136,7 +136,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       });
     };
 
-    registryUI.DockerImage._tagReduce = function (acc, e) {
+    registryUI.DockerImage._tagReduce = function(acc, e) {
       if (acc.length > 0 && registryUI.isDigit(acc[acc.length - 1].charAt(0)) == registryUI.isDigit(e)) {
         acc[acc.length - 1] += e;
       } else {
@@ -145,7 +145,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return acc;
     }
 
-    registryUI.DockerImage.compare = function (e1, e2) {
+    registryUI.DockerImage.compare = function(e1, e2) {
       const tag1 = e1.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
       const tag2 = e2.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
 
@@ -163,17 +163,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return e1.tag.length - e2.tag.length;
     };
 
-    registryUI.DockerImage.prototype.fillInfo = function () {
+    registryUI.DockerImage.prototype.fillInfo = function() {
       if (this._fillInfoWaiting) {
         return;
       }
       this._fillInfoWaiting = true;
       const oReq = new Http();
       const self = this;
-      oReq.addEventListener('loadend', function () {
+      oReq.addEventListener('loadend', function() {
         if (this.status == 200 || this.status == 202) {
           const response = JSON.parse(this.responseText);
-          self.size = response.layers.reduce(function (acc, e) {
+          self.size = response.layers.reduce(function(acc, e) {
             return acc + e.size;
           }, 0);
           self.sha256 = response.config.digest;
@@ -191,10 +191,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.send();
     }
 
-    registryUI.DockerImage.prototype.getBlobs = function (blob) {
+    registryUI.DockerImage.prototype.getBlobs = function(blob) {
       const oReq = new Http();
       const self = this;
-      oReq.addEventListener('loadend', function () {
+      oReq.addEventListener('loadend', function() {
         if (this.status == 200 || this.status == 202) {
           const response = JSON.parse(this.responseText);
           self.creationDate = new Date(response.created);

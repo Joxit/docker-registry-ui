@@ -56,27 +56,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         function modifySpecificAttributeTypes(value) {
           if (attribute === "created") {
-            let date = new Date(value);
-            let year = date.getFullYear();
-            let month = date.getMonth();
-            let day = date.getDay();
-            let minutes = date.getMinutes();
-            let hours = date.getUTCHours();
-            let seconds = date.getSeconds();
-            let milliSeconds = date.getMilliseconds();
-
-            if (month < 10) {
-              month = '0' + month;
-            }
-
-            if (minutes < 10) {
-              minutes = '0' + minutes;
-            }
-            if (hours < 10) {
-              hours = '0' + hours;
-            }
-
-            value = day + "." + month + "." + year + " | " + hours + ":" + minutes + ":" + seconds + "." + milliSeconds;
+            var date = new Date(value);
+            value = date.toLocaleString();
           } else if (attribute === "container_config" || attribute === "config") {
             value = "";
           }

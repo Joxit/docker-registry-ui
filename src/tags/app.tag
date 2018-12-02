@@ -85,6 +85,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         route('');
       }
     };
+
+    registryUI.taghistory.go = function(image, tag) {
+      route('/taghistory/image/' + image + '/tag/' + tag);
+    };
+
     registryUI.snackbar = function(message, isError) {
       registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError}, 15000);
     };

@@ -16,14 +16,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history-button>
   <a href="#" title="This will show the history of given tag"
-     onclick="go('{ opts.image.name }', '{ opts.image.tag }');">
+     onclick="registryUI.taghistory.go('{ opts.image.name }', '{ opts.image.tag }');">
     <i class="material-icons">history</i>
   </a>
-
-  <script type="text/javascript">
-    go = function(image, tag) {
-      route('/taghistory/image/' + image + '/tag/' + tag);
-    };
-  </script>
 
 </tag-history-button>

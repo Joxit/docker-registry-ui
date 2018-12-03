@@ -68,6 +68,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     });
     route('/taghistory/image/*/tag/*', function(image, tag) {
       route.routeName = 'taghistory';
+      console.log("Route Taghistory");
 
       registryUI.taghistory.image = image;
       registryUI.taghistory.tag = tag;

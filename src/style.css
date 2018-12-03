@@ -426,3 +426,8 @@ select {
 .tag-history-element .parent div.value {
   font-size: 12px;
 }
+
+tag-history-button button {
+  background: none;
+  border: none;
+}

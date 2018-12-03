@@ -16,3 +16,7 @@ The registry is protected via __Basic authentication__ but feel free to use wath
 In this sample, credentials are: **admin / admin**.
 
 To generate a new password for basic auth, run the command: `htpasswd -nb username password`.
+
+## Contributors
+
+Thank you [@onizet](https://github.com/onizet) for this example.

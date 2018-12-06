@@ -21,8 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </a>
       <h2>
-        History of Image Tag |
-        { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i>
+        History of { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i>
       </h2>
     </div>
     <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">

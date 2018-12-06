@@ -24,25 +24,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         History of { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i>
       </h2>
     </div>
-    <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
-      <material-spinner></material-spinner>
+
+    <div class="material-card-title-action">
+      <p>Nested v1Compatibility history elements:</p>
     </div>
+  </material-card>
+  <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
+    <material-spinner></material-spinner>
+  </div>
 
-    <div show="{ registryUI.taghistory.loadend }">
-      <div class="material-card-title-action">
-        <p>Nested v1Compatibility history elements:</p>
-      </div>
-      <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
-        <div each="{ entry in guiElement }" class="{ entry.key }">
-          <div class="headline"><i class="material-icons"></i>
-            <p>{ entry.key }</p></div>
-          <div class="value"> { entry.value }</div>
-        </div>
-
-      </material-card>
+  <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
+    <div each="{ entry in guiElement }" class="{ entry.key }">
+      <div class="headline"><i class="material-icons"></i>
+        <p>{ entry.key }</p></div>
+      <div class="value"> { entry.value }</div>
     </div>
 
   </material-card>
+
 
   <script type="text/javascript">
 
@@ -53,32 +52,32 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.addEventListener('load', function() {
         registryUI.taghistory.elements = [];
 
-        function modifySpecificAttributeTypes(value) {
-          if (attribute === "created") {
-            var date = new Date(value);
-            value = date.toLocaleString();
-          } else if (attribute === "container_config" || attribute === "config") {
-            value = "";
+        function modifySpecificAttributeTypes(attribute, value) {
+          switch (attribute) {
+            case "created":
+              return new Date(value).toLocaleString();
+            case "container_config":
+            case "config":
+              return "";
           }
           return value;
         }
 
-        if (this.status == 200) {
-          let elements = JSON.parse(this.responseText).history || [];
-          for (var index in elements) {
-            let parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
+        if (this.status === 200) {
+          const elements = JSON.parse(this.responseText).history || [];
+          for (const index in elements) {
+            const parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
 
             let guiElements = [];
             let guiElement = {};
 
-            for (var attribute in parsedNestedElements) {
+            for (const attribute in parsedNestedElements) {
               if (parsedNestedElements.hasOwnProperty(attribute)) {
-                let value = parsedNestedElements[attribute];
+                const value = parsedNestedElements[attribute];
 
-                value = modifySpecificAttributeTypes(value);
                 guiElement = {
                   "key": attribute,
-                  "value": value
+                  "value": modifySpecificAttributeTypes(attribute, value)
                 };
                 guiElements.push(guiElement);
               }
@@ -87,7 +86,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
             registryUI.taghistory.elements.push(guiElements);
           }
-        } else if (this.status == 404) {
+        } else if (this.status === 404) {
           registryUI.snackbar('Manifest could not be fetched', true);
         } else {
           registryUI.snackbar(this.responseText);

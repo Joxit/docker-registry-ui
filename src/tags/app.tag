@@ -95,27 +95,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
     registryUI.errorSnackbar = function(message) {
       return registryUI.snackbar(message, true);
-    }
+    };
     registryUI.cleanName = function() {
       const url = (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
       if (url) {
         return url.startsWith('http') ? url.replace(/https?:\/\//, '') : url;
       }
       return '';
-    }
+    };
     route.parser(null, function(path, filter) {
       const f = filter
         .replace(/\?/g, '\\?')
         .replace(/\*/g, '([^?#]+?)')
-        .replace(/\.\./, '.*')
-      const re = new RegExp('^' + f + '$')
-      const args = path.match(re)
+        .replace(/\.\./, '.*');
+      const re = new RegExp('^' + f + '$');
+      const args = path.match(re);
       if (args) return args.slice(1)
     });
 
     registryUI.isDigit = function(char) {
       return char >= '0' && char <= '9';
-    }
+    };
 
     registryUI.DockerImage = function(name, tag) {
       this.name = name;
@@ -148,7 +148,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         acc.push(e);
       }
       return acc;
-    }
+    };
 
     registryUI.DockerImage.compare = function(e1, e2) {
       const tag1 = e1.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
@@ -194,7 +194,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/manifests/' + self.tag);
       oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
       oReq.send();
-    }
+    };
 
     registryUI.DockerImage.prototype.getBlobs = function(blob) {
       const oReq = new Http();

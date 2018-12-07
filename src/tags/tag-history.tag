@@ -68,14 +68,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           for (const index in elements) {
             const parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
 
-            let guiElements = [];
-            let guiElement = {};
+            const guiElements = [];
 
             for (const attribute in parsedNestedElements) {
               if (parsedNestedElements.hasOwnProperty(attribute)) {
                 const value = parsedNestedElements[attribute];
-
-                guiElement = {
+                const guiElement = {
                   "key": attribute,
                   "value": modifySpecificAttributeTypes(attribute, value)
                 };

@@ -1,18 +1,18 @@
 <!--
- Copyright (C) 2016  Jones Magloire @Joxit
+Copyright (C) 2016 Jones Magloire @Joxit
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
 
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <app>
   <header>
@@ -24,6 +24,7 @@
   <main>
     <catalog if="{route.routeName == 'home'}"></catalog>
     <taglist if="{route.routeName == 'taglist'}"></taglist>
+    <tag-history if="{route.routeName == 'taghistory'}"></tag-history>
     <change></change>
     <add></add>
     <remove></remove>
@@ -31,7 +32,8 @@
   </main>
   <footer>
     <material-footer>
-      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI %%GULP_INJECT_VERSION%%</a>
+      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI
+        %%GULP_INJECT_VERSION%%</a>
       <ul class="material-footer-link-list">
         <li>
           <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
@@ -46,7 +48,7 @@
   <script>
 
     registryUI.appTag = this;
-    route.base('#!')
+    route.base('#!');
     route('', function() {
       route.routeName = 'home';
       if (registryUI.catalog.display) {
@@ -57,48 +59,65 @@
     });
     route('/taglist/*', function(image) {
       route.routeName = 'taglist';
-      registryUI.taglist.name = image
+      registryUI.taglist.name = image;
       if (registryUI.taglist.display) {
         registryUI.taglist.loadend = false;
         registryUI.taglist.display();
       }
       registryUI.appTag.update();
     });
+    route('/taghistory/image/*/tag/*', function(image, tag) {
+      route.routeName = 'taghistory';
+
+      registryUI.taghistory.image = image;
+      registryUI.taghistory.tag = tag;
+
+      if (registryUI.taghistory.display) {
+        registryUI.taghistory.loadend = false;
+        registryUI.taghistory.display();
+      }
+      registryUI.appTag.update();
+    });
     registryUI.home = function() {
-      if(route.routeName == 'home') {
-        registryUI.catalog.display();
+      if (route.routeName == 'home') {
+        registryUI.catalog.display;
       } else {
         route('');
       }
     };
-    registryUI.snackbar = function (message, isError) {
+
+    registryUI.taghistory.go = function(image, tag) {
+      route('/taghistory/image/' + image + '/tag/' + tag);
+    };
+
+    registryUI.snackbar = function(message, isError) {
       registryUI.appTag.tags['material-snackbar'].addToast({'message': message, 'isError': isError}, 15000);
     };
-    registryUI.errorSnackbar = function (message) {
+    registryUI.errorSnackbar = function(message) {
       return registryUI.snackbar(message, true);
-    }
+    };
     registryUI.cleanName = function() {
       const url = (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
       if (url) {
         return url.startsWith('http') ? url.replace(/https?:\/\//, '') : url;
       }
       return '';
-    }
+    };
     route.parser(null, function(path, filter) {
       const f = filter
         .replace(/\?/g, '\\?')
         .replace(/\*/g, '([^?#]+?)')
-        .replace(/\.\./, '.*')
-      const re = new RegExp('^' + f + '$')
-      const args = path.match(re)
+        .replace(/\.\./, '.*');
+      const re = new RegExp('^' + f + '$');
+      const args = path.match(re);
       if (args) return args.slice(1)
     });
 
     registryUI.isDigit = function(char) {
       return char >= '0' && char <= '9';
-    }
+    };
 
-    registryUI.DockerImage = function (name, tag) {
+    registryUI.DockerImage = function(name, tag) {
       this.name = name;
       this.tag = tag;
       riot.observable(this);
@@ -122,14 +141,14 @@
       });
     };
 
-    registryUI.DockerImage._tagReduce = function (acc, e) {
+    registryUI.DockerImage._tagReduce = function(acc, e) {
       if (acc.length > 0 && registryUI.isDigit(acc[acc.length - 1].charAt(0)) == registryUI.isDigit(e)) {
         acc[acc.length - 1] += e;
       } else {
         acc.push(e);
       }
       return acc;
-    }
+    };
 
     registryUI.DockerImage.compare = function(e1, e2) {
       const tag1 = e1.tag.match(/./g).reduce(registryUI.DockerImage._tagReduce, []);
@@ -156,10 +175,10 @@
       this._fillInfoWaiting = true;
       const oReq = new Http();
       const self = this;
-      oReq.addEventListener('loadend', function () {
+      oReq.addEventListener('loadend', function() {
         if (this.status == 200 || this.status == 202) {
           const response = JSON.parse(this.responseText);
-          self.size = response.layers.reduce(function (acc, e) {
+          self.size = response.layers.reduce(function(acc, e) {
             return acc + e.size;
           }, 0);
           self.sha256 = response.config.digest;
@@ -175,12 +194,12 @@
       oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/manifests/' + self.tag);
       oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
       oReq.send();
-    }
+    };
 
     registryUI.DockerImage.prototype.getBlobs = function(blob) {
       const oReq = new Http();
       const self = this;
-      oReq.addEventListener('loadend', function () {
+      oReq.addEventListener('loadend', function() {
         if (this.status == 200 || this.status == 202) {
           const response = JSON.parse(this.responseText);
           self.creationDate = new Date(response.created);

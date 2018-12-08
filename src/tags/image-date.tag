@@ -32,7 +32,7 @@
           return Math.floor(diff / maxSeconds[i]) + ' ' + labels[i * 2 + 1];
         }
       }
-    }
+    };
     opts.image.on('creation-date', function(date) {
       self.date = date;
       self.localDate = date.toLocaleString()

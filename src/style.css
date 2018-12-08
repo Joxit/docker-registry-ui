@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-html>body {
+html > body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
 
@@ -94,12 +94,12 @@ h2 {
   list-style: none;
 }
 
-.list.highlight>li:hover {
+.list.highlight > li:hover {
   background-color: #eee;
   cursor: pointer;
 }
 
-.list>li {
+.list > li {
   box-sizing: border-box;
   line-height: 1;
   height: 48px;
@@ -107,7 +107,7 @@ h2 {
   overflow: hidden;
 }
 
-.list>li i.material-icons {
+.list > li i.material-icons {
   margin-right: 32px;
   height: 24px;
   width: 24px;
@@ -116,7 +116,7 @@ h2 {
   color: #757575;
 }
 
-.list>li>span {
+.list > li > span {
   height: 100%;
   text-decoration: none;
   box-sizing: border-box;
@@ -322,6 +322,114 @@ select {
   padding: 12px 5px;
 }
 
+.show-tag-history {
+  width: 30px;
+  text-align: center;
+}
+
+.remove-tag {
+  padding: 12px 5px;
+  width: 30px;
+  text-align: center;
+}
+
 .copy-to-clipboard a:hover {
   cursor: pointer;
+}
+
+material-card.tag-history{
+  margin-bottom: 0;
+}
+.tag-history-element {
+  margin-top:5px;
+  margin-bottom: 0;
+}
+
+.tag-history-element > div {
+  padding: 20px;
+  min-width: 100px;
+}
+
+.tag-history-element i {
+  font-size: 20px;
+  padding: 0px;
+}
+
+.tag-history-element .created i:after {
+  content: 'event';
+}
+
+.tag-history-element .config i:after {
+  content: 'build';
+}
+
+.tag-history-element .config .value:after,
+.tag-history-element .container_config .value:after {
+  content: 'WIP for display of config value';
+  font-style: italic;
+  font-size: 12px;
+}
+
+.tag-history-element .container_config i:after {
+  content: 'code';
+}
+
+.tag-history-element .throwaway i:after {
+  content: 'eject';
+}
+
+.tag-history-element .parent i:after {
+  content: 'supervisor_account';
+}
+
+.tag-history-element .architecture i:after {
+  content: 'memory';
+}
+
+.tag-history-element .os i:after {
+  content: 'developer_board';
+}
+
+.tag-history-element .container i:after {
+  content: 'dns';
+}
+
+.tag-history-element .id i:after {
+  content: 'settings_ethernet';
+}
+
+.tag-history-element .docker_version {
+  background-size: 35px auto;
+  background-image: url("images/docker-logo.svg");
+  background-repeat: no-repeat;
+  background-position: 11px 20px;
+}
+
+.tag-history-element > div {
+  display: block;
+  width: 420px;
+  float: left;
+}
+
+.tag-history-element .docker_version div.headline {
+  padding-left: 10px;
+}
+
+.tag-history-element .headline p {
+  font-weight: bold;
+  line-height: 20px;
+  position: relative;
+  display: inline;
+  top: -4px;
+}
+
+.tag-history-element .id div.value,
+.tag-history-element .container div.value,
+.tag-history-element .parent div.value {
+  font-size: 12px;
+}
+
+tag-history-button button {
+  background: none;
+  border: none;
 }

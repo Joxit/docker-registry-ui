@@ -36,7 +36,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
     <div each="{ entry in guiElement }" class="{ entry.key }">
       <div class="headline"><i class="material-icons"></i>
-        <p>{ entry.key }</p></div>
+        <p>{ entry.key.replace('_', ' ') }</p></div>
       <div class="value"> { entry.value }</div>
     </div>
 

@@ -398,21 +398,16 @@ material-card.tag-history{
   content: 'settings_ethernet';
 }
 
-.tag-history-element .docker_version {
-  background-size: 35px auto;
+.tag-history-element .docker_version .headline .material-icons {
+  background-size: 20px auto;
   background-image: url("images/docker-logo.svg");
   background-repeat: no-repeat;
-  background-position: 11px 20px;
 }
 
 .tag-history-element > div {
   display: block;
   width: 420px;
   float: left;
-}
-
-.tag-history-element .docker_version div.headline {
-  padding-left: 10px;
 }
 
 .tag-history-element .headline p {

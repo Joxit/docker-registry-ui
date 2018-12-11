@@ -46,7 +46,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-footer>
   </footer>
   <script>
-
     registryUI.appTag = this;
     route.base('#!');
     route('', function() {
@@ -182,6 +181,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             return acc + e.size;
           }, 0);
           self.sha256 = response.config.digest;
+          self.layers = response.layers;
           self.trigger('size', self.size);
           self.trigger('sha256', self.sha256);
           self.getBlobs(response.config.digest)
@@ -203,7 +203,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         if (this.status == 200 || this.status == 202) {
           const response = JSON.parse(this.responseText);
           self.creationDate = new Date(response.created);
+          self.blobs = response;
+          self.blobs.history.filter(function(e) {
+              return !e.empty_layer;
+            }).forEach(function(e, i) {
+              e.size = self.layers[i].size;
+              e.id = self.layers[i].digest;
+            });
           self.trigger('creation-date', self.creationDate);
+          self.trigger('blobs', self.blobs);
         } else if (this.status == 404) {
           registryUI.errorSnackbar('Blobs for ' + self.name + ':' + self.tag + ' not found');
         } else {

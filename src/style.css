@@ -337,7 +337,8 @@ select {
   cursor: pointer;
 }
 
-material-card.tag-history{
+material-card.tag-history {
+  min-height: auto;
   margin-bottom: 0;
 }
 .tag-history-element {

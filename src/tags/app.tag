@@ -208,7 +208,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               return !e.empty_layer;
             }).forEach(function(e, i) {
               e.size = self.layers[i].size;
-              e.id = self.layers[i].digest;
+              e.id = self.layers[i].digest.replace('sha256:', '');
             });
           self.trigger('creation-date', self.creationDate);
           self.trigger('blobs', self.blobs);

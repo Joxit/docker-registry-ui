@@ -30,7 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </div>
 
   <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
-    <div each="{ entry in guiElement }" class="{ entry.key }">
+    <div each="{ entry in guiElement.sort(registryUI.taghistory.eltSort) }" class="{ entry.key }">
       <div class="headline"><i class="material-icons"></i>
         <p>{ entry.key.replace('_', ' ') }</p>
       </div>
@@ -40,6 +40,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
   <script type="text/javascript">
     registryUI.taghistory.instance = this;
+    registryUI.taghistory.eltIdx = function(e) {
+      switch (e) {
+        case 'id': return 1;
+        case 'created': return 2;
+        case 'created_by': return 3;
+        case 'size': return 4;
+        case 'os': return 5;
+        case 'architecture': return 6;
+        case 'linux': return 7;
+        case 'docker_version': return 8;
+        case 'config': return 9;
+        case 'container_config': return 10;
+        default: return 10;
+      }
+    };
+    registryUI.taghistory.eltSort = function(e1, e2) {
+      return registryUI.taghistory.eltIdx(e1.key) - registryUI.taghistory.eltIdx(e2.key);
+    };
     registryUI.taghistory.display = function() {
       registryUI.taghistory.elements = []
       let oReq = new Http();

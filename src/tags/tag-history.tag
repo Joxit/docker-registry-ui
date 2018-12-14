@@ -55,9 +55,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         default: return 10;
       }
     };
+
     registryUI.taghistory.eltSort = function(e1, e2) {
       return registryUI.taghistory.eltIdx(e1.key) - registryUI.taghistory.eltIdx(e2.key);
     };
+
     registryUI.taghistory.display = function() {
       registryUI.taghistory.elements = []
       let oReq = new Http();
@@ -68,6 +70,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           switch (attribute) {
             case "created":
               return new Date(value).toLocaleString();
+            case "created_by":
+              const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
+              return (cmd && cmd [1]) || 'RUN'
+            case 'size':
+              return registryUI.bytesToSize(value);
             case "container_config":
             case "config":
               return "";
@@ -90,7 +97,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           registryUI.taghistory.elements.push(guiElements);
         }
         exec(blobs)
-        blobs.history.forEach(function(elt) { exec(elt) });
+        blobs.history.reverse().forEach(function(elt) { exec(elt) });
         registryUI.taghistory.loadend = true;
         registryUI.taghistory.instance.update();
       });

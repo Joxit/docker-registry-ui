@@ -356,49 +356,6 @@ material-card.tag-history {
   padding: 0px;
 }
 
-.tag-history-element .created i:after {
-  content: 'event';
-}
-
-.tag-history-element .config i:after {
-  content: 'build';
-}
-
-.tag-history-element .config .value:after,
-.tag-history-element .container_config .value:after {
-  content: 'WIP for display of config value';
-  font-style: italic;
-  font-size: 12px;
-}
-
-.tag-history-element .container_config i:after {
-  content: 'code';
-}
-
-.tag-history-element .throwaway i:after {
-  content: 'eject';
-}
-
-.tag-history-element .parent i:after {
-  content: 'supervisor_account';
-}
-
-.tag-history-element .architecture i:after {
-  content: 'memory';
-}
-
-.tag-history-element .os i:after {
-  content: 'developer_board';
-}
-
-.tag-history-element .container i:after {
-  content: 'dns';
-}
-
-.tag-history-element .id i:after {
-  content: 'settings_ethernet';
-}
-
 .tag-history-element .docker_version .headline .material-icons {
   background-size: 20px auto;
   background-image: url("images/docker-logo.svg");

@@ -29,9 +29,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-spinner></material-spinner>
   </div>
 
-  <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
-    <div each="{ entry in guiElement.sort(registryUI.taghistory.eltSort) }" class="{ entry.key }">
-      <div class="headline"><i class="material-icons"></i>
+  <material-card each="{ guiElement in this.elements }" class="tag-history-element">
+    <div each="{ entry in guiElement }" class="{ entry.key }" if="{ entry.value != ''}">
+      <div class="headline"><i class="material-icons">{entry.icon}</i>
         <p>{ entry.key.replace('_', ' ') }</p>
       </div>
       <div class="value"> { entry.value }</div>
@@ -39,8 +39,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   </material-card>
   <script type="text/javascript">
-    registryUI.taghistory.instance = this;
-    registryUI.taghistory.eltIdx = function(e) {
+    const self = this;
+    self.eltIdx = function(e) {
       switch (e) {
         case 'id': return 1;
         case 'created': return 2;
@@ -50,60 +50,103 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         case 'architecture': return 6;
         case 'linux': return 7;
         case 'docker_version': return 8;
-        case 'config': return 9;
-        case 'container_config': return 10;
         default: return 10;
       }
     };
 
-    registryUI.taghistory.eltSort = function(e1, e2) {
-      return registryUI.taghistory.eltIdx(e1.key) - registryUI.taghistory.eltIdx(e2.key);
+    self.eltSort = function(e1, e2) {
+      console.log(e1, e2)
+      return self.eltIdx(e1.key) - self.eltIdx(e2.key);
+    };
+
+    self.modifySpecificAttributeTypes = function(attribute, value) {
+      switch (attribute) {
+        case 'created':
+          return new Date(value).toLocaleString();
+        case 'created_by':
+          const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
+          return (cmd && cmd [1]) || 'RUN'
+        case 'size':
+          return registryUI.bytesToSize(value);
+        case 'Entrypoint':
+        case 'Env':
+        case 'Cmd':
+          return (value || []).join(' ');
+        case 'Labels':
+          return Object.keys(value || {}).map(function(elt) {
+            return value[elt] ? elt + '=' + value[elt] : '';
+          }).join(' ');
+        case 'Volumes':
+          return Object.keys(value);
+      }
+      return value || '';
+    };
+
+    self.getIcon = function(attribute) {
+      switch (attribute) {
+        case 'architecture': return 'memory';
+        case 'created': return 'event';
+        case 'docker_version': return '';
+        case 'os': return 'developer_board';
+        case 'Cmd': return 'launch';
+        case 'Entrypoint': return 'input';
+        case 'Env': return 'notes';
+        case 'Labels': return 'label';
+        case 'User': return 'face';
+        case 'Volumes': return 'storage';
+        case 'WorkingDir': return 'home';
+        case 'author': return 'account_circle';
+        case 'id': case 'digest': return 'settings_ethernet';
+        case 'created_by': return 'build';
+        case 'size': return 'get_app';
+        default: ''
+
+      }
+    }
+
+    self.getConfig = function(blobs) {
+      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels', 'User', 'Volumes', 'WorkingDir', 'author'].reduce(function(acc, e) {
+        acc[e] = blobs[e] || blobs.config[e];
+        return acc;
+      }, {});
+
+      if (!res.author && (res.Labels && res.Labels.maintainer)) {
+        res.author = blobs.config.Labels.maintainer;
+        delete res.Labels.maintainer;
+      }
+
+      return res;
     };
 
     registryUI.taghistory.display = function() {
-      registryUI.taghistory.elements = []
-      let oReq = new Http();
-      const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag)
+      self.elements = []
+      const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag);
       image.fillInfo()
       image.on('blobs', function(blobs) {
-        function modifySpecificAttributeTypes(attribute, value) {
-          switch (attribute) {
-            case "created":
-              return new Date(value).toLocaleString();
-            case "created_by":
-              const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
-              return (cmd && cmd [1]) || 'RUN'
-            case 'size':
-              return registryUI.bytesToSize(value);
-            case "container_config":
-            case "config":
-              return "";
-          }
-          return value;
-        }
-
         function exec(elt) {
           const guiElements = [];
           for (const attribute in elt) {
-            if (elt.hasOwnProperty(attribute) && attribute != 'history' && attribute != 'rootfs') {
+            if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
               const value = elt[attribute];
               const guiElement = {
                 "key": attribute,
-                "value": modifySpecificAttributeTypes(attribute, value)
+                "value": self.modifySpecificAttributeTypes(attribute, value),
+                'icon': self.getIcon(attribute)
               };
               guiElements.push(guiElement);
             }
           }
-          registryUI.taghistory.elements.push(guiElements);
+          return guiElements.sort(self.eltSort);
         }
-        exec(blobs)
-        blobs.history.reverse().forEach(function(elt) { exec(elt) });
+
+        self.elements.push(exec(self.getConfig(blobs)));
+        blobs.history.reverse().forEach(function(elt) { self.elements.push(exec(elt)) });
         registryUI.taghistory.loadend = true;
-        registryUI.taghistory.instance.update();
+        self.update();
       });
     };
 
     registryUI.taghistory.display();
-    registryUI.taghistory.instance.update();
+    self.update();
   </script>
 </tag-history>

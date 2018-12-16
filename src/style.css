@@ -194,6 +194,7 @@ material-card table td {
   text-align: right;
 }
 
+tag-history-button button:hover,
 material-card table th.material-card-th-sorted-ascending:hover, material-card table th.material-card-th-sorted-descending:hover {
   cursor: pointer;
 }
@@ -337,38 +338,31 @@ select {
   cursor: pointer;
 }
 
-material-card.tag-history {
+tag-history material-card {
   min-height: auto;
-  margin-bottom: 0;
-}
-.tag-history-element {
-  margin-top:5px;
-  margin-bottom: 0;
 }
 
-.tag-history-element > div {
-  padding: 20px;
-  min-width: 100px;
-}
-
-.tag-history-element i {
+tag-history-element i {
   font-size: 20px;
   padding: 0px;
 }
 
-.tag-history-element .docker_version .headline .material-icons {
-  background-size: 20px auto;
+tag-history-element.docker_version .headline .material-icons {
+  background-size: 24px auto;
   background-image: url("images/docker-logo.svg");
   background-repeat: no-repeat;
 }
 
-.tag-history-element > div {
+tag-history-element {
   display: block;
+  padding: 20px;
+  min-width: 100px;
   width: 420px;
   float: left;
+  overflow-x: auto;
 }
 
-.tag-history-element .headline p {
+tag-history-element .headline p {
   font-weight: bold;
   line-height: 20px;
   position: relative;
@@ -376,9 +370,7 @@ material-card.tag-history {
   top: -4px;
 }
 
-.tag-history-element .id div.value,
-.tag-history-element .container div.value,
-.tag-history-element .parent div.value {
+tag-history-element.id div.value {
   font-size: 12px;
 }
 

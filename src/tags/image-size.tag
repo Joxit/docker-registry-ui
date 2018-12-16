@@ -17,7 +17,7 @@
 <image-size>
   <div title="Compressed size of your image.">{ registryUI.bytesToSize(this.size) }</div>
   <script type="text/javascript">
-    var self = this;
+    const self = this;
     opts.image.on('size', function(size) {
       self.size = size;
       self.update();

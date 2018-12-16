@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-history>
   <material-card ref="tag-history-tag" class="tag-history">
     <div class="material-card-title-action">
-      <a href="#!taglist/{registryUI.taghistory.image}" onclick="registryUI.home();">
+      <a href="#!taglist/{registryUI.taghistory.image}">
         <i class="material-icons">arrow_back</i>
       </a>
       <h2>
@@ -26,17 +26,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </div>
   </material-card>
   <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
-    <material-spinner></material-spinner>
+    <material-spinner/>
   </div>
 
   <material-card each="{ guiElement in this.elements }" class="tag-history-element">
-    <div each="{ entry in guiElement }" class="{ entry.key }" if="{ entry.value != ''}">
-      <div class="headline"><i class="material-icons">{entry.icon}</i>
-        <p>{ entry.key.replace('_', ' ') }</p>
-      </div>
-      <div class="value"> { entry.value }</div>
-    </div>
-
+    <tag-history-element each="{ entry in guiElement }" if="{ entry.value && entry.value.length > 0}"/>
   </material-card>
   <script type="text/javascript">
     const self = this;
@@ -55,7 +49,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
 
     self.eltSort = function(e1, e2) {
-      console.log(e1, e2)
       return self.eltIdx(e1.key) - self.eltIdx(e2.key);
     };
 
@@ -69,44 +62,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         case 'size':
           return registryUI.bytesToSize(value);
         case 'Entrypoint':
-        case 'Env':
         case 'Cmd':
           return (value || []).join(' ');
         case 'Labels':
           return Object.keys(value || {}).map(function(elt) {
             return value[elt] ? elt + '=' + value[elt] : '';
-          }).join(' ');
+          });
         case 'Volumes':
+        case 'ExposedPorts':
           return Object.keys(value);
       }
       return value || '';
     };
 
-    self.getIcon = function(attribute) {
-      switch (attribute) {
-        case 'architecture': return 'memory';
-        case 'created': return 'event';
-        case 'docker_version': return '';
-        case 'os': return 'developer_board';
-        case 'Cmd': return 'launch';
-        case 'Entrypoint': return 'input';
-        case 'Env': return 'notes';
-        case 'Labels': return 'label';
-        case 'User': return 'face';
-        case 'Volumes': return 'storage';
-        case 'WorkingDir': return 'home';
-        case 'author': return 'account_circle';
-        case 'id': case 'digest': return 'settings_ethernet';
-        case 'created_by': return 'build';
-        case 'size': return 'get_app';
-        default: ''
-
-      }
-    }
-
     self.getConfig = function(blobs) {
-      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels', 'User', 'Volumes', 'WorkingDir', 'author'].reduce(function(acc, e) {
-        acc[e] = blobs[e] || blobs.config[e];
+      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels', 'User', 'Volumes', 'WorkingDir', 'author', 'id', 'ExposedPorts'].reduce(function(acc, e) {
+        const value = blobs[e] || blobs.config[e];
+        if (value) {
+          acc[e] = value;
+        }
         return acc;
       }, {});
 
@@ -130,8 +104,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               const value = elt[attribute];
               const guiElement = {
                 "key": attribute,
-                "value": self.modifySpecificAttributeTypes(attribute, value),
-                'icon': self.getIcon(attribute)
+                "value": self.modifySpecificAttributeTypes(attribute, value)
               };
               guiElements.push(guiElement);
             }

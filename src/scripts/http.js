@@ -24,13 +24,13 @@ function Http() {
 
 Http.prototype.addEventListener = function(e, f) {
   this._events[e] = f;
-  var self = this;
+  const self = this;
   switch (e) {
     case 'loadend':
       {
         self.oReq.addEventListener('loadend', function() {
           if (this.status == 401) {
-            var req = new XMLHttpRequest();
+            const req = new XMLHttpRequest();
             req.open(self._method, self._url);
             for (key in self._events) {
               req.addEventListener(key, self._events[key]);

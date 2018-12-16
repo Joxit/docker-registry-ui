@@ -72,7 +72,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     registryUI.taglist.display = function() {
       registryUI.taglist.tags = [];
       if (route.routeName == 'taglist') {
-        var oReq = new Http();
+        const oReq = new Http();
         registryUI.taglist.instance.update();
         oReq.addEventListener('load', function() {
           registryUI.taglist.tags = [];

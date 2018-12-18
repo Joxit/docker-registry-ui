@@ -52,7 +52,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       route.routeName = 'home';
       if (registryUI.catalog.display) {
         registryUI.catalog.loadend = false;
-        registryUI.catalog.display();
       }
       registryUI.appTag.update();
     });
@@ -61,7 +60,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       registryUI.taglist.name = image;
       if (registryUI.taglist.display) {
         registryUI.taglist.loadend = false;
-        registryUI.taglist.display();
       }
       registryUI.appTag.update();
     });
@@ -73,7 +71,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
       if (registryUI.taghistory.display) {
         registryUI.taghistory.loadend = false;
-        registryUI.taghistory.display();
       }
       registryUI.appTag.update();
     });

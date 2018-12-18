@@ -34,7 +34,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
   <script type="text/javascript">
     const self = this;
-    self.eltIdx = function(e) {
+    const eltIdx = function(e) {
       switch (e) {
         case 'id': return 1;
         case 'created': return 2;
@@ -48,11 +48,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
     };
 
-    self.eltSort = function(e1, e2) {
-      return self.eltIdx(e1.key) - self.eltIdx(e2.key);
+    const eltSort = function(e1, e2) {
+      return eltIdx(e1.key) - eltIdx(e2.key);
     };
 
-    self.modifySpecificAttributeTypes = function(attribute, value) {
+    const modifySpecificAttributeTypes = function(attribute, value) {
       switch (attribute) {
         case 'created':
           return new Date(value).toLocaleString();
@@ -75,7 +75,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return value || '';
     };
 
-    self.getConfig = function(blobs) {
+    const getConfig = function(blobs) {
       const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels', 'User', 'Volumes', 'WorkingDir', 'author', 'id', 'ExposedPorts'].reduce(function(acc, e) {
         const value = blobs[e] || blobs.config[e];
         if (value) {
@@ -92,31 +92,37 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return res;
     };
 
+    const processBlobs = function(blobs) {
+      function exec(elt) {
+        const guiElements = [];
+        for (const attribute in elt) {
+          if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
+            const value = elt[attribute];
+            const guiElement = {
+              "key": attribute,
+              "value": modifySpecificAttributeTypes(attribute, value)
+            };
+            guiElements.push(guiElement);
+          }
+        }
+        return guiElements.sort(eltSort);
+      }
+
+      self.elements.push(exec(getConfig(blobs)));
+      blobs.history.reverse().forEach(function(elt) { self.elements.push(exec(elt)) });
+      registryUI.taghistory.loadend = true;
+      self.update();
+    };
+
     registryUI.taghistory.display = function() {
       self.elements = []
+      const blobs = registryUI.taghistory._image && registryUI.taghistory._image.blobs;
+      if (blobs) {
+        return processBlobs(blobs)
+      }
       const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag);
       image.fillInfo()
-      image.on('blobs', function(blobs) {
-        function exec(elt) {
-          const guiElements = [];
-          for (const attribute in elt) {
-            if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
-              const value = elt[attribute];
-              const guiElement = {
-                "key": attribute,
-                "value": self.modifySpecificAttributeTypes(attribute, value)
-              };
-              guiElements.push(guiElement);
-            }
-          }
-          return guiElements.sort(self.eltSort);
-        }
-
-        self.elements.push(exec(self.getConfig(blobs)));
-        blobs.history.reverse().forEach(function(elt) { self.elements.push(exec(elt)) });
-        registryUI.taghistory.loadend = true;
-        self.update();
-      });
+      image.on('blobs', processBlobs);
     };
 
     registryUI.taghistory.display();

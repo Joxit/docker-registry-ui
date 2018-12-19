@@ -16,23 +16,14 @@ const useref = require('gulp-useref');
 const injectVersion = require('gulp-inject-version');
 const merge = require('stream-series');
 
-const allTags = 'src/tags/*.tag';
+const allTags = ['src/tags/*.tag', 'src/tags/dialogs/*.tag'];
 
 const allScripts = [
   'src/scripts/http.js',
   'src/scripts/script.js'
 ];
 
-const staticTags = [
-  'src/tags/catalog.tag',
-  'src/tags/app.tag',
-  'src/tags/taglist.tag',
-  'src/tags/copy-to-clipboard.tag',
-  'src/tags/remove-image.tag',
-  'src/tags/image-size.tag',
-  'src/tags/image-tag.tag',
-  'src/tags/image-date.tag'
-];
+const staticTags = ['src/tags/*.tag'];
 
 const staticScripts = [
   'src/scripts/http.js',
@@ -115,4 +106,16 @@ function fonts() {
     .pipe(gulp.dest('dist/fonts'));
 };
 
-exports.build = series(clean, html, parallel(fonts, styles, vendor, app, appStatic));
+function svgs() {
+  return gulp.src(['src/images/*.svg'])
+    .pipe(htmlmin({
+      removeComments: false,
+      collapseWhitespace: true,
+      removeRedundantAttributes: true,
+      removeEmptyAttributes: true,
+      minifyJS: uglify
+    }))
+    .pipe(gulp.dest('dist/images/'));
+};
+
+exports.build = series(clean, html, parallel(fonts, styles, vendor, app, appStatic, svgs));

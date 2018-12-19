@@ -22,7 +22,7 @@
   <script type="text/javascript">
     this.dockerCmd = 'docker pull ' + registryUI.cleanName() + '/' + opts.image.name + ':' + opts.image.tag;
     this.copy = function () {
-      var copyText = this.refs['input'];
+      const copyText = this.refs['input'];
       copyText.style.display = 'block';
       copyText.select();
       document.execCommand('copy');

@@ -46,14 +46,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-footer>
   </footer>
   <script>
-
     registryUI.appTag = this;
     route.base('#!');
     route('', function() {
       route.routeName = 'home';
       if (registryUI.catalog.display) {
         registryUI.catalog.loadend = false;
-        registryUI.catalog.display();
       }
       registryUI.appTag.update();
     });
@@ -62,7 +60,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       registryUI.taglist.name = image;
       if (registryUI.taglist.display) {
         registryUI.taglist.loadend = false;
-        registryUI.taglist.display();
       }
       registryUI.appTag.update();
     });
@@ -74,7 +71,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
       if (registryUI.taghistory.display) {
         registryUI.taghistory.loadend = false;
-        registryUI.taghistory.display();
       }
       registryUI.appTag.update();
     });
@@ -182,6 +178,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             return acc + e.size;
           }, 0);
           self.sha256 = response.config.digest;
+          self.layers = response.layers;
           self.trigger('size', self.size);
           self.trigger('sha256', self.sha256);
           self.getBlobs(response.config.digest)
@@ -203,7 +200,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         if (this.status == 200 || this.status == 202) {
           const response = JSON.parse(this.responseText);
           self.creationDate = new Date(response.created);
+          self.blobs = response;
+          self.blobs.history.filter(function(e) {
+              return !e.empty_layer;
+            }).forEach(function(e, i) {
+              e.size = self.layers[i].size;
+              e.id = self.layers[i].digest.replace('sha256:', '');
+            });
+          self.blobs.id = blob.replace('sha256:', '');
           self.trigger('creation-date', self.creationDate);
+          self.trigger('blobs', self.blobs);
         } else if (this.status == 404) {
           registryUI.errorSnackbar('Blobs for ' + self.name + ':' + self.tag + ' not found');
         } else {
@@ -213,6 +219,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/blobs/' + blob);
       oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
       oReq.send();
+    };
+
+    registryUI.bytesToSize = function (bytes) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+      if (bytes == undefined || isNaN(bytes)) {
+        return '?';
+      } else if (bytes == 0) {
+        return '0 Byte';
+      }
+      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+      return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
     };
     route.start(true);
   </script>

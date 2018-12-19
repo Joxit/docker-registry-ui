@@ -15,19 +15,9 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-size>
-  <div title="Compressed size of your image.">{ this.bytesToSize(this.size) }</div>
+  <div title="Compressed size of your image.">{ registryUI.bytesToSize(this.size) }</div>
   <script type="text/javascript">
-    var self = this;
-    this.bytesToSize = function (bytes) {
-      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-      if (bytes == undefined || isNaN(bytes)) {
-        return '?';
-      } else if (bytes == 0) {
-        return '0 Byte';
-      }
-      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-      return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
-    };
+    const self = this;
     opts.image.on('size', function(size) {
       self.size = size;
       self.update();

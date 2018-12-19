@@ -20,7 +20,7 @@ registryUI.URL_PARAM_REGEX = /^url=/;
 
 registryUI.name = registryUI.url = function(byPassQueryParam) {
   if (!registryUI._url) {
-    var url = registryUI.getUrlQueryParam();
+    const url = registryUI.getUrlQueryParam();
     if (url) {
       try {
         registryUI._url = registryUI.decodeURI(url);
@@ -35,7 +35,7 @@ registryUI.name = registryUI.url = function(byPassQueryParam) {
 }
 registryUI.getRegistryServer = function(i) {
   try {
-    var res = JSON.parse(localStorage.getItem('registryServer'));
+    const res = JSON.parse(localStorage.getItem('registryServer'));
     if (res instanceof Array) {
       return (!isNaN(i)) ? res[i] : res.map(function(url) {
         return url.trim().replace(/\/*$/, '');
@@ -45,9 +45,9 @@ registryUI.getRegistryServer = function(i) {
   return (!isNaN(i)) ? '' : [];
 }
 registryUI.addServer = function(url) {
-  var registryServer = registryUI.getRegistryServer();
+  const registryServer = registryUI.getRegistryServer();
   url = url.trim().replace(/\/*$/, '');
-  var index = registryServer.indexOf(url);
+  const index = registryServer.indexOf(url);
   if (index != -1) {
     return;
   }
@@ -56,11 +56,11 @@ registryUI.addServer = function(url) {
     registryUI.updateHistory(url);
   }
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
-}
+};
 registryUI.changeServer = function(url) {
   var registryServer = registryUI.getRegistryServer();
   url = url.trim().replace(/\/*$/, '');
-  var index = registryServer.indexOf(url);
+  const index = registryServer.indexOf(url);
   if (index == -1) {
     return;
   }
@@ -68,11 +68,11 @@ registryUI.changeServer = function(url) {
   registryServer = [url].concat(registryServer);
   registryUI.updateHistory(url);
   localStorage.setItem('registryServer', JSON.stringify(registryServer));
-}
+};
 registryUI.removeServer = function(url) {
-  var registryServer = registryUI.getRegistryServer();
+  const registryServer = registryUI.getRegistryServer();
   url = url.trim().replace(/\/*$/, '');
-  var index = registryServer.indexOf(url);
+  const index = registryServer.indexOf(url);
   if (index == -1) {
     return;
   }
@@ -90,9 +90,9 @@ registryUI.updateHistory = function(url) {
 }
 
 registryUI.getUrlQueryParam = function () {
-  var search = window.location.search;
+  const search = window.location.search;
   if (registryUI.URL_QUERY_PARAM_REGEX.test(search)) {
-    var param = search.split(/^\?|&/).find(function(param) {
+    const param = search.split(/^\?|&/).find(function(param) {
       return param && registryUI.URL_PARAM_REGEX.test(param);
     });
     return param ? param.replace(registryUI.URL_PARAM_REGEX, '') : param;

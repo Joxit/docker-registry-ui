@@ -37,7 +37,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     registryUI.catalog.instance = this;
     registryUI.catalog.display = function() {
       registryUI.catalog.repositories = [];
-      var oReq = new Http();
+      const oReq = new Http();
       oReq.addEventListener('load', function() {
         registryUI.catalog.repositories = [];
         if (this.status == 200) {

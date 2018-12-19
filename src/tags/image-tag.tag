@@ -17,7 +17,7 @@
 <image-tag>
   <div title="{ this.sha256 }">{ opts.image.tag }</div>
   <script type="text/javascript">
-    var self = this;
+    const self = this;
     opts.image.on('sha256', function(sha256) {
       self.sha256 = sha256.substring(0, 19);
       self.update();

@@ -23,7 +23,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     registryUI.removeImage = registryUI.removeImage || {};
 
     registryUI.removeImage.remove = function(name, tag) {
-      var oReq = new Http();
+      const oReq = new Http();
       oReq.addEventListener('loadend', function() {
         registryUI.taglist.refresh();
         if (this.status == 200) {
@@ -31,8 +31,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             registryUI.errorSnackbar('You need to add Access-Control-Expose-Headers: [\'Docker-Content-Digest\'] in your server configuration.');
             return;
           }
-          var digest = this.getResponseHeader('Docker-Content-Digest');
-          var oReq = new Http();
+          const digest = this.getResponseHeader('Docker-Content-Digest');
+          const oReq = new Http();
           oReq.addEventListener('loadend', function() {
             if (this.status == 200 || this.status == 202) {
               registryUI.taglist.refresh();

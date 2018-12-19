@@ -17,93 +17,115 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-history>
   <material-card ref="tag-history-tag" class="tag-history">
     <div class="material-card-title-action">
-      <a href="#!taglist/{registryUI.taghistory.image}" onclick="registryUI.home();">
+      <a href="#!taglist/{registryUI.taghistory.image}">
         <i class="material-icons">arrow_back</i>
       </a>
       <h2>
         History of { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i>
       </h2>
     </div>
-
-    <div class="material-card-title-action">
-      <p>Nested v1Compatibility history elements:</p>
-    </div>
   </material-card>
   <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
-    <material-spinner></material-spinner>
+    <material-spinner/>
   </div>
 
-  <material-card each="{ guiElement in registryUI.taghistory.elements }" class="tag-history-element">
-    <div each="{ entry in guiElement }" class="{ entry.key }">
-      <div class="headline"><i class="material-icons"></i>
-        <p>{ entry.key.replace('_', ' ') }</p></div>
-      <div class="value"> { entry.value }</div>
-    </div>
-
+  <material-card each="{ guiElement in this.elements }" class="tag-history-element">
+    <tag-history-element each="{ entry in guiElement }" if="{ entry.value && entry.value.length > 0}"/>
   </material-card>
-
-
   <script type="text/javascript">
-
-    registryUI.taghistory.instance = this;
-    registryUI.taghistory.display = function() {
-      let oReq = new Http();
-      registryUI.taghistory.instance.update();
-      oReq.addEventListener('load', function() {
-        registryUI.taghistory.elements = [];
-
-        function modifySpecificAttributeTypes(attribute, value) {
-          switch (attribute) {
-            case "created":
-              return new Date(value).toLocaleString();
-            case "container_config":
-            case "config":
-              return "";
-          }
-          return value;
-        }
-
-        if (this.status === 200) {
-          const elements = JSON.parse(this.responseText).history || [];
-          for (const index in elements) {
-            const parsedNestedElements = JSON.parse(elements[index].v1Compatibility || {});
-
-            const guiElements = [];
-
-            for (const attribute in parsedNestedElements) {
-              if (parsedNestedElements.hasOwnProperty(attribute)) {
-                const value = parsedNestedElements[attribute];
-                const guiElement = {
-                  "key": attribute,
-                  "value": modifySpecificAttributeTypes(attribute, value)
-                };
-                guiElements.push(guiElement);
-              }
-
-            }
-
-            registryUI.taghistory.elements.push(guiElements);
-          }
-        } else if (this.status === 404) {
-          registryUI.snackbar('Manifest could not be fetched', true);
-        } else {
-          registryUI.snackbar(this.responseText);
-        }
-      });
-      oReq.addEventListener('error', function() {
-        registryUI.snackbar(this.getErrorMessage(), true);
-        registryUI.taghistory.elements = [];
-      });
-      oReq.addEventListener('loadend', function() {
-        registryUI.taghistory.loadend = true;
-        registryUI.taghistory.instance.update();
-      });
-      oReq.open('GET', registryUI.url() + '/v2/' + registryUI.taghistory.image + '/manifests/' + registryUI.taghistory.tag);
-      oReq.send();
+    const self = this;
+    const eltIdx = function(e) {
+      switch (e) {
+        case 'id': return 1;
+        case 'created': return 2;
+        case 'created_by': return 3;
+        case 'size': return 4;
+        case 'os': return 5;
+        case 'architecture': return 6;
+        case 'linux': return 7;
+        case 'docker_version': return 8;
+        default: return 10;
+      }
     };
 
+    const eltSort = function(e1, e2) {
+      return eltIdx(e1.key) - eltIdx(e2.key);
+    };
+
+    const modifySpecificAttributeTypes = function(attribute, value) {
+      switch (attribute) {
+        case 'created':
+          return new Date(value).toLocaleString();
+        case 'created_by':
+          const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
+          return (cmd && cmd [1]) || 'RUN'
+        case 'size':
+          return registryUI.bytesToSize(value);
+        case 'Entrypoint':
+        case 'Cmd':
+          return (value || []).join(' ');
+        case 'Labels':
+          return Object.keys(value || {}).map(function(elt) {
+            return value[elt] ? elt + '=' + value[elt] : '';
+          });
+        case 'Volumes':
+        case 'ExposedPorts':
+          return Object.keys(value);
+      }
+      return value || '';
+    };
+
+    const getConfig = function(blobs) {
+      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels', 'User', 'Volumes', 'WorkingDir', 'author', 'id', 'ExposedPorts'].reduce(function(acc, e) {
+        const value = blobs[e] || blobs.config[e];
+        if (value) {
+          acc[e] = value;
+        }
+        return acc;
+      }, {});
+
+      if (!res.author && (res.Labels && res.Labels.maintainer)) {
+        res.author = blobs.config.Labels.maintainer;
+        delete res.Labels.maintainer;
+      }
+
+      return res;
+    };
+
+    const processBlobs = function(blobs) {
+      function exec(elt) {
+        const guiElements = [];
+        for (const attribute in elt) {
+          if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
+            const value = elt[attribute];
+            const guiElement = {
+              "key": attribute,
+              "value": modifySpecificAttributeTypes(attribute, value)
+            };
+            guiElements.push(guiElement);
+          }
+        }
+        return guiElements.sort(eltSort);
+      }
+
+      self.elements.push(exec(getConfig(blobs)));
+      blobs.history.reverse().forEach(function(elt) { self.elements.push(exec(elt)) });
+      registryUI.taghistory.loadend = true;
+      self.update();
+    };
+
+    registryUI.taghistory.display = function() {
+      self.elements = []
+      const blobs = registryUI.taghistory._image && registryUI.taghistory._image.blobs;
+      if (blobs) {
+        return processBlobs(blobs)
+      }
+      const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag);
+      image.fillInfo()
+      image.on('blobs', processBlobs);
+    };
 
     registryUI.taghistory.display();
-    registryUI.taghistory.instance.update();
+    self.update();
   </script>
 </tag-history>

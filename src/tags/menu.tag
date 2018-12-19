@@ -28,7 +28,7 @@
     registryUI.menuTag = registryUI.menuTag || {};
     registryUI.menuTag.update = this.update;
     this.one('mount', function(args) {
-      var self = this;
+      const self = this;
       registryUI.menuTag.close = function() {
         self.tags['material-dropdown'].close();
         self.update();

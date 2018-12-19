@@ -15,9 +15,17 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history-button>
-  <button title="This will show the history of given tag"
-     onclick="registryUI.taghistory.go('{ opts.image.name }', '{ opts.image.tag }');">
+  <button ref="button" title="This will show the history of given tag">
     <i class="material-icons">history</i>
   </button>
-
+  <script>
+  this.on('mount', function() {
+    const self = this;
+    this.refs.button.onclick = function() {
+      registryUI.taghistory._image = self.opts.image;
+      registryUI.taghistory.go(self.opts.image.name, self.opts.image.tag);
+    };
+  });
+  this.update()
+  </script>
 </tag-history-button>

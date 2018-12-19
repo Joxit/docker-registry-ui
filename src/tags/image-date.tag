@@ -17,7 +17,7 @@
 <image-date>
   <div title="Creation date { this.localDate }">{ this.dateFormat(this.date) } ago</div>
   <script type="text/javascript">
-    var self = this;
+    const self = this;
     this.dateFormat = function(date) {
       if (date === undefined) {
         return '';

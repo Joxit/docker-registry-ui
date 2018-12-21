@@ -18,7 +18,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <!-- Begin of tag -->
   <material-card ref="catalog-tag" class="catalog">
     <div class="material-card-title-action">
-      <h2>Repositories of { registryUI.name() }</h2>
+      <h2>
+        Repositories of { registryUI.name() }
+        <div class="item-count">{ registryUI.catalog.repositories.length } images</div>
+      </h2>
     </div>
     <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
       <material-spinner></material-spinner>

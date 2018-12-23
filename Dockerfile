@@ -12,10 +12,22 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+FROM node:10-alpine AS builder
+
+WORKDIR /usr/app
+
+COPY package.json .
+
+RUN yarn install
+
+COPY . .
+
+RUN yarn build
+
 FROM nginx:alpine
 
 LABEL maintainer="Jones MAGLOIRE @Joxit"
 
 WORKDIR /usr/share/nginx/html/
 
-COPY dist/ /usr/share/nginx/html/
+COPY --from=builder /usr/app/dist/ /usr/share/nginx/html/

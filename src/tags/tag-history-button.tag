@@ -15,13 +15,13 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history-button>
-  <button ref="button" title="This will show the history of given tag">
+  <material-button ref="button" title="This will show the history of given tag" waves-center="true" rounded="true" waves-color="#ddd">
     <i class="material-icons">history</i>
-  </button>
+  </material-button>
   <script>
   this.on('mount', function() {
     const self = this;
-    this.refs.button.onclick = function() {
+    this.refs.button.root.onclick = function() {
       registryUI.taghistory._image = self.opts.image;
       registryUI.taghistory.go(self.opts.image.name, self.opts.image.tag);
     };

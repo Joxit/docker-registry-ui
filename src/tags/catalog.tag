@@ -27,7 +27,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <material-spinner></material-spinner>
     </div>
     <ul class="list highlight" show="{ registryUI.catalog.loadend }">
-      <li each="{ item in registryUI.catalog.repositories }" onclick="registryUI.catalog.go('{item}');">
+      <li each="{ item in registryUI.catalog.repositories }" onclick="registryUI.taglist.go('{item}');">
         <span>
           <i class="material-icons">send</i>
           { item }
@@ -62,9 +62,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       });
       oReq.open('GET', registryUI.url() + '/v2/_catalog?n=100000');
       oReq.send();
-    };
-    registryUI.catalog.go = function(image) {
-      route('taglist/' + image);
     };
     registryUI.catalog.display();
   </script>

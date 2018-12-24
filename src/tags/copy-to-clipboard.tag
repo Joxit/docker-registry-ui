@@ -16,9 +16,9 @@
 -->
 <copy-to-clipboard>
   <input ref="input" style="display: none; width: 1px; height: 1px;" value="{ this.dockerCmd }">
-  <a onclick="{ this.copy }" title="Copy pull command.">
+  <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="{ this.copy }" title="Copy pull command.">
     <i class="material-icons">content_copy</i>
-  </a>
+  </material-button>
   <script type="text/javascript">
     this.dockerCmd = 'docker pull ' + registryUI.cleanName() + '/' + opts.image.name + ':' + opts.image.tag;
     this.copy = function () {

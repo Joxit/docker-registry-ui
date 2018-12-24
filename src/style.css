@@ -175,16 +175,21 @@ material-card table th {
   text-align: left;
 }
 
+material-card material-button:hover,
 material-card table tbody tr:hover {
   background-color: #eee;
+}
+
+material-card material-button,
+material-card table tbody tr {
+  transition-duration: .28s;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition-property: background-color;
 }
 
 material-card table tbody tr {
   position: relative;
   height: 48px;
-  transition-duration: .28s;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-  transition-property: background-color;
 }
 
 material-card table td {
@@ -223,6 +228,7 @@ material-card table th.material-card-th-sorted-descending:before {
   content: "\e5db";
 }
 
+material-button .content i.material-icons,
 .material-icons {
   color: #777;
 }
@@ -339,10 +345,6 @@ select {
   text-align: center;
 }
 
-.copy-to-clipboard a:hover {
-  cursor: pointer;
-}
-
 tag-history material-card {
   min-height: auto;
 }
@@ -382,4 +384,17 @@ tag-history-element.id div.value {
 tag-history-button button {
   background: none;
   border: none;
+}
+
+material-button {
+  max-height: 30px;
+  max-width: 30px;
+}
+
+material-button:hover material-waves {
+  background: none;
+}
+
+material-card material-button {
+  background-color: inherit;
 }

@@ -18,9 +18,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <!-- Begin of tag -->
   <material-card ref="taglist-tag" class="taglist">
     <div class="material-card-title-action">
-      <a href="#!" onclick="registryUI.home();">
+      <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="registryUI.home();">
         <i class="material-icons">arrow_back</i>
-      </a>
+      </material-button>
       <h2>
         Tags of { registryUI.name() + '/' + registryUI.taglist.name }
         <div class="item-count">{ registryUI.taglist.tags.length } tags</div>
@@ -115,9 +115,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         registryUI.taglist.asc = true;
       }
       registryUI.taglist.instance.update();
-    };
-    registryUI.taglist.refresh = function() {
-      route(registryUI.taglist.name);
     };
   </script>
   <!-- End of tag -->

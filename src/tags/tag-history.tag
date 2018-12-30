@@ -17,9 +17,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-history>
   <material-card ref="tag-history-tag" class="tag-history">
     <div class="material-card-title-action">
-      <a href="#!taglist/{registryUI.taghistory.image}">
+      <material-button waves-center="true" rounded="true" waves-color="#ddd">
         <i class="material-icons">arrow_back</i>
-      </a>
+      </material-button>
       <h2>
         History of { registryUI.taghistory.image }:{ registryUI.taghistory.tag } <i class="material-icons">history</i>
       </h2>
@@ -124,6 +124,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       image.fillInfo()
       image.on('blobs', processBlobs);
     };
+
+    this.on('mount', function() {
+      self.refs['tag-history-tag'].tags['material-button'].root.onclick = function() {
+        registryUI.taglist.go(registryUI.taghistory.image);
+      };
+    });
 
     registryUI.taghistory.display();
     self.update();

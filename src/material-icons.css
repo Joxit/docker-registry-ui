@@ -11,7 +11,9 @@
        url(fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
 
-.material-icons {
+material-button .content i.material-icons,
+material-button[rounded=true] .content i.material-icons,
+i.material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
@@ -36,4 +38,9 @@
 
   /* Support for IE. */
   font-feature-settings: 'liga';
+}
+
+material-button .content i.material-icons,
+material-button[rounded=true] .content i.material-icons {
+  margin: auto;
 }

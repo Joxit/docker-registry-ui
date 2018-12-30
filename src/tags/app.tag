@@ -231,6 +231,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
       return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
     };
+
+    registryUI.taglist.go = function(image) {
+      route('taglist/' + image);
+    };
+
     route.start(true);
   </script>
 </app>

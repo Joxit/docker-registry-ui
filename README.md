@@ -29,6 +29,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Show sha256 for specific tag (hover image tag)
 -   Display image creation date (see #49)
 -   Display image history (see #58)
+-   Display image/tag count
 
 ## Getting Started
 

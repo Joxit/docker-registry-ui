@@ -99,11 +99,12 @@ h2 {
   list-style: none;
 }
 
-.list.highlight > li:hover {
+.list.highlight:hover {
   background-color: #eee;
   cursor: pointer;
 }
 
+.list > span,
 .list > li {
   box-sizing: border-box;
   line-height: 1;
@@ -112,6 +113,7 @@ h2 {
   overflow: hidden;
 }
 
+.list > span i.material-icons,
 .list > li i.material-icons {
   margin-right: 32px;
   height: 24px;
@@ -121,6 +123,7 @@ h2 {
   color: #757575;
 }
 
+.list > span,
 .list > li > span {
   height: 100%;
   text-decoration: none;
@@ -131,6 +134,11 @@ h2 {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+material-card.list {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .material-card-title-action {
@@ -345,6 +353,7 @@ select {
   text-align: center;
 }
 
+catalog material-card,
 tag-history material-card {
   min-height: auto;
 }

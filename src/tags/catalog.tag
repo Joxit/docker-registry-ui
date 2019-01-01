@@ -26,16 +26,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
       <material-spinner></material-spinner>
     </div>
-    <ul class="list highlight" show="{ registryUI.catalog.loadend }">
-      <li each="{ item in registryUI.catalog.repositories }" onclick="registryUI.taglist.go('{item}');">
-        <span>
-          <i class="material-icons">send</i>
-          { item }
-        </span>
-      </li>
-    </ul>
   </material-card>
-
+  <material-card each="{ item in registryUI.catalog.repositories }" class="list highlight" onclick="registryUI.taglist.go('{item}');">
+    <span>
+      <i class="material-icons">send</i>
+      { item }
+    </span>
+  </material-card>
   <script>
     registryUI.catalog.instance = this;
     registryUI.catalog.display = function() {

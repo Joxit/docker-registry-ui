@@ -27,12 +27,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <material-spinner></material-spinner>
     </div>
   </material-card>
-  <material-card each="{ item in registryUI.catalog.repositories }" class="list highlight" onclick="registryUI.taglist.go('{item}');">
-    <span>
-      <i class="material-icons">send</i>
-      { item }
-    </span>
-  </material-card>
+  <catalog-element each="{ item in registryUI.catalog.repositories }" />
   <script>
     registryUI.catalog.instance = this;
     registryUI.catalog.display = function() {

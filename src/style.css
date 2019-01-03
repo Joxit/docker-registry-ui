@@ -314,6 +314,7 @@ material-popup .popup {
 footer {
   width: 100%;
   position: fixed;
+  z-index: 75;
   bottom: 0;
 }
 
@@ -406,4 +407,21 @@ material-button:hover material-waves {
 
 material-card material-button {
   background-color: inherit;
+}
+
+catalog-element material-card {
+  z-index: 2;
+  position: relative;
+}
+
+catalog-element catalog-element material-card {
+  transition: all 350ms cubic-bezier(.4,0,.2,1);
+  z-index: 1;
+  position: relative;
+}
+
+catalog-element catalog-element.showing material-card,
+catalog-element catalog-element.hide material-card {
+  margin-top: -50px;
+  opacity: 0;
 }

@@ -16,19 +16,38 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog-element>
   <!-- Begin of tag -->
-  <material-card class="list highlight" onclick="registryUI.taglist.go('{item}');" item="{item}">
+  <material-card class="list highlight" item="{item}">
     <material-waves onmousedown="{launch}" center="true" color="#ddd" />
     <span>
       <i class="material-icons">send</i>
-      { opts.item }
+      { typeof opts.item === "string" ? opts.item : opts.item.repo }
     </span>
   </material-card>
+  <catalog-element hide="{typeof opts.item === "string"}" class="{hide: !show, showing: showing}" each="{item in item.images}" />
   <script>
     this.on('mount', function() {
+      const self = this;
       const card = this.tags['material-card'];
+      if (!card) {
+        return;
+      }
       // Launch waves
       card.launch = function(e) {
         card.tags['material-waves'].trigger('launch',e);
+      }
+      if (this.item.images && this.item.images.length === 1) {
+        this.item = this.item.images[0];
+      }
+      card.root.onclick = function(e) {
+        if (!self.item.repo) {
+          registryUI.taglist.go(self.item);
+        } else {
+          self.show = !self.show;
+          self.update({show: self.show, showing: true});
+          setTimeout(function() {
+            self.update({show: self.show, showing: false});
+          }, 50)
+        }
       }
     })
   </script>

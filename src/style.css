@@ -123,6 +123,16 @@ h2 {
   color: #757575;
 }
 
+.list > span i.material-icons.right.animated {
+  transition: all 350ms cubic-bezier(.4,0,.2,1);
+  margin-right: 10px;
+  position: absolute;
+  right: 0;
+}
+.list > span i.material-icons.right.animated.expanded {
+  transform: rotate(180deg);
+}
+
 .list > span,
 .list > li > span {
   height: 100%;

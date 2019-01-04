@@ -16,14 +16,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog-element>
   <!-- Begin of tag -->
-  <material-card class="list highlight" item="{item}">
+  <material-card class="list highlight" item="{item}" expanded="{expanded}">
     <material-waves onmousedown="{launch}" center="true" color="#ddd" />
     <span>
       <i class="material-icons">send</i>
       { typeof opts.item === "string" ? opts.item : opts.item.repo }
+      <i hide="{typeof opts.item === "string"}" class="material-icons right animated {expanded: opts.expanded}">expand_more</i>
     </span>
   </material-card>
-  <catalog-element hide="{typeof opts.item === "string"}" class="{hide: !show, showing: showing}" each="{item in item.images}" />
+  <catalog-element hide="{typeof opts.item === "string"}" class="animated {hide: !expanded, expanding: expanding}" each="{item in item.images}" />
   <script>
     this.on('mount', function() {
       const self = this;
@@ -42,10 +43,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         if (!self.item.repo) {
           registryUI.taglist.go(self.item);
         } else {
-          self.show = !self.show;
-          self.update({show: self.show, showing: true});
+          self.expanded = !self.expanded;
+          self.update({expanded: self.expanded, expanding: true});
           setTimeout(function() {
-            self.update({show: self.show, showing: false});
+            self.update({expanded: self.expanded, expanding: false});
           }, 50)
         }
       }

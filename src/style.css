@@ -123,14 +123,25 @@ h2 {
   color: #757575;
 }
 
-.list > span i.material-icons.right.animated {
+.list > span .right i.material-icons.animated {
   transition: all 350ms cubic-bezier(.4,0,.2,1);
   margin-right: 10px;
+}
+
+.list > span .right {
   position: absolute;
+  align-self: end;
+  display: flex;
+  align-items: center;
   right: 0;
 }
-.list > span i.material-icons.right.animated.expanded {
+
+.list > span i.material-icons.animated.expanded {
   transform: rotate(180deg);
+}
+
+.list > span .item-count {
+  font-size: 0.75em;
 }
 
 .list > span,

@@ -20,22 +20,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="material-card-title-action">
       <h2>
         Repositories of { registryUI.name() }
-        <div class="item-count">{ registryUI.catalog.repositories.length } images</div>
+        <div class="item-count">{ registryUI.catalog.length } images</div>
       </h2>
     </div>
     <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
       <material-spinner></material-spinner>
     </div>
-    <ul class="list highlight" show="{ registryUI.catalog.loadend }">
-      <li each="{ item in registryUI.catalog.repositories }" onclick="registryUI.taglist.go('{item}');">
-        <span>
-          <i class="material-icons">send</i>
-          { item }
-        </span>
-      </li>
-    </ul>
   </material-card>
-
+  <catalog-element each="{ item in registryUI.catalog.repositories }" />
   <script>
     registryUI.catalog.instance = this;
     registryUI.catalog.display = function() {
@@ -46,6 +38,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         if (this.status == 200) {
           registryUI.catalog.repositories = JSON.parse(this.responseText).repositories || [];
           registryUI.catalog.repositories.sort();
+          registryUI.catalog.length = registryUI.catalog.repositories.length;         registryUI.catalog.repositories = registryUI.catalog.repositories.reduce(function(acc, e) {
+            const slash = e.indexOf('/');
+            if (slash > 0) {
+              const repoName = e.substring(0, slash) + '/';
+              if (acc.length == 0 || acc[acc.length - 1].repo != repoName) {
+                acc.push({repo: repoName, images: []});
+              }
+              acc[acc.length - 1].images.push(e);
+              return acc;
+            }
+            acc.push(e);
+            return acc;
+          }, []);
         } else if (this.status == 404) {
           registryUI.snackbar('Server not found', true);
         } else {

@@ -99,11 +99,12 @@ h2 {
   list-style: none;
 }
 
-.list.highlight > li:hover {
+.list.highlight:hover {
   background-color: #eee;
   cursor: pointer;
 }
 
+.list > span,
 .list > li {
   box-sizing: border-box;
   line-height: 1;
@@ -112,6 +113,7 @@ h2 {
   overflow: hidden;
 }
 
+.list > span i.material-icons,
 .list > li i.material-icons {
   margin-right: 32px;
   height: 24px;
@@ -121,6 +123,28 @@ h2 {
   color: #757575;
 }
 
+.list > span .right i.material-icons.animated {
+  transition: all 350ms cubic-bezier(.4,0,.2,1);
+  margin-right: 10px;
+}
+
+.list > span .right {
+  position: absolute;
+  align-self: end;
+  display: flex;
+  align-items: center;
+  right: 0;
+}
+
+.list > span i.material-icons.animated.expanded {
+  transform: rotate(180deg);
+}
+
+.list > span .item-count {
+  font-size: 0.75em;
+}
+
+.list > span,
 .list > li > span {
   height: 100%;
   text-decoration: none;
@@ -131,6 +155,11 @@ h2 {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+material-card.list {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .material-card-title-action {
@@ -306,6 +335,7 @@ material-popup .popup {
 footer {
   width: 100%;
   position: fixed;
+  z-index: 75;
   bottom: 0;
 }
 
@@ -345,6 +375,7 @@ select {
   text-align: center;
 }
 
+catalog material-card,
 tag-history material-card {
   min-height: auto;
 }
@@ -397,4 +428,21 @@ material-button:hover material-waves {
 
 material-card material-button {
   background-color: inherit;
+}
+
+catalog-element material-card {
+  z-index: 2;
+  position: relative;
+}
+
+catalog-element catalog-element material-card {
+  transition: all 350ms cubic-bezier(.4,0,.2,1);
+  z-index: 1;
+  position: relative;
+}
+
+catalog-element catalog-element.showing material-card,
+catalog-element catalog-element.hide material-card {
+  margin-top: -50px;
+  opacity: 0;
 }

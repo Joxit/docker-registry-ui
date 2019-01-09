@@ -11,7 +11,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 
 ## [GitHub Page](https://joxit.github.io/docker-registry-ui) and [Live Demo](https://joxit.github.io/docker-registry-ui/demo/)
 
-![screenshot](https://raw.github.com/Joxit/docker-registry-ui/master/screenshot.png "Screenshot of Docker Registry UI")
+![preview](https://raw.github.com/Joxit/docker-registry-ui/master/docker-registry-ui.gif "Screenshot of Docker Registry UI")
 
 ## Features
 
@@ -30,6 +30,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Display image creation date (see #49)
 -   Display image history (see #58)
 -   Display image/tag count
+-   Image aggregation (see #56)
 
 ## Getting Started
 

@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2016-2018 Jones Magloire @Joxit
+Copyright (C) 2016-2019 Jones Magloire @Joxit
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -118,7 +118,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       self.elements = []
       const blobs = registryUI.taghistory._image && registryUI.taghistory._image.blobs;
       if (blobs) {
-        return processBlobs(blobs)
+        window.scrollTo(0, 0);
+        return processBlobs(blobs);
       }
       const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag);
       image.fillInfo()

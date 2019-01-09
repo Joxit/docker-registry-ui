@@ -58,7 +58,7 @@ function appStatic() {
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016-2018',
+      year: '2016-2019',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(injectVersion())
@@ -72,7 +72,7 @@ function app() {
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016-2018',
+      year: '2016-2019',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(injectVersion())
@@ -94,7 +94,7 @@ function styles() {
     .pipe(license('agpl3', {
       tiny: false,
       project: 'docker-registry-ui',
-      year: '2016-2018',
+      year: '2016-2019',
       organization: 'Jones Magloire @Joxit'
     }))
     .pipe(gulp.dest('dist/'));

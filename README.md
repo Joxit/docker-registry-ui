@@ -11,7 +11,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 
 ## [GitHub Page](https://joxit.github.io/docker-registry-ui) and [Live Demo](https://joxit.github.io/docker-registry-ui/demo/)
 
-![preview](https://raw.github.com/Joxit/docker-registry-ui/master/docker-registry-ui.gif "Screenshot of Docker Registry UI")
+![preview](https://raw.github.com/Joxit/docker-registry-ui/master/docker-registry-ui.gif "Preview of Docker Registry UI")
 
 ## Features
 

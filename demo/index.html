@@ -36,9 +36,9 @@
         }
       } catch (e) { return true; }
     })()) {
-      localStorage.setItem('registryServer', JSON.stringify([(location.origin + location.pathname).replace(/\/$/, '')]))
+      localStorage.setItem('registryServer', JSON.stringify(['https://raw.githubusercontent.com/Joxit/docker-registry-ui/master/demo']))
     }
-    
+
   </script>
   <script src="../dist/scripts/vendor.js"></script>
   <script src="../dist/scripts/docker-registry-ui.js"></script>

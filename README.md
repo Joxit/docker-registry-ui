@@ -31,6 +31,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Display image history (see #58)
 -   Display image/tag count
 -   Image aggregation (see #56)
+-   Customise docker pull command on static registry UI (see #71)
 
 ## Getting Started
 
@@ -108,7 +109,8 @@ Some env options are available for use this interface for only one server.
 -   `URL`: set the static URL to use (You will need CORS configuration). Example: `http://127.0.0.1:5000`. (`Required`)
 -   `REGISTRY_URL`: your docker registry URL to contact (CORS configuration is not needed). Example: `http://my-docker-container:5000`. (Can't be used with `URL`, since 0.3.2).
 -   `DELETE_IMAGES`: if this variable is empty or `false`, delete feature is deactivated. It is activated otherwise.
--   `REGISTRY_TITLE`: Set a custom title for your user interface when using `REGISTRY_URL` (since 0.3.4)
+-   `REGISTRY_TITLE`: Set a custom title for your user interface when using `REGISTRY_URL` (since 0.3.4).
+-   `PULL_URL`: Set a custom url for the docker pull command, this is useful when you use `REGISTRY_URL` and your registry is on a different host (since 1.1.0).
 
 Example with `URL` option.
 

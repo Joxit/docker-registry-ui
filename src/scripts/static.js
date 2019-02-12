@@ -21,6 +21,7 @@ registryUI.url = function() {
 registryUI.name = function() {
   return '${REGISTRY_TITLE}' || registryUI.url();
 };
+registryUI.pullUrl = '${PULL_URL}';
 registryUI.isImageRemoveActivated = true;
 registryUI.catalog = {};
 registryUI.taglist = {};

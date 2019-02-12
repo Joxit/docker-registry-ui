@@ -93,7 +93,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return registryUI.snackbar(message, true);
     };
     registryUI.cleanName = function() {
-      const url = (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
+      const url = registryUI.pullUrl || (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
       if (url) {
         return url.startsWith('http') ? url.replace(/https?:\/\//, '') : url;
       }

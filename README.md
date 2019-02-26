@@ -136,14 +136,14 @@ Your server should be configured to accept CORS.
 
 If your docker registry does not need credentials, you will need to send this HEADER:
 
-    Access-Control-Allow-Origin: '*'
+    Access-Control-Allow-Origin: ['*']
 
 If your docker registry need credentials, you will need to send these HEADERS:
 
 ```yml
 http:
   headers:
-    Access-Control-Allow-Origin: '<your docker-registry-ui url>'
+    Access-Control-Allow-Origin: ['<your docker-registry-ui url>']
     Access-Control-Allow-Credentials: true
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional
 ```

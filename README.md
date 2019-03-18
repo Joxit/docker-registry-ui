@@ -9,7 +9,7 @@ All registries will be stored in the [local storage](https://en.wikipedia.org/wi
 
 This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
 
-## [GitHub Page](https://joxit.github.io/docker-registry-ui) and [Live Demo](https://joxit.github.io/docker-registry-ui/demo/)
+## [GitHub Page](https://joxit.dev/docker-registry-ui) and [Live Demo](https://joxit.dev/docker-registry-ui/demo/)
 
 ![preview](https://raw.github.com/Joxit/docker-registry-ui/master/docker-registry-ui.gif "Preview of Docker Registry UI")
 
@@ -20,7 +20,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Sort the tag list
 -   One interface for many registries
 -   Use a secured docker registry
--   Share your docker registry with query parameter `url` (e.g. `https://joxit.github.io/docker-registry-ui/demo?url=https://registry.example.com`)
+-   Share your docker registry with query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`)
 -   Use `joxit/docker-registry-ui:static` as reverse proxy to your docker registry (This will avoid CORS).
 -   Display image size (see #30)
 -   Add Title when using REGISTRY_URL (see #28)

@@ -16,7 +16,12 @@
  */
 var registryUI = {}
 registryUI.url = function() {
-  return '${URL}';
+  var url = '${URL}';
+  if (!url) {
+    url = window.location.origin + window.location.pathname;
+    return url.endsWith('/') ? url.substr(0, url.length - 1) : url;
+  }
+  return url;
 };
 registryUI.name = function() {
   return '${REGISTRY_TITLE}' || registryUI.url();

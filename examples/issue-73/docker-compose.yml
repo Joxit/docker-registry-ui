@@ -1,0 +1,31 @@
+version: '2.0'
+services:
+  registry:
+    image: registry:2.6.2
+    volumes:
+      - ./registry-data:/var/lib/registry
+    networks:
+      - registry-ui-net
+
+  ui:
+    image: joxit/docker-registry-ui:static
+    environment:
+      - REGISTRY_TITLE=My Private Docker Registry
+      - REGISTRY_URL=http://registry:5000
+    depends_on:
+      - registry
+    networks:
+      - registry-ui-net
+
+  proxy:
+    image: nginx:alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    depends_on:
+      - ui
+    networks:
+      - registry-ui-net
+networks:
+  registry-ui-net:

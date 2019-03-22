@@ -1,6 +1,6 @@
 {
   "name": "docker-registry-ui",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "scripts": {
     "build": "./node_modules/gulp/bin/gulp.js build"
   },
@@ -23,7 +23,7 @@
     "gulp-inject-version": "^1.0.1",
     "gulp-license": "^1.1.0",
     "gulp-riot": "^1.1.5",
-    "gulp-uglify": "^3.0.1",
+    "gulp-uglify": "^3.0.2",
     "gulp-useref": "^3.1.6",
     "riot": "^3.13.2",
     "riot-mui": "^0.1.1",

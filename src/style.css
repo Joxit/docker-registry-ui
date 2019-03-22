@@ -56,6 +56,13 @@ material-card {
   margin-bottom: 20px;
 }
 
+@media screen and (max-width: 950px){
+  material-card {
+    width: 95%;
+    max-width: 750px;
+  }
+}
+
 material-spinner {
   align-self: center;
 }
@@ -330,6 +337,7 @@ material-popup material-button:hover material-waves {
 
 material-popup .popup {
   max-width: 450px;
+  top: 2em;
 }
 
 footer {
@@ -337,6 +345,22 @@ footer {
   position: fixed;
   z-index: 75;
   bottom: 0;
+}
+
+@media screen and (max-height: 750px) {
+  main {
+    min-height: calc(100% - 164px - 2.5em);
+    margin-bottom: 2em;
+  }
+  footer {
+    position: relative;
+  }
+}
+
+@media screen and (min-width: 760px) and (max-height: 750px) {
+  main {
+    min-height: calc(100% - 144px - 2.5em);
+  }
 }
 
 .select-padding {

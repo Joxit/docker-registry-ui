@@ -1,0 +1,37 @@
+version: 0.1
+
+log:
+  level: debug
+  fields:
+    service: registry
+storage:
+  delete:
+    enabled: true
+  cache:
+    blobdescriptor: inmemory
+  s3:
+    accesskey: accessKey1
+    secretkey: verySecretKey1
+    region: us-east-1
+    regionendpoint: http://127.0.0.1:9000
+    bucket: registry
+    encrypt: false
+    secure: false
+    v4auth: true
+    chunksize: 5242880
+    rootdirectory: /
+http:
+  addr: 0.0.0.0:5000
+  headers:
+    X-Content-Type-Options: [nosniff]
+    Access-Control-Allow-Origin: ['http://127.0.0.1']
+    Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
+    Access-Control-Allow-Headers: ['Authorization']
+    Access-Control-Max-Age: [1728000]
+    Access-Control-Allow-Credentials: [true]
+    Access-Control-Expose-Headers: ['Docker-Content-Digest']
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3

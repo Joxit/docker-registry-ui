@@ -1,0 +1,32 @@
+version: '2.0'
+services:
+  registry:
+    image: registry:2.7
+    volumes:
+      - ./registry-data:/var/lib/registry
+      - ./registry-config/config.yml:/etc/docker/registry/config.yml
+    depends_on:
+      - s3-server
+    network_mode: host
+
+  ui:
+    image: joxit/docker-registry-ui:static
+    ports:
+      - 80:80
+    environment:
+      - URL=http://127.0.0.1:5000
+      - DELETE_IMAGES=true
+    depends_on:
+      - registry
+    network_mode: host
+
+  s3-server:
+    image: minio/minio:RELEASE.2019-04-09T01-22-30Z
+    volumes:
+      - ./s3-server-cmd:/bin/s3-server-cmd:ro
+    environment:
+      - MINIO_ACCESS_KEY=accessKey1
+      - MINIO_SECRET_KEY=verySecretKey1
+      - MINIO_REGION=us-east-1
+    network_mode: host
+    entrypoint: /bin/s3-server-cmd

@@ -1,0 +1,27 @@
+version: '2.0'
+services:
+  registry:
+    image: registry:2.6.2
+    volumes:
+      - ./registry-data:/var/lib/registry
+    networks:
+      - registry-ui-net
+
+  ui:
+    image: joxit/docker-registry-ui:static
+    environment:
+      - REGISTRY_TITLE=My Private Docker Registry
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/fullchain.pem:/etc/nginx/certs/fullchain.pem
+      - ./nginx/privkey.pem:/etc/nginx/certs/privkey.pem
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - registry
+    networks:
+      - registry-ui-net
+
+networks:
+  registry-ui-net:

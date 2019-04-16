@@ -198,3 +198,12 @@ auth:
     realm: basic-realm
     path: /etc/docker/registry/htpasswd
 ```
+
+## All examples
+
+- [Use docker-registry-ui as a proxy (use REGISTRY_URL)](https://github.com/Joxit/docker-registry-ui/tree/master/examples/ui-as-proxy)
+- [Use docker-registry-ui as standalone (use URL)](https://github.com/Joxit/docker-registry-ui/tree/master/examples/ui-as-standalone)
+- [Use docker-registry-ui with traefik](https://github.com/Joxit/docker-registry-ui/tree/master/examples/traefik)
+- [Use docker-registry-ui with docker registry and Amazon s3 (#75)](https://github.com/Joxit/docker-registry-ui/tree/master/examples/issue-75)
+- [FIX revproxy to registry does not work when published under non-root url (#73)](https://github.com/Joxit/docker-registry-ui/tree/master/examples/issue-73)
+- [Use docker-registry-ui with HTTPS (#20)](https://github.com/Joxit/docker-registry-ui/tree/master/examples/issue-20)

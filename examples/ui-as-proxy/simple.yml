@@ -5,7 +5,7 @@ services:
     volumes:
       - ./registry-data:/var/lib/registry
     networks:
-      - docker-registry-ui
+      - registry-ui-net
 
   ui:
     image: joxit/docker-registry-ui:static
@@ -17,7 +17,7 @@ services:
     depends_on:
       - registry
     networks:
-      - docker-registry-ui
+      - registry-ui-net
 
 networks:
   registry-ui-net:

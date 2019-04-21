@@ -395,8 +395,12 @@ select {
 
 .remove-tag {
   padding: 12px 5px;
-  width: 30px;
+  width: 66px;
   text-align: center;
+}
+
+.remove-tag.delete {
+  padding: 7px 5px;
 }
 
 catalog material-card,
@@ -469,4 +473,37 @@ catalog-element catalog-element.showing material-card,
 catalog-element catalog-element.hide material-card {
   margin-top: -50px;
   opacity: 0;
+}
+
+remove-image {
+  width: 30px;
+}
+
+material-checkbox .label {
+  display: none;
+}
+
+taglist material-checkbox {
+  margin: auto;
+  width: 18px;
+}
+
+material-checkbox.indeterminate .checkbox .checkmark {
+  border-bottom: none;
+}
+
+material-checkbox.indeterminate .checkbox.checked .checkmark {
+  transform: rotate(90deg) scale(1);
+  -webkit-transform: rotate(90deg) scale(1);
+  -ms-transform: rotate(90deg) scale(1);
+  -moz-transform: rotate(90deg) scale(1);
+  -o-transform: rotate(90deg) scale(1);
+}
+
+material-checkbox .checkbox {
+  border-color: #777;
+}
+
+material-checkbox .checkbox.checked {
+  background-color: #777;
 }

@@ -15,13 +15,21 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
-  <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image.">
+  <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image." hide="{ opts.multiDelete }">
     <i class="material-icons">delete</i>
   </material-button>
+  <material-checkbox show="{ opts.multiDelete }"></material-checkbox>
   <script type="text/javascript">
     const self = this;
+
+    this.on('update', function() {
+      if (!this.opts.multiDelete && this.tags['material-checkbox'].checked) {
+        this.tags['material-checkbox'].toggle();
+      }
+    });
+
     this.on('mount', function() {
-      this.tags['material-button'].root.onclick = function() {
+      this.delete = this.tags['material-button'].root.onclick = function(ignoreError) {
         const name = self.opts.image.name;
         const tag = self.opts.image.tag;
         const oReq = new Http();
@@ -39,7 +47,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 registryUI.taglist.display()
                 registryUI.snackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
               } else if (this.status == 404) {
-                registryUI.errorSnackbar('Digest not found');
+                ignoreError || registryUI.errorSnackbar('Digest not found');
               } else {
                 registryUI.snackbar(this.responseText);
               }
@@ -60,6 +68,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
         oReq.send();
       };
+
+      this.tags['material-checkbox'].on('toggle', function() {
+        registryUI.taglist.instance.trigger('toggle-remove-image', this.checked);
+      });
     });
   </script>
 </remove-image>

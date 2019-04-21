@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <taglist>
   <!-- Begin of tag -->
-  <material-card ref="taglist-tag" class="taglist">
+  <material-card ref="taglist-tag" class="taglist" multi-delete={ this.multiDelete }>
     <div class="material-card-title-action">
       <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="registryUI.home();">
         <i class="material-icons">arrow_back</i>
@@ -42,7 +42,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         onclick="registryUI.taglist.reverse();">Tag
         </th>
         <th class="show-tag-history">History</th>
-        <th class="remove-tag" show="{ registryUI.isImageRemoveActivated }"></th>
+        <th class={ 'remove-tag': true, delete: this.parent.toDelete > 0 } show="{ registryUI.isImageRemoveActivated }"><material-checkbox ref="remove-tag-checkbox" class="indeterminate" show={ this.toDelete === 0}></material-checkbox>
+          <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete selected images." onclick={ registryUI.taglist.bulkDelete } show={ this.toDelete > 0 }>
+            <i class="material-icons">delete</i>
+          </material-button></th>
       </tr>
       </thead>
       <tbody>
@@ -64,14 +67,64 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <tag-history-button image={ image }/>
         </td>
         <td show="{ registryUI.isImageRemoveActivated }">
-          <remove-image image={ image }/>
+          <remove-image multi-delete={ this.opts.multiDelete } image={ image }/>
         </td>
       </tr>
       </tbody>
     </table>
   </material-card>
   <script>
-    registryUI.taglist.instance = this;
+    var self = registryUI.taglist.instance = this;
+
+    this.multiDelete = false;
+    this.toDelete = 0;
+
+    this.on('delete', function() {
+      if (!registryUI.isImageRemoveActivated || !this.multiDelete) {
+        return;
+      }
+    });
+
+    this.on('multi-delete', function() {
+      if (!registryUI.isImageRemoveActivated) {
+        return;
+      }
+      this.multiDelete = !this.multiDelete;
+    });
+
+    this.on('toggle-remove-image', function(checked) {
+      if (checked) {
+        this.toDelete++;
+      } else {
+        this.toDelete--;
+      }
+
+      if (this.toDelete <= 1) {
+        this.update();
+      }
+    })
+
+    registryUI.taglist.bulkDelete = function() {
+      if (self.multiDelete && self.toDelete > 0) {
+        var images = self.refs['taglist-tag'].tags['remove-image'];
+        if (!(images instanceof Array)) {
+          images = [images];
+        }
+        images.filter(function(img) {
+          return img.tags['material-checkbox'].checked;
+        }).forEach(function(img) {
+          img.delete(true);
+        });
+      }
+    }
+
+    this.on('mount', function() {
+      this.tags['material-card'].refs['remove-tag-checkbox'].on('toggle', function() {
+        registryUI.taglist.instance.multiDelete = this.checked;
+        registryUI.taglist.instance.update();
+      });
+    });
+
     registryUI.taglist.display = function() {
       registryUI.taglist.tags = [];
       if (route.routeName == 'taglist') {

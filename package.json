@@ -1,6 +1,6 @@
 {
   "name": "docker-registry-ui",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "scripts": {
     "build": "./node_modules/gulp/bin/gulp.js build"
   },
@@ -14,7 +14,7 @@
   "dependencies": {},
   "devDependencies": {
     "del": "^3.0.0",
-    "gulp": "^4.0",
+    "gulp": "^4.0.1",
     "gulp-clean-css": "^4.0.0",
     "gulp-concat": "^2.6.0",
     "gulp-filter": "^5.1.0",

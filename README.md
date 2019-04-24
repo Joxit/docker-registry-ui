@@ -32,6 +32,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Display image/tag count
 -   Image aggregation (see #56)
 -   Customise docker pull command on static registry UI (see #71)
+-   Multi-delete and multi-select shortcut (Alt+click) (see #29 and #80)
 
 ## Getting Started
 

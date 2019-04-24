@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image." hide="{ opts.multiDelete }">
     <i class="material-icons">delete</i>
   </material-button>
-  <material-checkbox show="{ opts.multiDelete }"></material-checkbox>
+  <material-checkbox show="{ opts.multiDelete }" title="Select this tag to delete it."></material-checkbox>
   <script type="text/javascript">
     const self = this;
 

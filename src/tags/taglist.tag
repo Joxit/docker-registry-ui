@@ -42,7 +42,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         onclick="registryUI.taglist.reverse();">Tag
         </th>
         <th class="show-tag-history">History</th>
-        <th class={ 'remove-tag': true, delete: this.parent.toDelete > 0 } show="{ registryUI.isImageRemoveActivated }"><material-checkbox ref="remove-tag-checkbox" class="indeterminate" show={ this.toDelete === 0}></material-checkbox>
+        <th class={ 'remove-tag': true, delete: this.parent.toDelete > 0 } show="{ registryUI.isImageRemoveActivated }">
+          <material-checkbox ref="remove-tag-checkbox" class="indeterminate" show={ this.toDelete === 0} title="Toggle multi-delete. Alt+Click to select all tags."></material-checkbox>
           <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete selected images." onclick={ registryUI.taglist.bulkDelete } show={ this.toDelete > 0 }>
             <i class="material-icons">delete</i>
           </material-button></th>
@@ -102,23 +103,38 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       if (this.toDelete <= 1) {
         this.update();
       }
-    })
+    });
+
+    this._getRemoveImageTags = function() {
+      var images = self.refs['taglist-tag'].tags['remove-image'];
+      if (!(images instanceof Array)) {
+        images = [images];
+      }
+      return images;
+    };
 
     registryUI.taglist.bulkDelete = function() {
       if (self.multiDelete && self.toDelete > 0) {
-        var images = self.refs['taglist-tag'].tags['remove-image'];
-        if (!(images instanceof Array)) {
-          images = [images];
-        }
-        images.filter(function(img) {
+        self._getRemoveImageTags().filter(function(img) {
           return img.tags['material-checkbox'].checked;
         }).forEach(function(img) {
           img.delete(true);
         });
       }
-    }
+    };
 
     this.on('mount', function() {
+      var toggle = this.tags['material-card'].refs['remove-tag-checkbox'].toggle;
+      this.tags['material-card'].refs['remove-tag-checkbox'].toggle = function(e) {
+        if (e.altKey) {
+          self._getRemoveImageTags()
+            .filter(function(img) { return !img.tags['material-checkbox'].checked; })
+            .forEach(function(img) { img.tags['material-checkbox'].toggle() });
+        } else {
+          toggle();
+        }
+      };
+
       this.tags['material-card'].refs['remove-tag-checkbox'].on('toggle', function() {
         registryUI.taglist.instance.multiDelete = this.checked;
         registryUI.taglist.instance.update();

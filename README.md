@@ -1,38 +1,47 @@
+---
+title: Project Page
+---
+
 # Docker Registry UI
 
 ## Overview
 
-This project aims to provide a user interface for your private docker registry v2.
-There is no default registry on this UI, you should add your own with the UI.
+This project aims to provide a simple and complete user interface for your private docker registry.
+You have the choice between two versions, the **standard interface** and the **static interface**.
+
+In the **standard interface**, there is no default registry, you need to add your own within the UI.
 You can manage more than one registry server.
-All registries will be stored in the [local storage](https://en.wikipedia.org/wiki/Web_storage#Local_and_session_storage) of your browser.
+All registries will be stored in the [local storage](https://en.wikipedia.org/wiki/Web_storage#Local_and_session_storage) of your browser. No configuration is needed when you launch the UI.
+
+In the **static interface**, it will connect to a single registry and will not change. The configuration is done at the start of the interface, when you use the docker images whose tags contain the `static` keyword.
 
 This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
 
-## [GitHub Page](https://joxit.dev/docker-registry-ui) and [Live Demo](https://joxit.dev/docker-registry-ui/demo/)
+## [Project Page](https://joxit.dev/docker-registry-ui) and [Live Demo](https://joxit.dev/docker-registry-ui/demo/)
 
 ![preview](https://raw.github.com/Joxit/docker-registry-ui/master/docker-registry-ui.gif "Preview of Docker Registry UI")
 
 ## Features
 
 -   List all your repositories/images.
--   List all tags for a repository/image
--   Sort the tag list
--   One interface for many registries
--   Use a secured docker registry
--   Share your docker registry with query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`)
--   Use `joxit/docker-registry-ui:static` as reverse proxy to your docker registry (This will avoid CORS).
--   Display image size (see #30)
--   Add Title when using REGISTRY_URL (see #28)
--   Alpine and Debian based images with supports for arm32v7 and arm64v8
--   Copy `docker pull` command to clipbloard
--   Show sha256 for specific tag (hover image tag)
--   Display image creation date (see #49)
--   Display image history (see #58)
--   Display image/tag count
--   Image aggregation (see #56)
--   Customise docker pull command on static registry UI (see #71)
--   Multi-delete and multi-select shortcut (Alt+click) (see #29 and #80)
+-   List all tags for a image.
+-   Sort the tag list with number compatibility (see [#46](https://github.com/Joxit/docker-registry-ui/pull/46)).
+-   Use a secured docker registry.
+-   Display image size (see [#30](https://github.com/Joxit/docker-registry-ui/issues/30)).
+-   Multi arch supports, Alpine and Debian based images with supports for arm32v7 and arm64v8.
+-   Copy `docker pull` command to clipboard (see [#42](https://github.com/Joxit/docker-registry-ui/issues/42)).
+-   Show sha256 for specific tag (hover image tag).
+-   Display image creation date (see [#49](https://github.com/Joxit/docker-registry-ui/issues/49))
+-   Display image history (see [#58](https://github.com/Joxit/docker-registry-ui/pull/58) & [#61](https://github.com/Joxit/docker-registry-ui/pull/61)).
+-   Image aggregation (see [#56](https://github.com/Joxit/docker-registry-ui/issues/56)).
+-   Display image/tag count (see [#56 issue comment](https://github.com/Joxit/docker-registry-ui/issues/56#issuecomment-449246524)).
+-   Select multiple tags to delete (see [#29](https://github.com/Joxit/docker-registry-ui/issues/29)).
+-   Select all tags with ALT + Click to delete (see [#80](https://github.com/Joxit/docker-registry-ui/issues/80)).
+-   One interface for many registries **standard interface**.
+-   Share your docker registry with query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`) **standard interface**.
+-   Use `joxit/docker-registry-ui:static` as reverse proxy (with `REGISTRY_URL` environment variable) to your docker registry (This will avoid CORS) **static interface**.
+-   Add Title when using `REGISTRY_URL` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)) **static interface**.
+-   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)) **static interface**.
 
 ## Getting Started
 
@@ -103,7 +112,7 @@ To run the docker and see the website on your 80 port, try this:
 docker run -d -p 80:80 joxit/docker-registry-ui
 ```
 
-#### Run the static docker
+#### Run the static interface
 
 Some env options are available for use this interface for only one server.
 
@@ -120,7 +129,7 @@ docker run -d -p 80:80 -e URL=http://127.0.0.1:5000 -e DELETE_IMAGES=true joxit/
 ```
 
 Example with `REGISTRY_URL`, this will add a proxy to your registry.
-Your registry will be accessible here : `http://127.0.0.1/v2`, this will avoid CORS errors (see #25).
+Your registry will be accessible here : `http://127.0.0.1/v2`, this will avoid CORS errors (see [#25](https://github.com/Joxit/docker-registry-ui/issues/25#issuecomment-360522487)).
 Be careful, `joxit/docker-registry-ui` and `registry:2` will communicate, both containers should be in the same network or use your private IP.
 
 ```sh

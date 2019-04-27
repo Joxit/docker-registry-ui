@@ -20,6 +20,8 @@ storage:
     v4auth: true
     chunksize: 5242880
     rootdirectory: /
+  redirect:
+    disable: true
 http:
   addr: 0.0.0.0:5000
   headers:

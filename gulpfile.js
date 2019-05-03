@@ -48,7 +48,7 @@ function html() {
 };
 
 function clean() {
-  return del(['dist']);
+  return del(['dist/**', '!dist', '!dist/fonts/**']);
 };
 
 function appStatic() {
@@ -100,12 +100,6 @@ function styles() {
     .pipe(gulp.dest('dist/'));
 };
 
-function fonts() {
-  return gulp.src('src/fonts/*')
-    .pipe(filter('**/*.{otf,eot,svg,ttf,woff,woff2}'))
-    .pipe(gulp.dest('dist/fonts'));
-};
-
 function svgs() {
   return gulp.src(['src/images/*.svg'])
     .pipe(htmlmin({
@@ -118,4 +112,4 @@ function svgs() {
     .pipe(gulp.dest('dist/images/'));
 };
 
-exports.build = series(clean, html, parallel(fonts, styles, vendor, app, appStatic, svgs));
+exports.build = series(clean, html, parallel(styles, vendor, app, appStatic, svgs));

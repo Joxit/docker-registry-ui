@@ -4,6 +4,9 @@ title: Project Page
 
 # Docker Registry UI
 
+![Stars](https://img.shields.io/github/stars/joxit/docker-registry-ui.svg?logo=github&maxAge=86400)
+![Pulls](https://img.shields.io/docker/pulls/joxit/docker-registry-ui.svg?maxAge=86400)
+
 ## Overview
 
 This project aims to provide a simple and complete user interface for your private docker registry.

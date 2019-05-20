@@ -20,14 +20,16 @@ const allTags = ['src/tags/*.tag', 'src/tags/dialogs/*.tag'];
 
 const allScripts = [
   'src/scripts/http.js',
-  'src/scripts/script.js'
+  'src/scripts/script.js',
+  'src/scripts/utils.js'
 ];
 
 const staticTags = ['src/tags/*.tag'];
 
 const staticScripts = [
   'src/scripts/http.js',
-  'src/scripts/static.js'
+  'src/scripts/static.js',
+  'src/scripts/utils.js'
 ];
 
 function html() {

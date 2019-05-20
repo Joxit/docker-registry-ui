@@ -15,29 +15,14 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-date>
-  <div title="Creation date { this.localDate }">{ this.dateFormat(this.date) } ago</div>
+  <div title="Creation date { this.localDate }">{ registryUI.dateFormat(this.date) } ago</div>
   <script type="text/javascript">
     const self = this;
-    this.dateFormat = function(date) {
-      if (date === undefined) {
-        return '';
-      }
-      const labels = ['a second', 'seconds', 'a minute', 'minutes', 'an hour', 'hours', 'a day', 'days', 'a month', 'months', 'a year', 'years'];
-      const maxSeconds = [1, 60, 3600, 86400, 2592000, 31104000, Infinity];
-      const diff = (new Date() - date) / 1000;
-      for (var i = 0; i < maxSeconds.length - 1; i++) {
-        if (maxSeconds[i] * 2 >= diff) {
-          return labels[i * 2];
-        } else if (maxSeconds[i + 1] > diff) {
-          return Math.floor(diff / maxSeconds[i]) + ' ' + labels[i * 2 + 1];
-        }
-      }
-    };
+
     opts.image.on('creation-date', function(date) {
       self.date = date;
       self.localDate = date.toLocaleString()
       self.update();
     });
-    opts.image.trigger('get-date');
   </script>
 </image-date>

@@ -130,8 +130,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         return this.fillInfo();
       });
       this.on('get-date', function() {
-        if (this.date !== undefined) {
-          return this.trigger('date', this.date);
+        if (this.creationDate !== undefined) {
+          return this.trigger('creation-date', this.creationDate);
         }
         return this.fillInfo();
       });

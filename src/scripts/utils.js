@@ -66,3 +66,9 @@ registryUI.getHistoryIcon = function(attribute) {
       ''
   }
 }
+
+registryUI.getPage = function(elts, page, limit) {
+  if (!limit) { limit = 100; }
+  if (!elts) { return []; }
+  return elts.slice(page * limit, limit);
+}

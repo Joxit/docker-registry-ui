@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <taglist>
   <!-- Begin of tag -->
-  <material-card ref="taglist-tag" class="taglist" multi-delete={ this.multiDelete }>
+  <material-card ref="taglist-tag" class="taglist" multi-delete={ this.multiDelete } tags={ registryUI.getPage(registryUI.taglist.tags, this.page) }>
     <div class="material-card-title-action">
       <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="registryUI.home();">
         <i class="material-icons">arrow_back</i>
@@ -50,7 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </tr>
       </thead>
       <tbody>
-      <tr each="{ image in registryUI.taglist.tags }">
+      <tr each="{ image in this.opts.tags }">
         <td class="material-card-th-left">{ image.name }</td>
         <td class="copy-to-clipboard">
           <copy-to-clipboard image={ image }/>
@@ -76,6 +76,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
   <script>
     var self = registryUI.taglist.instance = this;
+    self.page = 0;
 
     this.multiDelete = false;
     this.toDelete = 0;

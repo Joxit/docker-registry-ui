@@ -16,17 +16,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog>
   <!-- Begin of tag -->
-  <material-card ref="catalog-tag" class="catalog">
+  <material-card ref="catalog-tag" class="catalog header">
     <div class="material-card-title-action">
       <h2>
         Repositories of { registryUI.name() }
         <div class="item-count">{ registryUI.catalog.length } images</div>
       </h2>
     </div>
-    <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
-      <material-spinner></material-spinner>
-    </div>
   </material-card>
+  <div hide="{ registryUI.catalog.loadend }" class="spinner-wrapper">
+    <material-spinner></material-spinner>
+  </div>
   <catalog-element each="{ item in registryUI.catalog.repositories }" />
   <script>
     registryUI.catalog.instance = this;

@@ -56,6 +56,10 @@ material-card {
   margin-bottom: 20px;
 }
 
+material-card.header {
+  min-height: auto;
+}
+
 @media screen and (max-width: 950px){
   material-card {
     width: 95%;

@@ -16,8 +16,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <taglist>
   <!-- Begin of tag -->
-  <material-card ref="taglist-tag" class="taglist" multi-delete={ this.multiDelete } tags={ registryUI.getPage(registryUI.taglist.tags, this.page) }>
-    <div class="material-card-title-action">
+  <material-card class="header">
+    <div class="material-card-title-action ">
       <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="registryUI.home();">
         <i class="material-icons">arrow_back</i>
       </material-button>
@@ -26,9 +26,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <div class="item-count">{ registryUI.taglist.tags.length } tags</div>
       </h2>
     </div>
-    <div hide="{ registryUI.taglist.loadend }" class="spinner-wrapper">
-      <material-spinner></material-spinner>
-    </div>
+  </material-card>
+  <div hide="{ registryUI.taglist.loadend }" class="spinner-wrapper">
+    <material-spinner></material-spinner>
+  </div>
+  <material-card ref="taglist-tag" class="taglist" multi-delete={ this.multiDelete } tags={ registryUI.getPage(registryUI.taglist.tags, this.page) } show="{ registryUI.taglist.loadend }" >
     <table show="{ registryUI.taglist.loadend }" style="border: none;">
       <thead>
       <tr>
@@ -125,8 +127,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
 
     this.on('mount', function() {
-      var toggle = this.tags['material-card'].refs['remove-tag-checkbox'].toggle;
-      this.tags['material-card'].refs['remove-tag-checkbox'].toggle = function(e) {
+      var toggle = this.refs['taglist-tag'].refs['remove-tag-checkbox'].toggle;
+      this.refs['taglist-tag'].refs['remove-tag-checkbox'].toggle = function(e) {
         if (e.altKey) {
           self._getRemoveImageTags()
             .filter(function(img) { return !img.tags['material-checkbox'].checked; })
@@ -136,7 +138,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       };
 
-      this.tags['material-card'].refs['remove-tag-checkbox'].on('toggle', function() {
+      this.refs['taglist-tag'].refs['remove-tag-checkbox'].on('toggle', function() {
         registryUI.taglist.instance.multiDelete = this.checked;
         registryUI.taglist.instance.update();
       });

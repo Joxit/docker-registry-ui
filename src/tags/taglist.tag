@@ -30,6 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <div hide="{ registryUI.taglist.loadend }" class="spinner-wrapper">
     <material-spinner></material-spinner>
   </div>
+  <pagination pages="{ registryUI.getPageLabels(this.page, registryUI.getNumPages(registryUI.taglist.tags))}"></pagination>
   <material-card ref="taglist-tag" class="taglist" multi-delete={ this.multiDelete } tags={ registryUI.getPage(registryUI.taglist.tags, this.page) } show="{ registryUI.taglist.loadend }" >
     <table show="{ registryUI.taglist.loadend }" style="border: none;">
       <thead>
@@ -76,6 +77,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </tbody>
     </table>
   </material-card>
+  <pagination pages="{ registryUI.getPageLabels(this.page, registryUI.getNumPages(registryUI.taglist.tags))}"></pagination>
   <script>
     var self = registryUI.taglist.instance = this;
     self.page = 0;

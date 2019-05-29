@@ -72,3 +72,27 @@ registryUI.getPage = function(elts, page, limit) {
   if (!elts) { return []; }
   return elts.slice(page * limit, limit);
 }
+
+registryUI.getNumPages = function(elts, limit) {
+  if (!limit) { limit = 100; }
+  if (!elts) { return 0; }
+  return Math.trunc((elts.length / limit) % 10);
+}
+
+registryUI.getPageLabels = function(page, nPages) {
+  var pageLabels = [];
+  var maxItems = 10;
+  if (nPages === 0) { return pageLabels; }
+  if (page !== 0 && nPages >= maxItems) {
+    pageLabels.push({'icon': 'first_page', page: 0});
+    pageLabels.push({'icon': 'chevron_left', page: page - 1});
+  }
+  for (var i = Math.max(1, page - maxItems); i <= Math.min(nPages, page + maxItems); i++) {
+    pageLabels.push({page: i});
+  }
+  if (page !== nPages && nPages >= maxItems) {
+    pageLabels.push({'icon': 'chevron_right', page: nPages});
+    pageLabels.push({'icon': 'last_page', page: 0});
+  }
+  return pageLabels;
+}

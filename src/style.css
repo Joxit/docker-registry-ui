@@ -526,3 +526,7 @@ material-checkbox .checkbox.checked {
 pagination material-button {
   padding: 0.2em 0.75em;
 }
+
+pagination material-button.current {
+  border: 1px solid rgba(0, 0, 0, .12);
+}

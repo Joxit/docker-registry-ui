@@ -83,7 +83,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <pagination pages="{ registryUI.getPageLabels(this.page, registryUI.getNumPages(registryUI.taglist.tags)) }"></pagination>
   <script>
     var self = registryUI.taglist.instance = this;
-    self.page = 0;
+    self.page = registryUI.getPageQueryParam();
 
     this.multiDelete = false;
     this.toDelete = 0;

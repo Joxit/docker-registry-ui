@@ -225,6 +225,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       route('taglist/' + image);
     };
 
+    registryUI.getPageQueryParam = function() {
+      var qs = route.query();
+      try {
+        return qs.page !== undefined ? parseInt(qs.page.replace(/#.*/, '')) : 1;
+      } catch(e) { return 1; }
+    }
     route.start(true);
   </script>
 </app>

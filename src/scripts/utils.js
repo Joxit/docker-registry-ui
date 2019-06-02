@@ -70,7 +70,7 @@ registryUI.getHistoryIcon = function(attribute) {
 registryUI.getPage = function(elts, page, limit) {
   if (!limit) { limit = 100; }
   if (!elts) { return []; }
-  return elts.slice(page * limit, limit);
+  return elts.slice((page - 1) * limit, limit * page);
 }
 
 registryUI.getNumPages = function(elts, limit) {
@@ -82,17 +82,17 @@ registryUI.getNumPages = function(elts, limit) {
 registryUI.getPageLabels = function(page, nPages) {
   var pageLabels = [];
   var maxItems = 10;
-  if (nPages === 0) { return pageLabels; }
-  if (page !== 0 && nPages >= maxItems) {
+  if (nPages === 1) { return pageLabels; }
+  if (page !== 1 && nPages >= maxItems) {
     pageLabels.push({'icon': 'first_page', page: 0});
     pageLabels.push({'icon': 'chevron_left', page: page - 1});
   }
   for (var i = Math.max(1, page - maxItems); i <= Math.min(nPages, page + maxItems); i++) {
-    pageLabels.push({page: i, current: i === page + 1});
+    pageLabels.push({page: i, current: i === page});
   }
   if (page !== nPages && nPages >= maxItems) {
-    pageLabels.push({'icon': 'chevron_right', page: nPages});
-    pageLabels.push({'icon': 'last_page', page: 0});
+    pageLabels.push({'icon': 'chevron_right', page: page + 1});
+    pageLabels.push({'icon': 'last_page', page: nPages});
   }
   return pageLabels;
 }

@@ -113,6 +113,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
     });
 
+    this.on('page-update', function(page) {
+      self.page = page;
+      this.update();
+    });
+
     this._getRemoveImageTags = function() {
       var images = self.refs['taglist-tag'].tags['remove-image'];
       if (!(images instanceof Array)) {

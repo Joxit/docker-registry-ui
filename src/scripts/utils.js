@@ -76,7 +76,7 @@ registryUI.getPage = function(elts, page, limit) {
 registryUI.getNumPages = function(elts, limit) {
   if (!limit) { limit = 100; }
   if (!elts) { return 0; }
-  return Math.trunc((elts.length / limit) % 10);
+  return Math.trunc((elts.length / limit) % 10) + 1;
 }
 
 registryUI.getPageLabels = function(page, nPages) {
@@ -95,4 +95,14 @@ registryUI.getPageLabels = function(page, nPages) {
     pageLabels.push({'icon': 'last_page', page: nPages});
   }
   return pageLabels;
+}
+
+registryUI.updateQueryString = function(qs) {
+  var search = '';
+  for (var key in qs) {
+    if (qs[key] !== undefined) {
+      search += (search.length > 0 ? '&' : '?') +key + '=' + qs[key];
+    }
+  }
+  history.pushState(null, '', search + window.location.hash);
 }

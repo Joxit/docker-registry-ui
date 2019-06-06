@@ -1,0 +1,11 @@
+apiVersion: v1
+appVersion: "1.2.1"
+description: The simplest and most complete UI for your private registry
+name: docker-registry-ui
+home: https://github.com/Joxit/docker-registry-ui
+keywords:
+- docker
+- registry
+sources:
+- https://github.com/Joxit/docker-registry-ui
+version: 0.1.0

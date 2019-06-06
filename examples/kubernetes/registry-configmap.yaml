@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: docker-registry
+  labels:
+    app: registry
+    release: docker-registry-ui
+    app/version: "1.2.1"
+data:
+  config.yml: |-
+    version: 0.1
+    log:
+      fields:
+        service: registry
+    storage:
+      delete:
+        enabled: true
+      cache:
+        blobdescriptor: inmemory
+      filesystem:
+        rootdirectory: /var/lib/registry
+    http:
+      addr: :5000
+      headers:
+        X-Content-Type-Options: [nosniff]
+        Access-Control-Allow-Origin: ['*']
+        Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
+        Access-Control-Allow-Headers: ['Authorization']
+        Access-Control-Max-Age: [1728000]
+        Access-Control-Allow-Credentials: [true]
+        Access-Control-Expose-Headers: ['Docker-Content-Digest']

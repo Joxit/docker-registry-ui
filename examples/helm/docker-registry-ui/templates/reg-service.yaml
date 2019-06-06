@@ -1,0 +1,17 @@
+{{- if eq .Values.registry.external false -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "docker-registry.fullname" . }}
+  labels:
+{{ include "docker-registry.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.registry.service.type }}
+  ports:
+    - port: {{ .Values.registry.service.port }}
+      targetPort: registry
+      protocol: TCP
+      name: registry
+  selector:
+{{ include "docker-registry.matchLabels" . | indent 6 }}
+{{- end -}}

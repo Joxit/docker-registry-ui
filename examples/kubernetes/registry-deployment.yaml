@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-registry
+  labels:
+    app: registry
+    release: docker-registry-ui
+    app/version: "1.2.1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry
+      release: docker-registry-ui
+  template:
+    metadata:
+      labels:
+        app: registry
+        release: docker-registry-ui
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            defaultMode: 420
+            name: docker-registry
+        - name: data
+          persistentVolumeClaim:
+            claimName: docker-registry
+      containers:
+        - name: registry
+          image: "docker.io/registry:2.6.2"
+          imagePullPolicy: Always
+          ports:
+            - name: registry
+              containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/var/lib/registry"
+              name: "data"
+            - mountPath: "/etc/docker/registry"
+              name: "config"
+          livenessProbe:
+            httpGet:
+              path: /v2/
+              port: registry
+          readinessProbe:
+            httpGet:
+              path: /v2/
+              port: registry
+          resources:
+            {}

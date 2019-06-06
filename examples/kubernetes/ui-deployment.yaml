@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-registry-ui
+  labels:
+    app: registry-ui
+    release: docker-registry-ui
+    app/version: "1.2.1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-ui
+      release: docker-registry-ui
+  template:
+    metadata:
+      labels:
+        app: registry-ui
+        release: docker-registry-ui
+    spec:
+      containers:
+        - name: registry-ui
+          image: "docker.io/joxit/docker-registry-ui:static"
+          imagePullPolicy: Always
+          env:
+            - name: REGISTRY_TITLE
+              value: "Docker registry UI"
+            - name: DELETE_IMAGES
+              value: "false"
+            - name: REGISTRY_URL
+              value: "http://docker-registry.default:5000"
+            - name: PULL_URL
+              value: "docker-registry-ui.default:80"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {}
+

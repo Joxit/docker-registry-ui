@@ -84,11 +84,17 @@ registryUI.getPageLabels = function(page, nPages) {
   var maxItems = 10;
   if (nPages === 1) { return pageLabels; }
   if (page !== 1 && nPages >= maxItems) {
-    pageLabels.push({'icon': 'first_page', page: 0});
+    pageLabels.push({'icon': 'first_page', page: 1});
     pageLabels.push({'icon': 'chevron_left', page: page - 1});
   }
-  for (var i = Math.max(1, page - maxItems); i <= Math.min(nPages, page + maxItems); i++) {
-    pageLabels.push({page: i, current: i === page});
+  var start = Math.round(Math.max(1, Math.min(page - maxItems / 2, nPages - maxItems + 1)));
+  for (var i = start; i < Math.min(nPages + 1, start + maxItems); i++) {
+    pageLabels.push({
+      page: i,
+      current: i === page,
+      'space-left': page === 1 && nPages > maxItems,
+      'space-right': page === nPages && nPages > maxItems
+    });
   }
   if (page !== nPages && nPages >= maxItems) {
     pageLabels.push({'icon': 'chevron_right', page: page + 1});

@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <!-- Begin of tag -->
   <div class="conatianer">
     <div class="pagination-centered">
-      <material-button waves-color="rgba(158,158,158,.4)" each="{p in this.opts.pages}" class="{ current: p.current }">
+      <material-button waves-color="rgba(158,158,158,.4)" each="{p in this.opts.pages}" class="{ current: p.current, space-left: p['space-left'], space-right: p['space-right']}">
         <i show="{ p.icon }" class="material-icons">{ p.icon }</i>
         <div hide="{ p.icon }">{ p.page }</div>
       </material-button>

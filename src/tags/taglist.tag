@@ -48,7 +48,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         onclick="registryUI.taglist.reverse();">Tag
         </th>
         <th class="show-tag-history">History</th>
-        <th class={ 'remove-tag': true, delete: this.parent.toDelete > 0 } show="{ registryUI.isImageRemoveActivated }">
+        <th class={ 'remove-tag': true, delete: this.parent.toDelete > 0 } if="{ registryUI.isImageRemoveActivated }">
           <material-checkbox ref="remove-tag-checkbox" class="indeterminate" show={ this.toDelete === 0} title="Toggle multi-delete. Alt+Click to select all tags."></material-checkbox>
           <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete selected images." onclick={ registryUI.taglist.bulkDelete } show={ this.toDelete > 0 }>
             <i class="material-icons">delete</i>
@@ -73,7 +73,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <td class="show-tag-history">
           <tag-history-button image={ image }/>
         </td>
-        <td show="{ registryUI.isImageRemoveActivated }">
+        <td if="{ registryUI.isImageRemoveActivated }">
           <remove-image multi-delete={ this.opts.multiDelete } image={ image }/>
         </td>
       </tr>

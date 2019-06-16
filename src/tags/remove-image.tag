@@ -15,16 +15,21 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
-  <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image." hide="{ opts.multiDelete }">
+  <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image." if="{ !opts.multiDelete }">
     <i class="material-icons">delete</i>
   </material-button>
-  <material-checkbox show="{ opts.multiDelete }" title="Select this tag to delete it."></material-checkbox>
+  <material-checkbox if="{ opts.multiDelete }" title="Select this tag to delete it."></material-checkbox>
   <script type="text/javascript">
     const self = this;
 
     this.on('update', function() {
-      if (!this.opts.multiDelete && this.tags['material-checkbox'].checked) {
-        this.tags['material-checkbox'].toggle();
+      if (this.tags['material-checkbox']) {
+        if (!this.opts.multiDelete && this.tags['material-checkbox'].checked) {
+          this.tags['material-checkbox'].toggle();
+        }
+        this.tags['material-checkbox'].on('toggle', function() {
+          registryUI.taglist.instance.trigger('toggle-remove-image', this.checked);
+        });
       }
     });
 
@@ -68,10 +73,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
         oReq.send();
       };
-
-      this.tags['material-checkbox'].on('toggle', function() {
-        registryUI.taglist.instance.trigger('toggle-remove-image', this.checked);
-      });
     });
   </script>
 </remove-image>

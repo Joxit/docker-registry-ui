@@ -115,6 +115,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     this.on('page-update', function(page) {
       self.page = page;
+      this.toDelete = 0;
       this.update();
     });
 

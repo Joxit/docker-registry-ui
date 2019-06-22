@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  registry-srv:
+    image: registry:latest
+    restart: always
+    volumes:
+      - storage:/var/lib/registry
+      - ./config.yml:/etc/docker/registry/config.yml:ro
+    networks:
+      - registry-ui-net
+    container_name: registry-srv
+
+  registry-ui:
+    image: joxit/docker-registry-ui:static
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - REGISTRY_TITLE=Private Docker Registry
+      - REGISTRY_URL=http://registry-srv:5000
+      - DELETE_IMAGES=true
+    depends_on:
+      - debugproxy
+    networks:
+      - registry-ui-net
+    container_name: registry-ui
+
+networks:
+    registry-ui-net:
+
+volumes:
+    storage:
+      driver: local

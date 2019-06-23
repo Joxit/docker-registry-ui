@@ -76,7 +76,7 @@ registryUI.getPage = function(elts, page, limit) {
 registryUI.getNumPages = function(elts, limit) {
   if (!limit) { limit = 100; }
   if (!elts) { return 0; }
-  return Math.trunc((elts.length / limit) % 10) + 1;
+  return Math.trunc(elts.length / limit) + 1;
 }
 
 registryUI.getPageLabels = function(page, nPages) {

@@ -30,7 +30,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       var buttons = Array.isArray(this.tags['material-button']) ? this.tags['material-button'] : [this.tags['material-button']];
       buttons.forEach(function(button) {
         button.root.onclick = function() {
-          registryUI.updateQueryString(registryUI.getQueryParams({ page: button.p.page }) );
           registryUI.taglist.instance.trigger('page-update', button.p.page)
         }
       });

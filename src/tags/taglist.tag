@@ -114,7 +114,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     });
 
     this.on('page-update', function(page) {
-      self.page = page;
+      self.page = page < 1 ? 1 : page;
+      registryUI.updateQueryString(registryUI.getQueryParams({ page: self.page }) );
       this.toDelete = 0;
       this.update();
     });
@@ -167,6 +168,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             registryUI.taglist.tags = registryUI.taglist.tags.map(function(tag) {
               return new registryUI.DockerImage(registryUI.taglist.name, tag);
             }).sort(registryUI.DockerImage.compare);
+            self.trigger('page-update', Math.min(self.page, registryUI.getNumPages(registryUI.taglist.tags)))
           } else if (this.status == 404) {
             registryUI.snackbar('Server not found', true);
           } else {

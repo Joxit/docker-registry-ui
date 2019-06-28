@@ -35,6 +35,4 @@ COPY --from=builder /usr/app/dist/ /usr/share/nginx/html/
 COPY --from=builder /usr/app/dist/scripts/docker-registry-ui-static.js /usr/share/nginx/html/scripts/docker-registry-ui.js
 COPY bin/entrypoint /bin
 
-RUN apk add openssl
-
 ENTRYPOINT entrypoint

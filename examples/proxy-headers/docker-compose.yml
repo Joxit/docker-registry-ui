@@ -16,8 +16,9 @@ services:
     environment:
       - REGISTRY_TITLE=My Private Docker Registry
       - REGISTRY_URL=http://registry:5000
-      - NGINX_PROXY_HEADER_Authorization=Basic cmVnaXN0cnk6dWk=
       - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
+    volumes:
+      - ./nginx.env:/etc/nginx/.env
     depends_on:
       - registry
     networks:

@@ -9,11 +9,17 @@ if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
 fi
 
 get_nginx_proxy_headers() {
-  env | while read e; do
+  (
+    env &&
+    if [ -f "/etc/nginx/.env" ]; then
+      cat /etc/nginx/.env
+      # Force new line
+      echo ""
+    fi
+  ) | while read e; do
     if [ -n "$(echo $e | grep -o '^NGINX_PROXY_HEADER_')" ]; then
       key=$(echo ${e%%=*} | sed 's/^NGINX_PROXY_HEADER_//' | sed 's/_/-/g')
       value=${e#*=}
-      echo "Add proxy header $key: $value" >&2
       echo -n "proxy_set_header ${key} \"${value}\"; "
     fi
   done

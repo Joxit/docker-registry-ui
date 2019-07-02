@@ -1,0 +1,28 @@
+version: '2.0'
+services:
+  registry:
+    image: registry:2.7
+    volumes:
+      - ./registry-data:/var/lib/registry
+      - ./registry-config/credentials.yml:/etc/docker/registry/config.yml
+      - ./registry-config/htpasswd:/etc/docker/registry/htpasswd
+    networks:
+      - registry-ui-net
+
+  ui:
+    image: joxit/docker-registry-ui:static
+    ports:
+      - 80:80
+    environment:
+      - REGISTRY_TITLE=My Private Docker Registry
+      - REGISTRY_URL=http://registry:5000
+      - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
+    volumes:
+      - ./nginx.env:/etc/nginx/.env
+    depends_on:
+      - registry
+    networks:
+      - registry-ui-net
+
+networks:
+  registry-ui-net:

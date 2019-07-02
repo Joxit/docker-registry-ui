@@ -1,5 +1,5 @@
 #!/bin/sh
-$@
+
 sed -i "s,\${URL},${URL}," scripts/docker-registry-ui.js
 sed -i "s,\${REGISTRY_TITLE},${REGISTRY_TITLE}," scripts/docker-registry-ui.js
 sed -i "s,\${PULL_URL},${PULL_URL}," scripts/docker-registry-ui.js
@@ -8,13 +8,31 @@ if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
   sed -i -r "s/(isImageRemoveActivated[:=])[^,;]*/\1false/" scripts/docker-registry-ui.js
 fi
 
+get_nginx_proxy_headers() {
+  (
+    env &&
+    if [ -f "/etc/nginx/.env" ]; then
+      cat /etc/nginx/.env
+      # Force new line
+      echo ""
+    fi
+  ) | while read e; do
+    if [ -n "$(echo $e | grep -o '^NGINX_PROXY_HEADER_')" ]; then
+      key=$(echo ${e%%=*} | sed 's/^NGINX_PROXY_HEADER_//' | sed 's/_/-/g')
+      value=${e#*=}
+      echo -n "proxy_set_header ${key} \"${value}\"; "
+    fi
+  done
+}
+
 if [ -n "${REGISTRY_URL}" ] ; then
   sed -i "s,\${REGISTRY_URL},${REGISTRY_URL}," /etc/nginx/conf.d/default.conf
+  sed -i "s^\${NGINX_PROXY_HEADERS}^$(get_nginx_proxy_headers)^" /etc/nginx/conf.d/default.conf
   sed -i "s,#!,," /etc/nginx/conf.d/default.conf
 fi
 
 if [ -z "$@" ]; then
-  nginx -g "daemon off;"
+  exec nginx -g "daemon off;"
 else
-  $@
+  exec $@
 fi

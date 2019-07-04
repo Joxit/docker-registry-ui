@@ -85,7 +85,7 @@ registryUI.removeServer = function(url) {
 }
 
 registryUI.updateHistory = function(url) {
-  history.pushState(null, '', (url ? '?url=' + registryUI.encodeURI(url) : '?') + window.location.hash);
+  registryUI.updateQueryString({ url: registryUI.encodeURI(url) })
   registryUI._url = url;
 }
 
@@ -100,10 +100,12 @@ registryUI.getUrlQueryParam = function () {
 };
 
 registryUI.encodeURI = function(url) {
+  if (!url) { return; }
   return url.indexOf('&') < 0 ? window.encodeURIComponent(url) : btoa(url);
 };
 
 registryUI.decodeURI = function(url) {
+  if (!url) { return; }
   return url.startsWith('http') ? window.decodeURIComponent(url) : atob(url);
 };
 

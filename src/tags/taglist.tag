@@ -16,8 +16,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <taglist>
   <!-- Begin of tag -->
-  <material-card ref="taglist-tag" class="taglist" multi-delete={ this.multiDelete }>
-    <div class="material-card-title-action">
+  <material-card class="header">
+    <div class="material-card-title-action ">
       <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="registryUI.home();">
         <i class="material-icons">arrow_back</i>
       </material-button>
@@ -26,9 +26,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <div class="item-count">{ registryUI.taglist.tags.length } tags</div>
       </h2>
     </div>
-    <div hide="{ registryUI.taglist.loadend }" class="spinner-wrapper">
-      <material-spinner></material-spinner>
-    </div>
+  </material-card>
+  <div hide="{ registryUI.taglist.loadend }" class="spinner-wrapper">
+    <material-spinner></material-spinner>
+  </div>
+  <pagination pages="{ registryUI.getPageLabels(this.page, registryUI.getNumPages(registryUI.taglist.tags)) }"></pagination>
+  <material-card ref="taglist-tag" class="taglist"
+    multi-delete={ this.multiDelete }
+    tags={ registryUI.getPage(registryUI.taglist.tags, this.page) }
+    show="{ registryUI.taglist.loadend }">
     <table show="{ registryUI.taglist.loadend }" style="border: none;">
       <thead>
       <tr>
@@ -42,7 +48,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         onclick="registryUI.taglist.reverse();">Tag
         </th>
         <th class="show-tag-history">History</th>
-        <th class={ 'remove-tag': true, delete: this.parent.toDelete > 0 } show="{ registryUI.isImageRemoveActivated }">
+        <th class={ 'remove-tag': true, delete: this.parent.toDelete > 0 } if="{ registryUI.isImageRemoveActivated }">
           <material-checkbox ref="remove-tag-checkbox" class="indeterminate" show={ this.toDelete === 0} title="Toggle multi-delete. Alt+Click to select all tags."></material-checkbox>
           <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete selected images." onclick={ registryUI.taglist.bulkDelete } show={ this.toDelete > 0 }>
             <i class="material-icons">delete</i>
@@ -50,7 +56,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </tr>
       </thead>
       <tbody>
-      <tr each="{ image in registryUI.taglist.tags }">
+      <tr each="{ image in this.opts.tags }">
         <td class="material-card-th-left">{ image.name }</td>
         <td class="copy-to-clipboard">
           <copy-to-clipboard image={ image }/>
@@ -67,15 +73,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <td class="show-tag-history">
           <tag-history-button image={ image }/>
         </td>
-        <td show="{ registryUI.isImageRemoveActivated }">
+        <td if="{ registryUI.isImageRemoveActivated }">
           <remove-image multi-delete={ this.opts.multiDelete } image={ image }/>
         </td>
       </tr>
       </tbody>
     </table>
   </material-card>
+  <pagination pages="{ registryUI.getPageLabels(this.page, registryUI.getNumPages(registryUI.taglist.tags)) }"></pagination>
   <script>
     var self = registryUI.taglist.instance = this;
+    self.page = registryUI.getPageQueryParam();
 
     this.multiDelete = false;
     this.toDelete = 0;
@@ -105,6 +113,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
     });
 
+    this.on('page-update', function(page) {
+      self.page = page < 1 ? 1 : page;
+      registryUI.updateQueryString(registryUI.getQueryParams({ page: self.page }) );
+      this.toDelete = 0;
+      this.update();
+    });
+
     this._getRemoveImageTags = function() {
       var images = self.refs['taglist-tag'].tags['remove-image'];
       if (!(images instanceof Array)) {
@@ -124,8 +139,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
 
     this.on('mount', function() {
-      var toggle = this.tags['material-card'].refs['remove-tag-checkbox'].toggle;
-      this.tags['material-card'].refs['remove-tag-checkbox'].toggle = function(e) {
+      var toggle = this.refs['taglist-tag'].refs['remove-tag-checkbox'].toggle;
+      this.refs['taglist-tag'].refs['remove-tag-checkbox'].toggle = function(e) {
         if (e.altKey) {
           self._getRemoveImageTags()
             .filter(function(img) { return !img.tags['material-checkbox'].checked; })
@@ -135,7 +150,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       };
 
-      this.tags['material-card'].refs['remove-tag-checkbox'].on('toggle', function() {
+      this.refs['taglist-tag'].refs['remove-tag-checkbox'].on('toggle', function() {
         registryUI.taglist.instance.multiDelete = this.checked;
         registryUI.taglist.instance.update();
       });
@@ -153,6 +168,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             registryUI.taglist.tags = registryUI.taglist.tags.map(function(tag) {
               return new registryUI.DockerImage(registryUI.taglist.name, tag);
             }).sort(registryUI.DockerImage.compare);
+            self.trigger('page-update', Math.min(self.page, registryUI.getNumPages(registryUI.taglist.tags)))
           } else if (this.status == 404) {
             registryUI.snackbar('Server not found', true);
           } else {

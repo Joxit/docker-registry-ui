@@ -66,3 +66,49 @@ registryUI.getHistoryIcon = function(attribute) {
       ''
   }
 }
+
+registryUI.getPage = function(elts, page, limit) {
+  if (!limit) { limit = 100; }
+  if (!elts) { return []; }
+  return elts.slice((page - 1) * limit, limit * page);
+}
+
+registryUI.getNumPages = function(elts, limit) {
+  if (!limit) { limit = 100; }
+  if (!elts) { return 0; }
+  return Math.trunc(elts.length / limit) + 1;
+}
+
+registryUI.getPageLabels = function(page, nPages) {
+  var pageLabels = [];
+  var maxItems = 10;
+  if (nPages === 1) { return pageLabels; }
+  if (page !== 1 && nPages >= maxItems) {
+    pageLabels.push({'icon': 'first_page', page: 1});
+    pageLabels.push({'icon': 'chevron_left', page: page - 1});
+  }
+  var start = Math.round(Math.max(1, Math.min(page - maxItems / 2, nPages - maxItems + 1)));
+  for (var i = start; i < Math.min(nPages + 1, start + maxItems); i++) {
+    pageLabels.push({
+      page: i,
+      current: i === page,
+      'space-left': page === 1 && nPages > maxItems,
+      'space-right': page === nPages && nPages > maxItems
+    });
+  }
+  if (page !== nPages && nPages >= maxItems) {
+    pageLabels.push({'icon': 'chevron_right', page: page + 1});
+    pageLabels.push({'icon': 'last_page', page: nPages});
+  }
+  return pageLabels;
+}
+
+registryUI.updateQueryString = function(qs) {
+  var search = '';
+  for (var key in qs) {
+    if (qs[key] !== undefined) {
+      search += (search.length > 0 ? '&' : '?') +key + '=' + qs[key];
+    }
+  }
+  history.pushState(null, '', search + window.location.hash);
+}

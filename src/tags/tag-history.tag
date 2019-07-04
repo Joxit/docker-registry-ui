@@ -15,7 +15,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history>
-  <material-card ref="tag-history-tag" class="tag-history">
+  <material-card ref="tag-history-tag" class="tag-history header">
     <div class="material-card-title-action">
       <material-button waves-center="true" rounded="true" waves-color="#ddd">
         <i class="material-icons">arrow_back</i>

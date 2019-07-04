@@ -48,12 +48,22 @@ main {
   font-weight: inherit;
 }
 
-material-card {
-  min-height: 200px;
+material-card, pagination .conatianer {
   max-width: 75%;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+pagination .conatianer {
+  display: flex;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+}
+
+pagination .conatianer .pagination-centered {
+  margin: auto;
 }
 
 @media screen and (max-width: 950px){
@@ -212,12 +222,14 @@ material-card table th {
 }
 
 material-card material-button:hover,
-material-card table tbody tr:hover {
+material-card table tbody tr:hover,
+pagination material-button:hover  {
   background-color: #eee;
 }
 
 material-card material-button,
-material-card table tbody tr {
+material-card table tbody tr,
+pagination material-button  {
   transition-duration: .28s;
   transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-property: background-color;
@@ -326,7 +338,8 @@ dropdown-item, #menu-control-dropdown p {
   background-color: #e0e0e0;
 }
 
-material-popup material-button {
+material-popup material-button,
+pagination material-button {
   background-color: #fff;
   color: #000;
 }
@@ -445,7 +458,8 @@ tag-history-button button {
   border: none;
 }
 
-material-card material-button {
+material-card material-button,
+pagination material-button {
   max-height: 30px;
   max-width: 30px;
 }
@@ -454,7 +468,8 @@ material-button:hover material-waves {
   background: none;
 }
 
-material-card material-button {
+material-card material-button,
+pagination material-button {
   background-color: inherit;
 }
 
@@ -506,4 +521,30 @@ material-checkbox .checkbox {
 
 material-checkbox .checkbox.checked {
   background-color: #777;
+}
+
+pagination material-button {
+  padding: 0.2em 0.75em;
+}
+
+pagination material-button .content {
+  display: flex;
+  align-content: center;
+  line-height: 1.9em;
+}
+
+pagination material-button.current {
+  border: 1px solid rgba(0, 0, 0, .12);
+}
+
+pagination material-button.current.space-left {
+  margin-left: 85px;
+}
+
+pagination material-button.current.space-right {
+  margin-right: 85px;
+}
+
+pagination material-button .content i.material-icons {
+  color: #000;
 }

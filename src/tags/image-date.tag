@@ -24,5 +24,7 @@
       self.localDate = date.toLocaleString()
       self.update();
     });
+
+    opts.image.trigger('get-date');
   </script>
 </image-date>

@@ -138,19 +138,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
     };
 
-    this.on('mount', function() {
-      var toggle = this.refs['taglist-tag'].refs['remove-tag-checkbox'].toggle;
-      this.refs['taglist-tag'].refs['remove-tag-checkbox'].toggle = function(e) {
+    this.on('update', function() {
+      var checkbox = this.refs['taglist-tag'].refs['remove-tag-checkbox'];
+      if (!checkbox || checkbox._toggle) { return; }
+
+      checkbox._toggle = checkbox.toggle;
+      checkbox.toggle = function(e) {
         if (e.altKey) {
           self._getRemoveImageTags()
             .filter(function(img) { return !img.tags['material-checkbox'].checked; })
             .forEach(function(img) { img.tags['material-checkbox'].toggle() });
         } else {
-          toggle();
+          this._toggle();
         }
       };
 
-      this.refs['taglist-tag'].refs['remove-tag-checkbox'].on('toggle', function() {
+      checkbox.on('toggle', function() {
         registryUI.taglist.instance.multiDelete = this.checked;
         registryUI.taglist.instance.update();
       });

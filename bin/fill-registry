@@ -1,0 +1,13 @@
+#!/bin/sh
+
+for i in alpine chronograf:alpine consul debian jawg/mapnik3 nginx:alpine postgres:alpine redis:alpine telegraf:alpine joxit/docker-registry-ui joxit/kosmtik joxit/node joxit/rust-openssl joxit/tile-server-ui; do
+  docker pull $i
+  docker tag $i 127.0.0.1:5000/$i
+  docker push 127.0.0.1:5000/$i
+done
+
+for i in arm32v7-static 1.2-debian-static master-static 1.2 arm64v8 arm32v7 arm64v8-static master 1.2-debian latest static debian-static debian 1.2-static 1.1 1.1-static 1.1-debian-static 1.1-debian ; do
+  docker pull joxit/docker-registry-ui:$i
+  docker tag joxit/docker-registry-ui:$i 127.0.0.1:5000/joxit/docker-registry-ui:$i
+  docker push 127.0.0.1:5000/joxit/docker-registry-ui:$i
+done

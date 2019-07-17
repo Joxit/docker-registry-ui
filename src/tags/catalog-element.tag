@@ -21,13 +21,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <span>
       <i class="material-icons">send</i>
       { typeof opts.item === "string" ? opts.item : opts.item.repo }
-      <div hide="{typeof opts.item === "string"}" class="item-count right">
+      <div if="{typeof opts.item !== "string"}" class="item-count right">
         { opts.item.images && opts.item.images.length } images
         <i class="material-icons animated {expanded: opts.expanded}">expand_more</i>
       </div>
     </span>
   </material-card>
-  <catalog-element hide="{typeof opts.item === "string"}" class="animated {hide: !expanded, expanding: expanding}" each="{item in item.images}" />
+  <catalog-element if="{typeof opts.item !== "string"}" class="animated {hide: !expanded, expanding: expanding}" each="{item in item.images}" />
   <script>
     this.on('mount', function() {
       const self = this;

@@ -490,6 +490,10 @@ catalog-element catalog-element.hide material-card {
   opacity: 0;
 }
 
+catalog-element catalog-element .list > span i.material-icons {
+  margin-right: 48px;
+}
+
 remove-image {
   width: 30px;
 }

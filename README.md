@@ -47,6 +47,15 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)) **static interface**.
 -   Add custom header via environment variable and file (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)) **static interface**
 
+## FAQ
+
+-   Why when I delete all tags of an image, the image is still in the UI ?
+    -   This is a docker registry limitation, the garbage collector don't remove empty images.
+-   Why the image size in the UI is not the same as displayed during `docker images` ?
+    -   The UI displays the compressed size of the image and not the extracted size version.
+-   Can I use HTTPS on the UI ?
+    -   Yes, put your favourite reverse proxy on the front of the UI. Your reverse proxy will take care of HTTPS connection.
+
 ## Getting Started
 
 ### Basic

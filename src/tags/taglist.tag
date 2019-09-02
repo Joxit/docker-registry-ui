@@ -22,7 +22,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
-        Tags of { registryUI.name() + '/' + registryUI.taglist.name }
+        Tags of { registryUI.taglist.name }
+        <div class="source-hint">
+          Sourced from { registryUI.name() + '/' + registryUI.taglist.name }
+        </div>
         <div class="item-count">{ registryUI.taglist.tags.length } tags</div>
       </h2>
     </div>
@@ -38,8 +41,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <table show="{ registryUI.taglist.loadend }" style="border: none;">
       <thead>
       <tr>
-        <th class="material-card-th-left">Repository</th>
-        <th></th>
         <th>Creation date</th>
         <th>Size</th>
 
@@ -57,10 +58,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </thead>
       <tbody>
       <tr each="{ image in this.opts.tags }">
-        <td class="material-card-th-left">{ image.name }</td>
-        <td class="copy-to-clipboard">
-          <copy-to-clipboard image={ image }/>
-        </td>
         <td>
           <image-date image="{ image }"/>
         </td>

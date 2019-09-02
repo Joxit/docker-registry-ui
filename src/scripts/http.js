@@ -22,6 +22,32 @@ function Http() {
   this._headers = {};
 }
 
+Http.prototype.getContentDigest = function(cb) {
+  const headers = this.oReq.getAllResponseHeaders();
+  const start = headers.indexOf('etag: "sha256:');
+  if (start !== -1) {
+    // Same origin or advanced CORS headers set:
+    // 'Access-Control-Expose-Headers: ETag'
+    cb(headers.slice(start + 7, headers.indexOf('"', start + 7)))
+  } else if (window.crypto && window.TextEncoder) {
+    crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(this.oReq.responseText)
+    ).then(function (buffer) {
+      cb(
+        'sha256:' + Array.from(
+          new Uint8Array(buffer)
+        ).map(function(byte) {
+          return byte.toString(16).padStart(2, '0');
+        }).join('')
+      );
+    })
+  } else {
+    // IE and old Edge
+    // simply do not call the callback and skip the setup downstream
+  }
+};
+
 Http.prototype.addEventListener = function(e, f) {
   this._events[e] = f;
   const self = this;

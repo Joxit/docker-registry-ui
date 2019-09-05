@@ -47,6 +47,23 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)) **static interface**.
 -   Add custom header via environment variable and file (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)) **static interface**
 
+## FAQ
+
+-   Why, when I delete all tags of an image, the image is still in the UI ?
+    -   This is a limitation of docker registry, the garbage collector don't remove empty images. If you want to delete dangling images, you will need to delete the folder in your registry data. (see [#77](https://github.com/Joxit/docker-registry-ui/issues/77))
+-   Why the image size in the UI is not the same as displayed during `docker images` ?
+    -   The UI displays the compressed size of the image and not the extracted size version.
+-   Can I use HTTPS on the UI ?
+    -   Yes, put your favourite reverse proxy on the front of the UI. Your reverse proxy will take care of HTTPS connection.
+-   Does the UI support authentication ?
+    -   Yes, but it supports only basic auth. It's a simple standalone frontend, it will use your browser window for authentication.
+-   Can I use the UI and docker client with an insecure registry (registry url without https) ?
+    -   Yes you can, you must first configure your docker client. (see [#76](https://github.com/Joxit/docker-registry-ui/issues/76))
+-   What does Mixed Content error mean ?
+    -   This means you are using a UI with HTTPS and your registry is using HTTP (unsecured). When you are on a HTTPS site, you can't get HTTP content. Upgrade you registry with a HTTPS connection.
+
+Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/master/examples) or open an issue.
+
 ## Getting Started
 
 ### Basic

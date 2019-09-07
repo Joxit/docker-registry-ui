@@ -36,6 +36,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.addEventListener('load', function() {
         registryUI.catalog.repositories = [];
         if (this.status == 200) {
+          if (!registryUI.url()) {
+            registryUI._url = window.location.origin + window.location.pathname.replace(/\/+$/, '')
+          }
           registryUI.catalog.repositories = JSON.parse(this.responseText).repositories || [];
           registryUI.catalog.repositories.sort();
           registryUI.catalog.length = registryUI.catalog.repositories.length;         registryUI.catalog.repositories = registryUI.catalog.repositories.reduce(function(acc, e) {

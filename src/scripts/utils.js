@@ -112,3 +112,10 @@ registryUI.updateQueryString = function(qs) {
   }
   history.pushState(null, '', search + window.location.hash);
 }
+
+registryUI.stripHttps = function (url) {
+  if (!url) {
+    return '';
+  }
+  return url.replace(/^https?:\/\//, '');
+};

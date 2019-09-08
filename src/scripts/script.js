@@ -18,7 +18,7 @@ var registryUI = {}
 registryUI.URL_QUERY_PARAM_REGEX = /[&?]url=/;
 registryUI.URL_PARAM_REGEX = /^url=/;
 
-registryUI.name = registryUI.url = function(byPassQueryParam) {
+registryUI.url = function(byPassQueryParam) {
   if (!registryUI._url) {
     const url = registryUI.getUrlQueryParam();
     if (url) {
@@ -32,6 +32,9 @@ registryUI.name = registryUI.url = function(byPassQueryParam) {
     registryUI._url = registryUI.getRegistryServer(0);
   }
   return registryUI._url;
+}
+registryUI.name = function() {
+  return registryUI.stripHttps(registryUI.url());
 }
 registryUI.getRegistryServer = function(i) {
   try {

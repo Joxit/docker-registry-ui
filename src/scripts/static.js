@@ -24,7 +24,12 @@ registryUI.url = function() {
   return url;
 };
 registryUI.name = function() {
-  return '${REGISTRY_TITLE}' || registryUI.url();
+  const name = '${REGISTRY_TITLE}';
+  if (name) {
+    // the user can strip the http prefix if they wish
+    return name;
+  }
+  return registryUI.stripHttps(registryUI.url());
 };
 registryUI.pullUrl = '${PULL_URL}';
 registryUI.isImageRemoveActivated = true;

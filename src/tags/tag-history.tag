@@ -95,7 +95,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     const processBlobs = function(blobs) {
       function exec(elt) {
         const guiElements = [];
-        for (const attribute in elt) {
+        for (var attribute in elt) {
           if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
             const value = elt[attribute];
             const guiElement = {

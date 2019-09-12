@@ -175,7 +175,7 @@ If your docker registry need credentials, you will need to send these HEADERS:
 http:
   headers:
     Access-Control-Allow-Origin: ['<your docker-registry-ui url>']
-    Access-Control-Allow-Credentials: true
+    Access-Control-Allow-Credentials: [true]
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional
 ```
 

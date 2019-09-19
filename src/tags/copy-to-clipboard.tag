@@ -39,7 +39,7 @@
       if (!self.dockerCmd) {
         registryUI.errorSnackbar(
           'Your browser has no SHA256 support. As a workaround your registry ' +
-          ' can set the header `Access-Control-Expose-Headers: ETag`.'
+          ' can set the header `Access-Control-Expose-Headers: Docker-Content-Digest`.'
         );
         return;
       }

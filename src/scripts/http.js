@@ -23,12 +23,10 @@ function Http() {
 }
 
 Http.prototype.getContentDigest = function(cb) {
-  const headers = this.oReq.getAllResponseHeaders();
-  const start = headers.indexOf('etag: "sha256:');
-  if (start !== -1) {
+  if (this.oReq.hasHeader('Docker-Content-Digest')) {
     // Same origin or advanced CORS headers set:
-    // 'Access-Control-Expose-Headers: ETag'
-    cb(headers.slice(start + 7, headers.indexOf('"', start + 7)))
+    // 'Access-Control-Expose-Headers: Docker-Content-Digest'
+    cb(this.oReq.getResponseHeader('Docker-Content-Digest'))
   } else if (window.crypto && window.TextEncoder) {
     crypto.subtle.digest(
       'SHA-256',

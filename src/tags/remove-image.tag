@@ -33,40 +33,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.delete = this.tags['material-button'].root.onclick = function(ignoreError) {
           const name = self.opts.image.name;
           const tag = self.opts.image.tag;
+          registryUI.taglist.go(name);
+          if (!self.digest) {
+            registryUI.showErrorCanNotReadContentDigest();
+            return;
+          }
           const oReq = new Http();
           oReq.addEventListener('loadend', function() {
-            registryUI.taglist.go(name);
-            if (this.status == 200) {
-              if (!this.hasHeader('Docker-Content-Digest')) {
-                registryUI.showErrorCanNotReadContentDigest();
-                return;
-              }
-              const digest = this.getResponseHeader('Docker-Content-Digest');
-              const oReq = new Http();
-              oReq.addEventListener('loadend', function() {
-                if (this.status == 200 || this.status == 202) {
-                  registryUI.taglist.display()
-                  registryUI.snackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
-                } else if (this.status == 404) {
-                  ignoreError || registryUI.errorSnackbar('Digest not found');
-                } else {
-                  registryUI.snackbar(this.responseText);
-                }
-              });
-              oReq.open('DELETE', registryUI.url() + '/v2/' + name + '/manifests/' + digest);
-              oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
-              oReq.addEventListener('error', function() {
-                registryUI.errorSnackbar('An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].');
-              });
-              oReq.send();
+            if (this.status == 200 || this.status == 202) {
+              registryUI.taglist.display()
+              registryUI.snackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
             } else if (this.status == 404) {
-              registryUI.errorSnackbar('Manifest for ' + name + ':' + tag + ' not found');
+              ignoreError || registryUI.errorSnackbar('Digest not found');
             } else {
               registryUI.snackbar(this.responseText);
             }
           });
-          oReq.open('HEAD', registryUI.url() + '/v2/' + name + '/manifests/' + tag);
+          oReq.open('DELETE', registryUI.url() + '/v2/' + name + '/manifests/' + self.digest);
           oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+          oReq.addEventListener('error', function() {
+            registryUI.errorSnackbar('An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].');
+          });
           oReq.send();
         };
       }
@@ -81,5 +68,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
       self.multiDelete = self.opts.multiDelete;
     });
+
+    opts.image.one('content-digest', function(digest) {
+      self.digest = digest;
+    });
+    opts.image.trigger('get-content-digest');
   </script>
 </remove-image>

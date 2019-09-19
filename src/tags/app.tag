@@ -92,6 +92,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     registryUI.errorSnackbar = function(message) {
       return registryUI.snackbar(message, true);
     };
+    registryUI.showErrorCanNotReadContentDigest = function() {
+      registryUI.errorSnackbar(
+        'Access on registry response was blocked. Try adding the header ' +
+        '`Access-Control-Expose-Headers: Docker-Content-Digest`' +
+        ' to your proxy or registry: ' +
+        'https://docs.docker.com/registry/configuration/#http'
+      );
+    };
     registryUI.cleanName = function() {
       const url = registryUI.pullUrl || (registryUI.url() && registryUI.url().length > 0 && registryUI.url()) || window.location.host;
       return registryUI.stripHttps(url);

@@ -26,11 +26,9 @@
     const self = this;
     if (opts.target === 'tag') {
         self.dockerCmd = self.prefix + ':' + opts.image.tag;
-        self.update();
     } else {
         opts.image.one('content-digest', function (digest) {
             self.dockerCmd = self.prefix + '@' + digest;
-            self.update();
         });
         opts.image.trigger('get-content-digest');
     }

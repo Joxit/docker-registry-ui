@@ -22,6 +22,30 @@ function Http() {
   this._headers = {};
 }
 
+Http.prototype.getContentDigest = function(cb) {
+  if (this.oReq.hasHeader('Docker-Content-Digest')) {
+    // Same origin or advanced CORS headers set:
+    // 'Access-Control-Expose-Headers: Docker-Content-Digest'
+    cb(this.oReq.getResponseHeader('Docker-Content-Digest'))
+  } else if (window.crypto && window.TextEncoder) {
+    crypto.subtle.digest(
+      'SHA-256',
+      new TextEncoder().encode(this.oReq.responseText)
+    ).then(function (buffer) {
+      cb(
+        'sha256:' + Array.from(
+          new Uint8Array(buffer)
+        ).map(function(byte) {
+          return byte.toString(16).padStart(2, '0');
+        }).join('')
+      );
+    })
+  } else {
+    // IE and old Edge
+    // simply do not call the callback and skip the setup downstream
+  }
+};
+
 Http.prototype.addEventListener = function(e, f) {
   this._events[e] = f;
   const self = this;

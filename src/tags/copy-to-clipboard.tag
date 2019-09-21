@@ -15,13 +15,29 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <copy-to-clipboard>
+  <div class="copy-to-clipboard">
   <input ref="input" style="display: none; width: 1px; height: 1px;" value="{ this.dockerCmd }">
   <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="{ this.copy }" title="Copy pull command.">
     <i class="material-icons">content_copy</i>
   </material-button>
+  </div>
   <script type="text/javascript">
-    this.dockerCmd = 'docker pull ' + registryUI.cleanName() + '/' + opts.image.name + ':' + opts.image.tag;
+    this.prefix = 'docker pull ' + registryUI.cleanName() + '/' + opts.image.name;
+    const self = this;
+    if (opts.target === 'tag') {
+        self.dockerCmd = self.prefix + ':' + opts.image.tag;
+    } else {
+        opts.image.one('content-digest', function (digest) {
+            self.dockerCmd = self.prefix + '@' + digest;
+        });
+        opts.image.trigger('get-content-digest');
+    }
+
     this.copy = function () {
+      if (!self.dockerCmd) {
+        registryUI.showErrorCanNotReadContentDigest();
+        return;
+      }
       const copyText = this.refs['input'];
       copyText.style.display = 'block';
       copyText.select();

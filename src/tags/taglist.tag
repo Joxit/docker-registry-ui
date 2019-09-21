@@ -22,7 +22,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
-        Tags of { registryUI.name() + '/' + registryUI.taglist.name }
+        Tags of { registryUI.taglist.name }
+        <div class="source-hint">
+          Sourced from { registryUI.name() + '/' + registryUI.taglist.name }
+        </div>
         <div class="item-count">{ registryUI.taglist.tags.length } tags</div>
       </h2>
     </div>
@@ -38,12 +41,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <table show="{ registryUI.taglist.loadend }" style="border: none;">
       <thead>
       <tr>
-        <th class="material-card-th-left">Repository</th>
-        <th></th>
         <th>Creation date</th>
         <th>Size</th>
+        <th id="image-content-digest-header">Content Digest</th>
 
         <th
+        id="image-tag-header"
         class="{ registryUI.taglist.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
         onclick="registryUI.taglist.reverse();">Tag
         </th>
@@ -57,10 +60,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </thead>
       <tbody>
       <tr each="{ image in this.opts.tags }">
-        <td class="material-card-th-left">{ image.name }</td>
-        <td class="copy-to-clipboard">
-          <copy-to-clipboard image={ image }/>
-        </td>
         <td>
           <image-date image="{ image }"/>
         </td>
@@ -68,7 +67,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <image-size image="{ image }"/>
         </td>
         <td>
+          <image-content-digest image="{ image }"/>
+          <copy-to-clipboard target="digest" image={ image }/>
+        </td>
+        <td>
           <image-tag image="{ image }"/>
+          <copy-to-clipboard target="tag" image={ image }/>
         </td>
         <td class="show-tag-history">
           <tag-history-button image={ image }/>
@@ -84,6 +88,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <script>
     var self = registryUI.taglist.instance = this;
     self.page = registryUI.getPageQueryParam();
+    registryUI.taglist.tags = [];
+    const onResize = function() {
+      // window.innerWidth is a blocking access, cache its result.
+      const innerWidth = window.innerWidth;
+      var chars = 0;
+      if (innerWidth >= 1440) {
+        chars = 71;
+      } else if (innerWidth < 1024) {
+        chars = 0;
+      } else {
+        // SHA256:12345678 + scaled between 1024 and 1440px
+        chars = 15 + 56 * ((innerWidth - 1024) / 416);
+      }
+      registryUI.taglist.tags.map(function (image) {
+        image.trigger('content-digest-chars', chars);
+      });
+    };
+    window.addEventListener('resize', onResize);
+    // this may be run before the final document size is available, so schedule
+    //  a correction once everything is set up.
+    window.requestAnimationFrame(onResize);
 
     this.multiDelete = false;
     this.toDelete = 0;
@@ -167,10 +192,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.addEventListener('load', function() {
           registryUI.taglist.tags = [];
           if (this.status == 200) {
-            registryUI.taglist.tags = JSON.parse(this.responseText).tags || [];
-            registryUI.taglist.tags = registryUI.taglist.tags.map(function(tag) {
+            const tags = JSON.parse(this.responseText).tags || [];
+            registryUI.taglist.tags = tags.map(function(tag) {
               return new registryUI.DockerImage(registryUI.taglist.name, tag);
             }).sort(registryUI.DockerImage.compare);
+            window.requestAnimationFrame(onResize);
             self.trigger('page-update', Math.min(self.page, registryUI.getNumPages(registryUI.taglist.tags)))
           } else if (this.status == 404) {
             registryUI.snackbar('Server not found', true);

@@ -411,6 +411,7 @@ image-tag, .copy-to-clipboard {
 }
 image-content-digest {
   display: none;
+  font-family: 'Roboto Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
 @media screen and (min-width: 1024px) {
   #image-content-digest-header {

@@ -45,7 +45,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Use `joxit/docker-registry-ui:static` as reverse proxy (with `REGISTRY_URL` environment variable) to your docker registry (This will avoid CORS) **static interface**.
 -   Add Title when using `REGISTRY_URL` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)) **static interface**.
 -   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)) **static interface**.
--   Add custom header via environment variable and file (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)) **static interface**
+-   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)) **static interface**
 
 ## FAQ
 
@@ -137,11 +137,12 @@ docker run -d -p 80:80 joxit/docker-registry-ui
 
 Some env options are available for use this interface for only one server.
 
--   `URL`: set the static URL to use (You will need CORS configuration). Example: `http://127.0.0.1:5000`. (`Required`)
--   `REGISTRY_URL`: your docker registry URL to contact (CORS configuration is not needed). Example: `http://my-docker-container:5000`. (Can't be used with `URL`, since 0.3.2).
+-   [`URL`](https://github.com/Joxit/docker-registry-ui/tree/master/examples/ui-as-standalone): set the static URL to use (You will need CORS configuration). Example: `http://127.0.0.1:5000`. (`Required`)
+-   [`REGISTRY_URL`](https://github.com/Joxit/docker-registry-ui/tree/master/examples/ui-as-proxy): your docker registry URL to contact (CORS configuration is not needed). Example: `http://my-docker-container:5000`. (Can't be used with `URL`, since 0.3.2).
 -   `DELETE_IMAGES`: if this variable is empty or `false`, delete feature is deactivated. It is activated otherwise.
 -   `REGISTRY_TITLE`: Set a custom title for your user interface when using `REGISTRY_URL` (since 0.3.4).
 -   `PULL_URL`: Set a custom url for the docker pull command, this is useful when you use `REGISTRY_URL` and your registry is on a different host (since 1.1.0).
+-   [`NGINX_PROXY_HEADER_*`](https://github.com/Joxit/docker-registry-ui/tree/master/examples/proxy-headers): Set custom headers for your docker registry, usefull when you want to add your credentials. (Can be use only with `REGISTRY_URL`).
 
 Example with `URL` option.
 

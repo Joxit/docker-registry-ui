@@ -12,7 +12,7 @@
 - Vladimir Kozyrev [@fieryvova](https://github.com/fieryvova)
 - Haibo Jia [@bluethon](https://github.com/bluethon)
 
-## Beceause committers are not the only contributors
+## Because committers are not the only contributors
 
 - Ewout Prangsma [@ewoutp](https://github.com/ewoutp)
 - [@soosap](https://github.com/soosap)

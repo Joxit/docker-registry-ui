@@ -24,3 +24,4 @@
 - [@wuyue92tree](https://github.com/wuyue92tree)
 - Giovanni Toraldo [@gionn](https://github.com/gionn)
 - [@marcusblake](https://github.com/marcusblake)
+- Dario [@pidario](https://github.com/pidario)

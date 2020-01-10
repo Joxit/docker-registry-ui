@@ -211,7 +211,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       });
       oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/manifests/' + self.tag);
-      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
       oReq.send();
     };
 
@@ -239,7 +239,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       });
       oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/blobs/' + blob);
-      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
       oReq.send();
     };
 

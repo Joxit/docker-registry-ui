@@ -50,7 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             }
           });
           oReq.open('DELETE', registryUI.url() + '/v2/' + name + '/manifests/' + self.digest);
-          oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json');
+          oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
           oReq.addEventListener('error', function() {
             registryUI.errorSnackbar('An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].');
           });

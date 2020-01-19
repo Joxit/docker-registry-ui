@@ -29,8 +29,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       if (self.multiDelete == self.opts.multiDelete) {
         return;
       }
-      if (this.tags['material-button']) {
-        this.delete = this.tags['material-button'].root.onclick = function(ignoreError) {
+      if (self.tags['material-button']) {
+        self.delete = function(ignoreError) {
           const name = self.opts.image.name;
           const tag = self.opts.image.tag;
           registryUI.taglist.go(name);
@@ -44,7 +44,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               registryUI.taglist.display()
               registryUI.snackbar('Deleting ' + name + ':' + tag + ' image. Run `registry garbage-collect config.yml` on your registry');
             } else if (this.status == 404) {
-              ignoreError || registryUI.errorSnackbar('Digest not found');
+              ignoreError || registryUI.errorSnackbar('Digest not found for this image in your registry.');
             } else {
               registryUI.snackbar(this.responseText);
             }
@@ -56,14 +56,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           });
           oReq.send();
         };
+        self.tags['material-button'].root.onclick = function() {
+          self.delete();
+        }
       }
 
-      if (this.tags['material-checkbox']) {
-        if (!this.opts.multiDelete && this.tags['material-checkbox'].checked) {
-          this.tags['material-checkbox'].toggle();
+      if (self.tags['material-checkbox']) {
+        if (!self.opts.multiDelete && self.tags['material-checkbox'].checked) {
+          self.tags['material-checkbox'].toggle();
         }
-        this.tags['material-checkbox'].on('toggle', function() {
-          registryUI.taglist.instance.trigger('toggle-remove-image', this.checked);
+        self.tags['material-checkbox'].on('toggle', function() {
+          registryUI.taglist.instance.trigger('toggle-remove-image', self.checked);
         });
       }
       self.multiDelete = self.opts.multiDelete;

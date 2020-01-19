@@ -18,6 +18,8 @@ LABEL maintainer="Jones MAGLOIRE @Joxit"
 
 WORKDIR /usr/share/nginx/html/
 
+ENV NGINX_PROXY_HEADER_Host '$http_host'
+
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY dist/ /usr/share/nginx/html/
 COPY dist/scripts/docker-registry-ui-static.js /usr/share/nginx/html/scripts/docker-registry-ui.js

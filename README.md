@@ -63,6 +63,8 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
     -   This means you are using a UI with HTTPS and your registry is using HTTP (unsecured). When you are on a HTTPS site, you can't get HTTP content. Upgrade you registry with a HTTPS connection.
 -   Why the default nginx `Host` is set to `$http_host` ?
     -   This fixes the issue [#88](https://github.com/Joxit/docker-registry-ui/issues/88). More about this in [#113](https://github.com/Joxit/docker-registry-ui/issues/113).
+-   Why DELETE fails with 401 status code (using Basic Auth) ?
+    -   This is caused by a bug in docker registry, I suggest to have your UI on the same domain than your registry e.g. registry.example.com/ui/. (see [#104](https://github.com/Joxit/docker-registry-ui/issues/104)).
 
 Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/master/examples) or open an issue.
 

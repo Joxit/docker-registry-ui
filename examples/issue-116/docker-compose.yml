@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+  registry-srv:
+    image: registry:2.7.1
+    restart: always
+    volumes:
+      - storage:/var/lib/registry
+      - ./htpasswd:/etc/docker/registry/htpasswd
+    ports:
+      - 5000:5000
+    environment:
+      - REGISTRY_HTTP_HEADERS_X-Content-Type-Options=[nosniff]
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin=['http://localhost']
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods=['HEAD', 'GET', 'OPTIONS', 'DELETE']
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Headers=['Authorization']
+      - REGISTRY_HTTP_HEADERS_Access-Control-Expose-Headers=['Docker-Content-Digest']
+      - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Credentials=['true']
+      - REGISTRY_AUTH_HTPASSWD_REALM=basic-realm
+      - REGISTRY_AUTH_HTPASSWD_PATH=/etc/docker/registry/htpasswd
+    networks:
+      - registry-ui-net
+    container_name: registry-srv
+
+  registry-ui:
+    image: joxit/docker-registry-ui:static
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      - REGISTRY_TITLE=Private Docker Registry
+      - URL=http://localhost:5000
+      - DELETE_IMAGES=true
+    container_name: registry-ui
+
+networks:
+    registry-ui-net:
+
+volumes:
+    storage:
+      driver: local

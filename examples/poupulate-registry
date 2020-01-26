@@ -1,0 +1,9 @@
+#!/bin/sh
+
+REGISTRY="${1:-localhost:5000}"
+
+for image in alpine:latest alpine:edge alpine:3.11 alpine:3.10 alpine:3.9; do
+  docker pull $image
+  docker tag $image $REGISTRY/$image
+  docker push $REGISTRY/$image
+done

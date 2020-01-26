@@ -27,7 +27,7 @@ My docker-compose file
 
 ```
 
-My private docker registry configuration 
+My private docker registry configuration
 ```yml
 
 ```
@@ -41,18 +41,18 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 ## System information
- 
+
 - OS: [e.g. Debian 10, Windows, Android 9...]
 <!-- Browser is only for UI bugs -->
 - Browser:
     - Name:  [e.g. Chrome, Firefox...]
     - Version: [e.g. 22]
 - Docker registry UI:
-    - Version: [e.g. 1.3.0]
-    - Interface variant: [standard or static]
+    - Version: [e.g. 1.4.0]
     - Server: [docker or dist]
 <!-- Only for Docker and for where the UI is hosted -->
     - Docker version: [e.g. 19.03]
+    - Docker registry ui tag: [latest, static, master, 1.4-static...]
     - OS/Arch: [e.g. linux/amd64]
     - Tools: [e.g. docker-compose, kubernets..]
 

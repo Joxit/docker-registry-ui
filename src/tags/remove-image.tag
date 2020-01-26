@@ -66,7 +66,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           self.tags['material-checkbox'].toggle();
         }
         self.tags['material-checkbox'].on('toggle', function() {
-          registryUI.taglist.instance.trigger('toggle-remove-image', self.checked);
+          registryUI.taglist.instance.trigger('toggle-remove-image', this.checked);
         });
       }
       self.multiDelete = self.opts.multiDelete;

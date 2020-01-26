@@ -25,4 +25,5 @@
 - Giovanni Toraldo [@gionn](https://github.com/gionn)
 - [@marcusblake](https://github.com/marcusblake)
 - Dario [@pidario](https://github.com/pidario)
-- Jernej K. [Cvetk0](https://github.com/Cvetk0)
+- Jernej K. [@Cvetk0](https://github.com/Cvetk0)
+- Cristian Posoiu [@cr1st1p](https://github.com/cr1st1p)

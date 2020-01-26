@@ -65,6 +65,7 @@ Http.prototype.addEventListener = function(e, f) {
             req.withCredentials = true;
             req.hasHeader = Http.hasHeader;
             req.getErrorMessage = Http.getErrorMessage;
+            self.oReq = req;
             req.send();
           } else {
             f.bind(this)();

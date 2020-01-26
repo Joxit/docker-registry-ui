@@ -18,6 +18,7 @@ services:
       - REGISTRY_HTTP_HEADERS_Access-Control-Allow-Credentials=['true']
       - REGISTRY_AUTH_HTPASSWD_REALM=basic-realm
       - REGISTRY_AUTH_HTPASSWD_PATH=/etc/docker/registry/htpasswd
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
     networks:
       - registry-ui-net
     container_name: registry-srv

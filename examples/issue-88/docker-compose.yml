@@ -20,8 +20,6 @@ services:
       - REGISTRY_TITLE=Private Docker Registry
       - REGISTRY_URL=http://registry-srv:5000
       - DELETE_IMAGES=true
-    depends_on:
-      - debugproxy
     networks:
       - registry-ui-net
     container_name: registry-ui

@@ -153,8 +153,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return images;
     };
 
-    registryUI.taglist.bulkDelete = function() {
+    registryUI.taglist.bulkDelete = function(e) {
       if (self.multiDelete && self.toDelete > 0) {
+        if (e.altKey) {
+          self._getRemoveImageTags()
+            .filter(function(img) { return img.tags['material-checkbox'].checked; })
+            .forEach(function(img) { img.tags['material-checkbox'].toggle() });
+        }
         self._getRemoveImageTags().filter(function(img) {
           return img.tags['material-checkbox'].checked;
         }).forEach(function(img) {
@@ -170,6 +175,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       checkbox._toggle = checkbox.toggle;
       checkbox.toggle = function(e) {
         if (e.altKey) {
+          if (!this.checked) { this._toggle(); }
           self._getRemoveImageTags()
             .filter(function(img) { return !img.tags['material-checkbox'].checked; })
             .forEach(function(img) { img.tags['material-checkbox'].toggle() });

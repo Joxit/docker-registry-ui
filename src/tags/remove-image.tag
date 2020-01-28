@@ -15,10 +15,10 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
-  <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image." if="{ !opts.multiDelete }">
+  <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image." if="{ !opts.multiDelete }" disabled="{ !this.digest }">
     <i class="material-icons">delete</i>
   </material-button>
-  <material-checkbox if="{ opts.multiDelete }" title="Select this tag to delete it."></material-checkbox>
+  <material-checkbox if="{ opts.multiDelete }" title="Select this tag to delete it." disabled="{ !this.digest }"></material-checkbox>
   <script type="text/javascript">
     const self = this;
 
@@ -35,7 +35,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           const tag = self.opts.image.tag;
           registryUI.taglist.go(name);
           if (!self.digest) {
-            registryUI.showErrorCanNotReadContentDigest();
+            registryUI.snackbar('Information for ' + name + ':' + tag + ' are not yet loaded.');
             return;
           }
           const oReq = new Http();
@@ -74,6 +74,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     opts.image.one('content-digest', function(digest) {
       self.digest = digest;
+      self.update();
     });
     opts.image.trigger('get-content-digest');
   </script>

@@ -282,6 +282,11 @@ material-button .content i.material-icons,
   color: #777;
 }
 
+material-button[disabled] .content i.material-icons,
+material-checkbox[disabled] .content i.material-icons {
+  color: #bbb;
+}
+
 material-snackbar .toast {
   height: auto;
 }

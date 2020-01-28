@@ -202,6 +202,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           oReq.getContentDigest(function (digest) {
             self.digest = digest;
             self.trigger('content-digest', digest);
+            if (!digest) {
+              registryUI.showErrorCanNotReadContentDigest();
+            }
           });
           self.getBlobs(response.config.digest)
         } else if (this.status == 404) {

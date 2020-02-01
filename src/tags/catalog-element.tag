@@ -16,18 +16,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog-element>
   <!-- Begin of tag -->
-  <material-card class="list highlight" item="{item}" expanded="{expanded}">
-    <material-waves onmousedown="{launch}" center="true" color="#ddd" />
-    <span>
-      <i class="material-icons">send</i>
-      { typeof opts.item === "string" ? opts.item : opts.item.repo }
-      <div if="{typeof opts.item !== "string"}" class="item-count right">
-        { opts.item.images && opts.item.images.length } images
-        <i class="material-icons animated {expanded: opts.expanded}">expand_more</i>
-      </div>
-    </span>
-  </material-card>
-  <catalog-element if="{typeof opts.item !== "string"}" class="animated {hide: !expanded, expanding: expanding}" each="{item in item.images}" />
+  <div class="content">
+    <material-card class="list highlight" item="{item}" expanded="{expanded}">
+      <material-waves onmousedown="{launch}" center="true" color="#ddd" />
+      <span>
+        <i class="material-icons">send</i>
+        { typeof opts.item === "string" ? opts.item : opts.item.repo }
+        <div if="{typeof opts.item !== "string"}" class="item-count right">
+          { opts.item.images && opts.item.images.length } images
+          <i class="material-icons animated {expanded: opts.expanded}">expand_more</i>
+        </div>
+      </span>
+    </material-card>
+    <catalog-element if="{typeof opts.item !== "string"}" class="animated {hide: !expanded, expanding: expanding}" each="{item in item.images}" />
+  </div>
   <script>
     this.on('mount', function() {
       const self = this;

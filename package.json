@@ -1,6 +1,6 @@
 {
   "name": "docker-registry-ui",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "scripts": {
     "build": "./node_modules/gulp/bin/gulp.js build"
   },

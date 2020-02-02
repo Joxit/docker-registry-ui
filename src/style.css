@@ -520,8 +520,14 @@ catalog-element catalog-element.hide material-card {
   opacity: 0;
 }
 
-catalog-element catalog-element > .content  {
+catalog-element catalog-element > .content {
   margin-left: 3em;
+}
+
+@media screen and (min-width: 1515px){
+  catalog-element catalog-element > .content material-card {
+    max-width: calc(1440px - 3em);
+  }
 }
 
 remove-image {

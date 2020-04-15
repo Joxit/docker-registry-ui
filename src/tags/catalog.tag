@@ -68,7 +68,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         registryUI.catalog.loadend = true;
         registryUI.catalog.instance.update();
       });
-      oReq.open('GET', registryUI.url() + '/v2/_catalog?n=100000');
+      oReq.open('GET', registryUI.url() + '/v2/_catalog?n=1000');
       oReq.send();
     };
     registryUI.catalog.display();

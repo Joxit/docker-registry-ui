@@ -41,9 +41,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <table show="{ registryUI.taglist.loadend }" style="border: none;">
       <thead>
       <tr>
-        <th>Creation date</th>
-        <th>Size</th>
-        <th id="image-content-digest-header">Content Digest</th>
+        <th class="creation-date">Creation date</th>
+        <th class="image-size">Size</th>
+        <th id="image-content-digest-header" if="{ registryUI.showContentDigest }">Content Digest</th>
 
         <th
         id="image-tag-header"
@@ -60,13 +60,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </thead>
       <tbody>
       <tr each="{ image in this.opts.tags }">
-        <td>
+        <td class="creation-date">
           <image-date image="{ image }"/>
         </td>
-        <td>
+        <td class="image-size">
           <image-size image="{ image }"/>
         </td>
-        <td>
+        <td if="{ registryUI.showContentDigest }">
           <image-content-digest image="{ image }"/>
           <copy-to-clipboard target="digest" image={ image }/>
         </td>

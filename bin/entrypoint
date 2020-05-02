@@ -8,6 +8,10 @@ if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
   sed -i -r "s/(isImageRemoveActivated[:=])[^,;]*/\1false/" scripts/docker-registry-ui.js
 fi
 
+if [ "${SHOW_CONTENT_DIGEST}" = false ] ; then
+  sed -i -r "s/(showContentDigest[:=])[^,;]*/\1false/" scripts/docker-registry-ui.js
+fi
+
 get_nginx_proxy_headers() {
   (
     env &&

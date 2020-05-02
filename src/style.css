@@ -446,6 +446,14 @@ image-content-digest {
   padding: 7px 5px;
 }
 
+taglist .creation-date {
+  width: 10em;
+}
+
+taglist .image-size {
+  width: 7em;
+}
+
 catalog material-card,
 tag-history material-card {
   min-height: auto;

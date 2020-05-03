@@ -12,6 +12,10 @@ if [ "${SHOW_CONTENT_DIGEST}" = false ] ; then
   sed -i -r "s/(showContentDigest[:=])[^,;]*/\1false/" scripts/docker-registry-ui.js
 fi
 
+if [ -n "${CATALOG_ELEMENTS_LIMIT}" ] ; then
+  sed -i -r "s/(catalogElementsLimit[:=])[^,;]*/\1${CATALOG_ELEMENTS_LIMIT}/" scripts/docker-registry-ui.js
+fi
+
 get_nginx_proxy_headers() {
   (
     env &&

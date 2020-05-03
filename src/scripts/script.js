@@ -18,6 +18,7 @@ var registryUI = {}
 registryUI.URL_QUERY_PARAM_REGEX = /[&?]url=/;
 registryUI.URL_PARAM_REGEX = /^url=/;
 registryUI.showContentDigest = true;
+registryUI.catalogElementsLimit = 100000;
 
 registryUI.url = function(byPassQueryParam) {
   if (!registryUI._url) {

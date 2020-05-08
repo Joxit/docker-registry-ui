@@ -10,7 +10,16 @@ let mainWindow = null;
 let credentials = [];
 
 async function createWindow () {
-  credentials = await keytar.findCredentials('docker-registry-ui');
+  try {
+    credentials = await keytar.findCredentials('docker-registry-ui');
+    for(const credential of credentials) {
+      // fix for windows
+      credential.password = credential.password.replace(/\000+/g, '');
+    }
+  } catch(e) {
+    console.log(e);
+    credentials = [];
+  }
 
   mainWindow = new BrowserWindow({
     height: 920,

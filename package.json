@@ -3,7 +3,7 @@
   "version": "1.4.8",
   "scripts": {
     "build": "./node_modules/gulp/bin/gulp.js build",
-    "build:electron": "cd electron && npm run dist"
+    "build:electron": "npm run build && cd electron && npm run dist"
   },
   "repository": {
     "type": "git",

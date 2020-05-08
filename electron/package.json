@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron ./",
     "rebuild": "electron-rebuild -f -w keytar",
-    "package": "electron-packager .",
+    "package": "electron-packager --overwrite .",
     "sync": "copyfiles ../dist/* ../dist/**/* out",
     "dist": "npm install && npm run rebuild && npm run sync && npm run package"
   },

@@ -235,6 +235,10 @@ auth:
     path: /etc/docker/registry/htpasswd
 ```
 
+## Standalone Application
+If you do not want to install the docker-registry-ui on your server, you may
+check out the [Electron](electron/README.md) standalone application.
+
 ## All examples
 
 - [Use docker-registry-ui as a proxy (use REGISTRY_URL)](https://github.com/Joxit/docker-registry-ui/tree/master/examples/ui-as-proxy)

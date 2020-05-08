@@ -9,14 +9,14 @@ let mainWindow = null;
 // Credentials that are fetched from the Keychain
 let credentials = [];
 
-async function createWindow () {
+async function createWindow() {
   try {
     credentials = await keytar.findCredentials('docker-registry-ui');
-    for(const credential of credentials) {
+    for (const credential of credentials) {
       // fix for windows
-      credential.password = credential.password.replace(/\000+/g, '');
-    }
-  } catch(e) {
+      credential.password = credential.password.replace(/\000+/g, '');
+    }
+  } catch (e) {
     console.log(e);
     credentials = [];
   }
@@ -55,7 +55,7 @@ app.on('activate', async function () {
 });
 
 app.on("login", (event, contents, authencation, info, callback) => {
-  for(const credential of credentials) {
+  for (const credential of credentials) {
     const parsedUrl = url.parse(credential.account);
     if (parsedUrl.hostname === info.host) {
       return callback(parsedUrl.auth, credential.password);

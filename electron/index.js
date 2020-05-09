@@ -176,7 +176,10 @@ function createCredentialsWindow() {
     }
   });
 
-  credentialsWindow.openDevTools();
+  if (isDevMode) {
+    credentialsWindow.openDevTools();
+  }
+
   credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
   credentialsWindow.webContents.on('ipc-message', (event, channel) => {
     if (channel === 'close') {

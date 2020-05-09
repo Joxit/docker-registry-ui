@@ -38,15 +38,10 @@ const mainStyle = makeStyles((theme) => ({
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
     },
-    footer: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-    },
     input: {
         width: '100%',
     },
 }));
-
 
 function CredentialRow({credential, index, onDelete, onUpdate}) {
     const [account, setAccount] = useState(credential?.account || '');
@@ -188,10 +183,6 @@ function App() {
         [prefersDarkMode],
       );
 
-    function handleOk() {
-        ipcRenderer.send('close');
-    }
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
@@ -205,9 +196,6 @@ function App() {
                 <main className={classes.main}>
                     <CredentialsTable onError={setError}/>
                 </main>
-                <footer className={classes.footer}>
-                    <Button onClick={handleOk} variant="contained" color="primary">Ok</Button>
-                </footer>
             </div>
         </ThemeProvider>
     );

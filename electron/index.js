@@ -174,7 +174,8 @@ async function createWindow() {
 async function createCredentialsWindow() {
     return new Promise((resolve) => {
         credentialsWindow = new BrowserWindow({
-            useContentSize: true,
+            width: 1000,
+            height: 400,
             show: false,
             title: 'Credential Manager',
             parent: mainWindow,
@@ -192,13 +193,6 @@ async function createCredentialsWindow() {
         }
 
         credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
-        credentialsWindow.webContents.on('ipc-message', (event, channel) => {
-            if (channel === 'close') {
-                credentialsWindow.hide();
-
-            }
-        });
-
         credentialsWindow.webContents.on('dom-ready', () => {
             console.log('Credentials Window DOM is ready');
             resolve();

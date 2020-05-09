@@ -97,7 +97,12 @@ function CredentialsTable({onError}) {
 
     async function loadItems() {
         try {
-            setCredentials(await keytar.findCredentials('docker-registry-ui'));
+            const credentials = await keytar.findCredentials('docker-registry-ui');
+            for (const credential of credentials) {
+                // fix for windows
+                credential.password = credential.password.replace(/\000+/g, '');
+            }
+            setCredentials(credentials);
         } catch (e) {
             onError(e.toString());
         }
@@ -202,6 +207,9 @@ function App() {
 
 render(<App/>, document.getElementById("root"));
 
+// @ts-ignore
 if (module.hot) {
+    // @ts-ignore
     module.hot.accept();
 }
+

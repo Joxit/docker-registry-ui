@@ -23,7 +23,7 @@ const template = [
             {type: 'separator'},
             {
                 label: 'Preferences', accelerator: 'CmdorCtrl+,', click: () => {
-                    createCredentialsWindow();
+                    credentialsWindow.show();
                 }
             },
             {type: 'separator'},
@@ -41,7 +41,7 @@ const template = [
             ...(isMac ? [] : [{role: 'quit'}]),
             {
                 label: 'Preferences', accelerator: 'CmdorCtrl+,', click: () => {
-                    createCredentialsWindow();
+                    credentialsWindow.show();
                 }
             },
         ]
@@ -91,7 +91,7 @@ const template = [
             {type: 'separator'},
             {
                 label: 'Credentials Helper', accelerator: 'CmdorCtrl+k', click: () => {
-                    createCredentialsWindow();
+                    credentialsWindow.show();
                 }
             },
         ]
@@ -169,12 +169,11 @@ function createWindow() {
 }
 
 function createCredentialsWindow() {
-    if (!mainWindow || credentialsWindow) return;
 
     credentialsWindow = new BrowserWindow({
         useContentSize: true,
         show: false,
-        modal: true,
+        //modal: true,
         title: 'Credential Manager',
         parent: mainWindow,
         webPreferences: {
@@ -189,25 +188,26 @@ function createCredentialsWindow() {
     credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
     credentialsWindow.webContents.on('ipc-message', (event, channel) => {
         if (channel === 'close') {
-            credentialsWindow.close();
+            credentialsWindow.hide();
 
         }
     })
-    credentialsWindow.webContents.on('dom-ready', () => {
-        credentialsWindow.show();
-    });
 
-    credentialsWindow.on('close', async () => {
+    credentialsWindow.on('hide', async () => {
         await loadCredentials();
         mainWindow.reload();
-        credentialsWindow.destroy();
-        credentialsWindow = null;
+    });
+
+    credentialsWindow.on('close', (event) => {
+        event.preventDefault();
+        credentialsWindow.hide();
     })
 }
 
 app.on('ready', async () => {
     await loadCredentials();
     createWindow();
+    createCredentialsWindow();
 });
 
 app.on('window-all-closed', function () {

@@ -22,7 +22,7 @@ import {
 } from "@material-ui/core";
 import {Alert, AlertTitle} from '@material-ui/lab';
 import {blue} from "@material-ui/core/colors";
-import {Delete as DeleteIcon, Save as SaveIcon} from "@material-ui/icons";
+import {Add as AddIcon, Delete as DeleteIcon, Save as SaveIcon} from "@material-ui/icons";
 
 const theme = createMuiTheme({
     palette: {
@@ -157,9 +157,11 @@ function CredentialsTable({onError}) {
                         <TableCell>Host of the registry including username</TableCell>
                         <TableCell>Password</TableCell>
                         <TableCell align='right'>
-                            <Button onClick={() => {
+                            <IconButton onClick={() => {
                                 setCredentials([...credentials, null])
-                            }} disabled={credentials.includes(null)}>+</Button>
+                            }} disabled={credentials.includes(null)}>
+                                <AddIcon/>
+                            </IconButton>
                         </TableCell>
                     </TableRow>
                 </TableHead>

@@ -198,10 +198,11 @@ async function createCredentialsWindow() {
             resolve();
         });
 
-        credentialsWindow.on('close', (e) => {
+        credentialsWindow.on('close', async (e) => {
             console.log("Closed credential window");
             credentialsWindow.hide();
             e.preventDefault();
+            await loadCredentials();
             mainWindow.reload();
         });
     });

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, Menu } = require('electron');
+const {app, BrowserWindow, globalShortcut, Menu} = require('electron');
 const isDevMode = require('electron-is-dev');
 const keytar = require('keytar');
 const url = require('url');
@@ -15,205 +15,211 @@ let credentials = [];
 let credentialsWindow;
 
 const template = [
-  // { role: 'appMenu' }
-  ...(isMac ? [{
-    label: app.name,
-    submenu: [
-      { role: 'about' },
-      { type: 'separator' },
-      { label: 'Preferences', accelerator:'CmdorCtrl+,', click: () => {
-        createCredentialsWindow();
-      }},
-      { type: 'separator' },
-      { role: 'hide' },
-      { role: 'hideothers' },
-      { role: 'unhide' },
-      { type: 'separator' },
-      { role: 'quit' }
-    ]
-  }] : []),
-  // { role: 'fileMenu' }
-  {
-    label: 'File',
-    submenu: [
-        ...(isMac ? [] : [{ role: 'quit' }]),
-      { label: 'Preferences', accelerator:'CmdorCtrl+,', click: () => {
-          createCredentialsWindow();
-        }},
-    ]
-  },
-  // { role: 'editMenu' }
-  {
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      ...(isMac ? [
-        { role: 'pasteAndMatchStyle' },
-        { role: 'delete' },
-        { role: 'selectAll' },
-        { type: 'separator' },
-        {
-          label: 'Speech',
-          submenu: [
-            { role: 'startspeaking' },
-            { role: 'stopspeaking' }
-          ]
-        }
-      ] : [
-        { role: 'delete' },
-        { type: 'separator' },
-        { role: 'selectAll' }
-      ])
-    ]
-  },
-  // { role: 'viewMenu' }
-  {
-    label: 'View',
-    submenu: [
-      { role: 'reload' },
-      { role: 'forcereload' },
-      { role: 'toggledevtools' },
-      { type: 'separator' },
-      { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' },
-      { type: 'separator' },
-      { label: 'Credentials Helper', accelerator:'CmdorCtrl+k', click: () => {
-          createCredentialsWindow();
-      }},
-    ]
-  },
-  // { role: 'windowMenu' }
-  {
-    label: 'Window',
-    submenu: [
-      { role: 'minimize' },
-      { role: 'zoom' },
-      ...(isMac ? [
-        { type: 'separator' },
-        { role: 'front' },
-        { type: 'separator' },
-        { role: 'window' }
-      ] : [
-        { role: 'close' }
-      ])
-    ]
-  },
-  {
-    role: 'help',
-    submenu: [
-      {
-        label: 'Learn More',
-        click: async () => {
-          const { shell } = require('electron')
-          await shell.openExternal('https://joxit.dev/docker-registry-ui/')
-        }
-      }
-    ]
-  }
+    // { role: 'appMenu' }
+    ...(isMac ? [{
+        label: app.name,
+        submenu: [
+            {role: 'about'},
+            {type: 'separator'},
+            {
+                label: 'Preferences', accelerator: 'CmdorCtrl+,', click: () => {
+                    createCredentialsWindow();
+                }
+            },
+            {type: 'separator'},
+            {role: 'hide'},
+            {role: 'hideothers'},
+            {role: 'unhide'},
+            {type: 'separator'},
+            {role: 'quit'}
+        ]
+    }] : []),
+    // { role: 'fileMenu' }
+    {
+        label: 'File',
+        submenu: [
+            ...(isMac ? [] : [{role: 'quit'}]),
+            {
+                label: 'Preferences', accelerator: 'CmdorCtrl+,', click: () => {
+                    createCredentialsWindow();
+                }
+            },
+        ]
+    },
+    // { role: 'editMenu' }
+    {
+        label: 'Edit',
+        submenu: [
+            {role: 'undo'},
+            {role: 'redo'},
+            {type: 'separator'},
+            {role: 'cut'},
+            {role: 'copy'},
+            {role: 'paste'},
+            ...(isMac ? [
+                {role: 'pasteAndMatchStyle'},
+                {role: 'delete'},
+                {role: 'selectAll'},
+                {type: 'separator'},
+                {
+                    label: 'Speech',
+                    submenu: [
+                        {role: 'startspeaking'},
+                        {role: 'stopspeaking'}
+                    ]
+                }
+            ] : [
+                {role: 'delete'},
+                {type: 'separator'},
+                {role: 'selectAll'}
+            ])
+        ]
+    },
+    // { role: 'viewMenu' }
+    {
+        label: 'View',
+        submenu: [
+            {role: 'reload'},
+            {role: 'forcereload'},
+            {role: 'toggledevtools'},
+            {type: 'separator'},
+            {role: 'resetzoom'},
+            {role: 'zoomin'},
+            {role: 'zoomout'},
+            {type: 'separator'},
+            {role: 'togglefullscreen'},
+            {type: 'separator'},
+            {
+                label: 'Credentials Helper', accelerator: 'CmdorCtrl+k', click: () => {
+                    createCredentialsWindow();
+                }
+            },
+        ]
+    },
+    // { role: 'windowMenu' }
+    {
+        label: 'Window',
+        submenu: [
+            {role: 'minimize'},
+            {role: 'zoom'},
+            ...(isMac ? [
+                {type: 'separator'},
+                {role: 'front'},
+                {type: 'separator'},
+                {role: 'window'}
+            ] : [
+                {role: 'close'}
+            ])
+        ]
+    },
+    {
+        role: 'help',
+        submenu: [
+            {
+                label: 'Learn More',
+                click: async () => {
+                    const {shell} = require('electron')
+                    await shell.openExternal('https://joxit.dev/docker-registry-ui/')
+                }
+            }
+        ]
+    }
 ];
 
 const menu = Menu.buildFromTemplate(template);
 if (isMac) {
-  Menu.setApplicationMenu(menu);
+    Menu.setApplicationMenu(menu);
 }
 
 async function loadCredentials() {
-  try {
-    credentials = await keytar.findCredentials('docker-registry-ui');
-    for (const credential of credentials) {
-      // fix for windows
-      credential.password = credential.password.replace(/\000+/g, '');
+    try {
+        credentials = await keytar.findCredentials('docker-registry-ui');
+        for (const credential of credentials) {
+            // fix for windows
+            credential.password = credential.password.replace(/\000+/g, '');
+        }
+    } catch (e) {
+        console.log(e);
+        credentials = [];
     }
-  } catch (e) {
-    console.log(e);
-    credentials = [];
-  }
 }
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    height: 920,
-    width: 1600,
-    show: false,
-    webPreferences: {
-      nodeIntegration: false,
+    mainWindow = new BrowserWindow({
+        height: 920,
+        width: 1600,
+        show: false,
+        webPreferences: {
+            nodeIntegration: false,
+        }
+    });
+
+    if (isDevMode) {
+        mainWindow.webContents.openDevTools();
     }
-  });
 
-  if (isDevMode) {
-    mainWindow.webContents.openDevTools();
-  }
+    if (!isMac) {
+        mainWindow.setMenu(menu);
+    }
 
-  if(!isMac) {
-    mainWindow.setMenu(menu);
-  }
-
-  mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
-  mainWindow.webContents.on('dom-ready', () => {
-    mainWindow.show();
-  });
+    mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
+    mainWindow.webContents.on('dom-ready', () => {
+        mainWindow.show();
+    });
 }
 
 function createCredentialsWindow() {
-  if(!mainWindow || credentialsWindow) return;
+    if (!mainWindow || credentialsWindow) return;
 
-  credentialsWindow = new BrowserWindow({
-    useContentSize: true,
-    show: false,
-    modal: true,
-    title: 'Credential Manager',
-    parent: mainWindow,
-    webPreferences: {
-      nodeIntegration: true,
+    credentialsWindow = new BrowserWindow({
+        useContentSize: true,
+        show: false,
+        modal: true,
+        title: 'Credential Manager',
+        parent: mainWindow,
+        webPreferences: {
+            nodeIntegration: true,
+        }
+    });
+
+    if (isDevMode) {
+        credentialsWindow.openDevTools();
     }
-  });
 
-  if (isDevMode) {
-    credentialsWindow.openDevTools();
-  }
+    credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
+    credentialsWindow.webContents.on('ipc-message', (event, channel) => {
+        if (channel === 'close') {
+            credentialsWindow.close();
 
-  credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
-  credentialsWindow.webContents.on('ipc-message', (event, channel) => {
-    if (channel === 'close') {
-      credentialsWindow.close();
+        }
+    })
+    credentialsWindow.webContents.on('dom-ready', () => {
+        credentialsWindow.show();
+    });
 
-    }
-  })
-  credentialsWindow.webContents.on('dom-ready', () => {
-    credentialsWindow.show();
-  });
-
-  credentialsWindow.on('close', async () => {
-    await loadCredentials();
-    mainWindow.reload();
-    credentialsWindow.destroy();
-    credentialsWindow=null;
-  })
+    credentialsWindow.on('close', async () => {
+        await loadCredentials();
+        mainWindow.reload();
+        credentialsWindow.destroy();
+        credentialsWindow = null;
+    })
 }
 
 app.on('ready', async () => {
-  await loadCredentials();
-  createWindow();
+    await loadCredentials();
+    createWindow();
 });
 
 app.on('window-all-closed', function () {
-  app.quit();
+    app.quit();
 });
 
 app.on("login", (event, contents, authencation, info, callback) => {
-  for (const credential of credentials) {
-    const parsedUrl = url.parse(credential.account);
-    if (parsedUrl.hostname === info.host) {
-      return callback(parsedUrl.auth, credential.password);
+    for (const credential of credentials) {
+        const parsedUrl = url.parse(credential.account);
+        if (parsedUrl.hostname === info.host) {
+            return callback(parsedUrl.auth, credential.password);
+        }
     }
-  }
-  callback();
+    callback();
 });

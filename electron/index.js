@@ -173,9 +173,7 @@ function createCredentialsWindow() {
     credentialsWindow = new BrowserWindow({
         useContentSize: true,
         show: false,
-        //modal: true,
         title: 'Credential Manager',
-        parent: mainWindow,
         webPreferences: {
             nodeIntegration: true,
         }

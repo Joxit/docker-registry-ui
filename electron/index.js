@@ -183,6 +183,9 @@ function createCredentialsWindow() {
         credentialsWindow.openDevTools();
     }
 
+    if (!isMac) {
+        credentialsWindow.setMenu(null);
+    }
     credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
     credentialsWindow.webContents.on('ipc-message', (event, channel) => {
         if (channel === 'close') {

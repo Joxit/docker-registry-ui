@@ -5,7 +5,9 @@
   "description": "Electron Application for Docker Registry UI",
   "main": "index.js",
   "scripts": {
+    "build": "parcel build -d dist/authentication -t electron --public-url ./ authentication/index.html",
     "start": "electron ./",
+    "start:dev": "parcel serve -d dist/authentication -t electron --public-url ./ authentication/index.html",
     "rebuild": "electron-rebuild -f -w keytar",
     "package": "electron-packager --overwrite .",
     "sync": "copyfiles ../dist/* ../dist/**/* out",
@@ -13,14 +15,18 @@
   },
   "dependencies": {
     "electron-is-dev": "^1.1.0",
-    "keytar": "^5.6.0"
+    "keytar": "^5.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "copyfiles": "^2.2.0",
     "electron": "^8.0.0",
     "electron-builder": "^22.6.0",
     "electron-packager": "^14.2.1",
-    "electron-rebuild": "^1.10.1"
+    "electron-rebuild": "^1.10.1",
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.8.3"
   },
   "keywords": [
     "electron"

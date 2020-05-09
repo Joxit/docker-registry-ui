@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, globalShortcut } = require('electron');
 const isDevMode = require('electron-is-dev');
 const keytar = require('keytar');
 const url = require('url');
@@ -8,6 +8,8 @@ let mainWindow = null;
 
 // Credentials that are fetched from the Keychain
 let credentials = [];
+
+let x ;
 
 async function createWindow() {
   try {
@@ -38,9 +40,37 @@ async function createWindow() {
   mainWindow.webContents.on('dom-ready', () => {
     mainWindow.show();
   });
+
+
 }
 
-app.on('ready', async () => await createWindow());
+app.on('ready', async () => {
+  await createWindow();
+
+  globalShortcut.register('CommandOrControl+,', () => {
+    if(!mainWindow || x) return;
+
+    x = new BrowserWindow({
+      useContentSize: true,
+      show: false,
+      modal: true,
+      parent: mainWindow,
+      webPreferences: {
+        nodeIntegration: true,
+      }
+    });
+    // x.openDevTools();
+    x.loadURL(`file://${__dirname}/dist/authentication/index.html`);
+    x.webContents.on('ipc-message', (event, channel) => {
+      if (channel === 'close') {
+        x.destroy();
+      }
+    })
+    x.webContents.on('dom-ready', () => {
+      x.show();
+    });
+  })
+});
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

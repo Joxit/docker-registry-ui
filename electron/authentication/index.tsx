@@ -159,7 +159,7 @@ function CredentialsTable({onError}) {
                         <TableCell align='right'>
                             <Button onClick={() => {
                                 setCredentials([...credentials, null])
-                            }}>+</Button>
+                            }} disabled={credentials.includes(null)}>+</Button>
                         </TableCell>
                     </TableRow>
                 </TableHead>
@@ -168,7 +168,7 @@ function CredentialsTable({onError}) {
                         onDelete={handleDelete}
                         onUpdate={handleUpdate}
                         index={index}
-                        key={index}
+                        key={credential?.account || ''}
                         credential={credential}/>)}
                 </TableBody>
             </Table>

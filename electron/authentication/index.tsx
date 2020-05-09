@@ -1,39 +1,104 @@
 import * as React from "react";
-import { render } from "react-dom";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
+import {render} from "react-dom";
 import * as keytar from 'keytar';
-import './main.css';
-import { ipcRenderer } from 'electron';
+import {ipcRenderer} from 'electron';
+import {
+    Button,
+    createMuiTheme,
+    CssBaseline,
+    IconButton,
+    LinearProgress,
+    makeStyles,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
+    ThemeProvider
+} from "@material-ui/core";
+import {Alert, AlertTitle} from '@material-ui/lab';
+import {blue} from "@material-ui/core/colors";
+import {Delete as DeleteIcon, Save as SaveIcon} from "@material-ui/icons";
 
-function CredentialRow({ credential, index, onDelete, onUpdate }) {
-    const [account, setAccount] = useState(credential?.account  || '');
-    const [password, setPassword] = useState(credential?.password  || '');
+const theme = createMuiTheme({
+    palette: {
+        type: "light",
+        primary: blue,
+    },
+});
 
-    return (<tr>
-        <td>
-            <input type="text"
-                   value={account}
-                   onChange={(e) => { setAccount(e.target.value) }} />
-        </td>
-        <td>
-            <input type="password"
-                   value={password}
-                   onChange={(e) => { setPassword(e.target.value) }} />
-        </td>
-        <td align="right">
-            <button onClick={async () => await onDelete(credential, index) }>Delete</button>
-            <button onClick={async () => await onUpdate(credential, index, { account, password }) }>Save</button>
-        </td>
-    </tr>);
+const mainStyle = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+        display: "flex",
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+    },
+    main: {
+        flexGrow: 1,
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
+    input: {
+        width: '100%',
+    },
+}));
+
+
+function CredentialRow({credential, index, onDelete, onUpdate}) {
+    const [account, setAccount] = useState(credential?.account || '');
+    const [password, setPassword] = useState(credential?.password || '');
+
+    const style = mainStyle();
+    return (<TableRow>
+        <TableCell>
+            <TextField
+                className={style.input}
+                type="text"
+                placeholder='https://user@someregistry:5000/'
+                value={account} variant="outlined"
+                onChange={(e) => {
+                    setAccount(e.target.value)
+                }}/>
+        </TableCell>
+        <TableCell>
+            <TextField type="password"
+                       className={style.input}
+                       variant="outlined"
+                       placeholder='password'
+                       value={password}
+                       onChange={(e) => {
+                           setPassword(e.target.value)
+                       }}/>
+        </TableCell>
+        <TableCell align="right">
+            <IconButton onClick={async () => await onUpdate(credential, index, {account, password})}>
+                <SaveIcon/>
+            </IconButton>
+            <IconButton onClick={async () => await onDelete(credential, index,)}>
+                <DeleteIcon/>
+            </IconButton>
+        </TableCell>
+    </TableRow>);
 }
 
-function CredentialsTable({ onError }) {
+
+function CredentialsTable({onError}) {
     const [credentials, setCredentials] = useState(null);
 
     async function loadItems() {
         try {
             setCredentials(await keytar.findCredentials('docker-registry-ui'));
-        } catch(e) {
+        } catch (e) {
             onError(e.toString());
         }
     }
@@ -50,18 +115,17 @@ function CredentialsTable({ onError }) {
         try {
             await keytar.deletePassword('docker-registry-ui', item.account);
             await loadItems();
-        } catch(e) {
+        } catch (e) {
             onError(e.toString());
         }
     }
 
     async function handleUpdate(oldCredentials, index, newCredentials) {
-        console.log("update");
         try {
             await handleDelete(oldCredentials, index);
             await keytar.setPassword('docker-registry-ui', newCredentials.account, newCredentials.password);
             await loadItems();
-        } catch(e) {
+        } catch (e) {
             console.error("Error while updating key: ", e);
             onError(e.toString());
         }
@@ -77,50 +141,66 @@ function CredentialsTable({ onError }) {
     }, []);
 
     if (credentials === null) {
-        return <h1>Loading ...</h1>
+        return <LinearProgress/>
     }
+
     return (
-        <>
-            <header>
-                <h1>Docker Registry</h1>
-                <button onClick={() => { setCredentials([...credentials, null ])}}>+</button>
-            </header>
-        <table>
-        <thead>
-            <tr>
-                <td>URL</td>
-                <td>Password</td>
-            </tr>
-        </thead>
-        <tbody>
-            {credentials.map((credential, index) => <CredentialRow
-                onDelete={handleDelete}
-                onUpdate={handleUpdate}
-                index={index}
-                key={index}
-                credential={credential} />)}
-        </tbody>
-    </table></>);
+        <TableContainer component={Paper}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Host of the registry including username</TableCell>
+                        <TableCell>Password</TableCell>
+                        <TableCell align='right'>
+                            <Button onClick={() => {
+                                setCredentials([...credentials, null])
+                            }}>+</Button>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {credentials.map((credential, index) => <CredentialRow
+                        onDelete={handleDelete}
+                        onUpdate={handleUpdate}
+                        index={index}
+                        key={index}
+                        credential={credential}/>)}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
 }
 
 function App() {
-    const [error, setError] = useState(null);
+    const [error, setError] = useState();
+    const classes = mainStyle();
 
     function handleOk() {
         ipcRenderer.send('close');
     }
 
     return (
-        <main>
-            <CredentialsTable onError={setError} />
-            { error && <p class="error">{error}</p>}
-            <footer>
-                <button onClick={handleOk}>Ok</button>
-            </footer>
-        </main>);
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <div className={classes.root}>
+                {error && <Alert severity='error' onClose={() => {
+                    setError(null)
+                }}>
+                    <AlertTitle>Error</AlertTitle>
+                    {error}
+                </Alert>}
+                <main className={classes.main}>
+                    <CredentialsTable onError={setError}/>
+                </main>
+                <footer className={classes.footer}>
+                    <Button onClick={handleOk} variant="contained" color="primary">Ok</Button>
+                </footer>
+            </div>
+        </ThemeProvider>
+    );
 }
 
-render(<App />, document.getElementById("root"));
+render(<App/>, document.getElementById("root"));
 
 if (module.hot) {
     module.hot.accept();

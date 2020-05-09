@@ -9,7 +9,7 @@ let mainWindow = null;
 // Credentials that are fetched from the Keychain
 let credentials = [];
 
-let x ;
+let credentialsWindow ;
 
 async function createWindow() {
   try {
@@ -48,9 +48,9 @@ app.on('ready', async () => {
   await createWindow();
 
   globalShortcut.register('CommandOrControl+,', () => {
-    if(!mainWindow || x) return;
+    if(!mainWindow || credentialsWindow) return;
 
-    x = new BrowserWindow({
+    credentialsWindow = new BrowserWindow({
       useContentSize: true,
       show: false,
       modal: true,
@@ -59,15 +59,16 @@ app.on('ready', async () => {
         nodeIntegration: true,
       }
     });
-    // x.openDevTools();
-    x.loadURL(`file://${__dirname}/dist/authentication/index.html`);
-    x.webContents.on('ipc-message', (event, channel) => {
+    // credentialsWindow.openDevTools();
+    credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
+    credentialsWindow.webContents.on('ipc-message', (event, channel) => {
       if (channel === 'close') {
-        x.destroy();
+        credentialsWindow.destroy();
+        credentialsWindow=null;
       }
     })
-    x.webContents.on('dom-ready', () => {
-      x.show();
+    credentialsWindow.webContents.on('dom-ready', () => {
+      credentialsWindow.show();
     });
   })
 });

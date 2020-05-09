@@ -144,76 +144,84 @@ async function loadCredentials() {
     }
 }
 
-function createWindow() {
-    mainWindow = new BrowserWindow({
-        height: 920,
-        width: 1600,
-        show: false,
-        webPreferences: {
-            nodeIntegration: false,
+async function createWindow() {
+    return new Promise((resolve, reject) => {
+        mainWindow = new BrowserWindow({
+            height: 920,
+            width: 1600,
+            show: false,
+            webPreferences: {
+                nodeIntegration: false,
+            }
+        });
+
+        if (isDevMode) {
+            mainWindow.webContents.openDevTools();
         }
-    });
 
-    if (isDevMode) {
-        mainWindow.webContents.openDevTools();
-    }
+        if (!isMac) {
+            mainWindow.setMenu(menu);
+        }
 
-    if (!isMac) {
-        mainWindow.setMenu(menu);
-    }
-
-    mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
-    mainWindow.webContents.on('dom-ready', () => {
-        mainWindow.show();
+        mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
+        mainWindow.webContents.on('dom-ready', () => {
+            console.log("Main Window DOM ready");
+            resolve();
+        });
     });
 }
 
-function createCredentialsWindow() {
+async function createCredentialsWindow() {
+    return new Promise((resolve) => {
+        credentialsWindow = new BrowserWindow({
+            useContentSize: true,
+            show: false,
+            title: 'Credential Manager',
+            parent: mainWindow,
+            webPreferences: {
+                nodeIntegration: true,
+            }
+        });
 
-    credentialsWindow = new BrowserWindow({
-        useContentSize: true,
-        show: false,
-        title: 'Credential Manager',
-        webPreferences: {
-            nodeIntegration: true,
+        if (isDevMode) {
+            credentialsWindow.openDevTools();
         }
-    });
 
-    if (isDevMode) {
-        credentialsWindow.openDevTools();
-    }
+        if (!isMac) {
+            credentialsWindow.setMenu(null);
+        }
 
-    if (!isMac) {
-        credentialsWindow.setMenu(null);
-    }
-    credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
-    credentialsWindow.webContents.on('ipc-message', (event, channel) => {
-        if (channel === 'close') {
+        credentialsWindow.loadURL(`file://${__dirname}/dist/authentication/index.html`);
+        credentialsWindow.webContents.on('ipc-message', (event, channel) => {
+            if (channel === 'close') {
+                credentialsWindow.hide();
+
+            }
+        });
+
+        credentialsWindow.webContents.on('dom-ready', () => {
+            console.log('Credentials Window DOM is ready');
+            resolve();
+        });
+
+        credentialsWindow.on('close', (e) => {
+            console.log("Closed credential window");
             credentialsWindow.hide();
-
-        }
-    })
-
-    credentialsWindow.on('hide', async () => {
-        await loadCredentials();
-        mainWindow.reload();
+            e.preventDefault();
+            mainWindow.reload();
+        });
     });
-
-    credentialsWindow.on('close', (event) => {
-        event.preventDefault();
-        credentialsWindow.hide();
-    })
 }
 
 app.on('ready', async () => {
-    await loadCredentials();
-    createWindow();
-    createCredentialsWindow();
+    await Promise.all([
+        loadCredentials(),
+        createWindow(),
+        createCredentialsWindow(),
+    ]);
+    mainWindow.show();
 });
 
-app.on('window-all-closed', function () {
-    app.quit();
-});
 
 app.on("login", (event, contents, authencation, info, callback) => {
     for (const credential of credentials) {

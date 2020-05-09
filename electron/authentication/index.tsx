@@ -18,18 +18,12 @@ import {
     TableHead,
     TableRow,
     TextField,
-    ThemeProvider
+    ThemeProvider,
+    useMediaQuery
 } from "@material-ui/core";
 import {Alert, AlertTitle} from '@material-ui/lab';
 import {blue} from "@material-ui/core/colors";
 import {Add as AddIcon, Delete as DeleteIcon, Save as SaveIcon} from "@material-ui/icons";
-
-const theme = createMuiTheme({
-    palette: {
-        type: "light",
-        primary: blue,
-    },
-});
 
 const mainStyle = makeStyles((theme) => ({
     root: {
@@ -74,7 +68,7 @@ function CredentialRow({credential, index, onDelete, onUpdate}) {
             <TextField type="password"
                        className={style.input}
                        variant="outlined"
-                       placeholder='password'
+                       placeholder='Password'
                        value={password}
                        onChange={(e) => {
                            setPassword(e.target.value)
@@ -179,8 +173,20 @@ function CredentialsTable({onError}) {
 }
 
 function App() {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const [error, setError] = useState();
     const classes = mainStyle();
+
+    const theme = React.useMemo(
+        () =>
+          createMuiTheme({
+            palette: {
+              type: prefersDarkMode ? 'dark' : 'light',
+              primary: blue,
+            },
+          }),
+        [prefersDarkMode],
+      );
 
     function handleOk() {
         ipcRenderer.send('close');

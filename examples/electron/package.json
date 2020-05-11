@@ -10,7 +10,7 @@
     "build": "parcel build -d dist/authentication -t electron --public-url ./ authentication/index.html",
     "rebuild": "electron-rebuild -f -w keytar",
     "package": "electron-packager --overwrite .",
-    "sync": "copyfiles ../dist/* ../dist/**/* out",
+    "sync": "copyfiles ../../dist/* ../../dist/**/* ./examples/out",
     "dist": "npm run rebuild && npm run sync && npm run build && npm run package"
   },
   "dependencies": {

@@ -186,6 +186,8 @@ http:
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional
 ```
 
+An alternative for CORS issues is a plugin on your browser, more info [here](https://github.com/Joxit/docker-registry-ui/issues/25#issuecomment-621104846) (thank you [xmontero](https://github.com/xmontero)).
+
 ## Using delete
 
 For deleting images, you need to activate the delete feature in your registry:

@@ -28,7 +28,7 @@
         if (chars >= 70) {
             self.display_id = self.digest;
             self.title = '';
-        } else if (chars === 0) {
+        } else if (chars <= 0) {
             self.display_id = '';
             self.title = self.digest;
         } else {

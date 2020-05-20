@@ -93,6 +93,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       // window.innerWidth is a blocking access, cache its result.
       const innerWidth = window.innerWidth;
       var chars = 0;
+      var max = registryUI.taglist.tags.reduce(function(acc, e) {
+        return e.tag.length > acc ? e.tag.length : acc;
+      }, 0);
       if (innerWidth >= 1440) {
         chars = 71;
       } else if (innerWidth < 1024) {
@@ -101,6 +104,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         // SHA256:12345678 + scaled between 1024 and 1440px
         chars = 15 + 56 * ((innerWidth - 1024) / 416);
       }
+      if (max > 20) chars -= (max - 20);
       registryUI.taglist.tags.map(function (image) {
         image.trigger('content-digest-chars', chars);
       });

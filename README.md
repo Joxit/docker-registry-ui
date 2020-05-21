@@ -46,6 +46,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Add Title when using `REGISTRY_URL` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)) **static interface**.
 -   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)) **static interface**.
 -   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)) **static interface**
+-   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `true`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)).
 
 ## FAQ
 

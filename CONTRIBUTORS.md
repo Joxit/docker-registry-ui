@@ -11,6 +11,7 @@
 - Sébastien Huss [@sebt3](https://github.com/sebt3)
 - Vladimir Kozyrev [@fieryvova](https://github.com/fieryvova)
 - Haibo Jia [@bluethon](https://github.com/bluethon)
+- Manuel Leitold [@agrippa1994](https://github.com/agrippa1994)
 
 ## Because committers are not the only contributors
 
@@ -27,3 +28,5 @@
 - Dario [@pidario](https://github.com/pidario)
 - Jernej K. [@Cvetk0](https://github.com/Cvetk0)
 - Cristian Posoiu [@cr1st1p](https://github.com/cr1st1p)
+- Sepp Zuther [@Herr-Sepp](https://github.com/Herr-Sepp)
+- Tomas Hulata [@tombokombo](https://github.com/tombokombo)

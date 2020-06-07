@@ -48,7 +48,7 @@ main {
   font-weight: inherit;
 }
 
-material-card, pagination .conatianer {
+material-card, material-tabs, pagination .conatianer {
   max-width: 95%;
   margin: auto;
   margin-top: 20px;
@@ -68,9 +68,32 @@ pagination .conatianer .pagination-centered {
 
 /* 1515px * 0.95 = 1440px */
 @media screen and (min-width: 1515px){
-  material-card, pagination .conatianer {
+  material-card, material-tabs, pagination .conatianer {
     max-width: 1440px;
   }
+}
+
+material-tabs {
+  display: block;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+  -ms-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
+  -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
+  -o-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+
+material-tabs material-button,
+material-tabs material-button .content .text {
+  background-color: #fff;
+  color: #aaa;
+  text-transform: none;
+}
+
+material-tabs .line-wrapper .line {
+  background-color: #25313b;
+}
+material-tabs material-button.selected .content .text {
+  color: #25313b;
 }
 
 material-spinner {

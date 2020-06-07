@@ -29,6 +29,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-spinner/>
   </div>
 
+  <material-tabs useLine="true" tabs="{ [{title:'amd64'},{title:'armv7'}] }" color="#000"></material-tabs>
+
   <material-card each="{ guiElement in this.elements }" class="tag-history-element">
     <tag-history-element each="{ entry in guiElement }" if="{ entry.value && entry.value.length > 0}"/>
   </material-card>

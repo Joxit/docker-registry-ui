@@ -119,3 +119,9 @@ registryUI.stripHttps = function (url) {
   }
   return url.replace(/^https?:\/\//, '');
 };
+
+registryUI.eventTransfer = function(from, to) {
+  from.on('*', function(event, param) {
+    to.trigger(event, param);
+  })
+}

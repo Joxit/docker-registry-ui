@@ -123,7 +123,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         window.scrollTo(0, 0);
         return processBlobs(blobs);
       }
-      const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag);
+      const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag, true);
       image.fillInfo()
       image.on('blobs', processBlobs);
     };

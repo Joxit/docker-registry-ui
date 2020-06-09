@@ -118,9 +118,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return char >= '0' && char <= '9';
     };
 
-    registryUI.DockerImage = function(name, tag) {
+    registryUI.DockerImage = function(name, tag, list) {
       this.name = name;
       this.tag = tag;
+      this.list = list;
       this.chars = 0;
       riot.observable(this);
       this.on('get-size', function() {
@@ -192,6 +193,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.addEventListener('loadend', function() {
         if (this.status == 200 || this.status == 202) {
           const response = JSON.parse(this.responseText);
+          if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json') {
+            self.trigger('list', response);
+            const manifest = response.manifests[0];
+            const image = new registryUI.DockerImage(self.name, manifest.digest)
+            registryUI.eventTransfer(image, self)
+            image.fillInfo()
+            return;
+          }
           self.size = response.layers.reduce(function(acc, e) {
             return acc + e.size;
           }, 0);
@@ -214,7 +223,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       });
       oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/manifests/' + self.tag);
-      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
+      oReq.setRequestHeader('Accept', 'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json' 
+        + (self.list ? ', application/vnd.docker.distribution.manifest.list.v2+json' : ''));
       oReq.send();
     };
 

@@ -63,7 +63,7 @@ registry:
   image:
     registry: docker.io
     repository: registry
-    tag: 2.6.2
+    tag: 2.7.1
     pullPolicy: Always
   probe:
     liveness: true

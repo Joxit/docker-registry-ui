@@ -22,7 +22,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   this.on('mount', function() {
     const self = this;
     this.refs.button.root.onclick = function() {
-      registryUI.taghistory._image = self.opts.image;
       registryUI.taghistory.go(self.opts.image.name, self.opts.image.tag);
     };
   });

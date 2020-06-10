@@ -26,48 +26,48 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </div>
   </material-card>
   <div hide="{ registryUI.taghistory.loadend }" class="spinner-wrapper">
-    <material-spinner/>
+    <material-spinner />
   </div>
 
-  <material-tabs if="{ this.archs }" useLine="true" tabs="{ this.archs }" tabchanged="{ this.tabchanged }"></material-tabs>
+  <material-tabs if="{ this.archs }" useLine="true" tabs="{ this.archs }" tabchanged="{ this.tabchanged }" />
 
   <material-card each="{ guiElement in this.elements }" class="tag-history-element">
-    <tag-history-element each="{ entry in guiElement }" if="{ entry.value && entry.value.length > 0}"/>
+    <tag-history-element each="{ entry in guiElement }" if="{ entry.value && entry.value.length > 0}" />
   </material-card>
   <script type="text/javascript">
     const self = this;
-    const eltIdx = function(e) {
+    const eltIdx = function (e) {
       switch (e) {
-        case 'id': return 1;
-        case 'created': return 2;
-        case 'created_by': return 3;
-        case 'size': return 4;
-        case 'os': return 5;
-        case 'architecture': return 6;
+        case 'created': return 1;
+        case 'created_by': return 2;
+        case 'size': return 3;
+        case 'os': return 4;
+        case 'architecture': return 5;
+        case 'id': return 6;
         case 'linux': return 7;
         case 'docker_version': return 8;
         default: return 10;
       }
     };
 
-    const eltSort = function(e1, e2) {
+    const eltSort = function (e1, e2) {
       return eltIdx(e1.key) - eltIdx(e2.key);
     };
 
-    const modifySpecificAttributeTypes = function(attribute, value) {
+    const modifySpecificAttributeTypes = function (attribute, value) {
       switch (attribute) {
         case 'created':
           return new Date(value).toLocaleString();
         case 'created_by':
           const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
-          return (cmd && cmd [1]) || 'RUN'
+          return (cmd && cmd[1]) || 'RUN'
         case 'size':
           return registryUI.bytesToSize(value);
         case 'Entrypoint':
         case 'Cmd':
           return (value || []).join(' ');
         case 'Labels':
-          return Object.keys(value || {}).map(function(elt) {
+          return Object.keys(value || {}).map(function (elt) {
             return value[elt] ? elt + '=' + value[elt] : '';
           });
         case 'Volumes':
@@ -77,14 +77,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return value || '';
     };
 
-    const getConfig = function(blobs) {
-      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels', 'User', 'Volumes', 'WorkingDir', 'author', 'id', 'ExposedPorts'].reduce(function(acc, e) {
-        const value = blobs[e] || blobs.config[e];
-        if (value) {
-          acc[e] = value;
-        }
-        return acc;
-      }, {});
+    const getConfig = function (blobs) {
+      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels', 'User', 'Volumes', 'WorkingDir', 'author', 'id', 'ExposedPorts']
+        .reduce(function (acc, e) {
+          const value = blobs[e] || blobs.config[e];
+          if (value && e === 'architecture' && blobs.variant) {
+            acc[e] = value + blobs.variant;
+          } else if (value) {
+            acc[e] = value;
+          }
+          return acc;
+        }, {});
 
       if (!res.author && (res.Labels && res.Labels.maintainer)) {
         res.author = blobs.config.Labels.maintainer;
@@ -94,7 +97,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return res;
     };
 
-    const processBlobs = function(blobs) {
+    const processBlobs = function (blobs) {
       function exec(elt) {
         const guiElements = [];
         for (var attribute in elt) {
@@ -109,25 +112,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         return guiElements.sort(eltSort);
       }
-
-      self.elements.push(exec(getConfig(blobs)));
-      blobs.history.reverse().forEach(function(elt) { self.elements.push(exec(elt)) });
+      self.elements = new Array(blobs.history.length + 1);
+      self.elements[0] = exec(getConfig(blobs));
+      blobs.history.forEach(function (elt, i) { self.elements[blobs.history.length - i] = exec(elt) });
       registryUI.taghistory.loadend = true;
       self.update();
     };
 
-    const multiArchList = function(manifests) {
+    const multiArchList = function (manifests) {
       manifests = manifests.manifests || manifests;
-      self.archs = manifests.map(function(manifest) {
+      self.archs = manifests.map(function (manifest) {
         return {
           title: manifest.platform.os + '/' + manifest.platform.architecture + (manifest.platform.variant ? manifest.platform.variant : ''),
           digest: manifest.digest
         }
       })
       self.update();
-    }
+    };
 
-    self.tabchanged = function(arch, idx) {
+    self.tabchanged = function (arch, idx) {
       self.elements = []
       self.image.variants[idx] = self.image.variants[idx] || new registryUI.DockerImage(registryUI.taghistory.image, arch.digest);
       if (self.image.variants[idx].blobs) {
@@ -135,23 +138,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       }
       self.image.variants[idx].fillInfo();
       self.image.variants[idx].on('blobs', processBlobs);
-    }
+    };
 
-    registryUI.taghistory.display = function() {
+    registryUI.taghistory.display = function () {
       self.elements = []
-      const blobs = registryUI.taghistory._image && registryUI.taghistory._image.blobs;
-      if (blobs) {
-        window.scrollTo(0, 0);
-        return processBlobs(blobs);
-      }
       self.image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag, true);
       self.image.fillInfo()
       self.image.on('blobs', processBlobs);
       self.image.on('list', multiArchList)
     };
 
-    this.on('mount', function() {
-      self.refs['tag-history-tag'].tags['material-button'].root.onclick = function() {
+    this.on('mount', function () {
+      self.refs['tag-history-tag'].tags['material-button'].root.onclick = function () {
         registryUI.taglist.go(registryUI.taghistory.image);
       };
     });

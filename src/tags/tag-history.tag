@@ -29,7 +29,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-spinner/>
   </div>
 
-  <material-tabs useLine="true" tabs="{ [{title:'amd64'},{title:'armv7'}] }" color="#000"></material-tabs>
+  <material-tabs if="{ this.archs }" useLine="true" tabs="{ this.archs }" tabchanged="{ this.tabchanged }"></material-tabs>
 
   <material-card each="{ guiElement in this.elements }" class="tag-history-element">
     <tag-history-element each="{ entry in guiElement }" if="{ entry.value && entry.value.length > 0}"/>
@@ -116,6 +116,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       self.update();
     };
 
+    const multiArchList = function(manifests) {
+      manifests = manifests.manifests || manifests;
+      self.archs = manifests.map(function(manifest) {
+        return {
+          title: manifest.platform.os + '/' + manifest.platform.architecture + (manifest.platform.variant ? manifest.platform.variant : ''),
+          digest: manifest.digest
+        }
+      })
+      self.update();
+    }
+
+    self.tabchanged = function(arch, idx) {
+      self.elements = []
+      self.image.variants[idx] = self.image.variants[idx] || new registryUI.DockerImage(registryUI.taghistory.image, arch.digest);
+      if (self.image.variants[idx].blobs) {
+        return processBlobs(self.image.variants[idx].blobs);
+      }
+      self.image.variants[idx].fillInfo();
+      self.image.variants[idx].on('blobs', processBlobs);
+    }
+
     registryUI.taghistory.display = function() {
       self.elements = []
       const blobs = registryUI.taghistory._image && registryUI.taghistory._image.blobs;
@@ -123,9 +144,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         window.scrollTo(0, 0);
         return processBlobs(blobs);
       }
-      const image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag, true);
-      image.fillInfo()
-      image.on('blobs', processBlobs);
+      self.image = new registryUI.DockerImage(registryUI.taghistory.image, registryUI.taghistory.tag, true);
+      self.image.fillInfo()
+      self.image.on('blobs', processBlobs);
+      self.image.on('list', multiArchList)
     };
 
     this.on('mount', function() {

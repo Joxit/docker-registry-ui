@@ -199,6 +199,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             const image = new registryUI.DockerImage(self.name, manifest.digest)
             registryUI.eventTransfer(image, self)
             image.fillInfo()
+            self.variants = [image];
             return;
           }
           self.size = response.layers.reduce(function(acc, e) {

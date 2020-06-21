@@ -12,6 +12,7 @@
 - Vladimir Kozyrev [@fieryvova](https://github.com/fieryvova)
 - Haibo Jia [@bluethon](https://github.com/bluethon)
 - Manuel Leitold [@agrippa1994](https://github.com/agrippa1994)
+- Murad [@muradheydarov](https://github.com/muradheydarov)
 
 ## Because committers are not the only contributors
 
@@ -30,3 +31,4 @@
 - Cristian Posoiu [@cr1st1p](https://github.com/cr1st1p)
 - Sepp Zuther [@Herr-Sepp](https://github.com/Herr-Sepp)
 - Tomas Hulata [@tombokombo](https://github.com/tombokombo)
+- Ben Jackson [@bjj](https://github.com/bjj)

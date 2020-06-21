@@ -28,7 +28,7 @@ spec:
             claimName: docker-registry
       containers:
         - name: registry
-          image: "docker.io/registry:2.6.2"
+          image: "docker.io/registry:2.7"
           imagePullPolicy: Always
           ports:
             - name: registry

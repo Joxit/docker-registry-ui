@@ -48,6 +48,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)) **static interface**
 -   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `true`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)).
 -   Limit the number of elements in the image list via `CATALOG_ELEMENTS_LIMIT` (see [#127](https://github.com/Joxit/docker-registry-ui/pull/127)).
+-   Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134))
 
 ## FAQ
 
@@ -185,6 +186,7 @@ http:
   headers:
     Access-Control-Allow-Origin: ['<your docker-registry-ui url>']
     Access-Control-Allow-Credentials: [true]
+    Access-Control-Allow-Headers: ['Authorization', 'Accept']
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional
 ```
 
@@ -231,7 +233,7 @@ http:
     X-Content-Type-Options: [nosniff]
     Access-Control-Allow-Origin: ['http://127.0.0.1:8001']
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
-    Access-Control-Allow-Headers: ['Authorization']
+    Access-Control-Allow-Headers: ['Authorization', 'Accept']
     Access-Control-Max-Age: [1728000]
     Access-Control-Allow-Credentials: [true]
     Access-Control-Expose-Headers: ['Docker-Content-Digest']

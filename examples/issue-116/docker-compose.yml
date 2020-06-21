@@ -2,7 +2,7 @@ version: '2'
 
 services:
   registry-srv:
-    image: registry:2.7.1
+    image: registry:2.7
     restart: always
     volumes:
       - storage:/var/lib/registry

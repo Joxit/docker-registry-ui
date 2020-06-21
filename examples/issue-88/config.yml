@@ -15,6 +15,7 @@ http:
     X-Content-Type-Options: [nosniff]
     Access-Control-Allow-Origin: ['*']
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
+    Access-Control-Allow-Headers: ['Accept']
     Access-Control-Expose-Headers: ['Docker-Content-Digest']
 health:
   storagedriver:

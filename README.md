@@ -1,5 +1,5 @@
 ---
-title: Project Page
+title: Docker Registry User Interface
 ---
 
 # Docker Registry UI

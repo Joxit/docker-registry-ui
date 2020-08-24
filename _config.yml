@@ -2,10 +2,12 @@ title: Docker Registry User Interface
 description: The simplest and most complete UI for your private registry!
 url: https://joxit.dev/docker-registry-ui
 google_analytics: UA-99119327-1
-theme: jekyll-theme-cayman
+remote_theme: joxit/joxit.github.io
 author: Jones Magloire
 twitter:
   username: Joxit
+instagram:
+  username: jox.it
 defaults:
   - scope:
       path: ""

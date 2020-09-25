@@ -70,6 +70,8 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
     -   This is caused by a bug in docker registry, I suggest to have your UI on the same domain than your registry e.g. registry.example.com/ui/. (see [#104](https://github.com/Joxit/docker-registry-ui/issues/104)).
 -   Can I use the docker registry ui as a standalone application (with Electron) ?
     -   Yes, check out the example [here](https://github.com/Joxit/docker-registry-ui/tree/master/examples/electron). (see [#129](https://github.com/Joxit/docker-registry-ui/pull/129))
+-   I deleted images through the UI, but they are still present on the server. How can I delete them?
+    - When you delete an image with the UI, only the reference is deleted and not the content. To remove dangling images, you need to run the garbage collector of the registry with the command `registry garbage-collect config.yml` or `docker exec registry registry garbage-collect config.yml`. (see [#77](https://github.com/Joxit/docker-registry-ui/issues/77) [#147](https://github.com/Joxit/docker-registry-ui/issues/147))
 
 Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/master/examples) or open an issue.
 

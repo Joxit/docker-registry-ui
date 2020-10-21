@@ -23,6 +23,4 @@ ENV NGINX_PROXY_HEADER_Host '$http_host'
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY dist/ /usr/share/nginx/html/
 COPY dist/scripts/docker-registry-ui-static.js /usr/share/nginx/html/scripts/docker-registry-ui.js
-COPY bin/entrypoint /bin
-
-ENTRYPOINT entrypoint
+COPY bin/entrypoint /docker-entrypoint.d/90-docker-registry-ui.sh

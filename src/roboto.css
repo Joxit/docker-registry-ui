@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fonts/Roboto-Regular.eot); /* For IE6-8 */
+  src: local('Roboto Light'),
+       local('Roboto-Light'),
+       url(fonts/Roboto-Light.woff2) format('woff2'),
+       url(fonts/Roboto-Light.woff) format('woff'),
+       url(fonts/Roboto-Light.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/Roboto-Regular.eot); /* For IE6-8 */
+  src: local('Roboto Regular'),
+       local('Roboto-Regular'),
+       url(fonts/Roboto-Regular.woff2) format('woff2'),
+       url(fonts/Roboto-Regular.woff) format('woff'),
+       url(fonts/Roboto-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/Roboto-Regular.eot); /* For IE6-8 */
+  src: local('Roboto Bold'),
+       local('Roboto-Bold'),
+       url(fonts/Roboto-Bold.woff2) format('woff2'),
+       url(fonts/Roboto-Bold.woff) format('woff'),
+       url(fonts/Roboto-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/RobotoMono-Regular.eot); /* For IE6-8 */
+  src: local('Roboto Mono Regular'),
+       local('RobotoMono-Regular'),
+       local('Roboto-Mono-Regular'),
+       url(fonts/RobotoMono-Regular.woff2) format('woff2'),
+       url(fonts/RobotoMono-Regular.woff) format('woff'),
+       url(fonts/RobotoMono-Regular.ttf) format('truetype');
+}

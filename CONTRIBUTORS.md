@@ -13,6 +13,8 @@
 - Haibo Jia [@bluethon](https://github.com/bluethon)
 - Manuel Leitold [@agrippa1994](https://github.com/agrippa1994)
 - Murad [@muradheydarov](https://github.com/muradheydarov)
+- Giacomo Mazzamuto [@gmazzamuto](https://github.com/gmazzamuto)
+- Joe Bureau [@jabstone](https://github.com/jabstone)
 
 ## Because committers are not the only contributors
 
@@ -32,3 +34,5 @@
 - Sepp Zuther [@Herr-Sepp](https://github.com/Herr-Sepp)
 - Tomas Hulata [@tombokombo](https://github.com/tombokombo)
 - Ben Jackson [@bjj](https://github.com/bjj)
+- 三十文 [@xfduan](https://github.com/xfduan)
+- Dario Piombo [@pidario](https://github.com/pidario)

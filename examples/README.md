@@ -9,3 +9,5 @@
 - [Unable to push image when docker-registry-ui is used as a proxy on non 80 port](https://github.com/Joxit/docker-registry-ui/tree/master/examples/issue-88) ([#88](https://github.com/Joxit/docker-registry-ui/issues/88))
 - [Add custom headers bases on environment variable and/or file when the ui is used as proxy](https://github.com/Joxit/docker-registry-ui/tree/master/examples/proxy-headers) ([#89](https://github.com/Joxit/docker-registry-ui/pull/89))
 - [UI showing same sha256 content digest for all tags + Delete is not working](https://github.com/Joxit/docker-registry-ui/tree/master/examples/issue-116) ([#116](https://github.com/Joxit/docker-registry-ui/issues/116))
+- [Electron-based Standalone Application](https://github.com/Joxit/docker-registry-ui/tree/master/examples/electron) ([#129](https://github.com/Joxit/docker-registry-ui/pull/129))
+- [Use docker-registry-ui as proxy with read-only right](https://github.com/Joxit/docker-registry-ui/tree/master/examples/read-only-auth) ([#47](https://github.com/Joxit/docker-registry-ui/issues/47))

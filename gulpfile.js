@@ -16,7 +16,7 @@ const useref = require('gulp-useref');
 const injectVersion = require('gulp-inject-version');
 const merge = require('stream-series');
 
-const allTags = ['src/tags/*.tag', 'src/tags/dialogs/*.tag'];
+const allTags = ['src/tags/*.riot', 'src/tags/dialogs/*.riot'];
 
 const allScripts = [
   'src/scripts/http.js',
@@ -24,7 +24,7 @@ const allScripts = [
   'src/scripts/utils.js'
 ];
 
-const staticTags = ['src/tags/*.tag'];
+const staticTags = ['src/tags/*.riot'];
 
 const staticScripts = [
   'src/scripts/http.js',

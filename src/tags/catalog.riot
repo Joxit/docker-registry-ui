@@ -28,7 +28,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-spinner></material-spinner>
   </div>
   <catalog-element each="{ item in registryUI.catalog.repositories }" />
-  <script>
+  <script type="text/javascript">
     registryUI.catalog.instance = this;
     registryUI.catalog.display = function() {
       registryUI.catalog.repositories = [];
@@ -41,7 +41,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           }
           registryUI.catalog.repositories = JSON.parse(this.responseText).repositories || [];
           registryUI.catalog.repositories.sort();
-          registryUI.catalog.length = registryUI.catalog.repositories.length;         registryUI.catalog.repositories = registryUI.catalog.repositories.reduce(function(acc, e) {
+          registryUI.catalog.length = registryUI.catalog.repositories.length;
+          registryUI.catalog.repositories = registryUI.catalog.repositories.reduce(function(acc, e) {
             const slash = e.indexOf('/');
             if (slash > 0) {
               const repoName = e.substring(0, slash) + '/';

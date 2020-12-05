@@ -30,7 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-card>
     <catalog-element if="{typeof opts.item !== "string"}" class="animated {hide: !expanded, expanding: expanding}" each="{item in item.images}" />
   </div>
-  <script>
+  <script type="text/javascript">
     this.on('mount', function() {
       const self = this;
       const card = this.tags['material-card'];

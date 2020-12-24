@@ -24,10 +24,6 @@ html, body {
   height: 100%;
 }
 
-main {
-  margin-bottom: 100px;
-}
-
 .section-centerd {
   margin: auto;
 }
@@ -384,29 +380,16 @@ material-popup .popup {
 
 footer {
   width: 100%;
-  position: fixed;
   z-index: 75;
   bottom: 0;
 }
 
-@media screen and (max-height: 750px) {
-  main {
-    min-height: calc(100% - 164px - 2.5em);
-    margin-bottom: 2em;
-  }
-  footer {
-    position: relative;
-  }
+main {
+  min-height: calc(100% - 136px);
 }
 
 material-footer {
   padding: 0.5em 1em;
-}
-
-@media screen and (min-width: 760px) and (max-height: 750px) {
-  main {
-    min-height: calc(100% - 144px - 2.5em);
-  }
 }
 
 .select-padding {

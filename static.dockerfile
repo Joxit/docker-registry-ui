@@ -12,18 +12,6 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-FROM node:10-alpine AS builder
-
-WORKDIR /usr/app
-
-COPY package.json .
-
-RUN yarn install
-
-COPY . .
-
-RUN yarn build
-
 FROM nginx:alpine
 
 LABEL maintainer="Jones MAGLOIRE @Joxit"
@@ -33,6 +21,6 @@ WORKDIR /usr/share/nginx/html/
 ENV NGINX_PROXY_HEADER_Host '$http_host'
 
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /usr/app/dist/ /usr/share/nginx/html/
-COPY --from=builder /usr/app/dist/scripts/docker-registry-ui-static.js /usr/share/nginx/html/scripts/docker-registry-ui.js
+COPY dist/ /usr/share/nginx/html/
+COPY dist/scripts/docker-registry-ui-static.js /usr/share/nginx/html/scripts/docker-registry-ui.js
 COPY bin/entrypoint /docker-entrypoint.d/90-docker-registry-ui.sh

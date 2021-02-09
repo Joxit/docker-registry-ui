@@ -1,6 +1,6 @@
 {
   "name": "docker-registry-ui",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "scripts": {
     "build": "./node_modules/gulp/bin/gulp.js build",
     "build:electron": "npm run build && cd examples/electron && npm install && npm run dist"

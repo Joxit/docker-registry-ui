@@ -8,6 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Install dependencies
+      run: npm install
+    - name: Build the interface
+      run: npm run build
     - uses: actions/checkout@v2
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -28,7 +32,7 @@ jobs:
         tags: |
           joxit/docker-registry-ui:master
           joxit/docker-registry-ui:main
-    - name: Build and push Static version
+    - name: Build and push Static Version
       uses: docker/build-push-action@v2
       with:
         context: .

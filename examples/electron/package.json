@@ -18,16 +18,16 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.52",
     "electron-is-dev": "^1.1.0",
-    "keytar": "^5.6.0",
+    "keytar": "^7.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "copyfiles": "^2.2.0",
-    "electron": "^8.0.0",
+    "electron": "^11.2.3",
     "electron-builder": "^22.6.0",
-    "electron-packager": "^14.2.1",
-    "electron-rebuild": "^1.10.1",
+    "electron-packager": "^15.2.0",
+    "electron-rebuild": "^2.3.5",
     "parcel-bundler": "^1.12.4",
     "typescript": "^3.8.3"
   },

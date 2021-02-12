@@ -19,3 +19,4 @@ LABEL maintainer="Jones MAGLOIRE @Joxit"
 WORKDIR /usr/share/nginx/html/
 
 COPY dist/ /usr/share/nginx/html/
+COPY favicon.ico /usr/share/nginx/html/

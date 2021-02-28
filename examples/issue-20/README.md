@@ -1,6 +1,6 @@
 # Example for issue #20 (HTTPS supports)
 
-This example will override the original nginx conf with one supporting HTTPS. You will need to rewrite all the project configuration (replaces `proxy_pass` with our value).
+This example will override the original nginx conf with one supporting HTTPS. You will need to rewrite all the project configuration (replaces `proxy_pass` with your own value, in this example `http://registry:5000` is fine).
 
 Generating a self signed certificate:
 

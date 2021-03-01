@@ -5,3 +5,4 @@ registry-data
 .idea
 _site
 *.orig
+.serve/

@@ -24,6 +24,7 @@
     "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-html": "^0.2.3",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "js-beautify": "^1.13.0",
     "riot": "^5.3.1",

@@ -16,13 +16,39 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <docker-registry-ui>
   <header>
+    <material-navbar>
+      <div class="logo">Docker Registry UI</div>
+    </material-navbar>
   </header>
   <main>
   </main>
   <footer>
+    <material-footer>
+      <a slot="logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI { version }</a>
+      <ul slot="link-list">
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
+        </li>
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">Privacy &amp; Terms</a>
+        </li>
+      </ul>
+    </material-footer>
   </footer>
   <script>
+    import {
+      version
+    } from '../../package.json';
+    import MaterialNavbar from 'riot-mui/src/material-elements/material-navbar/material-navbar.riot';
+    import MaterialFooter from 'riot-mui/src/material-elements/material-footer/material-footer.riot';
+
     export default {
+      components: {
+        MaterialNavbar,
+        MaterialFooter
+      },
+      onMounted() {},
+      version
     }
   </script>
 </docker-registry-ui>

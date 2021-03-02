@@ -6,5 +6,11 @@ import './style.css';
 import './roboto.css';
 import './material-icons.css';
 
+import 'riot-mui/src/material-elements/material-navbar/material-navbar.scss';
+import 'riot-mui/src/material-elements/material-footer/material-footer.scss';
 
-component(DockerRegistryUI)(document.getElementsByTagName('body').item(0))
+const createApp = component(DockerRegistryUI);
+const tags = document.getElementsByTagName('docker-registry-ui');
+for (let i = 0; i < tags.length; i++) {
+  createApp(tags.item(i));
+}

@@ -8,12 +8,14 @@ import scss from 'rollup-plugin-scss';
 import serve from 'rollup-plugin-serve';
 import html from '@rollup/plugin-html';
 import htmlUseref from './rollup/html-useref';
+import json from '@rollup/plugin-json';
 
 const useServe = process.env.ROLLUP_SERVE === 'true';
 const output = useServe ? '.serve' : 'dist';
 
 const plugins = [
   riot(),
+  json(),
   nodeResolve(),
   commonjs(),
   scss({ output: `./${output}/docker-registry-ui.css`, outputStyle: 'compressed' }),

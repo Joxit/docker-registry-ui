@@ -14,7 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+@import 'riot-mui/src/material-elements/material-navbar/material-navbar.scss';
+@import 'riot-mui/src/material-elements/material-footer/material-footer.scss';
+@import 'riot-mui/src/material-elements/material-card/material-card.scss';
+@import 'riot-mui/src/material-elements/material-spinner/material-spinner.scss';
 
+@import './roboto.scss';
+@import './material-icons.scss';
+ 
 html > body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }

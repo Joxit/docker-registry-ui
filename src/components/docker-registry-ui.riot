@@ -21,6 +21,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-navbar>
   </header>
   <main>
+    <catalog registry-url="{ state.registryUrl }" name="{ state.name }"
+      catalog-elements-limit="{ state.catalogElementsLimit }"></catalog>
   </main>
   <footer>
     <material-footer>
@@ -41,13 +43,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     } from '../../package.json';
     import MaterialNavbar from 'riot-mui/src/material-elements/material-navbar/material-navbar.riot';
     import MaterialFooter from 'riot-mui/src/material-elements/material-footer/material-footer.riot';
+    import Catalog from './catalog/catalog.riot';
+    import {
+      stripHttps
+    } from '../scripts/utils';
 
     export default {
       components: {
         MaterialNavbar,
-        MaterialFooter
+        MaterialFooter,
+        Catalog
       },
-      onMounted() {},
+      onBeforeMount(props) {
+        this.state.registryUrl = props.registryUrl || (window.location.origin + window.location.pathname.replace(/\/+$/,
+          ''));
+        this.state.name = props.name || stripHttps(props.registryUrl);
+        this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
+      },
       version
     }
   </script>

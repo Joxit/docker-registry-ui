@@ -34,7 +34,55 @@
 </head>
 
 <body>
-  <docker-registry-ui></docker-registry-ui>
+  <script>
+    const URL_QUERY_PARAM_REGEX = /[&?]url=/;
+    const URL_PARAM_REGEX = /^url=/;
+
+    function getUrlQueryParam() {
+      const search = window.location.search;
+      if (URL_QUERY_PARAM_REGEX.test(search)) {
+        const param = search.split(/^\?|&/).find(function (param) {
+          return param && URL_PARAM_REGEX.test(param);
+        });
+        return param ? param.replace(URL_PARAM_REGEX, '') : param;
+      }
+    }
+
+    function getRegistryServer(i) {
+      try {
+        const res = JSON.parse(localStorage.getItem('registryServer'));
+        if (res instanceof Array) {
+          return (!isNaN(i)) ? res[i] : res.map(function (url) {
+            return url.trim().replace(/\/*$/, '');
+          });
+        }
+      } catch (e) {}
+      return (!isNaN(i)) ? '' : [];
+    }
+
+    function rDecodeURI(url) {
+      if (!url) {
+        return;
+      }
+      return url.startsWith('http') ? window.decodeURIComponent(url) : atob(url);
+    }
+
+    function getRegistryURL() {
+      let url = getUrlQueryParam();
+      if (url) {
+        try {
+          return rDecodeURI(url);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      return getRegistryServer(0);
+    }
+
+    const tag = document.createElement('docker-registry-ui');
+    tag.setAttribute('registry-url', getRegistryURL());
+    document.getElementsByTagName('body').item(0).appendChild(tag);
+  </script>
   <!-- build:js docker-registry-ui.js -->
   <script src="../node_modules/riot/riot+compiler.min.js"></script>
   <script src="../node_modules/riot-route/dist/route.js"></script>

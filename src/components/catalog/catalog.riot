@@ -1,0 +1,107 @@
+<!--
+Copyright (C) 2016-2019 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<catalog>
+  <material-card ref="catalog-tag" class="catalog header">
+    <div class="material-card-title-action">
+      <h2>
+        Repositories of { state.name }
+        <div class="item-count">{ state.length } images</div>
+      </h2>
+    </div>
+  </material-card>
+  <div if="{ !state.loadend }" class="spinner-wrapper">
+    <material-spinner></material-spinner>
+  </div>
+  <catalog-element each="{ item in state.repositories }" item="{ item }" />
+  <script>
+    import MaterialCard from 'riot-mui/src/material-elements/material-card/material-card.riot';
+    import MaterialSpinner from 'riot-mui/src/material-elements/material-spinner/material-spinner.riot';
+
+    import {
+      Http
+    } from '../../scripts/http';
+
+    export default {
+      components: {
+        MaterialCard,
+        MaterialSpinner
+      },
+      state: {
+        name: '',
+        length: 0,
+        loadend: false,
+        repositories: []
+      },
+
+      onBeforeMount(props) {
+        this.state.name = props.name;
+        this.state.catalogElementsLimit = props.catalogElementsLimit;
+      },
+      onMounted(props) {
+        this.display(props, this.state)
+      },
+      onUpdated(props, state) {
+
+      },
+
+      display(props, state) {
+        this.state.repositories = [];
+        const self = this;
+        const oReq = new Http();
+        oReq.addEventListener('load', function () {
+          state.repositories = [];
+          if (this.status == 200) {
+            state.repositories = JSON.parse(this.responseText).repositories || [];
+            state.repositories.sort();
+            state.length = state.repositories.length;
+            state.repositories = state.repositories.reduce(function (acc, e) {
+              const slash = e.indexOf('/');
+              if (slash > 0) {
+                const repoName = e.substring(0, slash) + '/';
+                if (acc.length == 0 || acc[acc.length - 1].repo != repoName) {
+                  acc.push({
+                    repo: repoName,
+                    images: []
+                  });
+                }
+                acc[acc.length - 1].images.push(e);
+                return acc;
+              }
+              acc.push(e);
+              return acc;
+            }, []);
+          } else if (this.status == 404) {
+            // registryUI.snackbar('Server not found', true);
+          } else {
+            // registryUI.snackbar(this.responseText);
+          }
+        });
+        oReq.addEventListener('error', function () {
+          // registryUI.snackbar(this.getErrorMessage(), true);
+          state.repositories = [];
+        });
+        oReq.addEventListener('loadend', function () {
+          self.update({
+            loadend: true
+          });
+        });
+        oReq.open('GET', props.registryUrl + '/v2/_catalog?n=' + state.catalogElementsLimit);
+        oReq.send();
+      }
+    }
+  </script>
+</catalog>

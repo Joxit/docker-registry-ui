@@ -30,7 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <script>
     import MaterialCard from 'riot-mui/src/material-elements/material-card/material-card.riot';
     import MaterialSpinner from 'riot-mui/src/material-elements/material-spinner/material-spinner.riot';
-
+    import CatalogElement from './catalog-element.riot'
     import {
       Http
     } from '../../scripts/http';
@@ -38,7 +38,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     export default {
       components: {
         MaterialCard,
-        MaterialSpinner
+        MaterialSpinner,
+        CatalogElement
       },
       state: {
         name: '',

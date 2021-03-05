@@ -33,6 +33,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       each="{item in props.item.images}" item="{ item }" />
   </div>
   <script>
+    import router from '../../scripts/router';
+
     export default {
       onMounted(props) {
         const card = this.$('material-card');
@@ -44,7 +46,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         card.onclick = (e) => {
           if (!props.item.repo) {
-            // registryUI.taglist.go(props.item);
+            router.taglist(props.item);
           } else {
             this.update({
               expanded: !this.state.expanded,

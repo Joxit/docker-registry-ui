@@ -21,8 +21,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-navbar>
   </header>
   <main>
-    <catalog registry-url="{ state.registryUrl }" name="{ state.name }"
-      catalog-elements-limit="{ state.catalogElementsLimit }"></catalog>
+    <router base="#!">
+      <route path="{baseRoute}">
+        <catalog registry-url="{ state.registryUrl }" name="{ state.name }"
+          catalog-elements-limit="{ state.catalogElementsLimit }" />
+      </route>
+      <route path="{baseRoute}taglist/(.*)">
+
+      </route>
+    </router>
   </main>
   <footer>
     <material-footer>
@@ -41,8 +48,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import {
       version
     } from '../../package.json';
-    import MaterialNavbar from 'riot-mui/src/material-elements/material-navbar/material-navbar.riot';
-    import MaterialFooter from 'riot-mui/src/material-elements/material-footer/material-footer.riot';
+    import {
+      Router,
+      Route,
+    } from '@riotjs/route'
     import Catalog from './catalog/catalog.riot';
     import {
       stripHttps
@@ -50,9 +59,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     export default {
       components: {
-        MaterialNavbar,
-        MaterialFooter,
-        Catalog
+        Catalog,
+        Router,
+        Route
       },
       onBeforeMount(props) {
         this.state.registryUrl = props.registryUrl || (window.location.origin + window.location.pathname.replace(/\/+$/,
@@ -60,6 +69,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.name = props.name || stripHttps(props.registryUrl);
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
       },
+      baseRoute: '/(\\?[^#]*)?(#!)?(/?)',
       version
     }
   </script>

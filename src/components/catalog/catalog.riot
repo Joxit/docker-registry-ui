@@ -28,8 +28,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </div>
   <catalog-element each="{ item in state.repositories }" item="{ item }" />
   <script>
-    import MaterialCard from 'riot-mui/src/material-elements/material-card/material-card.riot';
-    import MaterialSpinner from 'riot-mui/src/material-elements/material-spinner/material-spinner.riot';
     import CatalogElement from './catalog-element.riot'
     import {
       Http
@@ -37,8 +35,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     export default {
       components: {
-        MaterialCard,
-        MaterialSpinner,
         CatalogElement
       },
       state: {

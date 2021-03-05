@@ -9,7 +9,7 @@ import serve from 'rollup-plugin-serve';
 import html from '@rollup/plugin-html';
 import htmlUseref from './rollup/html-useref';
 import json from '@rollup/plugin-json';
-import copy from 'rollup-plugin-copy'
+import copy from 'rollup-plugin-copy';
 
 const useServe = process.env.ROLLUP_SERVE === 'true';
 const output = useServe ? '.serve' : 'dist';
@@ -20,14 +20,14 @@ const plugins = [
   nodeResolve(),
   commonjs(),
   scss({ output: `./${output}/docker-registry-ui.css`, outputStyle: 'compressed' }),
-  babel({ babelHelpers: 'bundled', presets: ['@babel/env'] }),
+  babel({ babelHelpers: 'bundled', presets: [['@babel/env', { useBuiltIns: 'usage' }]] }),
   html({ template: () => htmlUseref('./src/index.html') }),
   copy({
     targets: [
       { src: 'src/fonts', dest: `${output}` },
       { src: 'src/images', dest: `${output}` },
-    ]
-  })
+    ],
+  }),
 ];
 
 if (useServe) {

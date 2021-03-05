@@ -13,9 +13,6 @@
   "author": "Jones Magloire (Joxit)",
   "license": "AGPL-3.0",
   "description": "A web UI for private docker registry",
-  "dependencies": {
-    "marked": "^0.8.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.12.7",
@@ -26,6 +23,7 @@
     "@rollup/plugin-html": "^0.2.3",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
+    "core-js": "^3.9.1",
     "js-beautify": "^1.13.0",
     "riot": "^5.3.1",
     "riot-mui": "joxit/riot-5-mui#53a3399a",

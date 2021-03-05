@@ -14,7 +14,6 @@ services:
       - 80:80
     environment:
       - REGISTRY_TITLE=My Private Docker Registry
-      - REGISTRY_URL=http://registry:5000
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./read-write.htpasswd:/etc/nginx/auth/read-write.htpasswd:ro

@@ -1,5 +1,4 @@
-
-registryUI.bytesToSize = function (bytes) {
+export function bytesToSize(bytes) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   if (bytes == undefined || isNaN(bytes)) {
     return '?';
@@ -8,13 +7,26 @@ registryUI.bytesToSize = function (bytes) {
   }
   const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
   return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
-};
+}
 
-registryUI.dateFormat = function(date) {
+export function dateFormat(date) {
   if (date === undefined) {
     return '';
   }
-  const labels = ['a second', 'seconds', 'a minute', 'minutes', 'an hour', 'hours', 'a day', 'days', 'a month', 'months', 'a year', 'years'];
+  const labels = [
+    'a second',
+    'seconds',
+    'a minute',
+    'minutes',
+    'an hour',
+    'hours',
+    'a day',
+    'days',
+    'a month',
+    'months',
+    'a year',
+    'years',
+  ];
   const maxSeconds = [1, 60, 3600, 86400, 2592000, 31104000, Infinity];
   const diff = (new Date() - date) / 1000;
   for (var i = 0; i < maxSeconds.length - 1; i++) {
@@ -24,10 +36,9 @@ registryUI.dateFormat = function(date) {
       return Math.floor(diff / maxSeconds[i]) + ' ' + labels[i * 2 + 1];
     }
   }
-};
+}
 
-
-registryUI.getHistoryIcon = function(attribute) {
+export function getHistoryIcon(attribute) {
   switch (attribute) {
     case 'architecture':
       return 'memory';
@@ -63,29 +74,39 @@ registryUI.getHistoryIcon = function(attribute) {
     case 'ExposedPorts':
       return 'router';
     default:
-      ''
+      '';
   }
 }
 
-registryUI.getPage = function(elts, page, limit) {
-  if (!limit) { limit = 100; }
-  if (!elts) { return []; }
+export function getPage(elts, page, limit) {
+  if (!limit) {
+    limit = 100;
+  }
+  if (!elts) {
+    return [];
+  }
   return elts.slice((page - 1) * limit, limit * page);
 }
 
-registryUI.getNumPages = function(elts, limit) {
-  if (!limit) { limit = 100; }
-  if (!elts) { return 0; }
+export function getNumPages(elts, limit) {
+  if (!limit) {
+    limit = 100;
+  }
+  if (!elts) {
+    return 0;
+  }
   return Math.trunc(elts.length / limit) + 1;
 }
 
-registryUI.getPageLabels = function(page, nPages) {
+export function getPageLabels(page, nPages) {
   var pageLabels = [];
   var maxItems = 10;
-  if (nPages === 1) { return pageLabels; }
+  if (nPages === 1) {
+    return pageLabels;
+  }
   if (page !== 1 && nPages >= maxItems) {
-    pageLabels.push({'icon': 'first_page', page: 1});
-    pageLabels.push({'icon': 'chevron_left', page: page - 1});
+    pageLabels.push({ 'icon': 'first_page', page: 1 });
+    pageLabels.push({ 'icon': 'chevron_left', page: page - 1 });
   }
   var start = Math.round(Math.max(1, Math.min(page - maxItems / 2, nPages - maxItems + 1)));
   for (var i = start; i < Math.min(nPages + 1, start + maxItems); i++) {
@@ -93,35 +114,39 @@ registryUI.getPageLabels = function(page, nPages) {
       page: i,
       current: i === page,
       'space-left': page === 1 && nPages > maxItems,
-      'space-right': page === nPages && nPages > maxItems
+      'space-right': page === nPages && nPages > maxItems,
     });
   }
   if (page !== nPages && nPages >= maxItems) {
-    pageLabels.push({'icon': 'chevron_right', page: page + 1});
-    pageLabels.push({'icon': 'last_page', page: nPages});
+    pageLabels.push({ 'icon': 'chevron_right', page: page + 1 });
+    pageLabels.push({ 'icon': 'last_page', page: nPages });
   }
   return pageLabels;
 }
 
-registryUI.updateQueryString = function(qs) {
+export function updateQueryString(qs) {
   var search = '';
   for (var key in qs) {
     if (qs[key] !== undefined) {
-      search += (search.length > 0 ? '&' : '?') +key + '=' + qs[key];
+      search += (search.length > 0 ? '&' : '?') + key + '=' + qs[key];
     }
   }
   history.pushState(null, '', search + window.location.hash);
 }
 
-registryUI.stripHttps = function (url) {
+export function stripHttps(url) {
   if (!url) {
     return '';
   }
   return url.replace(/^https?:\/\//, '');
-};
-
-registryUI.eventTransfer = function(from, to) {
-  from.on('*', function(event, param) {
-    to.trigger(event, param);
-  })
 }
+
+export function eventTransfer(from, to) {
+  from.on('*', function (event, param) {
+    to.trigger(event, param);
+  });
+}
+
+export function isDigit(char) {
+  return char >= '0' && char <= '9';
+};

@@ -17,6 +17,7 @@
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.12.7",
     "@riotjs/compiler": "^5.3.1",
+    "@riotjs/observable": "^4.0.4",
     "@riotjs/route": "^7.0.0",
     "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-commonjs": "^17.0.0",

@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-card ref="catalog-tag" class="catalog header">
     <div class="material-card-title-action">
       <h2>
-        Repositories of { state.name }
+        Repositories of { state.registryName }
         <div class="item-count">{ state.length } images</div>
       </h2>
     </div>
@@ -38,14 +38,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         CatalogElement
       },
       state: {
-        name: '',
+        registryName: '',
         length: 0,
         loadend: false,
         repositories: []
       },
 
       onBeforeMount(props) {
-        this.state.name = props.name;
+        this.state.registryName = props.registryName;
         this.state.catalogElementsLimit = props.catalogElementsLimit;
       },
       onMounted(props) {

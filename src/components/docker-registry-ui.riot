@@ -23,11 +23,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <main>
     <router base="#!">
       <route path="{baseRoute}">
-        <catalog registry-url="{ state.registryUrl }" name="{ state.name }"
+        <catalog registry-url="{ state.registryUrl }" registry-name="{ state.name }"
           catalog-elements-limit="{ state.catalogElementsLimit }" />
       </route>
       <route path="{baseRoute}taglist/(.*)">
-
+        <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }"
+          image="{ router.getTagListImage() }"></tag-list>
       </route>
     </router>
   </main>
@@ -53,13 +54,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       Route,
     } from '@riotjs/route'
     import Catalog from './catalog/catalog.riot';
+    import TagList from './tag-list/tag-list.riot'
     import {
       stripHttps
     } from '../scripts/utils';
+    import router from '../scripts/router';
 
     export default {
       components: {
         Catalog,
+        TagList,
         Router,
         Route
       },
@@ -70,6 +74,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
       },
       baseRoute: '/(\\?[^#]*)?(#!)?(/?)',
+      router,
       version
     }
   </script>

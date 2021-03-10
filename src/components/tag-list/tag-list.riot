@@ -29,10 +29,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </h2>
     </div>
   </material-card>
+
   <div if="{ !state.loadend }" class="spinner-wrapper">
     <material-spinner></material-spinner>
   </div>
+
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
+
+  <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}"
+    show-content-digest="{props.showContentDigest}" is-image-remove-activated="{props.isImageRemoveActivated}"
+    onReverseOrder="{ onReverseOrder }"></tag-table>
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
@@ -49,9 +55,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       getPageLabels
     } from '../../scripts/utils'
     import Pagination from './pagination.riot'
+    import TagTable from './tag-table.riot'
     export default {
       components: {
-        Pagination
+        Pagination,
+        TagTable,
       },
       onBeforeMount(props) {
         this.state = {
@@ -125,6 +133,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.tags.map(function (image) {
           image.trigger('content-digest-chars', chars);
         });
+      },
+
+      onReverseOrder() {
+        if (this.state.asc) {
+          this.state.tags.reverse();
+          this.state.asc = false;
+        } else {
+          this.state.tags.sort(compare);
+          this.state.asc = true;
+        }
+        this.update();
       },
       getPageLabels,
       getNumPages

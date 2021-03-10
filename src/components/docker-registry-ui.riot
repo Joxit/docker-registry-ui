@@ -28,7 +28,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </route>
       <route path="{baseRoute}taglist/(.*)">
         <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }"
-          image="{ router.getTagListImage() }"></tag-list>
+          image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
+          is-image-remove-activated="{props.isImageRemoveActivated}"></tag-list>
       </route>
     </router>
   </main>

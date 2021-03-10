@@ -81,6 +81,8 @@
 
     const tag = document.createElement('docker-registry-ui');
     tag.setAttribute('registry-url', getRegistryURL());
+    tag.setAttribute('show-content-digest', true);
+    tag.setAttribute('is-image-remove-activated', true);
     document.getElementsByTagName('body').item(0).appendChild(tag);
   </script>
   <!-- build:js docker-registry-ui.js -->

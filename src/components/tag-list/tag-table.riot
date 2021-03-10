@@ -1,0 +1,89 @@
+<!--
+Copyright (C) 2016-2019 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<tag-table>
+  <material-card class="taglist" multi-delete="{ this.multiDelete }" tags="{ getPage(props.tags.tags, this.page) }">
+    <table style="border: none;">
+      <thead>
+        <tr>
+          <th class="creation-date">Creation date</th>
+          <th class="image-size">Size</th>
+          <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th>
+
+          <th id="image-tag-header"
+            class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
+            onclick="{() => props.onReverseOrder() }">Tag
+          </th>
+          <th class="show-tag-history">History</th>
+          <th class="remove-tag { state.toDelete > 0 ? 'delete' : '' }" if="{ props.isImageRemoveActivated }">
+            <material-checkbox ref="remove-tag-checkbox" class="indeterminate" if="{ state.toDelete === 0}"
+              title="Toggle multi-delete. Alt+Click to select all tags."></material-checkbox>
+            <material-button waves-center="true" rounded="true" waves-color="#ddd"
+              title="This will delete selected images." onclick="{ bulkDelete }" if="{ state.toDelete > 0 }">
+              <i class="material-icons">delete</i>
+            </material-button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr each="{ image in props.tags }">
+          <td class="creation-date">
+            <image-date image="{ image }" />
+          </td>
+          <td class="image-size">
+            <image-size image="{ image }" />
+          </td>
+          <td if="{ props.showContentDigest }">
+            <image-content-digest image="{ image }" />
+            <copy-to-clipboard target="digest" image="{ image }" />
+          </td>
+          <td>
+            <image-tag image="{ image }" />
+            <copy-to-clipboard target="tag" image="{ image }" />
+          </td>
+          <td class="show-tag-history">
+            <tag-history-button image="{ image }" />
+          </td>
+          <td if="{ props.isImageRemoveActivated }">
+            <remove-image multi-delete="{ state.multiDelete }" image="{ image }" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </material-card>
+  <script>
+    import {
+      Http
+    } from '../../scripts/http';
+    import {
+      getPage,
+    } from '../../scripts/utils'
+    export default {
+      components: {
+
+      },
+      onBeforeMount(props) {
+        this.state = {
+          toDelete: 0,
+          multiDelete: false
+        }
+      },
+      onMounted(props, state) {},
+      bulkDelete() {},
+      getPage
+    }
+  </script>
+</tag-table>

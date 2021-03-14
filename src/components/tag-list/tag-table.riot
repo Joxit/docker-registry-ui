@@ -15,7 +15,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-table>
-  <material-card class="taglist" multi-delete="{ this.multiDelete }" tags="{ getPage(props.tags.tags, this.page) }">
+  <material-card class="taglist">
     <table style="border: none;">
       <thead>
         <tr>
@@ -39,7 +39,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         </tr>
       </thead>
       <tbody>
-        <tr each="{ image in props.tags }">
+        <tr each="{ image in getPage(props.tags, props.page) }">
           <td class="creation-date">
             <image-date image="{ image }" />
           </td>
@@ -70,10 +70,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     } from '../../scripts/http';
     import {
       getPage,
-    } from '../../scripts/utils'
+    } from '../../scripts/utils';
+    import ImageDate from './image-date.riot';
+    import ImageSize from './image-size.riot';
+    import ImageTag from './image-tag.riot';
+    import ImageContentDigest from './image-content-digest.riot';
     export default {
       components: {
-
+        ImageDate,
+        ImageSize,
+        ImageTag,
+        ImageContentDigest,
       },
       onBeforeMount(props) {
         this.state = {

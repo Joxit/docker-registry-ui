@@ -30,10 +30,11 @@ export function compare(e1, e2) {
 }
 
 export class DockerImage {
-  constructor(name, tag, list) {
+  constructor(name, tag, list, registryUrl) {
     this.name = name;
     this.tag = tag;
     this.list = list;
+    this.registryUrl = registryUrl;
     this.chars = 0;
     observable(this);
     this.on('get-size', function () {
@@ -107,7 +108,7 @@ export class DockerImage {
         // registryUI.snackbar(this.responseText);
       }
     });
-    oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/manifests/' + self.tag);
+    oReq.open('GET', this.registryUrl + '/v2/' + self.name + '/manifests/' + self.tag);
     oReq.setRequestHeader(
       'Accept',
       'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json' +
@@ -115,7 +116,7 @@ export class DockerImage {
     );
     oReq.send();
   }
-  getBlobs() {
+  getBlobs(blob) {
     const oReq = new Http();
     const self = this;
     oReq.addEventListener('loadend', function () {
@@ -140,7 +141,7 @@ export class DockerImage {
         registryUI.snackbar(this.responseText);
       }
     });
-    oReq.open('GET', registryUI.url() + '/v2/' + self.name + '/blobs/' + blob);
+    oReq.open('GET', this.registryUrl + '/v2/' + self.name + '/blobs/' + blob);
     oReq.setRequestHeader(
       'Accept',
       'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json'

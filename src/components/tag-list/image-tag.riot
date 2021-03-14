@@ -14,14 +14,18 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<image-size>
-  <div title="Compressed size of your image.">{ registryUI.bytesToSize(this.size) }</div>
-  <script type="text/javascript">
-    const self = this;
-    opts.image.on('size', function(size) {
-      self.size = size;
-      self.update();
-    });
-    opts.image.trigger('get-size');
+<image-tag>
+  <div title="{ state.sha256 }">{ props.image.tag }</div>
+  <script>
+    export default {
+      onMounted(props) {
+        props.image.on('sha256', (sha256) => {
+          this.update({
+            sha256: sha256.substring(0, 19)
+          });
+        });
+        props.image.trigger('get-sha256');
+      }
+    }
   </script>
-</image-size>
+</image-tag>

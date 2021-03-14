@@ -36,7 +36,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
-  <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}"
+  <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}" page="{ state.page }"
     show-content-digest="{props.showContentDigest}" is-image-remove-activated="{props.isImageRemoveActivated}"
     onReverseOrder="{ onReverseOrder }"></tag-table>
 
@@ -72,6 +72,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onMounted(props, state) {
         this.display(props, state)
+        window.addEventListener('resize', this.onResize);
+        // this may be run before the final document size is available, so schedule
+        //  a correction once everything is set up.
+        window.requestAnimationFrame(this.onResize);
       },
       display(props, state) {
         state.tags = [];
@@ -82,7 +86,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           if (this.status == 200) {
             const tags = JSON.parse(this.responseText).tags || [];
             state.tags = tags.map(function (tag) {
-              return new DockerImage(props.image, tag);
+              return new DockerImage(props.image, tag, null, props.registryUrl);
             }).sort(compare);
             window.requestAnimationFrame(self.onResize);
             self.update({
@@ -130,6 +134,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           chars = 15 + 56 * ((innerWidth - 1024) / 416);
         }
         if (max > 20) chars -= (max - 20);
+        chars = Math.floor(chars)
         this.state.tags.map(function (image) {
           image.trigger('content-digest-chars', chars);
         });

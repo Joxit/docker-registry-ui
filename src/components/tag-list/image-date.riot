@@ -14,14 +14,26 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<image-tag>
-  <div title="{ this.sha256 }">{ opts.image.tag }</div>
-  <script type="text/javascript">
-    const self = this;
-    opts.image.on('sha256', function(sha256) {
-      self.sha256 = sha256.substring(0, 19);
-      self.update();
-    });
-    opts.image.trigger('get-sha256');
+<image-date>
+  <div title="Creation date { state.localDate }">{ dateFormat(state.date) } ago</div>
+  <script>
+    import {
+      dateFormat,
+    } from '../../scripts/utils';
+    export default {
+      state: {
+        localDate: 'unknown'
+      },
+      onMounted(props) {
+        props.image.on('creation-date', (date) => {
+          this.update({
+            date: date,
+            localDate: date.toLocaleString()
+          });
+        });
+        props.image.trigger('get-date');
+      },
+      dateFormat
+    }
   </script>
-</image-tag>
+</image-date>

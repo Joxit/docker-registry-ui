@@ -1,0 +1,50 @@
+<!--
+Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<image-content-digest>
+  <div title="{ state.title }">{ state.displayId }</div>
+  <script>
+    export default {
+      onMounted(props) {
+        this.chars = -1;
+        props.image.one('content-digest', (digest) => {
+          this.digest = digest;
+          props.image.on('content-digest-chars', this.onResize);
+          props.image.trigger('get-content-digest-chars');
+        });
+        props.image.trigger('get-content-digest');
+      },
+      onResize(chars) {
+      if (chars === this.chars) {
+        return;
+      }
+      let displayId = this.digest;
+      let title = '';
+      this.chars = chars;
+      if (chars >= 70) {
+        displayId = this.digest;
+      } else if (chars <= 0) {
+        displayId = '';
+        title = this.digest;
+      } else {
+        displayId = this.digest.slice(0, chars) + '...';
+        title = this.digest;
+      }
+      this.update({title, displayId});
+      }
+    }
+  </script>
+</image-content-digest>

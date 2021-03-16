@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2016-2019 Jones Magloire @Joxit
+Copyright (C) 2016-2021 Jones Magloire @Joxit
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-list>
   <material-card class="header">
     <div class="material-card-title-action ">
-      <material-button waves-center="true" rounded="true" waves-color="#ddd" onclick="registryUI.home();">
+      <material-button waves-center="true" rounded="true" waves-color="#ddd" onClick="{ router.home }">
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
@@ -38,7 +38,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}" page="{ state.page }"
     show-content-digest="{props.showContentDigest}" is-image-remove-activated="{props.isImageRemoveActivated}"
-    onReverseOrder="{ onReverseOrder }"></tag-table>
+    onReverseOrder="{ onReverseOrder }" registry-url="{ props.registryUrl }" pull-url="{ props.pullUrl }"></tag-table>
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
@@ -56,6 +56,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     } from '../../scripts/utils'
     import Pagination from './pagination.riot'
     import TagTable from './tag-table.riot'
+    import router from '../../scripts/router'
     export default {
       components: {
         Pagination,
@@ -151,7 +152,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.update();
       },
       getPageLabels,
-      getNumPages
+      getNumPages,
+      router
     }
   </script>
 </tag-list>

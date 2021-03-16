@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2016-2019 Jones Magloire @Joxit
+Copyright (C) 2016-2021 Jones Magloire @Joxit
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -28,11 +28,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             onclick="{() => props.onReverseOrder() }">Tag
           </th>
           <th class="show-tag-history">History</th>
-          <th class="remove-tag { state.toDelete > 0 ? 'delete' : '' }" if="{ props.isImageRemoveActivated }">
-            <material-checkbox ref="remove-tag-checkbox" class="indeterminate" if="{ state.toDelete === 0}"
-              title="Toggle multi-delete. Alt+Click to select all tags."></material-checkbox>
+          <th class="remove-tag { state.toDelete.size > 0 ? 'delete' : '' }" if="{ props.isImageRemoveActivated }">
+            <material-checkbox ref="remove-tag-checkbox" class="indeterminate" if="{ state.toDelete.size === 0}"
+              title="Toggle multi-delete. Alt+Click to select all tags." onChange="{ onRemoveImageHeaderChange }">
+            </material-checkbox>
             <material-button waves-center="true" rounded="true" waves-color="#ddd"
-              title="This will delete selected images." onclick="{ bulkDelete }" if="{ state.toDelete > 0 }">
+              title="This will delete selected images." onClick="{ bulkDelete }" if="{ state.toDelete.size > 0 }">
               <i class="material-icons">delete</i>
             </material-button>
           </th>
@@ -48,17 +49,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </td>
           <td if="{ props.showContentDigest }">
             <image-content-digest image="{ image }" />
-            <copy-to-clipboard target="digest" image="{ image }" />
+            <copy-to-clipboard target="digest" image="{ image }" pull-url="{ props.pullUrl }" />
           </td>
           <td>
             <image-tag image="{ image }" />
-            <copy-to-clipboard target="tag" image="{ image }" />
+            <copy-to-clipboard target="tag" image="{ image }" pull-url="{ props.pullUrl }" />
           </td>
           <td class="show-tag-history">
             <tag-history-button image="{ image }" />
           </td>
-          <td if="{ props.isImageRemoveActivated }">
-            <remove-image multi-delete="{ state.multiDelete }" image="{ image }" />
+          <td if="{ props.isImageRemoveActivated }" class="remove-tag">
+            <remove-image multi-delete="{ state.multiDelete }" image="{ image }" registry-url="{ props.registryUrl }"
+              handleCheckboxChange="{ onRemoveImageChange }" />
           </td>
         </tr>
       </tbody>
@@ -75,21 +77,44 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import ImageSize from './image-size.riot';
     import ImageTag from './image-tag.riot';
     import ImageContentDigest from './image-content-digest.riot';
+    import CopyToClipboard from './copy-to-clipboard.riot';
+    import RemoveImage, {
+      deleteImage
+    } from './remove-image.riot';
     export default {
       components: {
         ImageDate,
         ImageSize,
         ImageTag,
         ImageContentDigest,
+        CopyToClipboard,
+        RemoveImage,
       },
       onBeforeMount(props) {
         this.state = {
-          toDelete: 0,
-          multiDelete: false
+          toDelete: new Set(),
+          multiDelete: false,
         }
       },
       onMounted(props, state) {},
-      bulkDelete() {},
+      bulkDelete() {
+        this.state.toDelete.forEach(image => deleteImage(image, this.props.registryUrl, true))
+      },
+      onRemoveImageHeaderChange(checked) {
+        this.update({
+          multiDelete: checked
+        })
+      },
+      onRemoveImageChange(checked, image) {
+        if (checked) {
+          this.state.toDelete.add(image)
+        } else {
+          this.state.toDelete.delete(image)
+        }
+        this.update({
+          toDelete: this.state.toDelete
+        })
+      },
       getPage
     }
   </script>

@@ -6,7 +6,7 @@ function baseUrl() {
 
 export default {
   home() {
-    router.pus(baseUrl());
+    router.push(baseUrl());
   },
   taglist(image) {
     router.push(`${baseUrl()}#!/taglist/${image}`);

@@ -20,7 +20,7 @@ const plugins = [
   nodeResolve(),
   commonjs(),
   scss({ output: `./${output}/docker-registry-ui.css`, outputStyle: 'compressed' }),
-  babel({ babelHelpers: 'bundled', presets: [['@babel/env', { useBuiltIns: 'usage' }]] }),
+  babel({ babelHelpers: 'bundled', presets: [['@babel/env', { useBuiltIns: 'usage', corejs: { version: "2" } }]] }),
   html({ template: () => htmlUseref('./src/index.html') }),
   copy({
     targets: [

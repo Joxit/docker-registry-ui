@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2016-2019 Jones Magloire @Joxit
+Copyright (C) 2016-2021 Jones Magloire @Joxit
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -17,47 +17,50 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <catalog-element>
   <!-- Begin of tag -->
   <div class="content">
-    <material-card class="list highlight" item="{props.item}" expanded="{state.expanded}">
-      <material-waves onmousedown="{this.triggerLaunch}" center="true" color="#ddd" setLaunchListener="{ setLaunchListener }" />
+    <material-card class="list highlight" expanded="{state.expanded}" onclick="{ onClick }">
+      <material-waves onmousedown="{this.triggerLaunch}" center="true" color="#ddd"
+        setLaunchListener="{ setLaunchListener }" />
       <span>
         <i class="material-icons">send</i>
-        { typeof props.item === "string" ? props.item : props.item.repo }
-        <div if="{typeof props.item !== 'string'}" class="item-count right">
-          { props.item.images && props.item.images.length } images
+        { state.image || state.repo }
+        <div if="{state.images}" class="item-count right">
+          { state.images.length } images
           <i class="material-icons animated {state.expanded ? 'expanded' : ''}">expand_more</i>
         </div>
       </span>
     </material-card>
-    <catalog-element if="{typeof props.item !== 'string'}"
+    <catalog-element if="{ state.images }"
       class="animated {!state.expanded ? 'hide' : ''} {state.expanding ? 'expanding' : ''}"
-      each="{item in props.item.images}" item="{ item }" />
+      each="{item in state.images}" item="{ item }" />
   </div>
   <script>
     import router from '../../scripts/router';
 
     export default {
-      onMounted(props) {
-        const card = this.$('material-card');
-        if (!card) {
-          return;
-        }
+      onBeforeMount(props, state) {
         if (props.item.images && props.item.images.length === 1) {
-          props.item = props.item.images[0];
+          state.image = props.item.images[0];
+        } else if (typeof props.item === 'string') {
+          state.image = props.item;
+        } else if (props.item.images && props.item.repo) {
+          state.images = props.item.images;
+          state.repo = props.item.repo;
         }
-        card.onclick = (e) => {
-          if (!props.item.repo) {
-            router.taglist(props.item);
-          } else {
+      },
+      onClick() {
+        const state = this.state;
+        if (!state.repo) {
+          router.taglist(state.image);
+        } else {
+          this.update({
+            expanded: !this.state.expanded,
+            expanding: true
+          });
+          setTimeout(() => {
             this.update({
-              expanded: !this.state.expanded,
-              expanding: true
+              expanding: false
             });
-            setTimeout(() => {
-              this.update({
-                expanding: false
-              });
-            }, 50)
-          }
+          }, 50)
         }
       },
       setLaunchListener(cb) {

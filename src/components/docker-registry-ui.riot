@@ -31,6 +31,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
           is-image-remove-activated="{props.isImageRemoveActivated}"></tag-list>
       </route>
+      <route path="{baseRoute}taghistory/(.*)">
+        <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
+          image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
+          is-image-remove-activated="{props.isImageRemoveActivated}"></tag-history>
+      </route>
     </router>
   </main>
   <footer>
@@ -55,7 +60,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       Route,
     } from '@riotjs/route'
     import Catalog from './catalog/catalog.riot';
-    import TagList from './tag-list/tag-list.riot'
+    import TagList from './tag-list/tag-list.riot';
+    import TagHistory from './tag-history/tag-history.riot';
     import {
       stripHttps
     } from '../scripts/utils';
@@ -65,6 +71,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       components: {
         Catalog,
         TagList,
+        TagHistory,
         Router,
         Route
       },

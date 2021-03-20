@@ -1,0 +1,40 @@
+<!--
+Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<tag-history-element class="{ state.key }">
+  <div class="headline"><i class="material-icons">{ state.icon }</i>
+    <p>{ state.name }</p>
+  </div>
+  <div class="value" if="{ state.value }"> { state.value }</div>
+  <div class="value" each="{ value in state.values }" if="{ state.values }"> { value }</div>
+  <script>
+    import {
+      getHistoryIcon
+    } from '../../scripts/utils';
+    export default {
+      onBeforeMount(props, state) {
+        state.key = props.entry.key;
+        state.icon = getHistoryIcon(props.entry.key);
+        state.name = props.entry.key.replace('_', ' ');
+        if (props.value instanceof Array) {
+          state.values = props.entry.value;
+        } else {
+          state.value = props.entry.value;
+        }
+      }
+    }
+  </script>
+</tag-history-element>

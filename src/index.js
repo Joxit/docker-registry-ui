@@ -5,6 +5,7 @@ import MaterialNavbar from 'riot-mui/src/material-elements/material-navbar/mater
 import MaterialFooter from 'riot-mui/src/material-elements/material-footer/material-footer.riot';
 import MaterialButton from 'riot-mui/src/material-elements/material-button/material-button.riot';
 import MaterialCheckbox from 'riot-mui/src/material-elements/material-checkbox/material-checkbox.riot';
+import MaterialTabs from 'riot-mui/src/material-elements/material-tabs/material-tabs.riot';
 
 import DockerRegistryUI from './components/docker-registry-ui.riot';
 
@@ -16,6 +17,7 @@ register('material-navbar', MaterialNavbar);
 register('material-spinner', MaterialSpinner);
 register('material-button', MaterialButton);
 register('material-checkbox', MaterialCheckbox);
+register('material-tabs', MaterialTabs);
 
 const createApp = component(DockerRegistryUI);
 const tags = document.getElementsByTagName('docker-registry-ui');

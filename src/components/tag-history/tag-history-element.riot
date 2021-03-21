@@ -25,7 +25,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       getHistoryIcon
     } from '../../scripts/utils';
     export default {
-      onBeforeMount(props, state) {
+      onBeforeStar(props, state) {
         state.key = props.entry.key;
         state.icon = getHistoryIcon(props.entry.key);
         state.name = props.entry.key.replace('_', ' ');
@@ -34,6 +34,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         } else {
           state.value = props.entry.value;
         }
+      },
+      onBeforeMount(props, state) {
+        this.onBeforeStar(props, state);
+      },
+      onBeforeUpdate(props, state) {
+        this.onBeforeStar(props, state);
       }
     }
   </script>

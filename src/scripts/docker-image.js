@@ -97,7 +97,7 @@ export class DockerImage {
         if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json') {
           self.trigger('list', response);
           const manifest = response.manifests[0];
-          const image = new DockerImage(self.name, manifest.digest);
+          const image = new DockerImage(self.name, manifest.digest, false, self.registryUrl);
           eventTransfer(image, self);
           image.fillInfo();
           self.variants = [image];

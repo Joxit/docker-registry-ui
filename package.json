@@ -27,7 +27,7 @@
     "core-js": "^3.9.1",
     "js-beautify": "^1.13.0",
     "riot": "^5.3.1",
-    "riot-mui": "joxit/riot-5-mui#53a3399a",
+    "riot-mui": "joxit/riot-5-mui#e3e993f",
     "rollup": "^2.34.2",
     "rollup-plugin-app-utils": "^1.0.6",
     "rollup-plugin-commonjs": "^10.1.0",

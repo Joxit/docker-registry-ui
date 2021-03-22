@@ -29,7 +29,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </th>
           <th class="show-tag-history">History</th>
           <th class="remove-tag { state.toDelete.size > 0 ? 'delete' : '' }" if="{ props.isImageRemoveActivated }">
-            <material-checkbox ref="remove-tag-checkbox" class="indeterminate" if="{ state.toDelete.size === 0}"
+            <material-checkbox class="indeterminate" checked="{ state.multiDelete }" if="{ state.toDelete.size === 0}"
               title="Toggle multi-delete. Alt+Click to select all tags." onChange="{ onRemoveImageHeaderChange }">
             </material-checkbox>
             <material-button waves-center="true" rounded="true" waves-color="#ddd"
@@ -96,9 +96,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state = {
           toDelete: new Set(),
           multiDelete: false,
+          page: props.page,
         }
       },
-      onMounted(props, state) {},
+      onBeforeUpdate(props, state) {
+        if (state.page !== props.page) {
+          state.toDelete.clear();
+        }
+        state.page = props.page
+      },
       bulkDelete() {
         this.state.toDelete.forEach(image => deleteImage(image, this.props.registryUrl, true))
       },

@@ -51,9 +51,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onMounted(props) {
         this.display(props, this.state)
       },
-      onUpdated(props, state) {
-
-      },
 
       display(props, state) {
         this.state.repositories = [];
@@ -82,13 +79,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               return acc;
             }, []);
           } else if (this.status == 404) {
-            // registryUI.snackbar('Server not found', true);
+            self.props.onNotify('Server not found', true);
           } else {
-            // registryUI.snackbar(this.responseText);
+            self.props.onNotify(this.responseText);
           }
         });
         oReq.addEventListener('error', function () {
-          // registryUI.snackbar(this.getErrorMessage(), true);
+          self.props.onNotify(this.getErrorMessage(), true);
           state.repositories = [];
         });
         oReq.addEventListener('loadend', function () {

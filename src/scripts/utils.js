@@ -149,4 +149,13 @@ export function eventTransfer(from, to) {
 
 export function isDigit(char) {
   return char >= '0' && char <= '9';
+}
+
+export const ERROR_CAN_NOT_READ_CONTENT_DIGEST = {
+  message:
+    'Access on registry response was blocked. Try adding the header ' +
+    '`Access-Control-Expose-Headers: Docker-Content-Digest`' +
+    ' to your proxy or registry: ' +
+    'https://docs.docker.com/registry/configuration/#http',
+  isError: true,
 };

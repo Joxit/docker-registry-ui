@@ -49,18 +49,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </td>
           <td if="{ props.showContentDigest }">
             <image-content-digest image="{ image }" />
-            <copy-to-clipboard target="digest" image="{ image }" pull-url="{ props.pullUrl }" />
+            <copy-to-clipboard target="digest" image="{ image }" pull-url="{ props.pullUrl }"
+              on-notify="{ props.onNotify }" />
           </td>
           <td>
             <image-tag image="{ image }" />
-            <copy-to-clipboard target="tag" image="{ image }" pull-url="{ props.pullUrl }" />
+            <copy-to-clipboard target="tag" image="{ image }" pull-url="{ props.pullUrl }"
+              on-notify="{ props.onNotify }" />
           </td>
           <td class="show-tag-history">
             <tag-history-button image="{ image }" />
           </td>
           <td if="{ props.isImageRemoveActivated }" class="remove-tag">
             <remove-image multi-delete="{ state.multiDelete }" image="{ image }" registry-url="{ props.registryUrl }"
-              handleCheckboxChange="{ onRemoveImageChange }" checked="{ state.toDelete.has(image) }" />
+              handleCheckboxChange="{ onRemoveImageChange }" checked="{ state.toDelete.has(image) }"
+              on-notify="{ props.onNotify }" />
           </td>
         </tr>
       </tbody>
@@ -106,7 +109,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.page = props.page
       },
       bulkDelete() {
-        this.state.toDelete.forEach(image => deleteImage(image, this.props.registryUrl, true))
+        this.state.toDelete.forEach(image => deleteImage(image, this.props.registryUrl, true, this.props.onNotify))
       },
       onRemoveImageHeaderChange(checked, event) {
         if (event.altKey === true) {

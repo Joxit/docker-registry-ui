@@ -41,17 +41,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.checked = props.checked;
       },
       deleteImage(ignoreError) {
-        // registryUI.taglist.go(name);
-        deleteImage(this.props.image, this.props.registryUrl, ignoreError)
+        deleteImage(this.props.image, this.props.registryUrl, ignoreError, this.props.onNotify)
       },
       handleCheckboxChange(checked) {
         this.props.handleCheckboxChange(checked, this.props.image);
       }
     }
 
-    export function deleteImage(image, registryUrl, ignoreError) {
+    export function deleteImage(image, registryUrl, ignoreError, onNotify) {
       if (!image.digest) {
-        // registryUI.snackbar('Information for ' + name + ':' + tag + ' are not yet loaded.');
+        onNotify(`Information for ${name}:${tag} are not yet loaded.`);
         return;
       }
       const name = image.name;
@@ -60,21 +59,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       oReq.addEventListener('loadend', function () {
         if (this.status == 200 || this.status == 202) {
           router.taglist(name);
-          // registryUI.snackbar('Deleting ' + name + ':' + tag +
-          //   ' image. Run `registry garbage-collect config.yml` on your registry');
+          onNotify(`Deleting ${name}:${tag} image. Run \`registry garbage-collect config.yml\` on your registry`);
         } else if (this.status == 404) {
-          // ignoreError || registryUI.errorSnackbar('Digest not found for this image in your registry.');
+          ignoreError || onNotify({
+            message: 'Digest not found for this image in your registry.',
+            isError: true
+          });
         } else {
-          // registryUI.snackbar(this.responseText);
+          onNotify(this.responseText);
         }
       });
       oReq.open('DELETE', registryUrl + '/v2/' + name + '/manifests/' + image.digest);
       oReq.setRequestHeader('Accept',
         'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
       oReq.addEventListener('error', function () {
-        registryUI.errorSnackbar(
-          'An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].'
-        );
+        onNotify({
+          message: 'An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].',
+          isError: true
+        });
       });
       oReq.send();
     }

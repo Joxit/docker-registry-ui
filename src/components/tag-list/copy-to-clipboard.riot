@@ -23,6 +23,9 @@
     </material-button>
   </div>
   <script>
+    import {
+      ERROR_CAN_NOT_READ_CONTENT_DIGEST
+    } from '../../scripts/utils';
     export default {
       onBeforeMount(props, state) {
         const prefix = 'docker pull ' + props.pullUrl + '/' + props.image.name;
@@ -39,7 +42,7 @@
       },
       copy() {
         if (!this.state.dockerCmd) {
-          // registryUI.showErrorCanNotReadContentDigest();
+          this.props.onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
           return;
         }
         const copyText = this.$('input');
@@ -48,7 +51,7 @@
         document.execCommand('copy');
         copyText.style.display = 'none';
 
-        // registryUI.snackbar('`' + this.state.dockerCmd + '` has been copied to clipboard.')
+        this.props.onNotify('`' + this.state.dockerCmd + '` has been copied to clipboard.')
       }
     }
   </script>

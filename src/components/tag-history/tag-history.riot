@@ -29,7 +29,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-spinner />
   </div>
 
-  <material-tabs if="{ state.archs && state.loadend }" useLine="{ true }" tabs="{ state.archs }" onTabChanged="{ onTabChanged }" />
+  <material-tabs if="{ state.archs && state.loadend }" useLine="{ true }" tabs="{ state.archs }"
+    onTabChanged="{ onTabChanged }" />
 
   <material-card each="{ element in state.elements }" class="tag-history-element">
     <tag-history-element each="{ entry in element }" if="{ entry.value && entry.value.length > 0}" entry="{ entry }" />
@@ -49,7 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onBeforeMount(props, state) {
         state.elements = [];
-        state.image = new DockerImage(props.image, props.tag, true, props.registryUrl);
+        state.image = new DockerImage(props.image, props.tag, true, props.registryUrl, props.onNotify);
         state.image.fillInfo()
         state.image.on('blobs', this.processBlobs);
         state.image.on('list', this.multiArchList)
@@ -58,7 +59,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const state = this.state;
         state.elements = []
         state.image.variants[idx] = state.image.variants[idx] ||
-          new DockerImage(this.props.image, arch.digest, false, this.props.registryUrl);
+          new DockerImage(this.props.image, arch.digest, false, this.props.registryUrl, this.props.onNotify);
         if (state.image.variants[idx].blobs) {
           return this.processBlobs(state.image.variants[idx].blobs);
         }

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import { Http } from './http';
-import { isDigit, eventTransfer } from './utils';
+import { isDigit, eventTransfer, ERROR_CAN_NOT_READ_CONTENT_DIGEST } from './utils';
 import observable from '@riotjs/observable';
 
 const tagReduce = (acc, e) => {
@@ -46,12 +46,13 @@ export function compare(e1, e2) {
 }
 
 export class DockerImage {
-  constructor(name, tag, list, registryUrl) {
+  constructor(name, tag, list, registryUrl, onNotify) {
     this.name = name;
     this.tag = tag;
     this.list = list;
     this.registryUrl = registryUrl;
     this.chars = 0;
+    this.onNotify = onNotify;
     observable(this);
     this.on('get-size', function () {
       if (this.size !== undefined) {
@@ -97,7 +98,7 @@ export class DockerImage {
         if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json') {
           self.trigger('list', response);
           const manifest = response.manifests[0];
-          const image = new DockerImage(self.name, manifest.digest, false, self.registryUrl);
+          const image = new DockerImage(self.name, manifest.digest, false, self.registryUrl, self.onNotify);
           eventTransfer(image, self);
           image.fillInfo();
           self.variants = [image];
@@ -114,14 +115,14 @@ export class DockerImage {
           self.digest = digest;
           self.trigger('content-digest', digest);
           if (!digest) {
-            // registryUI.showErrorCanNotReadContentDigest();
+            self.onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
           }
         });
         self.getBlobs(response.config.digest);
       } else if (this.status == 404) {
-        // registryUI.errorSnackbar('Manifest for ' + self.name + ':' + self.tag + ' not found');
+        self.onNotify(`Manifest for ${self.name}:${self.tag} not found`, true);
       } else {
-        // registryUI.snackbar(this.responseText);
+        self.onNotify(this.responseText);
       }
     });
     oReq.open('GET', this.registryUrl + '/v2/' + self.name + '/manifests/' + self.tag);
@@ -152,9 +153,9 @@ export class DockerImage {
         self.trigger('creation-date', self.creationDate);
         self.trigger('blobs', self.blobs);
       } else if (this.status == 404) {
-        registryUI.errorSnackbar('Blobs for ' + self.name + ':' + self.tag + ' not found');
+        self.onNotify(`Blobs for ${self.name}:${self.tag} not found`, true);
       } else {
-        registryUI.snackbar(this.responseText);
+        self.onNotify(this.responseText);
       }
     });
     oReq.open('GET', this.registryUrl + '/v2/' + self.name + '/blobs/' + blob);

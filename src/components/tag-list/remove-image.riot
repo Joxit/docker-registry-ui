@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <i class="material-icons">delete</i>
   </material-button>
   <material-checkbox if="{ props.multiDelete }" title="Select this tag to delete it." disabled="{ !state.digest }"
-    onChange="{ handleCheckboxChange }">
+    onChange="{ handleCheckboxChange }" checked="{ state.checked }">
   </material-checkbox>
   <script>
     import {
@@ -29,12 +29,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import router from '../../scripts/router'
     export default {
       onBeforeMount(props, state) {
+        state.checked = props.checked;
         props.image.one('content-digest', (digest) => {
           this.update({
             digest
           });
         });
         props.image.trigger('get-content-digest');
+      },
+      onBeforeUpdate(props, state) {
+        state.checked = props.checked;
       },
       deleteImage(ignoreError) {
         // registryUI.taglist.go(name);

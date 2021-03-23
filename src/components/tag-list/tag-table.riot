@@ -60,7 +60,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </td>
           <td if="{ props.isImageRemoveActivated }" class="remove-tag">
             <remove-image multi-delete="{ state.multiDelete }" image="{ image }" registry-url="{ props.registryUrl }"
-              handleCheckboxChange="{ onRemoveImageChange }" />
+              handleCheckboxChange="{ onRemoveImageChange }" checked="{ state.toDelete.has(image) }" />
           </td>
         </tr>
       </tbody>
@@ -108,10 +108,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       bulkDelete() {
         this.state.toDelete.forEach(image => deleteImage(image, this.props.registryUrl, true))
       },
-      onRemoveImageHeaderChange(checked) {
-        this.update({
-          multiDelete: checked
-        })
+      onRemoveImageHeaderChange(checked, event) {
+        if (event.altKey === true) {
+          const tags = getPage(this.props.tags, this.props.page);
+          tags.forEach(tag => this.state.toDelete.add(tag));
+          this.update({
+            multiDelete: true,
+            toDelete: this.state.toDelete
+          })
+        } else {
+          this.update({
+            multiDelete: checked
+          })
+        }
       },
       onRemoveImageChange(checked, image) {
         if (checked) {

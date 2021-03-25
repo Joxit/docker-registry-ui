@@ -21,8 +21,15 @@
   <material-dropdown-list items="{ dropdownItems }" onSelect="{ onDropdownSelect }"
     opened="{ state.isDropdownOpened }" />
   <div class="overlay" onclick="{ onClick }" if="{ state.isDropdownOpened }"></div>
+  <add-registry-url opened="{ state['add-registry-url'] }" on-close="{ onClose('add-registry-url') }"
+    on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></add-registry-url>
   <script>
+    import AddRegistryUrl from './add-registry-url.riot';
+
     export default {
+      components: {
+        AddRegistryUrl
+      },
       dropdownItems: [{
         title: 'Add URL',
         name: 'add-registry-url'
@@ -33,7 +40,20 @@
         title: 'Remove URL',
         name: 'remove-registry-url'
       }],
-      onDropdownSelect(key, item) {},
+      onDropdownSelect(key, item) {
+        this.update({
+          [item.name]: true,
+          isDropdownOpened: false
+        });
+      },
+      onClose(name) {
+        return () => {
+          this.update({
+            [name]: false,
+            isDropdownOpened: false
+          })
+        }
+      },
       onClick() {
         this.update({
           isDropdownOpened: !this.state.isDropdownOpened
@@ -57,7 +77,7 @@
       width: 100%;
       top: 0;
       right: 0;
-      z-index: 1;
+      z-index: 10;
     }
 
     :host material-button {
@@ -85,6 +105,14 @@
     :host material-dropdown-list ul.dropdown-content li span {
       font-size: 1rem;
       line-height: 1.2em;
+    }
+
+    :host material-popup * {
+      line-height: 1em;
+    }
+
+    :host material-popup material-button .content {
+      line-height: 36px;
     }
   </style>
 </dialogs-menu>

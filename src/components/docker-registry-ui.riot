@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <header>
     <material-navbar>
       <div class="logo">Docker Registry UI</div>
-      <dialogs-menu></dialogs-menu>
+      <dialogs-menu on-notify="{ notifySnackbar }" on-server-change="{ onServerChange }"></dialogs-menu>
     </material-navbar>
   </header>
   <main>
@@ -79,16 +79,28 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Router,
         Route
       },
+      onUpdated(props, state) {
+        state.snackbarIsError = false;
+        state.snackbarMessage = undefined;
+      },
       onBeforeMount(props) {
         this.state.registryUrl = props.registryUrl || (window.location.origin + window.location.pathname.replace(/\/+$/,
           ''));
         this.state.name = props.name || stripHttps(props.registryUrl);
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
-        this.state.pullUrl = this.pullUrl(props);
+        this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
       },
-      pullUrl(props) {
-        const url = props.pullUrl ||
-          (props.registryUrl && props.registryUrl.length > 0 && props.registryUrl) ||
+      onServerChange(registryUrl) {
+        this.update({
+          registryUrl,
+          name: stripHttps(registryUrl),
+          pullUrl: this.pullUrl(registryUrl),
+          snackbarMessage: 'Registry server changed to `' + registryUrl + '`.'
+        })
+      },
+      pullUrl(registryUrl, pullUrl) {
+        const url = pullUrl ||
+          (registryUrl && registryUrl.length > 0 && registryUrl) ||
           window.location.host;
         return stripHttps(url);
       },

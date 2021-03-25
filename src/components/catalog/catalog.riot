@@ -53,16 +53,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
 
       display(props, state) {
-        this.state.repositories = [];
+        let repositories = [];
         const self = this;
         const oReq = new Http();
         oReq.addEventListener('load', function () {
-          state.repositories = [];
           if (this.status == 200) {
-            state.repositories = JSON.parse(this.responseText).repositories || [];
-            state.repositories.sort();
-            state.length = state.repositories.length;
-            state.repositories = state.repositories.reduce(function (acc, e) {
+            repositories = JSON.parse(this.responseText).repositories || [];
+            repositories.sort();
+            repositories = repositories.reduce(function (acc, e) {
               const slash = e.indexOf('/');
               if (slash > 0) {
                 const repoName = e.substring(0, slash) + '/';
@@ -86,14 +84,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         });
         oReq.addEventListener('error', function () {
           self.props.onNotify(this.getErrorMessage(), true);
-          state.repositories = [];
         });
         oReq.addEventListener('loadend', function () {
           self.update({
+            repositories,
+            length: repositories.length,
             loadend: true
           });
         });
-        oReq.open('GET', props.registryUrl + '/v2/_catalog?n=' + state.catalogElementsLimit);
+        oReq.open('GET', `${props.registryUrl}/v2/_catalog?n=${state.catalogElementsLimit}`);
         oReq.send();
       }
     }

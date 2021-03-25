@@ -159,3 +159,22 @@ export const ERROR_CAN_NOT_READ_CONTENT_DIGEST = {
     'https://docs.docker.com/registry/configuration/#http',
   isError: true,
 };
+
+export function getRegistryServers(i) {
+  try {
+    const res = JSON.parse(localStorage.getItem('registryServer'));
+    if (res instanceof Array) {
+      return !isNaN(i) ? res[i] : res.map((url) => url.trim().replace(/\/*$/, ''));
+    }
+  } catch (e) {}
+  return !isNaN(i) ? '' : [];
+}
+
+export function encodeURI(url) {
+  if (!url) { return; }
+  return url.indexOf('&') < 0 ? window.encodeURIComponent(url) : btoa(url);
+};
+
+export function updateHistory(url) {
+  updateQueryString({ url: encodeURI(url) })
+}

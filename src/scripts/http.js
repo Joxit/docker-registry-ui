@@ -54,6 +54,7 @@ export class Http {
         self.oReq.addEventListener('loadend', function () {
           if (this.status == 401) {
             const req = new XMLHttpRequest();
+            req._url = self._url;
             req.open(self._method, self._url);
             for (key in self._events) {
               req.addEventListener(key, self._events[key]);
@@ -97,6 +98,7 @@ export class Http {
   open(m, u) {
     this._method = m;
     this._url = u;
+    this.oReq._url = u;
     this.oReq.open(m, u);
   }
 
@@ -114,20 +116,20 @@ const hasHeader = function (header) {
 };
 
 const getErrorMessage = function () {
-  if (registryUI.url() && registryUI.url().match('^http://') && window.location.protocol === 'https:') {
+  if (this._url.match('^http://') && window.location.protocol === 'https:') {
     return (
       'Mixed Content: The page at `' +
       window.location.origin +
       '` was loaded over HTTPS, but requested an insecure server endpoint `' +
-      registryUI.url() +
+      new URL(this._url).origin +
       '`. This request has been blocked; the content must be served over HTTPS.'
     );
-  } else if (!registryUI.url()) {
+  } else if (!this._url || !this._url.match('^http')) {
     return 'Incorrect server endpoint.';
   } else if (this.withCredentials && !this.hasHeader('Access-Control-Allow-Credentials')) {
     return (
       "The `Access-Control-Allow-Credentials` header in the response is missing and must be set to `true` when the request's credentials mode is on. Origin `" +
-      registryUI.url() +
+      new URL(this._url).origin +
       '` is therefore not allowed access.'
     );
   }

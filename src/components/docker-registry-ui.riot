@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <header>
     <material-navbar>
       <div class="logo">Docker Registry UI</div>
+      <dialogs-menu></dialogs-menu>
     </material-navbar>
   </header>
   <main>
@@ -63,6 +64,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import Catalog from './catalog/catalog.riot';
     import TagList from './tag-list/tag-list.riot';
     import TagHistory from './tag-history/tag-history.riot';
+    import DialogsMenu from './dialogs/dialogs-menu.riot';
     import {
       stripHttps
     } from '../scripts/utils';
@@ -73,6 +75,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Catalog,
         TagList,
         TagHistory,
+        DialogsMenu,
         Router,
         Route
       },

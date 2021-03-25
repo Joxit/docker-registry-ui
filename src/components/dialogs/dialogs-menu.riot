@@ -1,0 +1,90 @@
+<!--
+ Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<dialogs-menu>
+  <material-button onClick="{ onClick }" waves-center="true" rounded="true" waves-opacity="0.6" waves-duration="600">
+    <i class="material-icons">more_vert</i>
+  </material-button>
+  <material-dropdown-list items="{ dropdownItems }" onSelect="{ onDropdownSelect }"
+    opened="{ state.isDropdownOpened }" />
+  <div class="overlay" onclick="{ onClick }" if="{ state.isDropdownOpened }"></div>
+  <script>
+    export default {
+      dropdownItems: [{
+        title: 'Add URL',
+        name: 'add-registry-url'
+      }, {
+        title: 'Change URL',
+        name: 'change-registry-url'
+      }, {
+        title: 'Remove URL',
+        name: 'remove-registry-url'
+      }],
+      onDropdownSelect(key, item) {},
+      onClick() {
+        this.update({
+          isDropdownOpened: !this.state.isDropdownOpened
+        })
+      }
+    }
+  </script>
+  <style>
+    :host {
+      position: absolute;
+      top: 0px;
+      right: 16px;
+      color: #000;
+      list-style-type: disc;
+      margin-block-start: 0.7em;
+    }
+
+    :host .overlay {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      right: 0;
+      z-index: 1;
+    }
+
+    :host material-button {
+      background: rgba(255, 255, 255, 0);
+      float: right;
+      z-index: 2;
+    }
+
+    :host material-button .content i.material-icons {
+      color: #fff;
+      font-size: 24px;
+    }
+
+    :host material-dropdown-list {
+      display: inline-block;
+      position: relative;
+    }
+
+    :host material-dropdown-list ul.dropdown-content {
+      min-width: 156px;
+      padding: 8px 0;
+      margin: 0;
+    }
+
+    :host material-dropdown-list ul.dropdown-content li span {
+      font-size: 1rem;
+      line-height: 1.2em;
+    }
+  </style>
+</dialogs-menu>

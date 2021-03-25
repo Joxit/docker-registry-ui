@@ -8,6 +8,7 @@ import {
   MaterialCheckbox,
   MaterialTabs,
   MaterialSnackbar,
+  MaterialDropdownList
 } from 'riot-mui';
 
 import DockerRegistryUI from './components/docker-registry-ui.riot';
@@ -22,6 +23,7 @@ register('material-button', MaterialButton);
 register('material-checkbox', MaterialCheckbox);
 register('material-snackbar', MaterialSnackbar);
 register('material-tabs', MaterialTabs);
+register('material-dropdown-list', MaterialDropdownList);
 
 const createApp = component(DockerRegistryUI);
 const tags = document.getElementsByTagName('docker-registry-ui');

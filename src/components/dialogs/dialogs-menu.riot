@@ -23,12 +23,16 @@
   <div class="overlay" onclick="{ onClick }" if="{ state.isDropdownOpened }"></div>
   <add-registry-url opened="{ state['add-registry-url'] }" on-close="{ onClose('add-registry-url') }"
     on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></add-registry-url>
+  <change-registry-url opened="{ state['change-registry-url'] }" on-close="{ onClose('change-registry-url') }"
+    on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></change-registry-url>
   <script>
     import AddRegistryUrl from './add-registry-url.riot';
+    import ChangeRegistryUrl from './change-registry-url.riot';
 
     export default {
       components: {
-        AddRegistryUrl
+        AddRegistryUrl,
+        ChangeRegistryUrl
       },
       dropdownItems: [{
         title: 'Add URL',

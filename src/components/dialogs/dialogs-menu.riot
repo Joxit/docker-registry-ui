@@ -25,14 +25,18 @@
     on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></add-registry-url>
   <change-registry-url opened="{ state['change-registry-url'] }" on-close="{ onClose('change-registry-url') }"
     on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></change-registry-url>
+  <remove-registry-url opened="{ state['remove-registry-url'] }" on-close="{ onClose('remove-registry-url') }"
+    on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></remove-registry-url>
   <script>
     import AddRegistryUrl from './add-registry-url.riot';
     import ChangeRegistryUrl from './change-registry-url.riot';
+    import RemoveRegistryUrl from './remove-registry-url.riot';
 
     export default {
       components: {
         AddRegistryUrl,
-        ChangeRegistryUrl
+        ChangeRegistryUrl,
+        RemoveRegistryUrl
       },
       dropdownItems: [{
         title: 'Add URL',

@@ -38,10 +38,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-popup>
   <script>
     import {
-      getRegistryServers,
-      updateHistory
+      getRegistryServers
     } from '../../scripts/utils';
-    import router from '../../scripts/router';
     export default {
       remove(event) {
         const url = event.currentTarget.attributes.url && event.currentTarget.attributes.url.value;

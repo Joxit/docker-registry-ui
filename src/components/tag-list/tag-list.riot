@@ -38,7 +38,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}" page="{ state.page }"
     show-content-digest="{props.showContentDigest}" is-image-remove-activated="{props.isImageRemoveActivated}"
-    onReverseOrder="{ onReverseOrder }" registry-url="{ props.registryUrl }" pull-url="{ props.pullUrl }" on-notify="{ props.onNotify }"></tag-table>
+    onReverseOrder="{ onReverseOrder }" registry-url="{ props.registryUrl }" pull-url="{ props.pullUrl }"
+    on-notify="{ props.onNotify }"></tag-table>
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
@@ -68,7 +69,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           tags: [],
           loadend: false,
           asc: true,
-          page: 1
+          page: router.getPageQueryParam() || 1
         }
       },
       onMounted(props, state) {
@@ -117,6 +118,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.update({
           page: page
         });
+        router.updatePageQueryParam(page);
       },
 
       onResize() {

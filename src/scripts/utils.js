@@ -124,16 +124,6 @@ export function getPageLabels(page, nPages) {
   return pageLabels;
 }
 
-export function updateQueryString(qs) {
-  var search = '';
-  for (var key in qs) {
-    if (qs[key] !== undefined) {
-      search += (search.length > 0 ? '&' : '?') + key + '=' + qs[key];
-    }
-  }
-  history.pushState(null, '', search + window.location.hash);
-}
-
 export function stripHttps(url) {
   if (!url) {
     return '';
@@ -171,10 +161,15 @@ export function getRegistryServers(i) {
 }
 
 export function encodeURI(url) {
-  if (!url) { return; }
+  if (!url) {
+    return;
+  }
   return url.indexOf('&') < 0 ? window.encodeURIComponent(url) : btoa(url);
-};
+}
 
-export function updateHistory(url) {
-  updateQueryString({ url: encodeURI(url) })
+export function decodeURI(url) {
+  if (!url) {
+    return;
+  }
+  return url.startsWith('http') ? window.decodeURIComponent(url) : atob(url);
 }

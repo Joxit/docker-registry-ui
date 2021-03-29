@@ -33,8 +33,7 @@
   </material-popup>
   <script>
     import {
-      getRegistryServers,
-      updateHistory
+      getRegistryServers
     } from '../../scripts/utils';
     import router from '../../scripts/router';
     export default {
@@ -52,7 +51,7 @@
         router.home()
         this.props.onServerChange(url);
         this.props.onClose()
-        setTimeout(() => updateHistory(url), 100);
+        setTimeout(() => router.updateUrlQueryParam(url), 100);
       },
       getRegistryServers
     }

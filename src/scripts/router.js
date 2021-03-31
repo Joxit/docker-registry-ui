@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import { router, getCurrentRoute } from '@riotjs/route';
-import { encodeURI } from './utils';
+import { encodeURI, decodeURI } from './utils';
 
 function getQueryParams() {
   const queries = {};
@@ -44,7 +44,7 @@ function updateQueryParams(qs) {
 function toSearchString(queries) {
   let search = [];
   for (let key in queries) {
-    if (queries[key] !== undefined) {
+    if (key && queries[key] !== undefined) {
       search.push(`${key}=${queries[key]}`);
     }
   }
@@ -82,6 +82,17 @@ export default {
   },
   updateUrlQueryParam(url) {
     this.updateQueryString({ url: encodeURI(url) });
+  },
+  getUrlQueryParam() {
+    const queries = getQueryParams();
+    const url = queries['url'];
+    if (url) {
+      try {
+        return decodeURI(url);
+      } catch (e) {
+        console.error(`Can't decode query parameter URL: ${url}`, e);
+      }
+    }
   },
   updatePageQueryParam(page) {
     this.updateQueryString({ page });

@@ -19,12 +19,13 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="../dist/vendor.css">
-  <link rel="stylesheet" href="../dist/style.css">
+  <link rel="stylesheet" href="../dist/docker-registry-ui.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta property="og:locale" content="en_US" />
-  <meta name="description" content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui" />
-  <meta property="og:description" content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui" />
+  <meta name="description"
+    content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui" />
+  <meta property="og:description"
+    content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui" />
   <link rel="canonical" href="https://joxit.dev/docker-registry-ui/demo/" />
   <meta property="og:url" content="https://joxit.dev/docker-registry-ui/demo/" />
   <meta property="og:site_name" content="Live Demo | Docker Registry User Interface" />
@@ -35,26 +36,28 @@
 </head>
 
 <body>
-  <app></app>
+  <script src="../dist/docker-registry-ui.js"></script>
   <script>
-    if ((function() {
-      try {
-        const res = JSON.parse(localStorage.getItem('registryServer'));
-        if (!(res instanceof Array) || res.length == 0) {
-          return true;
-        }
-      } catch (e) { return true; }
-    })()) {
-      localStorage.setItem('registryServer', JSON.stringify(['https://raw.githubusercontent.com/Joxit/docker-registry-ui/master/demo']))
+    if (DockerRegistryUI.getRegistryServers().length === 0) {
+      localStorage.setItem('registryServer', JSON.stringify([
+        'https://raw.githubusercontent.com/Joxit/docker-registry-ui/master/demo'
+      ]))
     }
 
+    var url = DockerRegistryUI.getUrlQueryParam() || DockerRegistryUI.getRegistryServers(0);
+    var tag = document.createElement('docker-registry-ui');
+
+    tag.setAttribute('registry-url', url);
+    tag.setAttribute('show-content-digest', true);
+    tag.setAttribute('is-image-remove-activated', true);
+    document.getElementsByTagName('body').item(0).appendChild(tag);
+    DockerRegistryUI.updateUrlQueryParam(url);
+    DockerRegistryUI.load();
   </script>
-  <script src="../dist/scripts/vendor.js"></script>
-  <script src="../dist/scripts/docker-registry-ui.js"></script>
   <script>
-    (function(i, s, o, g, r, a, m) {
+    (function (i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;
-      i[r] = i[r] || function() {
+      i[r] = i[r] || function () {
         (i[r].q = i[r].q || []).push(arguments)
       }, i[r].l = 1 * new Date();
       a = s.createElement(o),

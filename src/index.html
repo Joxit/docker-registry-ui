@@ -34,57 +34,17 @@
 </head>
 
 <body>
-  <script>
-    const URL_QUERY_PARAM_REGEX = /[&?]url=/;
-    const URL_PARAM_REGEX = /^url=/;
-
-    function getUrlQueryParam() {
-      const search = window.location.search;
-      if (URL_QUERY_PARAM_REGEX.test(search)) {
-        const param = search.split(/^\?|&/).find(function (param) {
-          return param && URL_PARAM_REGEX.test(param);
-        });
-        return param ? param.replace(URL_PARAM_REGEX, '') : param;
-      }
-    }
-
-    function getRegistryServer(i) {
-      try {
-        const res = JSON.parse(localStorage.getItem('registryServer'));
-        if (res instanceof Array) {
-          return (!isNaN(i)) ? res[i] : res.map(function (url) {
-            return url.trim().replace(/\/*$/, '');
-          });
-        }
-      } catch (e) {}
-      return (!isNaN(i)) ? '' : [];
-    }
-
-    function rDecodeURI(url) {
-      if (!url) {
-        return;
-      }
-      return url.startsWith('http') ? window.decodeURIComponent(url) : atob(url);
-    }
-
-    function getRegistryURL() {
-      let url = getUrlQueryParam();
-      if (url) {
-        try {
-          return rDecodeURI(url);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      return getRegistryServer(0);
-    }
-
-    const tag = document.createElement('docker-registry-ui');
-    tag.setAttribute('registry-url', getRegistryURL());
-    tag.setAttribute('show-content-digest', true);
-    tag.setAttribute('is-image-remove-activated', true);
-    document.getElementsByTagName('body').item(0).appendChild(tag);
-  </script>
+  <!-- build:keep production -->
+  <docker-registry-ui registry-url="${URL}" name="${REGISTRY_TITLE}" pull-url="${PULL_URL}"
+    show-content-digest="${SHOW_CONTENT_DIGEST}" is-image-remove-activated="${DELETE_IMAGES}"
+    catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}" single-registry="${SINGLE_REGISTRY}">
+  </docker-registry-ui>
+  <!-- endbuild -->
+  <!-- build:keep developement -->
+  <docker-registry-ui registry-url="" name="Developement Registry" pull-url="" show-content-digest="true"
+    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false">
+  </docker-registry-ui>
+  <!-- endbuild -->
   <!-- build:js docker-registry-ui.js -->
   <script src="../node_modules/riot/riot+compiler.min.js"></script>
   <script src="../node_modules/riot-route/dist/route.js"></script>

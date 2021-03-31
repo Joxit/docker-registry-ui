@@ -10,6 +10,8 @@ import html from '@rollup/plugin-html';
 import htmlUseref from './rollup/html-useref';
 import json from '@rollup/plugin-json';
 import copy from 'rollup-plugin-copy';
+import copyTransform from './rollup/copy-transform';
+import license from './rollup/license';
 
 const useServe = process.env.ROLLUP_SERVE === 'true';
 const output = useServe ? '.serve' : 'dist';
@@ -20,12 +22,11 @@ const plugins = [
   nodeResolve(),
   commonjs(),
   scss({ output: `./${output}/docker-registry-ui.css`, outputStyle: 'compressed' }),
-  babel({ babelHelpers: 'bundled', presets: [['@babel/env', { useBuiltIns: 'usage', corejs: { version: "2" } }]] }),
-  html({ template: () => htmlUseref('./src/index.html') }),
+  babel({ babelHelpers: 'bundled', presets: [['@babel/env', { useBuiltIns: 'usage', corejs: { version: '2' } }]] }),
   copy({
     targets: [
       { src: 'src/fonts', dest: `${output}` },
-      { src: 'src/images', dest: `${output}` },
+      { src: 'src/images/*', dest: `${output}/images`, transform: copyTransform },
     ],
   }),
 ];
@@ -33,7 +34,7 @@ const plugins = [
 if (useServe) {
   plugins.push(serve({ host: 'localhost', port: 8000, contentBase: [output, './'] }));
 } else {
-  plugins.push(terser());
+  plugins.push(terser({ format: { preamble: license } }));
 }
 
 export default [
@@ -41,8 +42,12 @@ export default [
     input: { 'docker-registry-ui': 'src/index.js' },
     output: {
       dir: output,
+      name: 'DockerRegistryUI',
       format: 'iife',
     },
-    plugins: [emptyDirectories(output)].concat(plugins),
+    plugins: [emptyDirectories(output)].concat(
+      plugins,
+      html({ template: () => htmlUseref('./src/index.html', { developement: useServe, production: !useServe }) })
+    ),
   },
 ];

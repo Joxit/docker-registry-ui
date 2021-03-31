@@ -1,4 +1,5 @@
 import { component, register } from 'riot';
+
 import {
   MaterialCard,
   MaterialSpinner,
@@ -11,7 +12,7 @@ import {
   MaterialSnackbar,
   MaterialDropdownList,
   MaterialPopup,
-  MaterialInput
+  MaterialInput,
 } from 'riot-mui';
 
 import DockerRegistryUI from './components/docker-registry-ui.riot';

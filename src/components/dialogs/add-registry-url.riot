@@ -1,0 +1,64 @@
+<!--
+ Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<add-registry-url>
+  <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
+    <div slot="title">Add your Server ?</div>
+    <div slot="content">
+      <material-input onkeyup="{ onKeyUp }" placeholder="Server URL"></material-input>
+      <span>Write your URL without /v2</span>
+    </div>
+    <div slot="action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ add }">
+        Add
+      </material-button>
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }">
+        Cancel
+      </material-button>
+    </div>
+  </material-popup>
+  <script>
+    import {
+      getRegistryServers
+    } from '../../scripts/utils';
+    import router from '../../scripts/router';
+
+    export default {
+      onKeyUp(event) {
+        // if keyCode is Enter
+        if (event.keyCode === 13) {
+          this.add();
+        }
+      },
+      add() {
+        const input = this.$('input');
+        if (!input || !input.value || input.value.length === 0) {
+          return this.props.onNotify('The input field is empty. Please enter an url.', true);
+        }
+        if (!input.value.startsWith('http')) {
+          return this.props.onNotify('The input field should start with http:// or https://.', true);
+        }
+        const url = input.value.trim().replace(/\/*$/, '');
+        const registryServer = getRegistryServers().filter(e => e !== url);
+        localStorage.setItem('registryServer', JSON.stringify([url].concat(registryServer)));
+        router.home()
+        this.props.onServerChange(url);
+        this.props.onClose()
+        setTimeout(() => router.updateUrlQueryParam(url), 100);
+      }
+    }
+  </script>
+</add-registry-url>

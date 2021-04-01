@@ -1,0 +1,141 @@
+<!--
+Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<tag-table>
+  <material-card class="taglist">
+    <table style="border: none;">
+      <thead>
+        <tr>
+          <th class="creation-date">Creation date</th>
+          <th class="image-size">Size</th>
+          <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th>
+
+          <th id="image-tag-header"
+            class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
+            onclick="{() => props.onReverseOrder() }">Tag
+          </th>
+          <th class="show-tag-history">History</th>
+          <th class="remove-tag { state.toDelete.size > 0 ? 'delete' : '' }" if="{ props.isImageRemoveActivated }">
+            <material-checkbox class="indeterminate" checked="{ state.multiDelete }" if="{ state.toDelete.size === 0}"
+              title="Toggle multi-delete. Alt+Click to select all tags." onChange="{ onRemoveImageHeaderChange }">
+            </material-checkbox>
+            <material-button waves-center="true" rounded="true" waves-color="#ddd"
+              title="This will delete selected images." onClick="{ bulkDelete }" if="{ state.toDelete.size > 0 }">
+              <i class="material-icons">delete</i>
+            </material-button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr each="{ image in getPage(props.tags, props.page) }">
+          <td class="creation-date">
+            <image-date image="{ image }" />
+          </td>
+          <td class="image-size">
+            <image-size image="{ image }" />
+          </td>
+          <td if="{ props.showContentDigest }">
+            <image-content-digest image="{ image }" />
+            <copy-to-clipboard target="digest" image="{ image }" pull-url="{ props.pullUrl }"
+              on-notify="{ props.onNotify }" />
+          </td>
+          <td>
+            <image-tag image="{ image }" />
+            <copy-to-clipboard target="tag" image="{ image }" pull-url="{ props.pullUrl }"
+              on-notify="{ props.onNotify }" />
+          </td>
+          <td class="show-tag-history">
+            <tag-history-button image="{ image }" />
+          </td>
+          <td if="{ props.isImageRemoveActivated }" class="remove-tag">
+            <remove-image multi-delete="{ state.multiDelete }" image="{ image }" registry-url="{ props.registryUrl }"
+              handleCheckboxChange="{ onRemoveImageChange }" checked="{ state.toDelete.has(image) }"
+              on-notify="{ props.onNotify }" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </material-card>
+  <script>
+    import {
+      Http
+    } from '../../scripts/http';
+    import {
+      getPage,
+    } from '../../scripts/utils';
+    import ImageDate from './image-date.riot';
+    import ImageSize from './image-size.riot';
+    import ImageTag from './image-tag.riot';
+    import ImageContentDigest from './image-content-digest.riot';
+    import CopyToClipboard from './copy-to-clipboard.riot';
+    import TagHistoryButton from './tag-history-button.riot';
+    import RemoveImage, {
+      deleteImage
+    } from './remove-image.riot';
+    export default {
+      components: {
+        ImageDate,
+        ImageSize,
+        ImageTag,
+        ImageContentDigest,
+        CopyToClipboard,
+        RemoveImage,
+        TagHistoryButton,
+      },
+      onBeforeMount(props) {
+        this.state = {
+          toDelete: new Set(),
+          multiDelete: false,
+          page: props.page,
+        }
+      },
+      onBeforeUpdate(props, state) {
+        if (state.page !== props.page) {
+          state.toDelete.clear();
+        }
+        state.page = props.page
+      },
+      bulkDelete() {
+        this.state.toDelete.forEach(image => deleteImage(image, this.props.registryUrl, true, this.props.onNotify))
+      },
+      onRemoveImageHeaderChange(checked, event) {
+        if (event.altKey === true) {
+          const tags = getPage(this.props.tags, this.props.page);
+          tags.forEach(tag => this.state.toDelete.add(tag));
+          this.update({
+            multiDelete: true,
+            toDelete: this.state.toDelete
+          })
+        } else {
+          this.update({
+            multiDelete: checked
+          })
+        }
+      },
+      onRemoveImageChange(checked, image) {
+        if (checked) {
+          this.state.toDelete.add(image)
+        } else {
+          this.state.toDelete.delete(image)
+        }
+        this.update({
+          toDelete: this.state.toDelete
+        })
+      },
+      getPage
+    }
+  </script>
+</tag-table>

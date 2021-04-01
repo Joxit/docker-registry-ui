@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2016-2019 Jones Magloire @Joxit
+ Copyright (C) 2016-2021 Jones Magloire @Joxit
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -19,10 +19,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <!-- build:css vendor.css -->
+  <!-- build:css docker-registry-ui.css -->
   <link href="../node_modules/riot-mui/build/styles/riot-mui.min.css" rel="stylesheet" type="text/css">
-  <!-- endbuild -->
-  <!-- build:css style.css -->
   <link href="style.css" rel="stylesheet" type="text/css">
   <link href="material-icons.css" rel="stylesheet" type="text/css">
   <link href="roboto.css" rel="stylesheet" type="text/css">
@@ -36,13 +34,21 @@
 </head>
 
 <body>
-  <app></app>
-  <!-- build:js scripts/vendor.js -->
+  <!-- build:keep production -->
+  <docker-registry-ui registry-url="${URL}" name="${REGISTRY_TITLE}" pull-url="${PULL_URL}"
+    show-content-digest="${SHOW_CONTENT_DIGEST}" is-image-remove-activated="${DELETE_IMAGES}"
+    catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}" single-registry="${SINGLE_REGISTRY}">
+  </docker-registry-ui>
+  <!-- endbuild -->
+  <!-- build:keep developement -->
+  <docker-registry-ui registry-url="" name="Developement Registry" pull-url="" show-content-digest="true"
+    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false">
+  </docker-registry-ui>
+  <!-- endbuild -->
+  <!-- build:js docker-registry-ui.js -->
   <script src="../node_modules/riot/riot+compiler.min.js"></script>
   <script src="../node_modules/riot-route/dist/route.js"></script>
   <script src="../node_modules/riot-mui/build/js/riot-mui.js"></script>
-  <!-- endbuild -->
-  <!-- build:js scripts/docker-registry-ui.js -->
   <script src="tags/catalog.riot" type="riot/tag"></script>
   <script src="tags/catalog-element.riot" type="riot/tag"></script>
   <script src="tags/tag-history-button.riot" type="riot/tag"></script>

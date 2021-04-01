@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2016-2019 Jones Magloire @Joxit
+ Copyright (C) 2016-2021 Jones Magloire @Joxit
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -14,17 +14,22 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<image-date>
-  <div title="Creation date { this.localDate }">{ registryUI.dateFormat(this.date) } ago</div>
-  <script type="text/javascript">
-    const self = this;
-
-    opts.image.on('creation-date', function(date) {
-      self.date = date;
-      self.localDate = date.toLocaleString()
-      self.update();
-    });
-
-    opts.image.trigger('get-date');
+<image-size>
+  <div title="Compressed size of your image.">{ bytesToSize(state.size) }</div>
+  <script>
+    import {
+      bytesToSize,
+    } from '../../scripts/utils';
+    export default {
+      onMounted(props) {
+        props.image.on('size', (size) => {
+          this.update({
+            size
+          });
+        });
+        props.image.trigger('get-size');
+      },
+      bytesToSize
+    }
   </script>
-</image-date>
+</image-size>

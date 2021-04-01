@@ -9,14 +9,11 @@ title: Docker Registry User Interface
 
 ## Overview
 
-This project aims to provide a simple and complete user interface for your private docker registry.
-You have the choice between two versions, the **standard interface** (`joxit/docker-registry-ui:latest`) and the **static interface** (`joxit/docker-registry-ui:static`).
+:warning: `joxit/docker-registry-ui:master` and `joxit/docker-registry-ui:main` tags contains unreleased v2.0.0 version!
 
-In the **standard interface**, there is no default registry, you need to add your own within the UI.
-With this version, you can manage **more than one** registry server but all the environment variables will be **unavailable**.
-All registries will be stored in the [local storage](https://en.wikipedia.org/wiki/Web_storage#Local_and_session_storage) of your browser. No configuration is needed when you launch the UI.
+This project aims to provide a simple and complete user interface for your private docker registry. You can customize the interface with various options. The major option is `SINGLE_REGISTRY` which allows you to disable the dynamic selection of docker registeries (same behavior as the old **static** tag).
 
-In the **static interface**, it will connect to a single registry and will not change. The configuration is done at the start of the interface, when you use the docker images whose tags contain the `static` keyword. With this version, you can manage **only one registry** and all environment variables will be **available**.
+You may need the [migration guide from 1.x to 2.x](https://github.com/Joxit/docker-registry-ui/wiki/Migrating-from-1.x-to-2.x) or [the 1.x readme](https://github.com/Joxit/docker-registry-ui/blob/8fe3adf12540d1316cb57628ebe86a392a703d90/README.md)
 
 This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
 
@@ -40,20 +37,20 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Display image/tag count (see [#56 issue comment](https://github.com/Joxit/docker-registry-ui/issues/56#issuecomment-449246524)).
 -   Select multiple tags to delete (see [#29](https://github.com/Joxit/docker-registry-ui/issues/29)).
 -   Select all tags with ALT + Click to delete (see [#80](https://github.com/Joxit/docker-registry-ui/issues/80)).
--   One interface for many registries **standard interface**.
--   Share your docker registry with query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`) **standard interface**.
--   Use `joxit/docker-registry-ui:static` as reverse proxy (with `REGISTRY_URL` environment variable) to your docker registry (This will avoid CORS) **static interface**.
--   Add Title when using `REGISTRY_URL` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)) **static interface**.
--   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)) **static interface**.
--   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)) **static interface**
--   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `true`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)) **static interface**.
--   Limit the number of elements in the image list via `CATALOG_ELEMENTS_LIMIT` (see [#127](https://github.com/Joxit/docker-registry-ui/pull/127)) **static interface**.
+-   One interface for many registries (when `SINGLE_REGISTRY=false`).
+-   Share your docker registry with query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`) (when `SINGLE_REGISTRY=false`).
+-   Use the UI as reverse proxy (with `REGISTRY_URL` environment variable) to your docker registry (This will avoid CORS).
+-   Add Title when using `REGISTRY_URL` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)).
+-   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)).
+-   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89))
+-   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `true`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)).
+-   Limit the number of elements in the image list via `CATALOG_ELEMENTS_LIMIT` (see [#127](https://github.com/Joxit/docker-registry-ui/pull/127)).
 -   Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134))
 
 ## FAQ
 
--   What is the difference between **`joxit/docker-registry-ui:latest`** and **`joxit/docker-registry-ui:static`** tags ?
-    -    The `latest` tag was the first version of the project, one UI for many docker registries. The `static` tag allows you to have an interface for a single registry and also allows you select your features.
+-   What is the difference between **`SINGLE_REGISTRY=false`** and **`SINGLE_REGISTRY=true`** options ?
+    -   When `SINGLE_REGISTRY` is set to false, a menu appears on the interface allowing you to dynamically change docker registry URLs.
 -   Why, when I delete all tags of an image, the image is still in the UI ?
     -   This is a limitation of docker registry, the garbage collector don't remove empty images. If you want to delete dangling images, you will need to delete the folder in your registry data. (see [#77](https://github.com/Joxit/docker-registry-ui/issues/77))
 -   Why the image size in the UI is not the same as displayed during `docker images` ?
@@ -80,46 +77,19 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 
 Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples) or open an issue.
 
-## Getting Started
-
-The docker image contains the source code and nginx in order to serve the docker-registry-ui. Please remember the difference between the **standard interface** (`latest` tag) and **static interface** (`static` tags).
-
-### Run the standard interface
-
-You can run the standard interface see the website on your 80 port. You will be able to use the interface for **many registry servers**, but all the configuration via environment variables from the static interface will be **unavailable**.
-
-```sh
-docker run -d -p 80:80 joxit/docker-registry-ui:latest
-```
-
-### Run the static interface
+## Available options
 
 Some env options are available for use this interface for **only one server**.
 
--   [`URL`](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone): set the static URL to use (You will need CORS configuration). Example: `http://127.0.0.1:5000`. (`Required`)
--   [`REGISTRY_URL`](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy): your docker registry URL to contact (CORS configuration is not needed). Example: `http://my-docker-container:5000`. (Can't be used with `URL`, since 0.3.2).
--   `DELETE_IMAGES`: if this variable is empty or `false`, delete feature is deactivated. It is activated otherwise.
--   `REGISTRY_TITLE`: Set a custom title for your user interface when using `REGISTRY_URL` (since 0.3.4).
--   `PULL_URL`: Set a custom url for the docker pull command, this is useful when you use `REGISTRY_URL` and your registry is on a different host (since 1.1.0).
--   [`NGINX_PROXY_HEADER_*`](https://github.com/Joxit/docker-registry-ui/tree/main/examples/proxy-headers): Set custom headers for your docker registry, usefull when you want to add your credentials. (Can be use only with `REGISTRY_URL`).
--   [`SHOW_CONTENT_DIGEST`](https://github.com/Joxit/docker-registry-ui/issues/126): Show content digest in docker tag list. Default: `true`.
--   [`CATALOG_ELEMENTS_LIMIT`](https://github.com/Joxit/docker-registry-ui/pull/132): Limit the number of elements in the catalog page. Default: `100000`.
-
-Example with `URL` option.
-
-```sh
-docker run -d -p 80:80 -e URL=http://127.0.0.1:5000 -e DELETE_IMAGES=true joxit/docker-registry-ui:static
-```
-
-Example with `REGISTRY_URL`, this will add a proxy to your registry.
-Your registry will be accessible here : `http://127.0.0.1/v2`, this will avoid CORS errors (see [#25](https://github.com/Joxit/docker-registry-ui/issues/25#issuecomment-360522487)).
-Be careful, `joxit/docker-registry-ui` and `registry:2` will communicate, both containers should be in the same network or use your private IP.
-
-```sh
-docker network create registry-ui-net
-docker run -d --net registry-ui-net --name registry-srv registry:2
-docker run -d --net registry-ui-net -p 80:80 -e REGISTRY_URL=http://registry-srv:5000 -e DELETE_IMAGES=true -e REGISTRY_TITLE="My registry" joxit/docker-registry-ui:static
-```
+- `REGISTRY_URL`: The default url of your docker registry. You may need CORS configuration on your registry. (default: derived from the hostname of your UI).
+- `REGISTRY_TITLE`: Set a custom title for your user interface. (default: value derived from `REGISTRY_URL`).
+- `PULL_URL`: Set a custom url when you copy the `docker pull` command. (default: value derived from `REGISTRY_URL`).
+- `DELETE_IMAGES`: Set if we can delete images from the UI. (default: `false`)
+- `SHOW_CONTENT_DIGEST`: Show content digest in docker tag list. (default: `true`)
+- `CATALOG_ELEMENTS_LIMIT`: Limit the number of elements in the catalog page. (default: `100000`).
+- `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default `false`)
+- `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration).
+- `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and set **custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
 
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
 
@@ -185,7 +155,7 @@ http:
   addr: :5000
   headers:
     X-Content-Type-Options: [nosniff]
-    Access-Control-Allow-Origin: ['http://127.0.0.1:8001']
+    Access-Control-Allow-Origin: ['http://127.0.0.1:8000']
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
     Access-Control-Allow-Headers: ['Authorization', 'Accept']
     Access-Control-Max-Age: [1728000]

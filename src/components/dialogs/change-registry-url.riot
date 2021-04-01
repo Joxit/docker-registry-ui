@@ -1,0 +1,78 @@
+<!--
+ Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<change-registry-url>
+  <material-popup opened="{ props.opened }" onClick="{ props.onClick }">
+    <div slot="title">Change your Server ?</div>
+    <div slot="content">
+      <select>
+        <option each="{ url in getRegistryServers() }" value="{ url }">{ url }</option>
+      </select>
+    </div>
+    <div slot="action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ change }">
+        Change
+      </material-button>
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }">
+        Cancel
+      </material-button>
+    </div>
+  </material-popup>
+  <script>
+    import {
+      getRegistryServers
+    } from '../../scripts/utils';
+    import router from '../../scripts/router';
+    export default {
+      change(event) {
+        const select = this.$('select');
+        if (!select || !select.value || select.value.length === 0) {
+          return this.props.onNotify('The select field is empty. Please add an url.', true);
+        }
+        if (!select.value.startsWith('http')) {
+          return this.props.onNotify('The select field should start with http:// or https://.', true);
+        }
+        const url = select.value.trim().replace(/\/*$/, '');
+        const registryServer = getRegistryServers().filter(e => e !== url);
+        localStorage.setItem('registryServer', JSON.stringify([url].concat(registryServer)));
+        router.home()
+        this.props.onServerChange(url);
+        this.props.onClose()
+        setTimeout(() => router.updateUrlQueryParam(url), 100);
+      },
+      getRegistryServers
+    }
+  </script>
+  <style>
+    :host select {
+      position: relative;
+      outline: 0;
+      box-shadow: none;
+      padding: 0;
+      width: 100%;
+      background: 0 0;
+      border: none;
+      font-weight: 400;
+      line-height: 24px;
+      height: 24px;
+      border-bottom: 1px solid #2f6975;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      margin: 1.5em 0;
+    }
+  </style>
+</change-registry-url>

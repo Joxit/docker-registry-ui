@@ -1,0 +1,129 @@
+<!--
+Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<docker-registry-ui>
+  <header>
+    <material-navbar>
+      <div class="logo">Docker Registry UI</div>
+      <dialogs-menu if="{props.singleRegistry !== 'true'}" on-notify="{ notifySnackbar }"
+        on-server-change="{ onServerChange }"></dialogs-menu>
+    </material-navbar>
+  </header>
+  <main>
+    <router base="#!">
+      <route path="{baseRoute}">
+        <catalog registry-url="{ state.registryUrl }" registry-name="{ state.name }"
+          catalog-elements-limit="{ state.catalogElementsLimit }" on-notify="{ notifySnackbar }" />
+      </route>
+      <route path="{baseRoute}taglist/(.*)">
+        <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
+          image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
+          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"></tag-list>
+      </route>
+      <route path="{baseRoute}taghistory/(.*)">
+        <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
+          image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
+          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"></tag-history>
+      </route>
+    </router>
+    <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
+  </main>
+  <footer>
+    <material-footer>
+      <a slot="logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI { version }</a>
+      <ul slot="link-list">
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
+        </li>
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">Privacy &amp; Terms</a>
+        </li>
+      </ul>
+    </material-footer>
+  </footer>
+  <script>
+    import {
+      version
+    } from '../../package.json';
+    import {
+      Router,
+      Route,
+    } from '@riotjs/route'
+    import Catalog from './catalog/catalog.riot';
+    import TagList from './tag-list/tag-list.riot';
+    import TagHistory from './tag-history/tag-history.riot';
+    import DialogsMenu from './dialogs/dialogs-menu.riot';
+    import {
+      stripHttps,
+      getRegistryServers
+    } from '../scripts/utils';
+    import router from '../scripts/router';
+
+    export default {
+      components: {
+        Catalog,
+        TagList,
+        TagHistory,
+        DialogsMenu,
+        Router,
+        Route
+      },
+      onUpdated(props, state) {
+        state.snackbarIsError = false;
+        state.snackbarMessage = undefined;
+      },
+      onBeforeMount(props) {
+        // props.singleRegistry === 'true' means old static version 
+        this.state.registryUrl = props.registryUrl ||
+          (props.singleRegistry === 'true' ? undefined : (router.getUrlQueryParam() || getRegistryServers(0))) ||
+          (window.location.origin + window.location.pathname.replace(/\/+$/, ''));
+        this.state.name = props.name || stripHttps(props.registryUrl);
+        this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
+        this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
+      },
+      onServerChange(registryUrl) {
+        this.update({
+          registryUrl,
+          name: stripHttps(registryUrl),
+          pullUrl: this.pullUrl(registryUrl),
+          snackbarMessage: 'Registry server changed to `' + registryUrl + '`.'
+        })
+      },
+      pullUrl(registryUrl, pullUrl) {
+        const url = pullUrl ||
+          (registryUrl && registryUrl.length > 0 && registryUrl) ||
+          window.location.host;
+        return stripHttps(url);
+      },
+      notifySnackbar(message, isError) {
+        if (typeof message === 'string') {
+          this.update({
+            snackbarMessage: message,
+            snackbarIsError: isError || false
+          });
+        } else if (message && message.message) {
+          this.update({
+            snackbarMessage: message.message,
+            snackbarIsError: message.isError
+          });
+        }
+      },
+      baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
+      router,
+      version
+    }
+  </script>
+</docker-registry-ui>

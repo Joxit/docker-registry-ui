@@ -14,7 +14,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+@import 'riot-mui/src/material-elements/material-navbar/material-navbar.scss';
+@import 'riot-mui/src/material-elements/material-footer/material-footer.scss';
+@import 'riot-mui/src/material-elements/material-card/material-card.scss';
+@import 'riot-mui/src/material-elements/material-spinner/material-spinner.scss';
+@import 'riot-mui/src/material-elements/material-button/material-button.scss';
+@import 'riot-mui/src/material-elements/material-waves/material-waves.scss';
+@import 'riot-mui/src/material-elements/material-checkbox/material-checkbox.scss';
+@import 'riot-mui/src/material-elements/material-tabs/material-tabs.scss';
+@import 'riot-mui/src/material-elements/material-snackbar/material-snackbar.scss';
+@import 'riot-mui/src/material-elements/material-dropdown-list/material-dropdown-list.scss';
+@import 'riot-mui/src/material-elements/material-popup/material-popup.scss';
+@import 'riot-mui/src/material-elements/material-input/material-input.scss';
 
+@import './roboto.scss';
+@import './material-icons.scss';
+ 
 html > body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
@@ -104,6 +119,10 @@ material-spinner {
 
 material-navbar {
   height: 64px;
+}
+
+material-navbar nav-wrapper {
+  display: flex;
 }
 
 .logo {
@@ -310,59 +329,6 @@ material-snackbar .toast {
   height: auto;
 }
 
-menu {
-  position: absolute;
-  top: 0px;
-  right: 16px;
-  color: #000;
-}
-
-menu .overlay {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  z-index: 1;
-}
-
-#menu-control-button {
-  background: rgba(255, 255, 255, 0);
-  float: right;
-}
-
-#menu-control-button i {
-  color: #fff;
-  font-size: 24px;
-}
-
-#menu-control-dropdown {
-  display: inline-block;
-  position: relative;
-}
-
-.dropdown {
-  min-width: 124px;
-  padding: 8px 0;
-  margin: 0;
-}
-
-dropdown-item, #menu-control-dropdown p {
-  padding: 0 16px;
-  margin: auto;
-  line-height: 48px;
-  height: 48px;
-  cursor: pointer;
-}
-
-#menu-control-dropdown p:hover {
-  background-color: #eee;
-}
-
-#menu-control-dropdown p:active, .material-button-active:active {
-  background-color: #e0e0e0;
-}
-
 material-popup material-button,
 pagination material-button {
   background-color: #fff;
@@ -390,27 +356,6 @@ main {
 
 material-footer {
   padding: 0.5em 1em;
-}
-
-.select-padding {
-  padding: 20px 0;
-}
-
-select {
-  position: relative;
-  outline: 0;
-  box-shadow: none;
-  padding: 0;
-  width: 100%;
-  background: 0 0;
-  border: none;
-  font-weight: 400;
-  line-height: 24px;
-  height: 24px;
-  border-bottom: 1px solid #2f6975;
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
 }
 
 .copy-to-clipboard {

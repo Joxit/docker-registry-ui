@@ -1,0 +1,185 @@
+<!--
+Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<tag-history>
+  <material-card ref="tag-history-tag" class="tag-history header">
+    <div class="material-card-title-action">
+      <material-button waves-center="true" rounded="true" waves-color="#ddd" onClick="{ toTaglist }">
+        <i class="material-icons">arrow_back</i>
+      </material-button>
+      <h2>
+        History of { props.image }:{ props.tag } <i class="material-icons">history</i>
+      </h2>
+    </div>
+  </material-card>
+  <div if="{ !state.loadend }" class="spinner-wrapper">
+    <material-spinner />
+  </div>
+
+  <material-tabs if="{ state.archs && state.loadend }" useLine="{ true }" tabs="{ state.archs }"
+    onTabChanged="{ onTabChanged }" />
+
+  <material-card each="{ element in state.elements }" class="tag-history-element">
+    <tag-history-element each="{ entry in element }" if="{ entry.value && entry.value.length > 0}" entry="{ entry }" />
+  </material-card>
+  <script>
+    import {
+      DockerImage
+    } from '../../scripts/docker-image';
+    import {
+      bytesToSize
+    } from '../../scripts/utils';
+    import router from '../../scripts/router';
+    import TagHistoryElement from './tag-history-element.riot'
+    export default {
+      components: {
+        TagHistoryElement
+      },
+      onBeforeMount(props, state) {
+        state.elements = [];
+        state.image = new DockerImage(props.image, props.tag, true, props.registryUrl, props.onNotify);
+        state.image.fillInfo()
+        state.image.on('blobs', this.processBlobs);
+        state.image.on('list', this.multiArchList)
+      },
+      onTabChanged(arch, idx) {
+        const state = this.state;
+        state.elements = []
+        state.image.variants[idx] = state.image.variants[idx] ||
+          new DockerImage(this.props.image, arch.digest, false, this.props.registryUrl, this.props.onNotify);
+        if (state.image.variants[idx].blobs) {
+          return this.processBlobs(state.image.variants[idx].blobs);
+        }
+        state.image.variants[idx].fillInfo();
+        state.image.variants[idx].on('blobs', this.processBlobs);
+      },
+      processBlobs(blobs) {
+        const state = this.state;
+
+        function exec(elt) {
+          const guiElements = [];
+          for (var attribute in elt) {
+            if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
+              const value = elt[attribute];
+              const guiElement = {
+                "key": attribute,
+                "value": modifySpecificAttributeTypes(attribute, value)
+              };
+              guiElements.push(guiElement);
+            }
+          }
+          return guiElements.sort(eltSort);
+        }
+        const elements = new Array(blobs.history.length + 1);
+        elements[0] = exec(getConfig(blobs));
+        blobs.history.forEach(function (elt, i) {
+          elements[blobs.history.length - i] = exec(elt)
+        });
+        this.update({
+          elements,
+          loadend: true
+        });
+      },
+      multiArchList(manifests) {
+        manifests = manifests.manifests || manifests;
+        const archs = manifests.map(function (manifest) {
+          return {
+            title: manifest.platform.os + '/' + manifest.platform.architecture + (manifest.platform.variant ?
+              manifest.platform.variant : ''),
+            digest: manifest.digest
+          }
+        });
+        this.update({
+          archs
+        });
+      },
+      toTaglist() {
+        router.taglist(this.props.image);
+      }
+    }
+    const eltIdx = function (e) {
+      switch (e) {
+        case 'created':
+          return 1;
+        case 'created_by':
+          return 2;
+        case 'size':
+          return 3;
+        case 'os':
+          return 4;
+        case 'architecture':
+          return 5;
+        case 'id':
+          return 6;
+        case 'linux':
+          return 7;
+        case 'docker_version':
+          return 8;
+        default:
+          return 10;
+      }
+    };
+
+    const eltSort = function (e1, e2) {
+      return eltIdx(e1.key) - eltIdx(e2.key);
+    };
+
+    const modifySpecificAttributeTypes = function (attribute, value) {
+      switch (attribute) {
+        case 'created':
+          return new Date(value).toLocaleString();
+        case 'created_by':
+          const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
+          return (cmd && cmd[1]) || 'RUN'
+        case 'size':
+          return bytesToSize(value);
+        case 'Entrypoint':
+        case 'Cmd':
+          return (value || []).join(' ');
+        case 'Labels':
+          return Object.keys(value || {}).map(function (elt) {
+            return value[elt] ? elt + '=' + value[elt] : '';
+          });
+        case 'Volumes':
+        case 'ExposedPorts':
+          return Object.keys(value);
+      }
+      return value || '';
+    };
+
+    const getConfig = function (blobs) {
+      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels',
+          'User', 'Volumes', 'WorkingDir', 'author', 'id', 'ExposedPorts'
+        ]
+        .reduce(function (acc, e) {
+          const value = blobs[e] || blobs.config[e];
+          if (value && e === 'architecture' && blobs.variant) {
+            acc[e] = value + blobs.variant;
+          } else if (value) {
+            acc[e] = value;
+          }
+          return acc;
+        }, {});
+
+      if (!res.author && (res.Labels && res.Labels.maintainer)) {
+        res.author = blobs.config.Labels.maintainer;
+        delete res.Labels.maintainer;
+      }
+
+      return res;
+    };
+  </script>
+</tag-history>

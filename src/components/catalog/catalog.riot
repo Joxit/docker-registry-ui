@@ -26,7 +26,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <div if="{ !state.loadend }" class="spinner-wrapper">
     <material-spinner></material-spinner>
   </div>
-  <catalog-element each="{ item in state.repositories }" item="{ item }" />
+  <catalog-element each="{ item in state.repositories }" item="{ item }" filter-results="{ props.filterResults }"/>
   <script>
     import CatalogElement from './catalog-element.riot'
     import {

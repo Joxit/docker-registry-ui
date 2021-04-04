@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <header>
     <material-navbar>
       <div class="logo">Docker Registry UI</div>
+      <search-bar on-search="{ onSearch }"></search-bar>
       <dialogs-menu if="{props.singleRegistry !== 'true'}" on-notify="{ notifySnackbar }"
         on-server-change="{ onServerChange }"></dialogs-menu>
     </material-navbar>
@@ -26,12 +27,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <router base="#!">
       <route path="{baseRoute}">
         <catalog registry-url="{ state.registryUrl }" registry-name="{ state.name }"
-          catalog-elements-limit="{ state.catalogElementsLimit }" on-notify="{ notifySnackbar }" />
+          catalog-elements-limit="{ state.catalogElementsLimit }" on-notify="{ notifySnackbar }"
+          filter-results="{ state.filter }" />
       </route>
       <route path="{baseRoute}taglist/(.*)">
         <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
-          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"></tag-list>
+          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"
+          filter-results="{ state.filter }"></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
         <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
@@ -66,6 +69,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagList from './tag-list/tag-list.riot';
     import TagHistory from './tag-history/tag-history.riot';
     import DialogsMenu from './dialogs/dialogs-menu.riot';
+    import SearchBar from './search-bar.riot'
     import {
       stripHttps,
       getRegistryServers
@@ -78,6 +82,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         TagList,
         TagHistory,
         DialogsMenu,
+        SearchBar,
         Router,
         Route
       },
@@ -120,6 +125,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             snackbarIsError: message.isError
           });
         }
+      },
+      onSearch(value) {
+        this.update({
+          filter: value
+        })
       },
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,

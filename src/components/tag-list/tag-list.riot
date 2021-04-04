@@ -39,7 +39,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}" page="{ state.page }"
     show-content-digest="{props.showContentDigest}" is-image-remove-activated="{props.isImageRemoveActivated}"
     onReverseOrder="{ onReverseOrder }" registry-url="{ props.registryUrl }" pull-url="{ props.pullUrl }"
-    on-notify="{ props.onNotify }"></tag-table>
+    on-notify="{ props.onNotify }" filter-results="{ props.filterResults }"></tag-table>
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
@@ -84,15 +84,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const self = this;
         const oReq = new Http();
         oReq.addEventListener('load', function () {
-          state.tags = [];
           if (this.status == 200) {
-            const tags = JSON.parse(this.responseText).tags || [];
-            state.tags = tags.map(function (tag) {
-              return new DockerImage(props.image, tag, null, props.registryUrl, props.onNotify);
-            }).sort(compare);
+            const tags = (JSON.parse(this.responseText).tags || [])
+              .map(tag => new DockerImage(props.image, tag, null, props.registryUrl, props.onNotify))
+              .sort(compare);
             window.requestAnimationFrame(self.onResize);
             self.update({
-              page: Math.min(state.page, getNumPages(state.tags))
+              page: Math.min(state.page, getNumPages(tags)),
+              tags
             })
           } else if (this.status == 404) {
             self.props.onNotify('Server not found', true);

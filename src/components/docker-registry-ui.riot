@@ -33,7 +33,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <route path="{baseRoute}taglist/(.*)">
         <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
-          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"></tag-list>
+          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"
+          filter-results="{ state.filter }"></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
         <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
@@ -126,7 +127,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       onSearch(value) {
-        this.update({ filter: value })
+        this.update({
+          filter: value
+        })
       },
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,

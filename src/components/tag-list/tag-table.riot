@@ -40,7 +40,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         </tr>
       </thead>
       <tbody>
-        <tr each="{ image in getPage(props.tags, props.page) }">
+        <tr each="{ image in getPage(props.tags, props.page) }" if="{ matchSearch(props.filterResults, image.tag) }">
           <td class="creation-date">
             <image-date image="{ image }" />
           </td>
@@ -85,6 +85,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import RemoveImage, {
       deleteImage
     } from './remove-image.riot';
+    import {
+      matchSearch
+    } from '../search-bar.riot';
     export default {
       components: {
         ImageDate,
@@ -135,7 +138,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           toDelete: this.state.toDelete
         })
       },
-      getPage
+      getPage,
+      matchSearch
     }
   </script>
 </tag-table>

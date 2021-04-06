@@ -28,13 +28,15 @@
     } from '../../scripts/utils';
     export default {
       onBeforeMount(props, state) {
-        const prefix = 'docker pull ' + props.pullUrl + '/' + props.image.name;
         if (props.target === 'tag') {
-          state.dockerCmd = prefix + ':' + props.image.tag;
-        } else {
+          state.dockerCmd = `docker pull ${props.pullUrl}/${props.image.name}:${props.image.tag}`;
+        }
+      },
+      onMounted(props, state) {
+        if (props.target !== 'tag') {
           props.image.one('content-digest', (digest) => {
             this.update({
-              dockerCmd: prefix + '@' + digest
+              dockerCmd: `docker pull ${props.pullUrl}/${props.image.name}@${digest}`
             })
           });
           props.image.trigger('get-content-digest');

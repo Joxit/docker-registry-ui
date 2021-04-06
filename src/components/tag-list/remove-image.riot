@@ -35,6 +35,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             digest
           });
         });
+      },
+      onMounted(props, state) {
         props.image.trigger('get-content-digest');
       },
       onBeforeUpdate(props, state) {

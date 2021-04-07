@@ -52,3 +52,13 @@ jobs:
         tags: |
           joxit/docker-registry-ui:latest
           joxit/docker-registry-ui:${{steps.current-tag.outputs.tag}}
+    - name: Build and push Latest Debian Version
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./debian.dockerfile
+        platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
+        push: true
+        tags: |
+          joxit/docker-registry-ui:debian
+          joxit/docker-registry-ui:${{steps.current-tag.outputs.tag}}-debian

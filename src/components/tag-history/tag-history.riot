@@ -50,10 +50,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onBeforeMount(props, state) {
         state.elements = [];
-        state.image = new DockerImage(props.image, props.tag, true, props.registryUrl, props.onNotify);
+        state.image = new DockerImage(props.image, props.tag, {
+          list: true,
+          registryUrl: props.registryUrl,
+          onNotify: props.onNotify,
+          onAuthentication: props.onAuthentication
+        });
         state.image.fillInfo()
+      },
+      onMounted(props, state) {
         state.image.on('blobs', this.processBlobs);
-        state.image.on('list', this.multiArchList)
+        state.image.on('list', this.multiArchList);
       },
       onTabChanged(arch, idx) {
         const state = this.state;

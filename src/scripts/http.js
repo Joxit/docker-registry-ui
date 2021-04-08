@@ -16,12 +16,14 @@
  */
 
 export class Http {
-  constructor() {
+  constructor(opts) {
     this.oReq = new XMLHttpRequest();
     this.oReq.hasHeader = hasHeader;
     this.oReq.getErrorMessage = getErrorMessage;
     this._events = {};
     this._headers = {};
+    this.onAuthentication = opts && opts.onAuthentication;
+    this.withCredentials = opts && opts.withCredentials;
   }
 
   getContentDigest(cb) {
@@ -34,9 +36,7 @@ export class Http {
         cb(
           'sha256:' +
             Array.from(new Uint8Array(buffer))
-              .map(function (byte) {
-                return byte.toString(16).padStart(2, '0');
-              })
+              .map((byte) => byte.toString(16).padStart(2, '0'))
               .join('')
         );
       });
@@ -52,21 +52,28 @@ export class Http {
     switch (e) {
       case 'loadend': {
         self.oReq.addEventListener('loadend', function () {
-          if (this.status == 401) {
-            const req = new XMLHttpRequest();
-            req._url = self._url;
-            req.open(self._method, self._url);
-            for (key in self._events) {
-              req.addEventListener(key, self._events[key]);
-            }
-            for (key in self._headers) {
-              req.setRequestHeader(key, self._headers[key]);
-            }
-            req.withCredentials = true;
-            req.hasHeader = Http.hasHeader;
-            req.getErrorMessage = Http.getErrorMessage;
-            self.oReq = req;
-            req.send();
+          if (this.status == 401 && !this.withCredentials) {
+            const tokenAuth = parseAuthenticateHeader(this.getResponseHeader('www-authenticate'));
+            self.onAuthentication(tokenAuth, (bearer) => {
+              const req = new XMLHttpRequest();
+              req._url = self._url;
+              req.open(self._method, self._url);
+              for (let key in self._events) {
+                req.addEventListener(key, self._events[key]);
+              }
+              for (let key in self._headers) {
+                req.setRequestHeader(key, self._headers[key]);
+              }
+              if (bearer && bearer.token) {
+                req.setRequestHeader('Authorization', `Bearer ${bearer.token}`)
+              } else {
+                req.withCredentials = true;
+              }
+              req.hasHeader = hasHeader;
+              req.getErrorMessage = Http.getErrorMessage;
+              self.oReq = req;
+              req.send();
+            });
           } else {
             f.bind(this)();
           }
@@ -99,6 +106,9 @@ export class Http {
     this._method = m;
     this._url = u;
     this.oReq._url = u;
+    if (this.withCredentials) {
+      this.oReq.withCredentials = true;
+    }
     this.oReq.open(m, u);
   }
 
@@ -138,4 +148,11 @@ const getErrorMessage = function () {
     window.location.origin +
     '`'
   );
+};
+
+const AUTHENTICATE_HEADER_REGEX = /Bearer realm="(?<realm>[^"]+)",service="(?<service>[^"]+)",scope="(?<scope>[^"]+)"/;
+
+const parseAuthenticateHeader = (header) => {
+  const exec = AUTHENTICATE_HEADER_REGEX.exec(header);
+  return exec && exec.groups;
 };

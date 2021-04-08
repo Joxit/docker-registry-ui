@@ -46,13 +46,16 @@ export function compare(e1, e2) {
 }
 
 export class DockerImage {
-  constructor(name, tag, list, registryUrl, onNotify) {
+  constructor(name, tag, { list, registryUrl, onNotify, onAuthentication }) {
     this.name = name;
     this.tag = tag;
-    this.list = list;
-    this.registryUrl = registryUrl;
     this.chars = 0;
-    this.onNotify = onNotify;
+    this.opts = {
+      list,
+      registryUrl,
+      onNotify,
+      onAuthentication,
+    };
     observable(this);
     this.on('get-size', function () {
       if (this.size !== undefined) {
@@ -90,7 +93,7 @@ export class DockerImage {
       return;
     }
     this._fillInfoWaiting = true;
-    const oReq = new Http();
+    const oReq = new Http({ onAuthentication: this.opts.onAuthentication });
     const self = this;
     oReq.addEventListener('loadend', function () {
       if (this.status == 200 || this.status == 202) {
@@ -98,7 +101,7 @@ export class DockerImage {
         if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json') {
           self.trigger('list', response);
           const manifest = response.manifests[0];
-          const image = new DockerImage(self.name, manifest.digest, false, self.registryUrl, self.onNotify);
+          const image = new DockerImage(self.name, manifest.digest, { ...self.opts, list: false });
           eventTransfer(image, self);
           image.fillInfo();
           self.variants = [image];
@@ -115,26 +118,26 @@ export class DockerImage {
           self.digest = digest;
           self.trigger('content-digest', digest);
           if (!digest) {
-            self.onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
+            self.opts.onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
           }
         });
         self.getBlobs(response.config.digest);
       } else if (this.status == 404) {
-        self.onNotify(`Manifest for ${self.name}:${self.tag} not found`, true);
+        self.opts.onNotify(`Manifest for ${self.name}:${self.tag} not found`, true);
       } else {
-        self.onNotify(this.responseText);
+        self.opts.onNotify(this.responseText);
       }
     });
-    oReq.open('GET', this.registryUrl + '/v2/' + self.name + '/manifests/' + self.tag);
+    oReq.open('GET', `${this.opts.registryUrl}/v2/${self.name}/manifests/${self.tag}`);
     oReq.setRequestHeader(
       'Accept',
       'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json' +
-        (self.list ? ', application/vnd.docker.distribution.manifest.list.v2+json' : '')
+        (self.opts.list ? ', application/vnd.docker.distribution.manifest.list.v2+json' : '')
     );
     oReq.send();
   }
   getBlobs(blob) {
-    const oReq = new Http();
+    const oReq = new Http({ onAuthentication: this.opts.onAuthentication });
     const self = this;
     oReq.addEventListener('loadend', function () {
       if (this.status == 200 || this.status == 202) {
@@ -153,12 +156,12 @@ export class DockerImage {
         self.trigger('creation-date', self.creationDate);
         self.trigger('blobs', self.blobs);
       } else if (this.status == 404) {
-        self.onNotify(`Blobs for ${self.name}:${self.tag} not found`, true);
+        self.opts.onNotify(`Blobs for ${self.name}:${self.tag} not found`, true);
       } else {
-        self.onNotify(this.responseText);
+        self.opts.onNotify(this.responseText);
       }
     });
-    oReq.open('GET', this.registryUrl + '/v2/' + self.name + '/blobs/' + blob);
+    oReq.open('GET', `${this.opts.registryUrl}/v2/${self.name}/blobs/${blob}`);
     oReq.setRequestHeader(
       'Accept',
       'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json'

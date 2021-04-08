@@ -55,7 +55,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       display(props, state) {
         let repositories = [];
         const self = this;
-        const oReq = new Http();
+        const oReq = new Http({
+          onAuthentication: this.props.onAuthentication
+        });
         oReq.addEventListener('load', function () {
           if (this.status == 200) {
             repositories = JSON.parse(this.responseText).repositories || [];

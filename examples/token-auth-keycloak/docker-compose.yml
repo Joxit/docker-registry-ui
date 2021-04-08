@@ -22,10 +22,11 @@ services:
       - registry-ui-net
 
   ui:
-    image: joxit/docker-registry-ui:static
+    image: joxit/docker-registry-ui
     environment:
       REGISTRY_TITLE: My Private Docker Registry
-      URL: http://localhost
+      REGISTRY_URL: http://localhost
+      SINGLE_REGISTRY: 'true'
     networks:
       - registry-ui-net
 

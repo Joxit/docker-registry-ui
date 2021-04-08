@@ -28,20 +28,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <route path="{baseRoute}">
         <catalog registry-url="{ state.registryUrl }" registry-name="{ state.name }"
           catalog-elements-limit="{ state.catalogElementsLimit }" on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }" />
+          filter-results="{ state.filter }" on-authentication="{ onAuthentication }" />
       </route>
       <route path="{baseRoute}taglist/(.*)">
         <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
           is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }"></tag-list>
+          filter-results="{ state.filter }" on-authentication="{ onAuthentication }"></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
         <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
-          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"></tag-history>
+          is-image-remove-activated="{ props.isImageRemoveActivated }" on-notify="{ notifySnackbar }" on-authentication="{ onAuthentication }"></tag-history>
       </route>
     </router>
+    <registry-authentication realm="{ state.realm }" scope="{ state.scope }" service="{ state.service }"
+      on-close="{ onAuthenticationClose }" on-authenticated="{ state.onAuthenticated }"
+      opened="{ state.authenticationDialogOpened }"></registry-authentication>
     <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
   </main>
   <footer>
@@ -70,6 +73,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagHistory from './tag-history/tag-history.riot';
     import DialogsMenu from './dialogs/dialogs-menu.riot';
     import SearchBar from './search-bar.riot'
+    import RegistryAuthentication from './dialogs/registry-authentication.riot';
     import {
       stripHttps,
       getRegistryServers
@@ -83,6 +87,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         TagHistory,
         DialogsMenu,
         SearchBar,
+        RegistryAuthentication,
         Router,
         Route
       },
@@ -105,6 +110,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           name: stripHttps(registryUrl),
           pullUrl: this.pullUrl(registryUrl),
           snackbarMessage: 'Registry server changed to `' + registryUrl + '`.'
+        })
+      },
+      onAuthentication(opts, onAuthenticated) {
+        const bearer = {
+          token: localStorage.getItem('registry.token'),
+          issued_at: localStorage.getItem('registry.issued_at'),
+          expires_in: localStorage.getItem('registry.expires_in')
+        }
+        if (bearer.token && bearer.issued_at && bearer.expires_in &&
+          (new Date().getTime() - new Date(bearer.issued_at).getTime()) < (bearer.expires_in * 1000)) {
+          onAuthenticated(bearer)
+        } else if (opts) {
+          this.update({
+            authenticationDialogOpened: true,
+            onAuthenticated,
+            ...opts
+          })
+        } else {
+          onAuthenticated()
+        }
+      },
+      onAuthenticationClose() {
+        this.update({
+          authenticationDialogOpened: false
         })
       },
       pullUrl(registryUrl, pullUrl) {

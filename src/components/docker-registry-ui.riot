@@ -39,7 +39,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <route path="{baseRoute}taghistory/(.*)">
         <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
-          is-image-remove-activated="{ props.isImageRemoveActivated }" on-notify="{ notifySnackbar }" on-authentication="{ onAuthentication }"></tag-history>
+          is-image-remove-activated="{ props.isImageRemoveActivated }" on-notify="{ notifySnackbar }"
+          on-authentication="{ onAuthentication }"></tag-history>
       </route>
     </router>
     <registry-authentication realm="{ state.realm }" scope="{ state.scope }" service="{ state.service }"
@@ -73,7 +74,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagHistory from './tag-history/tag-history.riot';
     import DialogsMenu from './dialogs/dialogs-menu.riot';
     import SearchBar from './search-bar.riot'
-    import RegistryAuthentication from './dialogs/registry-authentication.riot';
     import {
       stripHttps,
       getRegistryServers
@@ -87,7 +87,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         TagHistory,
         DialogsMenu,
         SearchBar,
-        RegistryAuthentication,
         Router,
         Route
       },
@@ -113,20 +112,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         })
       },
       onAuthentication(opts, onAuthenticated) {
-        const bearer = {
-          token: localStorage.getItem('registry.token'),
-          issued_at: localStorage.getItem('registry.issued_at'),
-          expires_in: localStorage.getItem('registry.expires_in')
-        }
-        if (bearer.token && bearer.issued_at && bearer.expires_in &&
-          (new Date().getTime() - new Date(bearer.issued_at).getTime()) < (bearer.expires_in * 1000)) {
-          onAuthenticated(bearer)
-        } else if (opts) {
-          this.update({
-            authenticationDialogOpened: true,
-            onAuthenticated,
-            ...opts
+        if (opts && opts.realm && opts.service && opts.scope) {
+          const {
+            realm,
+            service,
+            scope,
+          } = opts;
+          const req = new XMLHttpRequest()
+          req.addEventListener('loadend', () => {
+            try {
+              const bearer = JSON.parse(req.responseText);
+              onAuthenticated(bearer)
+            } catch (e) {
+              this.notifySnackbar(`Failed to log in: ${e.message}`, true)
+            }
           })
+          req.open('GET', `${realm}?service=${service}&scope=${scope}`)
+          req.send()
         } else {
           onAuthenticated()
         }

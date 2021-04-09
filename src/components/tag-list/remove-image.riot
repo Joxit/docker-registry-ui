@@ -43,21 +43,32 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.checked = props.checked;
       },
       deleteImage(ignoreError) {
-        deleteImage(this.props.image, this.props.registryUrl, ignoreError, this.props.onNotify)
+        deleteImage(this.props.image, {
+          ...this.props,
+          ignoreError
+        })
       },
       handleCheckboxChange(checked) {
         this.props.handleCheckboxChange(checked, this.props.image);
       }
     }
 
-    export function deleteImage(image, registryUrl, ignoreError, onNotify) {
+    export function deleteImage(image, opts) {
+      const {
+        registryUrl,
+        ignoreError,
+        onNotify,
+        onAuthentication
+      } = opts;
       if (!image.digest) {
         onNotify(`Information for ${name}:${tag} are not yet loaded.`);
         return;
       }
       const name = image.name;
       const tag = image.tag;
-      const oReq = new Http();
+      const oReq = new Http({
+        onAuthentication: onAuthentication
+      });
       oReq.addEventListener('loadend', function () {
         if (this.status == 200 || this.status == 202) {
           router.taglist(name);
@@ -71,7 +82,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           onNotify(this.responseText);
         }
       });
-      oReq.open('DELETE', registryUrl + '/v2/' + name + '/manifests/' + image.digest);
+      oReq.open('DELETE', `${registryUrl}/v2/${name}/manifests/${image.digest}`);
       oReq.setRequestHeader('Accept',
         'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
       oReq.addEventListener('error', function () {

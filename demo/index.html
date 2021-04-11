@@ -36,24 +36,16 @@
 </head>
 
 <body>
-  <script src="../dist/docker-registry-ui.js"></script>
-  <script>
-    if (DockerRegistryUI.getRegistryServers().length === 0) {
-      localStorage.setItem('registryServer', JSON.stringify([
-        'https://raw.githubusercontent.com/Joxit/docker-registry-ui/master/demo'
-      ]))
-    }
-
-    var url = DockerRegistryUI.getUrlQueryParam() || DockerRegistryUI.getRegistryServers(0);
-    var tag = document.createElement('docker-registry-ui');
-
-    tag.setAttribute('registry-url', url);
-    tag.setAttribute('show-content-digest', true);
-    tag.setAttribute('is-image-remove-activated', true);
-    document.getElementsByTagName('body').item(0).appendChild(tag);
-    DockerRegistryUI.updateUrlQueryParam(url);
-    DockerRegistryUI.load();
-  </script>
+  <docker-registry-ui registry-url="" name="Demo Docker Registry UI" pull-url="" show-content-digest="true"
+    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false">
+    <script>
+      if (!localStorage.getItem('registryServer')) {
+        localStorage.setItem('registryServer', JSON.stringify([
+          'https://raw.githubusercontent.com/Joxit/docker-registry-ui/master/demo'
+        ]))
+      }
+    </script>
+    <script src="../dist/docker-registry-ui.js"></script>
   <script>
     (function (i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;

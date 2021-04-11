@@ -4,17 +4,13 @@ sed -i "s,\${REGISTRY_URL},${REGISTRY_URL}," index.html
 sed -i "s,\${REGISTRY_TITLE},${REGISTRY_TITLE}," index.html
 sed -i "s,\${PULL_URL},${PULL_URL}," index.html
 sed -i "s,\${SINGLE_REGISTRY},${SINGLE_REGISTRY}," index.html
+sed -i "s/\${CATALOG_ELEMENTS_LIMIT}/${CATALOG_ELEMENTS_LIMIT}/" index.html
+sed -i "s/\${SHOW_CONTENT_DIGEST}/${SHOW_CONTENT_DIGEST}/" index.html
 
 if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
-  sed -i -r "s/\${DELETE_IMAGES}/false/" index.html
-fi
-
-if [ "${SHOW_CONTENT_DIGEST}" = false ] ; then
-  sed -i -r "s/\${SHOW_CONTENT_DIGEST}/false/" index.html
-fi
-
-if [ -n "${CATALOG_ELEMENTS_LIMIT}" ] ; then
-  sed -i -r "s/\${CATALOG_ELEMENTS_LIMIT}/${CATALOG_ELEMENTS_LIMIT}/" index.html
+  sed -i "s/\${DELETE_IMAGES}/false/" index.html
+else
+  sed -i "s/\${DELETE_IMAGES}/true/" index.html
 fi
 
 get_nginx_proxy_headers() {

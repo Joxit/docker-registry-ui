@@ -63,16 +63,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <td if="{ props.isImageRemoveActivated }" class="remove-tag">
             <remove-image multi-delete="{ state.multiDelete }" image="{ image }" registry-url="{ props.registryUrl }"
               handleCheckboxChange="{ onRemoveImageChange }" checked="{ state.toDelete.has(image) }"
-              on-notify="{ props.onNotify }" />
+              on-notify="{ props.onNotify }" on-authentication="{ props.onAuthentication }" />
           </td>
         </tr>
       </tbody>
     </table>
   </material-card>
   <script>
-    import {
-      Http
-    } from '../../scripts/http';
     import {
       getPage,
     } from '../../scripts/utils';
@@ -112,7 +109,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.page = props.page
       },
       bulkDelete() {
-        this.state.toDelete.forEach(image => deleteImage(image, this.props.registryUrl, true, this.props.onNotify))
+        this.state.toDelete.forEach(image => deleteImage(image, {
+          ...this.props,
+          ignoreError: true
+        }))
       },
       onRemoveImageHeaderChange(checked, event) {
         if (event.altKey === true) {

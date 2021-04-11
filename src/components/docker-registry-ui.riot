@@ -28,20 +28,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <route path="{baseRoute}">
         <catalog registry-url="{ state.registryUrl }" registry-name="{ state.name }"
           catalog-elements-limit="{ state.catalogElementsLimit }" on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }" />
+          filter-results="{ state.filter }" on-authentication="{ onAuthentication }" />
       </route>
       <route path="{baseRoute}taglist/(.*)">
         <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
           is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }"></tag-list>
+          filter-results="{ state.filter }" on-authentication="{ onAuthentication }"></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
         <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
-          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"></tag-history>
+          is-image-remove-activated="{ props.isImageRemoveActivated }" on-notify="{ notifySnackbar }"
+          on-authentication="{ onAuthentication }"></tag-history>
       </route>
     </router>
+    <registry-authentication realm="{ state.realm }" scope="{ state.scope }" service="{ state.service }"
+      on-close="{ onAuthenticationClose }" on-authenticated="{ state.onAuthenticated }"
+      opened="{ state.authenticationDialogOpened }"></registry-authentication>
     <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
   </main>
   <footer>
@@ -105,6 +109,33 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           name: stripHttps(registryUrl),
           pullUrl: this.pullUrl(registryUrl),
           snackbarMessage: 'Registry server changed to `' + registryUrl + '`.'
+        })
+      },
+      onAuthentication(opts, onAuthenticated) {
+        if (opts && opts.realm && opts.service && opts.scope) {
+          const {
+            realm,
+            service,
+            scope,
+          } = opts;
+          const req = new XMLHttpRequest()
+          req.addEventListener('loadend', () => {
+            try {
+              const bearer = JSON.parse(req.responseText);
+              onAuthenticated(bearer)
+            } catch (e) {
+              this.notifySnackbar(`Failed to log in: ${e.message}`, true)
+            }
+          })
+          req.open('GET', `${realm}?service=${service}&scope=${scope}`)
+          req.send()
+        } else {
+          onAuthenticated()
+        }
+      },
+      onAuthenticationClose() {
+        this.update({
+          authenticationDialogOpened: false
         })
       },
       pullUrl(registryUrl, pullUrl) {

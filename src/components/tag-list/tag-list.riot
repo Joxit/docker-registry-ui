@@ -39,7 +39,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}" page="{ state.page }"
     show-content-digest="{props.showContentDigest}" is-image-remove-activated="{props.isImageRemoveActivated}"
     onReverseOrder="{ onReverseOrder }" registry-url="{ props.registryUrl }" pull-url="{ props.pullUrl }"
-    on-notify="{ props.onNotify }" filter-results="{ props.filterResults }"></tag-table>
+    on-notify="{ props.onNotify }" filter-results="{ props.filterResults }"
+    on-authentication="{ props.onAuthentication }">
+  </tag-table>
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
@@ -82,11 +84,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       display(props, state) {
         state.tags = [];
         const self = this;
-        const oReq = new Http();
+        const oReq = new Http({
+          onAuthentication: props.onAuthentication
+        });
         oReq.addEventListener('load', function () {
           if (this.status == 200) {
             const tags = (JSON.parse(this.responseText).tags || [])
-              .map(tag => new DockerImage(props.image, tag, null, props.registryUrl, props.onNotify))
+              .map(tag => new DockerImage(props.image, tag, {
+                registryUrl: props.registryUrl,
+                onNotify: props.onNotify,
+                onAuthentication: props.onAuthentication
+              }))
               .sort(compare);
             window.requestAnimationFrame(self.onResize);
             self.update({

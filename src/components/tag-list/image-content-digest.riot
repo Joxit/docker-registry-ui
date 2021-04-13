@@ -15,11 +15,20 @@ Copyright (C) 2016-2021 Jones Magloire @Joxit
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-content-digest>
-  <div title="{ state.title }">{ state.displayId }</div>
+  <div title="{ getTitle(props.image, state.chars) }">{ getDigest(props.image, state.chars) }</div>
   <script>
     export default {
-      onMounted(props) {
-        this.chars = -1;
+      onMounted(props, state) {
+        this.load(props, state);
+      },
+      onUpdated(props, state) {
+        this.load(props, state);
+      },
+      load(props, state) {
+        if (props.image.digest) {
+          return;
+        }
+        state.chars = -1;
         props.image.one('content-digest', (digest) => {
           this.digest = digest;
           props.image.on('content-digest-chars', this.onResize);
@@ -28,22 +37,23 @@ Copyright (C) 2016-2021 Jones Magloire @Joxit
         props.image.trigger('get-content-digest');
       },
       onResize(chars) {
-      if (chars === this.chars) {
-        return;
-      }
-      let displayId = this.digest;
-      let title = '';
-      this.chars = chars;
-      if (chars >= 70) {
-        displayId = this.digest;
-      } else if (chars <= 0) {
-        displayId = '';
-        title = this.digest;
-      } else {
-        displayId = this.digest.slice(0, chars) + '...';
-        title = this.digest;
-      }
-      this.update({title, displayId});
+        if (chars !== this.state.chars) {
+          this.update({
+            chars
+          });
+        }
+      },
+      getTitle(image, chars) {
+        return chars >= 70 ? '' : (image.digest || '');
+      },
+      getDigest(image, chars) {
+        if (chars >= 70) {
+          return image.digest || '';
+        } else if (chars <= 0) {
+          return '';
+        } else {
+          return image.digest && image.digest.slice(0, chars) + '...';
+        }
       }
     }
   </script>

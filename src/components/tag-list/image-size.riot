@@ -15,21 +15,33 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-size>
-  <div title="Compressed size of your image.">{ bytesToSize(state.size) }</div>
+  <div title="Compressed size of your image.">{ getImageSize(props.image) }</div>
   <script>
     import {
       bytesToSize,
     } from '../../scripts/utils';
     export default {
-      onMounted(props) {
+      onMounted(props, state) {
+        this.load(props, state);
+      },
+      onUpdated(props, state) {
+        this.load(props, state);
+      },
+      load(props, state) {
+        if (typeof props.image.size === 'number') {
+          return;
+        }
         props.image.on('size', (size) => {
           this.update({
             size
           });
         });
         props.image.trigger('get-size');
+
       },
-      bytesToSize
+      getImageSize(image) {
+        return bytesToSize(image.size)
+      }
     }
   </script>
 </image-size>

@@ -19,13 +19,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <table style="border: none;">
       <thead>
         <tr>
-          <th class="creation-date">Creation date</th>
-          <th class="image-size">Size</th>
+          <th
+            class="creation-date { (state.desc && state.orderType === 'date') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
+            onclick="{() => onPageReorder('date') }">
+            Creation date
+          </th>
+          <th
+            class="image-size { (state.desc && state.orderType === 'size') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
+            onclick="{() => onPageReorder('size') }">
+            Size
+          </th>
           <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th>
 
           <th id="image-tag-header"
             class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
-            onclick="{() => props.onReverseOrder() }">Tag
+            onclick="{ onReverseOrder }">Tag
           </th>
           <th class="show-tag-history">History</th>
           <th class="remove-tag { state.toDelete.size > 0 ? 'delete' : '' }" if="{ props.isImageRemoveActivated }">
@@ -138,7 +146,32 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           toDelete: this.state.toDelete
         })
       },
-      getPage,
+      onReverseOrder() {
+        this.state.orderType = null;
+        this.state.desc = false;
+        this.props.onReverseOrder();
+      },
+      onPageReorder(type) {
+        this.update({
+          orderType: type,
+          desc: (this.state.orderType && this.state.orderType !== type) || !this.state.desc
+        })
+      },
+      getPage(tags, page) {
+        const sortedTags = getPage(tags, page);
+        if (this.state.orderType === 'date') {
+          sortedTags.sort((e1, e2) =>
+            !this.state.desc ?
+            e2.creationDate.getTime() - e1.creationDate.getTime() :
+            e1.creationDate.getTime() - e2.creationDate.getTime());
+        } else if (this.state.orderType === 'size') {
+          sortedTags.sort((e1, e2) =>
+            !this.state.desc ?
+            e2.size - e1.size :
+            e1.size - e2.size);
+        }
+        return sortedTags;
+      },
       matchSearch
     }
   </script>

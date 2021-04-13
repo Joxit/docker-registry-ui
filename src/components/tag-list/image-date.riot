@@ -15,17 +15,14 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-date>
-  <div title="Creation date { state.localDate }">{ dateFormat(state.date) } ago</div>
+  <div title="Creation date { getLocalDate(props.image) }">{ getDate(props.image) } ago</div>
   <script>
     import {
       dateFormat,
     } from '../../scripts/utils';
     export default {
-      state: {
-        localDate: 'unknown'
-      },
       onMounted(props) {
-        props.image.on('creation-date', (date) => {
+        props.image.one('creation-date', (date) => {
           this.update({
             date: date,
             localDate: date.toLocaleString()
@@ -33,7 +30,12 @@
         });
         props.image.trigger('get-date');
       },
-      dateFormat
+      getDate(image) {
+        return dateFormat(image.creationDate)
+      },
+      getLocalDate(image) {
+        return (image.creationDate && image.creationDate.toLocaleString()) || 'unknown'
+      }
     }
   </script>
 </image-date>

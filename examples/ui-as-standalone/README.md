@@ -13,7 +13,7 @@ docker-compose -f simple.yml up -d
 ./populate.sh
 ```
 
-You can add some credentials to access your registry wit `credentials.yml` docker-compose file.
+You can add some credentials to access your registry with `credentials.yml` docker-compose file.
 Credentials for this example are login: `registry` and password: `ui` using bcrypt.
 
 ```sh

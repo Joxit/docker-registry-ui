@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="material-card-title-action">
       <h2>
         Repositories of { state.registryName }
-        <div class="item-count">{ state.length } images</div>
+        <div class="item-count">{ state.nImages } images in { state.nRepositories } repositories</div>
       </h2>
     </div>
   </material-card>
@@ -90,7 +90,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.addEventListener('loadend', function () {
           self.update({
             repositories,
-            length: repositories.length,
+            nRepositories: repositories.length,
+            nImages: repositories.reduce((acc, e) => acc + (e.images && e.images.length || 1), 0),
             loadend: true
           });
         });

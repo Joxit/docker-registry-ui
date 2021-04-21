@@ -15,18 +15,20 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <dialogs-menu>
-  <material-button onClick="{ onClick }" waves-center="true" rounded="true" waves-opacity="0.6" waves-duration="600">
-    <i class="material-icons">more_vert</i>
-  </material-button>
-  <material-dropdown-list items="{ dropdownItems }" onSelect="{ onDropdownSelect }"
-    opened="{ state.isDropdownOpened }" />
-  <div class="overlay" onclick="{ onClick }" if="{ state.isDropdownOpened }"></div>
   <add-registry-url opened="{ state['add-registry-url'] }" on-close="{ onClose('add-registry-url') }"
     on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></add-registry-url>
   <change-registry-url opened="{ state['change-registry-url'] }" on-close="{ onClose('change-registry-url') }"
     on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></change-registry-url>
   <remove-registry-url opened="{ state['remove-registry-url'] }" on-close="{ onClose('remove-registry-url') }"
     on-notify="{ props.onNotify }" on-server-change="{ props.onServerChange }"></remove-registry-url>
+  <div class="container">
+    <material-button onClick="{ onClick }" waves-center="true" rounded="true" waves-opacity="0.6" waves-duration="600">
+      <i class="material-icons">more_vert</i>
+    </material-button>
+    <material-dropdown-list items="{ dropdownItems }" onSelect="{ onDropdownSelect }"
+      opened="{ state.isDropdownOpened }" />
+  </div>
+  <div class="overlay" onclick="{ onClick }" if="{ state.isDropdownOpened }"></div>
   <script>
     import AddRegistryUrl from './add-registry-url.riot';
     import ChangeRegistryUrl from './change-registry-url.riot';
@@ -70,7 +72,7 @@
     }
   </script>
   <style>
-    :host {
+    :host > .container{
       position: absolute;
       top: 0px;
       right: 16px;

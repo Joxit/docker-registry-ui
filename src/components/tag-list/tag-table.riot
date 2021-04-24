@@ -15,6 +15,9 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-table>
+  <confirm-delete-image opened="{ state.confirmDeleteImage }" on-click="{ onConfirmDeleteImageClick }"
+    registry-url="{ props.registryUrl }" on-notify="{ props.onNotify }" on-authentication="{ props.onAuthentication }"
+    tags="{ props.tags }" to-delete="{ state.toDelete }"></confirm-delete-image>
   <material-card class="taglist">
     <table style="border: none;">
       <thead>
@@ -87,12 +90,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import ImageContentDigest from './image-content-digest.riot';
     import CopyToClipboard from './copy-to-clipboard.riot';
     import TagHistoryButton from './tag-history-button.riot';
-    import RemoveImage, {
-      deleteImage
-    } from './remove-image.riot';
+    import RemoveImage from './remove-image.riot';
     import {
       matchSearch
     } from '../search-bar.riot';
+    import ConfirmDeleteImage from '../dialogs/confirm-delete-image.riot';
     export default {
       components: {
         ImageDate,
@@ -102,6 +104,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         CopyToClipboard,
         RemoveImage,
         TagHistoryButton,
+        ConfirmDeleteImage,
       },
       onBeforeMount(props) {
         this.state = {
@@ -117,10 +120,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.page = props.page
       },
       bulkDelete() {
-        this.state.toDelete.forEach(image => deleteImage(image, {
-          ...this.props,
-          ignoreError: true
-        }))
+        this.update({
+          confirmDeleteImage: true
+        })
+      },
+      onConfirmDeleteImageClick() {
+        this.update({
+          confirmDeleteImage: false
+        })
       },
       onRemoveImageHeaderChange(checked, event) {
         if (event.altKey === true) {

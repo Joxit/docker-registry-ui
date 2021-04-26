@@ -39,12 +39,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             onclick="{ onReverseOrder }">Tag
           </th>
           <th class="show-tag-history">History</th>
-          <th class="remove-tag { state.toDelete.size > 0 ? 'delete' : '' }" if="{ props.isImageRemoveActivated }">
-            <material-checkbox class="indeterminate" checked="{ state.multiDelete }" if="{ state.toDelete.size === 0}"
+          <th class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
+            if="{ props.isImageRemoveActivated }">
+            <material-checkbox class="indeterminate" checked="{ state.multiDelete }"
+              if="{ state.toDelete.size === 0 || state.singleDeleteAction }"
               title="Toggle multi-delete. Alt+Click to select all tags." onChange="{ onRemoveImageHeaderChange }">
             </material-checkbox>
             <material-button waves-center="true" rounded="true" waves-color="#ddd"
-              title="This will delete selected images." onClick="{ bulkDelete }" if="{ state.toDelete.size > 0 }">
+              title="This will delete selected images." onClick="{ deleteImages }"
+              if="{ state.toDelete.size > 0 && !state.singleDeleteAction }">
               <i class="material-icons">delete</i>
             </material-button>
           </th>
@@ -95,6 +98,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       matchSearch
     } from '../search-bar.riot';
     import ConfirmDeleteImage from '../dialogs/confirm-delete-image.riot';
+    const ACTION_CHECK_TO_DELETE = 'CHECK';
+    const ACTION_UNCHECK_TO_DELETE = 'UNCHECK';
+    const ACTION_DELETE_IMAGE = 'DELETE';
+
     export default {
       components: {
         ImageDate,
@@ -119,13 +126,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         state.page = props.page
       },
-      bulkDelete() {
+      deleteImages() {
         this.update({
           confirmDeleteImage: true
         })
       },
       onConfirmDeleteImageClick() {
+        if (this.state.singleDeleteAction) {
+          this.state.toDelete.clear();
+        }
         this.update({
+          singleDeleteAction: false,
           confirmDeleteImage: false
         })
       },
@@ -143,14 +154,29 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           })
         }
       },
-      onRemoveImageChange(checked, image) {
-        if (checked) {
-          this.state.toDelete.add(image)
-        } else {
-          this.state.toDelete.delete(image)
+      onRemoveImageChange(action, image) {
+        let confirmDeleteImage = false;
+        let singleDeleteAction = false;
+        switch (action) {
+          case ACTION_CHECK_TO_DELETE: {
+            this.state.toDelete.add(image);
+            break;
+          }
+          case ACTION_UNCHECK_TO_DELETE: {
+            this.state.toDelete.delete(image);
+            break;
+          }
+          case ACTION_DELETE_IMAGE: {
+            this.state.toDelete.clear();
+            this.state.toDelete.add(image);
+            confirmDeleteImage = true;
+            singleDeleteAction = true;
+          }
         }
         this.update({
-          toDelete: this.state.toDelete
+          toDelete: this.state.toDelete,
+          confirmDeleteImage,
+          singleDeleteAction
         })
       },
       onReverseOrder() {
@@ -180,6 +206,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         return sortedTags;
       },
       matchSearch
+    }
+    export {
+      ACTION_CHECK_TO_DELETE,
+      ACTION_UNCHECK_TO_DELETE,
+      ACTION_DELETE_IMAGE
     }
   </script>
 </tag-table>

@@ -27,6 +27,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       Http
     } from '../../scripts/http';
     import router from '../../scripts/router'
+    import {
+      ACTION_CHECK_TO_DELETE,
+      ACTION_UNCHECK_TO_DELETE,
+      ACTION_DELETE_IMAGE
+    } from './tag-table.riot';
     export default {
       onBeforeMount(props, state) {
         state.checked = props.checked;
@@ -42,56 +47,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onBeforeUpdate(props, state) {
         state.checked = props.checked;
       },
-      deleteImage(ignoreError) {
-        deleteImage(this.props.image, {
-          ...this.props,
-          ignoreError
-        })
+      deleteImage() {
+        this.props.handleCheckboxChange(ACTION_DELETE_IMAGE, this.props.image);
       },
       handleCheckboxChange(checked) {
-        this.props.handleCheckboxChange(checked, this.props.image);
+        const action = checked ? ACTION_CHECK_TO_DELETE : ACTION_UNCHECK_TO_DELETE;
+        this.props.handleCheckboxChange(action, this.props.image);
       }
-    }
-
-    export function deleteImage(image, opts) {
-      const {
-        registryUrl,
-        ignoreError,
-        onNotify,
-        onAuthentication
-      } = opts;
-      if (!image.digest) {
-        onNotify(`Information for ${name}:${tag} are not yet loaded.`);
-        return;
-      }
-      const name = image.name;
-      const tag = image.tag;
-      const oReq = new Http({
-        onAuthentication: onAuthentication
-      });
-      oReq.addEventListener('loadend', function () {
-        if (this.status == 200 || this.status == 202) {
-          router.taglist(name);
-          onNotify(`Deleting ${name}:${tag} image. Run \`registry garbage-collect config.yml\` on your registry`);
-        } else if (this.status == 404) {
-          ignoreError || onNotify({
-            message: 'Digest not found for this image in your registry.',
-            isError: true
-          });
-        } else {
-          onNotify(this.responseText);
-        }
-      });
-      oReq.open('DELETE', `${registryUrl}/v2/${name}/manifests/${image.digest}`);
-      oReq.setRequestHeader('Accept',
-        'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
-      oReq.addEventListener('error', function () {
-        onNotify({
-          message: 'An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].',
-          isError: true
-        });
-      });
-      oReq.send();
     }
   </script>
 </remove-image>

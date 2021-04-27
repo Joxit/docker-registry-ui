@@ -1,0 +1,108 @@
+<!--
+ Copyright (C) 2016-2021 Jones Magloire @Joxit
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<confirm-delete-image>
+  <material-popup opened="{ props.opened }" onClick="{ props.onClick }">
+    <div slot="title">These images will be deleted</div>
+    <div slot="content">
+      <ul>
+        <li each="{ image in displayImagesToDelete(props.toDelete, props.tags) }">{ image.name }:{ image.tag }</li>
+      </ul>
+    </div>
+    <div slot="action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ deleteImages }">
+        Delete
+      </material-button>
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClick }">
+        Cancel
+      </material-button>
+    </div>
+  </material-popup>
+  <script>
+    import {
+      Http
+    } from '../../scripts/http';
+    import router from '../../scripts/router';
+    export default {
+      displayImagesToDelete(toDelete, tags) {
+        const digests = new Set();
+        toDelete.forEach(image => {
+          if (image.digest) {
+            digests.add(image.digest);
+          }
+        })
+        return tags.filter(image => digests.has(image.digest))
+      },
+      deleteImages() {
+        this.props.toDelete.forEach(image => this.deleteImage(image, this.props));
+      },
+      deleteImage(image, opts) {
+        const {
+          registryUrl,
+          ignoreError,
+          onNotify,
+          onAuthentication,
+          onClick
+        } = opts;
+        if (!image.digest) {
+          onNotify(`Information for ${name}:${tag} are not yet loaded.`);
+          return;
+        }
+        const name = image.name;
+        const tag = image.tag;
+        const oReq = new Http({
+          onAuthentication: onAuthentication
+        });
+        oReq.addEventListener('loadend', function () {
+          if (this.status == 200 || this.status == 202) {
+            router.taglist(name);
+            onNotify(`Deleting ${name}:${tag} image. Run \`registry garbage-collect config.yml\` on your registry`);
+          } else if (this.status == 404) {
+            ignoreError || onNotify({
+              message: 'Digest not found for this image in your registry.',
+              isError: true
+            });
+          } else {
+            onNotify(this.responseText);
+          }
+          onClick();
+        });
+        oReq.open('DELETE', `${registryUrl}/v2/${name}/manifests/${image.digest}`);
+        oReq.setRequestHeader('Accept',
+          'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
+        oReq.addEventListener('error', function () {
+          onNotify({
+            message: 'An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].',
+            isError: true
+          });
+        });
+        oReq.send();
+      }
+    }
+  </script>
+  <style>
+    :host {
+      color: #000;
+      list-style-type: disc;
+      margin-block-start: 0.7em;
+    }
+
+    :host material-popup .content .material-popup-content {
+      overflow-y: auto;
+      max-height: 250px;
+    }
+  </style>
+</confirm-delete-image>

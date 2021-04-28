@@ -9,11 +9,12 @@ services:
       - ./registry-config/simple.yml:/etc/docker/registry/config.yml
 
   ui:
-    image: joxit/docker-registry-ui:static
+    image: joxit/docker-registry-ui:latest
     ports:
       - 80:80
     environment:
       - REGISTRY_TITLE=My Private Docker Registry
-      - URL=http://localhost:5000
+      - REGISTRY_URL=http://localhost:5000
+      - SINGLE_REGISTRY=true
     depends_on:
       - registry

@@ -39,8 +39,8 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Select all tags with ALT + Click to delete (see [#80](https://github.com/Joxit/docker-registry-ui/issues/80)).
 -   One interface for many registries (when `SINGLE_REGISTRY=false`).
 -   Share your docker registry with query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`) (when `SINGLE_REGISTRY=false`).
--   Use the UI as reverse proxy (with `REGISTRY_URL` environment variable) to your docker registry (This will avoid CORS).
--   Add Title when using `REGISTRY_URL` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)).
+-   Use the UI as reverse proxy (with `NGINX_PROXY_PASS_URL` environment variable) to your docker registry (This will avoid CORS).
+-   Add Title when using `REGISTRY_TITLE` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)).
 -   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)).
 -   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89))
 -   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `true`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)).

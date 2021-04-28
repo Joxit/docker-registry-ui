@@ -10,12 +10,13 @@ services:
     network_mode: host
 
   ui:
-    image: joxit/docker-registry-ui:static
+    image: joxit/docker-registry-ui:latest
     ports:
       - 80:80
     environment:
-      - URL=http://127.0.0.1:5000
+      - REGISTRY_URL=http://127.0.0.1:5000
       - DELETE_IMAGES=true
+      - SINGLE_REGISTRY=true
     depends_on:
       - registry
     network_mode: host

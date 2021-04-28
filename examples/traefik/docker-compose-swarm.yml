@@ -12,11 +12,12 @@ services:
             constraints: [node.role == manager]
 
     ui:
-        image: joxit/docker-registry-ui:static
+        image: joxit/docker-registry-ui:latest
         environment:
             - DELETE_IMAGES=true
             - REGISTRY_TITLE=My Private Docker Registry
-            - REGISTRY_URL=http://docker-registry_registry:5000
+            - NGINX_PROXY_PASS_URL=http://docker-registry_registry:5000
+            - SINGLE_REGISTRY=true
         depends_on: ['registry']
         networks: ['proxy', 'default']
         deploy:

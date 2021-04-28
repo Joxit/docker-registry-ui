@@ -9,11 +9,12 @@ services:
       - registry-ui-net
 
   ui:
-    image: joxit/docker-registry-ui:static
+    image: joxit/docker-registry-ui:latest
     ports:
       - 80:80
     environment:
       - REGISTRY_TITLE=My Private Docker Registry
+      - SINGLE_REGISTRY=true
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./read-write.htpasswd:/etc/nginx/auth/read-write.htpasswd:ro

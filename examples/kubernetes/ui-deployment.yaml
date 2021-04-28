@@ -5,7 +5,7 @@ metadata:
   labels:
     app: registry-ui
     release: docker-registry-ui
-    app/version: "1.2.1"
+    app/version: "2.0.0"
 spec:
   replicas: 1
   selector:
@@ -27,10 +27,12 @@ spec:
               value: "Docker registry UI"
             - name: DELETE_IMAGES
               value: "false"
-            - name: REGISTRY_URL
+            - name: NGINX_PROXY_PASS_URL
               value: "http://docker-registry.default:5000"
             - name: PULL_URL
               value: "docker-registry-ui.default:80"
+            - name: SINGLE_REGISTRY
+              value: "true"
           ports:
             - name: http
               containerPort: 80

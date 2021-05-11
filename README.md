@@ -81,14 +81,14 @@ Need more informations ? Try my [examples](https://github.com/Joxit/docker-regis
 
 Some env options are available for use this interface for **only one server**.
 
-- `REGISTRY_URL`: The default url of your docker registry. You may need CORS configuration on your registry. (default: derived from the hostname of your UI).
+- `REGISTRY_URL`: The default url of your docker registry. You may need CORS configuration on your registry. This is usually the domain name or IP of your registry reachable by your computer (e.g `http://registry.example.com`). (default: derived from the hostname of your UI).
 - `REGISTRY_TITLE`: Set a custom title for your user interface. (default: value derived from `REGISTRY_URL`).
 - `PULL_URL`: Set a custom url when you copy the `docker pull` command. (default: value derived from `REGISTRY_URL`).
 - `DELETE_IMAGES`: Set if we can delete images from the UI. (default: `false`)
 - `SHOW_CONTENT_DIGEST`: Show content digest in docker tag list. (default: `true`)
 - `CATALOG_ELEMENTS_LIMIT`: Limit the number of elements in the catalog page. (default: `100000`).
 - `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default `false`)
-- `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration).
+- `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`.
 - `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and set **custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
 
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
@@ -101,12 +101,12 @@ If your docker registry does not need credentials, you will need to send this HE
 
     Access-Control-Allow-Origin: ['*']
 
-If your docker registry need credentials, you will need to send these HEADERS:
+If your docker registry need credentials, you will need to send these HEADERS (you must add the protocol `http`/`https` and the port when not default `80`/`443`):
 
 ```yml
 http:
   headers:
-    Access-Control-Allow-Origin: ['<your docker-registry-ui url>']
+    Access-Control-Allow-Origin: ['http://registry.example.com']
     Access-Control-Allow-Credentials: [true]
     Access-Control-Allow-Headers: ['Authorization', 'Accept']
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional

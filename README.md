@@ -9,8 +9,6 @@ title: Docker Registry User Interface
 
 ## Overview
 
-:warning: `joxit/docker-registry-ui:master` and `joxit/docker-registry-ui:main` tags contains unreleased v2.0.0 version!
-
 This project aims to provide a simple and complete user interface for your private docker registry. You can customize the interface with various options. The major option is `SINGLE_REGISTRY` which allows you to disable the dynamic selection of docker registeries (same behavior as the old **static** tag).
 
 You may need the [migration guide from 1.x to 2.x](https://github.com/Joxit/docker-registry-ui/wiki/Migrating-from-1.x-to-2.x) or [the 1.x readme](https://github.com/Joxit/docker-registry-ui/blob/8fe3adf12540d1316cb57628ebe86a392a703d90/README.md)

@@ -173,3 +173,7 @@ export function decodeURI(url) {
   }
   return url.startsWith('http') ? window.decodeURIComponent(url) : atob(url);
 }
+
+export function truthy(value) {
+  return value === true || value === "true";
+}

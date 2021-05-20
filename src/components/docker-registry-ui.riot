@@ -32,14 +32,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </route>
       <route path="{baseRoute}taglist/(.*)">
         <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
-          image="{ router.getTagListImage() }" show-content-digest="{props.showContentDigest}"
-          is-image-remove-activated="{props.isImageRemoveActivated}" on-notify="{ notifySnackbar }"
+          image="{ router.getTagListImage() }" show-content-digest="{ truthy(props.showContentDigest) }"
+          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }" on-notify="{ notifySnackbar }"
           filter-results="{ state.filter }" on-authentication="{ onAuthentication }"></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
         <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
-          is-image-remove-activated="{ props.isImageRemoveActivated }" on-notify="{ notifySnackbar }"
+          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }" on-notify="{ notifySnackbar }"
           on-authentication="{ onAuthentication }"></tag-history>
       </route>
     </router>
@@ -76,7 +76,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import SearchBar from './search-bar.riot'
     import {
       stripHttps,
-      getRegistryServers
+      getRegistryServers,
+      truthy
     } from '../scripts/utils';
     import router from '../scripts/router';
 
@@ -95,6 +96,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.snackbarMessage = undefined;
       },
       onBeforeMount(props) {
+        console.log(props)
         // props.singleRegistry === 'true' means old static version 
         this.state.registryUrl = props.registryUrl ||
           (props.singleRegistry === 'true' ? undefined : (router.getUrlQueryParam() || getRegistryServers(0))) ||
@@ -164,7 +166,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,
-      version
+      version,
+      truthy
     }
   </script>
 </docker-registry-ui>

@@ -96,7 +96,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.snackbarMessage = undefined;
       },
       onBeforeMount(props) {
-        console.log(props)
         // props.singleRegistry === 'true' means old static version 
         this.state.registryUrl = props.registryUrl ||
           (props.singleRegistry === 'true' ? undefined : (router.getUrlQueryParam() || getRegistryServers(0))) ||

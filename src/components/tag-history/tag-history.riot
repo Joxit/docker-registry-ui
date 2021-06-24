@@ -64,9 +64,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onTabChanged(arch, idx) {
         const state = this.state;
+        const {
+          registryUrl,
+          onNotify
+        } = this.props;
         state.elements = []
         state.image.variants[idx] = state.image.variants[idx] ||
-          new DockerImage(this.props.image, arch.digest, false, this.props.registryUrl, this.props.onNotify);
+          new DockerImage(this.props.image, arch.digest, {
+            list: false,
+            registryUrl,
+            onNotify
+          });
         if (state.image.variants[idx].blobs) {
           return this.processBlobs(state.image.variants[idx].blobs);
         }

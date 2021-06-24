@@ -44,6 +44,7 @@ export default [
       dir: output,
       name: 'DockerRegistryUI',
       format: 'iife',
+      sourcemap: useServe
     },
     plugins: [emptyDirectories(output)].concat(
       plugins,

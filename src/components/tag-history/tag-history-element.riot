@@ -18,29 +18,89 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <div class="headline"><i class="material-icons">{ state.icon }</i>
     <p>{ state.name }</p>
   </div>
-  <div class="value" if="{ state.value }"> { state.value }</div>
-  <div class="value" each="{ value in state.values }" if="{ state.values }"> { value }</div>
+  <div class="content">
+    <div class="value" if="{ state.value }"> { state.value }</div>
+    <div class="values value" each="{ value in state.values }" if="{ state.values }"> { value }</div>
+  </div>
   <script>
     import {
       getHistoryIcon
     } from '../../scripts/utils';
     export default {
-      onBeforeStar(props, state) {
+      onBeforeStart(props, state) {
         state.key = props.entry.key;
         state.icon = getHistoryIcon(props.entry.key);
-        state.name = props.entry.key.replace('_', ' ');
-        if (props.value instanceof Array) {
+        state.name = this.cleanName(props.entry.key);
+        if (props.entry.value instanceof Array) {
           state.values = props.entry.value;
         } else {
           state.value = props.entry.value;
         }
       },
       onBeforeMount(props, state) {
-        this.onBeforeStar(props, state);
+        this.onBeforeStart(props, state);
       },
       onBeforeUpdate(props, state) {
-        this.onBeforeStar(props, state);
+        this.onBeforeStart(props, state);
+      },
+      cleanName(name) {
+        if (name === 'id') {
+          return name;
+        } else if (name === 'os') {
+          return 'OS';
+        }
+        return name.replace(/([a-z])([A-Z])/g, '$1 $2')
+          .replace('_', ' ')
+          .split(' ')
+          .map(word => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+          .join(' ');
       }
     }
   </script>
+  <style>
+    :host.Labels .value,
+    :host.Env .value {
+      margin-bottom: 0.5em;
+    }
+
+    :host i {
+      font-size: 20px;
+      padding: 0px;
+    }
+
+    :host.docker_version .headline .material-icons {
+      background-size: 24px auto;
+      background-image: url("images/docker-logo.svg");
+      background-repeat: no-repeat;
+    }
+
+    :host {
+      display: block;
+      padding: 20px;
+      min-width: 100px;
+      min-height: 3em;
+      width: 420px;
+      float: left;
+    }
+
+    :host .content {
+      overflow-x: auto;
+    }
+
+    :host.id .content {
+      overflow-x: initial;
+    }
+
+    :host .headline p {
+      font-weight: bold;
+      line-height: 20px;
+      position: relative;
+      display: inline;
+      top: -4px;
+    }
+
+    :host.id div.value {
+      font-size: 12px;
+    }
+  </style>
 </tag-history-element>

@@ -410,39 +410,6 @@ tag-history material-card {
   min-height: auto;
 }
 
-tag-history-element i {
-  font-size: 20px;
-  padding: 0px;
-}
-
-tag-history-element.docker_version .headline .material-icons {
-  background-size: 24px auto;
-  background-image: url("images/docker-logo.svg");
-  background-repeat: no-repeat;
-}
-
-tag-history-element {
-  display: block;
-  padding: 20px;
-  min-width: 100px;
-  min-height: 3em;
-  width: 420px;
-  float: left;
-  overflow-x: auto;
-}
-
-tag-history-element .headline p {
-  font-weight: bold;
-  line-height: 20px;
-  position: relative;
-  display: inline;
-  top: -4px;
-}
-
-tag-history-element.id div.value {
-  font-size: 12px;
-}
-
 tag-history-button button {
   background: none;
   border: none;

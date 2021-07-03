@@ -6,3 +6,4 @@ registry-data
 _site
 *.orig
 .serve/
+demo/v2

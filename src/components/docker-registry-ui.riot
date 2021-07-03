@@ -97,9 +97,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onBeforeMount(props) {
         // props.singleRegistry === 'true' means old static version 
-        this.state.registryUrl = props.registryUrl ||
+        const registryUrl = props.registryUrl ||
           (props.singleRegistry === 'true' ? undefined : (router.getUrlQueryParam() || getRegistryServers(0))) ||
           (window.location.origin + window.location.pathname.replace(/\/+$/, ''));
+        this.state.registryUrl = registryUrl.replace(/\/$/, '');
         this.state.name = props.name || stripHttps(props.registryUrl);
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
         this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);

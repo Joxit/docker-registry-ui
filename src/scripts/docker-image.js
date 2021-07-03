@@ -98,7 +98,7 @@ export class DockerImage {
     oReq.addEventListener('loadend', function () {
       if (this.status == 200 || this.status == 202) {
         const response = JSON.parse(this.responseText);
-        if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json') {
+        if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json' && !response.layers) {
           self.trigger('list', response);
           const manifest = response.manifests[0];
           const image = new DockerImage(self.name, manifest.digest, { ...self.opts, list: false });

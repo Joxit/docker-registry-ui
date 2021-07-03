@@ -1,3 +1,0 @@
-{
-  "repositories": ["alpine", "debian", "joxit/docker-registry-ui", "joxit/kosmtik", "joxit/node", "joxit/rust-openssl", "joxit/tile-server-ui", "nginx"]
-}

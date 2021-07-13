@@ -64,7 +64,7 @@ export class DockerImage {
       return this.fillInfo();
     });
     this.on('get-sha256', function () {
-      if (this.size !== undefined) {
+      if (this.sha256 !== undefined) {
         return this.trigger('sha256', this.sha256);
       }
       return this.fillInfo();

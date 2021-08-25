@@ -15,9 +15,15 @@ jobs:
       run: npm install
     - name: Build the interface
       run: npm run build
-    - name: Current tag
-      id: current-tag
+    - name: Major tag
+      id: major-tag
+      run: echo "::set-output name=tag::$(git describe --tags | grep -o '^[0-9]*')"
+    - name: Minor tag
+      id: minor-tag
       run: echo "::set-output name=tag::$(git describe --tags | grep -o '^[0-9]*\.[0-9]*')"
+    - name: Patch tag
+      id: patch-tag
+      run: echo "::set-output name=tag::$(git describe --tags | grep -o '^[0-9]*\.[0-9]*\.[0-9]*')"
     - name: Download kokai
       run: curl -sSL https://github.com/Joxit/kokai/releases/download/$(curl -sSL https://api.github.com/repos/Joxit/kokai/releases/latest | jq -r ".tag_name")/kokai-linux-x86_64 > kokai
     - name: Create Release Note
@@ -51,7 +57,9 @@ jobs:
         push: true
         tags: |
           joxit/docker-registry-ui:latest
-          joxit/docker-registry-ui:${{steps.current-tag.outputs.tag}}
+          joxit/docker-registry-ui:${{steps.major-tag.outputs.tag}}
+          joxit/docker-registry-ui:${{steps.minor-tag.outputs.tag}}
+          joxit/docker-registry-ui:${{steps.patch-tag.outputs.tag}}
     - name: Build and push Latest Debian Version
       uses: docker/build-push-action@v2
       with:
@@ -61,4 +69,6 @@ jobs:
         push: true
         tags: |
           joxit/docker-registry-ui:debian
-          joxit/docker-registry-ui:${{steps.current-tag.outputs.tag}}-debian
+          joxit/docker-registry-ui:${{steps.major-tag.outputs.tag}}-debian
+          joxit/docker-registry-ui:${{steps.minor-tag.outputs.tag}}-debian
+          joxit/docker-registry-ui:${{steps.patch-tag.outputs.tag}}-debian

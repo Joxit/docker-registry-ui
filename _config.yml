@@ -13,3 +13,5 @@ defaults:
       path: ""
     values:
       image: /screenshot.png
+plugins:
+  - jekyll-seo-tag

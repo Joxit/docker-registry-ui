@@ -16,7 +16,7 @@ computer.
 * After building the web application, navigate to the ```electron``` directory
   and execute following commands to build the executable:
     ```bash
-    cd electron
+    cd examples/electron
     npm install
     npm run dist
     ```

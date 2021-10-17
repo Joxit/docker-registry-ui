@@ -64,7 +64,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Why the default nginx `Host` is set to `$http_host` ?
     -   This fixes the issue [#88](https://github.com/Joxit/docker-registry-ui/issues/88). More about this in [#113](https://github.com/Joxit/docker-registry-ui/issues/113).
 -   Why DELETE fails with 401 status code (using Basic Auth) ?
-    -   This is caused by a bug in docker registry, I suggest to have your UI on the same domain than your registry e.g. registry.example.com/ui/. (see [#104](https://github.com/Joxit/docker-registry-ui/issues/104)).
+    -   This is caused by a bug in docker registry, I suggest to have your UI on the same domain than your registry and use `NGINX_PROXY_PASS_URL` e.g. registry.example.com/ui/. (see [#104](https://github.com/Joxit/docker-registry-ui/issues/104), [#204](https://github.com/Joxit/docker-registry-ui/issues/204), [#207](https://github.com/Joxit/docker-registry-ui/issues/207), [#214](https://github.com/Joxit/docker-registry-ui/issues/214)).
 -   Can I use the docker registry ui as a standalone application (with Electron) ?
     -   Yes, check out the example [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/electron). (see [#129](https://github.com/Joxit/docker-registry-ui/pull/129))
 -   I deleted images through the UI, but they are still present on the server. How can I delete them?

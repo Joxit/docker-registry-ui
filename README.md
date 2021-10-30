@@ -41,7 +41,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Add Title when using `REGISTRY_TITLE` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)).
 -   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)).
 -   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89))
--   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `true`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)).
+-   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `false`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)).
 -   Limit the number of elements in the image list via `CATALOG_ELEMENTS_LIMIT` (see [#127](https://github.com/Joxit/docker-registry-ui/pull/127)).
 -   Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134))
 
@@ -83,7 +83,7 @@ Some env options are available for use this interface for **only one server**.
 - `REGISTRY_TITLE`: Set a custom title for your user interface. (default: value derived from `REGISTRY_URL`).
 - `PULL_URL`: Set a custom url when you copy the `docker pull` command. (default: value derived from `REGISTRY_URL`).
 - `DELETE_IMAGES`: Set if we can delete images from the UI. (default: `false`)
-- `SHOW_CONTENT_DIGEST`: Show content digest in docker tag list. (default: `true`)
+- `SHOW_CONTENT_DIGEST`: Show content digest in docker tag list. (default: `false`)
 - `CATALOG_ELEMENTS_LIMIT`: Limit the number of elements in the catalog page. (default: `100000`).
 - `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default `false`)
 - `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`.

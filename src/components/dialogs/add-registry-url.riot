@@ -32,7 +32,7 @@
   </material-popup>
   <script>
     import {
-      getRegistryServers
+      addRegistryServers
     } from '../../scripts/utils';
     import router from '../../scripts/router';
 
@@ -51,9 +51,7 @@
         if (!input.value.startsWith('http')) {
           return this.props.onNotify('The input field should start with http:// or https://.', true);
         }
-        const url = input.value.trim().replace(/\/*$/, '');
-        const registryServer = getRegistryServers().filter(e => e !== url);
-        localStorage.setItem('registryServer', JSON.stringify([url].concat(registryServer)));
+        const url = addRegistryServers(input.value);
         router.home()
         this.props.onServerChange(url);
         this.props.onClose()

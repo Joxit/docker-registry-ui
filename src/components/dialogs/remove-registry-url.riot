@@ -38,13 +38,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-popup>
   <script>
     import {
-      getRegistryServers
+      getRegistryServers,
+      removeRegistryServers
     } from '../../scripts/utils';
     export default {
       remove(event) {
         const url = event.currentTarget.attributes.url && event.currentTarget.attributes.url.value;
-        const registryServer = getRegistryServers().filter(e => e !== url);
-        localStorage.setItem('registryServer', JSON.stringify(registryServer));
+        removeRegistryServers(url);
         setTimeout(() => this.update(), 100);
       },
       getRegistryServers

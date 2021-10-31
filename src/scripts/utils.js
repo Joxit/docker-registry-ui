@@ -1,3 +1,5 @@
+const LOCAL_STORAGE_KEY = 'registryServer';
+
 export function bytesToSize(bytes) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   if (bytes == undefined || isNaN(bytes)) {
@@ -152,12 +154,34 @@ export const ERROR_CAN_NOT_READ_CONTENT_DIGEST = {
 
 export function getRegistryServers(i) {
   try {
-    const res = JSON.parse(localStorage.getItem('registryServer'));
+    const res = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
     if (res instanceof Array) {
       return !isNaN(i) ? res[i] : res.map((url) => url.trim().replace(/\/*$/, ''));
     }
   } catch (e) {}
   return !isNaN(i) ? '' : [];
+}
+
+export function setRegistryServers(registries) {
+  if (typeof registries === 'string') {
+    registries = registries.split(',');
+  } else if (!Array.isArray(registries)) {
+    throw new Error('setRegistries must be called with string or array parameter');
+  }
+  registries = registries.map((registry) => registry.replace(/\/*$/, ''));
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(registries));
+}
+
+export function addRegistryServers(registry) {
+  const url = registry.trim().replace(/\/*$/, '');
+  const registryServer = getRegistryServers().filter((e) => e !== url);
+  setRegistryServers([url].concat(registryServer));
+  return url;
+}
+
+export function removeRegistryServers(registry) {
+  const registryServers = getRegistryServers().filter((e) => e !== registry);
+  setRegistryServers(registryServers);
 }
 
 export function encodeURI(url) {
@@ -175,5 +199,5 @@ export function decodeURI(url) {
 }
 
 export function truthy(value) {
-  return value === true || value === "true";
+  return value === true || value === 'true';
 }

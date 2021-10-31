@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <div class="logo">Docker Registry UI</div>
       <search-bar on-search="{ onSearch }"></search-bar>
       <dialogs-menu if="{props.singleRegistry !== 'true'}" on-notify="{ notifySnackbar }"
-        on-server-change="{ onServerChange }"></dialogs-menu>
+        on-server-change="{ onServerChange }" default-registries="{ props.defaultRegistries }"></dialogs-menu>
     </material-navbar>
   </header>
   <main>
@@ -77,6 +77,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import {
       stripHttps,
       getRegistryServers,
+      setRegistryServers,
       truthy
     } from '../scripts/utils';
     import router from '../scripts/router';
@@ -96,6 +97,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.snackbarMessage = undefined;
       },
       onBeforeMount(props) {
+        if (props.defaultRegistries && props.defaultRegistries.length > 0) {
+          setRegistryServers(props.defaultRegistries);
+        }
+
         // props.singleRegistry === 'true' means old static version 
         const registryUrl = props.registryUrl ||
           (props.singleRegistry === 'true' ? undefined : (router.getUrlQueryParam() || getRegistryServers(0))) ||

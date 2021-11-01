@@ -97,7 +97,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.snackbarMessage = undefined;
       },
       onBeforeMount(props) {
-        if (props.defaultRegistries && props.defaultRegistries.length > 0) {
+        if (props.defaultRegistries && props.defaultRegistries.length > 0 && getRegistryServers().length === 0) {
           setRegistryServers(props.defaultRegistries);
         }
 

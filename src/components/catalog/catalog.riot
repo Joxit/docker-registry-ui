@@ -26,12 +26,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <div if="{ !state.loadend }" class="spinner-wrapper">
     <material-spinner></material-spinner>
   </div>
-  <catalog-element each="{ item in state.repositories }" item="{ item }" filter-results="{ props.filterResults }"/>
+  <catalog-element each="{ item in state.repositories }" item="{ item }" filter-results="{ props.filterResults }" />
   <script>
     import CatalogElement from './catalog-element.riot'
     import {
       Http
     } from '../../scripts/http';
+    import {
+      getRegistryServers
+    } from '../../scripts/utils';
 
     export default {
       components: {
@@ -41,18 +44,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         registryName: '',
         length: 0,
         loadend: false,
-        repositories: []
+        repositories: [],
+        registryUrl: ''
       },
 
       onBeforeMount(props) {
         this.state.registryName = props.registryName;
         this.state.catalogElementsLimit = props.catalogElementsLimit;
       },
-      onMounted(props) {
-        this.display(props, this.state)
+      onMounted(props, state) {
+        this.display(props, state)
       },
-
+      onUpdated(props, state) {
+        this.display(props, state);
+      },
       display(props, state) {
+        if (props.registryUrl === state.registryUrl) {
+          return;
+        }
+        state.registryUrl = props.registryUrl;
         let repositories = [];
         const self = this;
         const oReq = new Http({

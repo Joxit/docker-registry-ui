@@ -20,7 +20,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <div class="logo">Docker Registry UI</div>
       <search-bar on-search="{ onSearch }"></search-bar>
       <dialogs-menu if="{props.singleRegistry !== 'true'}" on-notify="{ notifySnackbar }"
-        on-server-change="{ onServerChange }" default-registries="{ props.defaultRegistries }"></dialogs-menu>
+        on-server-change="{ onServerChange }" default-registries="{ props.defaultRegistries }"
+        read-only-registries="{ truthy(props.readOnlyRegistries) }"></dialogs-menu>
     </material-navbar>
   </header>
   <main>
@@ -97,7 +98,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.snackbarMessage = undefined;
       },
       onBeforeMount(props) {
-        if (props.defaultRegistries && props.defaultRegistries.length > 0 && getRegistryServers().length === 0) {
+        if ((props.defaultRegistries && props.defaultRegistries.length > 0 && getRegistryServers().length === 0) ||
+          truthy(props.readOnlyRegistries)) {
           setRegistryServers(props.defaultRegistries);
         }
 

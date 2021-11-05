@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+  registry_1:
+    image: registry:latest
+    restart: always
+    ports:
+    - 5000:5000
+    container_name: registry_1
+    environment:
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin: "['*']"
+      REGISTRY_STORAGE_DELETE_ENABLED: 'true'
+    volumes:
+      - ./data:/var/lib/registry
+
+  registry_2:
+    image: registry:latest
+    restart: always
+    ports:
+    - 5001:5000
+    container_name: registry_2
+    environment:
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin: "['*']"
+      REGISTRY_STORAGE_DELETE_ENABLED: 'true'
+    volumes:
+      - ./data:/var/lib/registry
+
+  ui:
+    image: joxit/docker-registry-ui:latest
+    restart: always
+    container_name: registry-ui
+    environment:
+      - REGISTRY_TITLE=Private Docker Registry
+      - DEFAULT_REGISTRIES=http://localhost:5000,http://localhost:5001
+      - DELETE_IMAGES=true
+      - READ_ONLY_REGISTRIES=true
+      - SINGLE_REGISTRY=false
+    ports:
+      - 80:80

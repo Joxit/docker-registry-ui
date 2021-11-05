@@ -1,13 +1,13 @@
 #!/bin/sh
 
-sed -i "s,\${REGISTRY_URL},${REGISTRY_URL}," index.html
-sed -i "s,\${REGISTRY_TITLE},${REGISTRY_TITLE}," index.html
-sed -i "s,\${PULL_URL},${PULL_URL}," index.html
-sed -i "s,\${SINGLE_REGISTRY},${SINGLE_REGISTRY}," index.html
-sed -i "s/\${CATALOG_ELEMENTS_LIMIT}/${CATALOG_ELEMENTS_LIMIT}/" index.html
-sed -i "s/\${SHOW_CONTENT_DIGEST}/${SHOW_CONTENT_DIGEST}/" index.html
-sed -i "s/\${DEFAULT_REGISTRIES}/${DEFAULT_REGISTRIES}/" index.html
-sed -i "s/\${READ_ONLY_REGISTRIES}/${READ_ONLY_REGISTRIES}/" index.html
+sed -i "s~\${REGISTRY_URL}~${REGISTRY_URL}~" index.html
+sed -i "s~\${REGISTRY_TITLE}~${REGISTRY_TITLE}~" index.html
+sed -i "s~\${PULL_URL}~${PULL_URL}~" index.html
+sed -i "s~\${SINGLE_REGISTRY}~${SINGLE_REGISTRY}~" index.html
+sed -i "s~\${CATALOG_ELEMENTS_LIMIT}~${CATALOG_ELEMENTS_LIMIT}~" index.html
+sed -i "s~\${SHOW_CONTENT_DIGEST}~${SHOW_CONTENT_DIGEST}~" index.html
+sed -i "s~\${DEFAULT_REGISTRIES}~${DEFAULT_REGISTRIES}~" index.html
+sed -i "s~\${READ_ONLY_REGISTRIES}~${READ_ONLY_REGISTRIES}~" index.html
 
 if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
   sed -i "s/\${DELETE_IMAGES}/false/" index.html

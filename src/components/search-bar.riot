@@ -20,6 +20,18 @@
           input.value = '';
           notify();
         })
+        window.addEventListener('keydown', e => {
+          // F3 or CTRL + F
+          if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+            // already focused, fallback to default behavior
+            if (document.activeElement === input) {
+              return true;
+            } else {
+              e.preventDefault();
+              input.focus();
+            }
+          }
+        })
       }
     }
 

@@ -46,6 +46,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134))
 -   Set a list of default registries with `DEFAULT_REGISTRIES` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)).
 -   Desactivate add and remove regisitries with `READ_ONLY_REGISTRIES` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)).
+-   Filter images and tags with a search bar. You can select the search bar with the shortcut `CRTL` + `F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)). 
 
 ## FAQ
 

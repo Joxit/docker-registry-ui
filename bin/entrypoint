@@ -32,8 +32,25 @@ get_nginx_proxy_headers() {
   done
 }
 
+get_nginx_proxy_pass_headers() {
+  (
+    env &&
+    if [ -f "/etc/nginx/.env" ]; then
+      cat /etc/nginx/.env
+      # Force new line
+      echo ""
+    fi
+  ) | while read e; do
+    if [ -n "$(echo $e | grep -o '^NGINX_PROXY_PASS_HEADER_')" ]; then
+      key=$(echo ${e%%=*} | sed 's/^NGINX_PROXY_PASS_HEADER_//' | sed 's/_/-/g')
+      echo -n "proxy_pass_header \"${key}\"; "
+    fi
+  done
+}
+
 if [ -n "${NGINX_PROXY_PASS_URL}" ] ; then
   sed -i "s,\${NGINX_PROXY_PASS_URL},${NGINX_PROXY_PASS_URL}," /etc/nginx/conf.d/default.conf
   sed -i "s^\${NGINX_PROXY_HEADERS}^$(get_nginx_proxy_headers)^" /etc/nginx/conf.d/default.conf
+  sed -i "s^\${NGINX_PROXY_PASS_HEADERS}^$(get_nginx_proxy_pass_headers)^" /etc/nginx/conf.d/default.conf
   sed -i "s,#!,," /etc/nginx/conf.d/default.conf
 fi

@@ -46,7 +46,8 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134))
 -   Set a list of default registries with `DEFAULT_REGISTRIES` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)).
 -   Desactivate add and remove regisitries with `READ_ONLY_REGISTRIES` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)).
--   Filter images and tags with a search bar. You can select the search bar with the shortcut `CRTL` + `F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)). 
+-   Filter images and tags with a search bar. You can select the search bar with the shortcut `CRTL` + `F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)).
+-   **Forward** custom header to your backend registry via environment variable and file via `NGINX_PROXY_PASS_HEADER_*` (see [#206](https://github.com/Joxit/docker-registry-ui/pull/206)).
 
 ## FAQ
 
@@ -90,7 +91,8 @@ Some env options are available for use this interface for **only one server**.
 - `CATALOG_ELEMENTS_LIMIT`: Limit the number of elements in the catalog page. (default: `100000`).
 - `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default: `false`).
 - `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`.
-- `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and set **custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
+- `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **set custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
+- `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **forward custom headers** to your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
 - `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false`. (default: ` `).
 - `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false`. (default: `false`).
 

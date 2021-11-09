@@ -37,7 +37,7 @@
 
 <body>
   <docker-registry-ui registry-url="" name="Demo Docker Registry UI" pull-url="" show-content-digest="true"
-    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false">
+    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false" default-registries="https://joxit.dev/docker-registry-demo">
     <script>
       if (localStorage.getItem('registryServer')) {
         localStorage.setItem('registryServer',
@@ -46,10 +46,6 @@
             'https://joxit.dev/docker-registry-demo'
           )
         )
-      } else {
-        localStorage.setItem('registryServer', JSON.stringify([
-          'https://joxit.dev/docker-registry-demo'
-        ]))
       }
     </script>
     <script src="../dist/docker-registry-ui.js"></script>

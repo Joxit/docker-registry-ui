@@ -10,7 +10,7 @@ kubectl apply -f *.yaml
 Please note that you'll need a PV provisionner to be able to store the uploaded images.
 
 ## Dynamic installation
-Edit the image tag in the ui-deployement.yaml file and set it to `latest`, then :
+Edit the image tag in the ui-deployment.yaml file and set it to `latest`, then :
 
 ```sh
 kubectl apply -f ui*.yaml

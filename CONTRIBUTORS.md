@@ -35,3 +35,5 @@
 - Tomas Hulata [@tombokombo](https://github.com/tombokombo)
 - Ben Jackson [@bjj](https://github.com/bjj)
 - 三十文 [@xfduan](https://github.com/xfduan)
+- Aram Akhavan [@kaysond](https://github.com/kaysond)
+- Jason Tackaberry [@jtackaberry](https://github.com/jtackaberry)

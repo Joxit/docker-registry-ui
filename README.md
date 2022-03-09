@@ -48,6 +48,7 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Desactivate add and remove regisitries with `READ_ONLY_REGISTRIES` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)).
 -   Filter images and tags with a search bar. You can select the search bar with the shortcut `CRTL` + `F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)).
 -   **Forward** custom header to your backend registry via environment variable and file via `NGINX_PROXY_PASS_HEADER_*` (see [#206](https://github.com/Joxit/docker-registry-ui/pull/206)).
+-   Run the container with user nginx instead of root via `--user nginx` and listend on custom port via `NGINX_LISTEN_PORT` (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
 
 ## FAQ
 
@@ -81,6 +82,8 @@ Need more informations ? Try my [examples](https://github.com/Joxit/docker-regis
 
 ## Available options
 
+You can run the container with the unprivileged user `nginx`, see the discussion [#224](https://github.com/Joxit/docker-registry-ui/issues/224).
+
 Some env options are available for use this interface for **only one server**.
 
 - `REGISTRY_URL`: The default url of your docker registry. You may need CORS configuration on your registry. This is usually the domain name or IP of your registry reachable by your computer (e.g `http://registry.example.com`). (default: derived from the hostname of your UI).
@@ -93,6 +96,7 @@ Some env options are available for use this interface for **only one server**.
 - `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`.
 - `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **set custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
 - `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **forward custom headers** to your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
+- `NGINX_LISTEN_PORT`: Listen on a port other than 80. (default: `80` when the user is root, `8080` otherwise).
 - `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false`. (default: ` `).
 - `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false`. (default: `false`).
 

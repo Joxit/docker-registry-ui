@@ -32,66 +32,80 @@
     </div>
   </material-popup>
   <script>
-    import {
-      Http
-    } from '../../scripts/http';
+    import { Http } from '../../scripts/http';
     import router from '../../scripts/router';
     export default {
       displayImagesToDelete(toDelete, tags) {
         const digests = new Set();
-        toDelete.forEach(image => {
+        toDelete.forEach((image) => {
           if (image.digest) {
             digests.add(image.digest);
           }
-        })
-        return tags.filter(image => digests.has(image.digest))
+        });
+        return tags.filter((image) => digests.has(image.digest));
       },
       deleteImages() {
-        this.props.toDelete.forEach(image => this.deleteImage(image, this.props));
+        this.props.toDelete.forEach((image) => this.getContentDigestThenDelete(image, this.props));
       },
-      deleteImage(image, opts) {
-        const {
-          registryUrl,
-          ignoreError,
-          onNotify,
-          onAuthentication,
-          onClick
-        } = opts;
-        if (!image.digest) {
-          onNotify(`Information for ${name}:${tag} are not yet loaded.`);
-          return;
-        }
-        const name = image.name;
-        const tag = image.tag;
-        const oReq = new Http({
-          onAuthentication: onAuthentication
+      getContentDigestThenDelete({ name, tag }, opts) {
+        const { registryUrl, onNotify, onAuthentication } = opts;
+        const oReq = new Http({ onAuthentication });
+        const self = this;
+        oReq.addEventListener('loadend', function () {
+          if (this.status == 200 || this.status == 202) {
+            oReq.getContentDigest(function (digest) {
+              if (!digest) {
+                onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
+              } else {
+                self.deleteImage({ name, tag, digest }, opts);
+              }
+            });
+          } else if (this.status == 404) {
+            onNotify(`Manifest for ${name}:${tag} not found`, true);
+          } else {
+            onNotify(this.responseText);
+          }
         });
+        oReq.open('GET', `${registryUrl}/v2/${name}/manifests/${tag}`);
+        oReq.setRequestHeader(
+          'Accept',
+          'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.docker.distribution.manifest.list.v2+json'
+        );
+        oReq.send();
+      },
+      deleteImage({ name, tag, digest }, opts) {
+        const { registryUrl, ignoreError, onNotify, onAuthentication, onClick } = opts;
+        const oReq = new Http({ onAuthentication });
         oReq.addEventListener('loadend', function () {
           if (this.status == 200 || this.status == 202) {
             router.taglist(name);
             onNotify(`Deleting ${name}:${tag} image. Run \`registry garbage-collect config.yml\` on your registry`);
           } else if (this.status == 404) {
-            ignoreError || onNotify({
-              message: 'Digest not found for this image in your registry.',
-              isError: true
-            });
+            ignoreError ||
+              onNotify({
+                message: 'Digest not found for this image in your registry.',
+                isError: true,
+              });
           } else {
             onNotify(this.responseText);
           }
           onClick();
         });
-        oReq.open('DELETE', `${registryUrl}/v2/${name}/manifests/${image.digest}`);
-        oReq.setRequestHeader('Accept',
-          'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json');
+        oReq.open('DELETE', `${registryUrl}/v2/${name}/manifests/${digest}`);
+        oReq.setRequestHeader(
+          'Accept',
+          'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json'
+        );
         oReq.addEventListener('error', function () {
           onNotify({
-            message: 'An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: [\'DELETE\'].',
-            isError: true
+            message:
+              "An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: ['DELETE'].",
+            isError: true,
           });
         });
         oReq.send();
-      }
-    }
+      },
+    };
   </script>
   <style>
     :host {

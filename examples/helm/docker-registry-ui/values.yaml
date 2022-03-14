@@ -15,7 +15,7 @@ ui:
   image:
     registry: docker.io
     repository: joxit/docker-registry-ui
-    tag: static
+    tag: latest
     pullPolicy: Always
   probe:
     liveness: true

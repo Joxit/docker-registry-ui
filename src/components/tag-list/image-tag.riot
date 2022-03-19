@@ -21,11 +21,11 @@
       onMounted(props) {
         props.image.on('sha256', (sha256) => {
           this.update({
-            sha256: sha256.substring(0, 19)
+            sha256: sha256 && sha256.substring(0, 19),
           });
         });
         props.image.trigger('get-sha256');
-      }
-    }
+      },
+    };
   </script>
 </image-tag>

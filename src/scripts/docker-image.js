@@ -56,6 +56,7 @@ export class DockerImage {
       onNotify,
       onAuthentication,
     };
+    this.ociImage = false;
     observable(this);
     this.on('get-size', function () {
       if (this.size !== undefined) {
@@ -107,11 +108,12 @@ export class DockerImage {
           self.variants = [image];
           return;
         }
-        self.size = response.layers.reduce(function (acc, e) {
+        self.ociImage = response.mediaType === 'application/vnd.oci.image.index.v1+json';
+        self.layers = self.ociImage ? response.manifests : response.layers;
+        self.size = self.layers.reduce(function (acc, e) {
           return acc + e.size;
         }, 0);
-        self.sha256 = response.config.digest;
-        self.layers = response.layers;
+        self.sha256 = response.config && response.config.digest;
         self.trigger('size', self.size);
         self.trigger('sha256', self.sha256);
         oReq.getContentDigest(function (digest) {
@@ -121,7 +123,14 @@ export class DockerImage {
             self.opts.onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
           }
         });
-        self.getBlobs(response.config.digest);
+        if (!self.ociImage) {
+          self.getBlobs(self.sha256);
+        } else {
+          // Force updates
+          self.trigger('creation-date');
+          self.trigger('blobs');
+          self.trigger('oci-image');
+        }
       } else if (this.status == 404) {
         self.opts.onNotify(`Manifest for ${self.name}:${self.tag} not found`, true);
       } else {
@@ -131,7 +140,7 @@ export class DockerImage {
     oReq.open('GET', `${this.opts.registryUrl}/v2/${self.name}/manifests/${self.tag}`);
     oReq.setRequestHeader(
       'Accept',
-      'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json' +
+      'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json' +
         (self.opts.list ? ', application/vnd.docker.distribution.manifest.list.v2+json' : '')
     );
     oReq.send();

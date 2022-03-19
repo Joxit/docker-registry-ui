@@ -15,27 +15,27 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-date>
-  <div title="Creation date { getLocalDate(props.image) }">{ getDate(props.image) } ago</div>
+  <div title="Creation date { getLocalDate(props.image) }">{ getDate(props.image) }</div>
   <script>
-    import {
-      dateFormat,
-    } from '../../scripts/utils';
+    import { dateFormat } from '../../scripts/utils';
     export default {
       onMounted(props) {
         props.image.one('creation-date', (date) => {
           this.update({
             date: date,
-            localDate: date.toLocaleString()
+            localDate: date && date.toLocaleString(),
           });
         });
         props.image.trigger('get-date');
       },
       getDate(image) {
-        return dateFormat(image.creationDate)
+        return !image.ociImage ? `${dateFormat(image.creationDate)} ago` : 'Not Available';
       },
       getLocalDate(image) {
-        return (image.creationDate && image.creationDate.toLocaleString()) || 'unknown'
-      }
-    }
+        return !image.ociImage
+          ? (image.creationDate && image.creationDate.toLocaleString()) || 'unknown'
+          : 'unavailable on OCI index/Buildkit export cache';
+      },
+    };
   </script>
 </image-date>

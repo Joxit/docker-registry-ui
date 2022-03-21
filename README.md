@@ -99,6 +99,7 @@ Some env options are available for use this interface for **only one server**.
 - `NGINX_LISTEN_PORT`: Listen on a port other than 80. (default: `80` when the user is root, `8080` otherwise).
 - `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false`. (default: ` `).
 - `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false`. (default: `false`).
+- `SHOW_CATALOG_NB_TAGS`: Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries. (default: `false`).
 
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
 

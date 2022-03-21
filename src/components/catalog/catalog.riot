@@ -26,26 +26,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <div if="{ !state.loadend }" class="spinner-wrapper">
     <material-spinner></material-spinner>
   </div>
-  <catalog-element each="{ item in state.repositories }" item="{ item }" filter-results="{ props.filterResults }" />
+  <catalog-element
+    each="{ item in state.repositories }"
+    item="{ item }"
+    filter-results="{ props.filterResults }"
+    registry-url="{ props.registryUrl }"
+    on-notify="{ props.onNotify }"
+    on-authentication="{ props.onAuthentication }"
+    show-catalog-nb-tags="{ props.showCatalogNbTags }"
+  ></catalog-element>
   <script>
-    import CatalogElement from './catalog-element.riot'
-    import {
-      Http
-    } from '../../scripts/http';
-    import {
-      getRegistryServers
-    } from '../../scripts/utils';
+    import CatalogElement from './catalog-element.riot';
+    import { Http } from '../../scripts/http';
+    import { getRegistryServers } from '../../scripts/utils';
 
     export default {
       components: {
-        CatalogElement
+        CatalogElement,
       },
       state: {
         registryName: '',
         length: 0,
         loadend: false,
         repositories: [],
-        registryUrl: ''
+        registryUrl: '',
       },
 
       onBeforeMount(props) {
@@ -53,7 +57,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.catalogElementsLimit = props.catalogElementsLimit;
       },
       onMounted(props, state) {
-        this.display(props, state)
+        this.display(props, state);
       },
       onUpdated(props, state) {
         this.display(props, state);
@@ -66,7 +70,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         let repositories = [];
         const self = this;
         const oReq = new Http({
-          onAuthentication: this.props.onAuthentication
+          onAuthentication: this.props.onAuthentication,
         });
         oReq.addEventListener('load', function () {
           if (this.status == 200) {
@@ -79,7 +83,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 if (acc.length == 0 || acc[acc.length - 1].repo != repoName) {
                   acc.push({
                     repo: repoName,
-                    images: []
+                    images: [],
                   });
                 }
                 acc[acc.length - 1].images.push(e);
@@ -101,13 +105,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           self.update({
             repositories,
             nRepositories: repositories.length,
-            nImages: repositories.reduce((acc, e) => acc + (e.images && e.images.length || 1), 0),
-            loadend: true
+            nImages: repositories.reduce((acc, e) => acc + ((e.images && e.images.length) || 1), 0),
+            loadend: true,
           });
         });
         oReq.open('GET', `${props.registryUrl}/v2/_catalog?n=${state.catalogElementsLimit}`);
         oReq.send();
-      }
-    }
+      },
+    };
   </script>
 </catalog>

@@ -16,11 +16,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog-element>
   <!-- Begin of tag -->
-  <div class="content"
-    if="{!props.filterResults || state.nImages > 0 || matchSearch(props.filterResults, state.image)}">
+  <div
+    class="content"
+    if="{!props.filterResults || state.nImages > 0 || matchSearch(props.filterResults, state.image)}"
+  >
     <material-card class="list highlight" expanded="{state.expanded}" onclick="{ onClick }">
-      <material-waves onmousedown="{this.triggerLaunch}" center="true" color="#ddd"
-        setLaunchListener="{ setLaunchListener }" />
+      <material-waves center="true" color="#ddd"></material-waves>
       <span>
         <i class="material-icons">send</i>
         { state.image || state.repo }
@@ -28,17 +29,28 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           { state.nImages } images
           <i class="material-icons animated {state.expanded ? 'expanded' : ''}">expand_more</i>
         </div>
+        <div if="{props.showCatalogNbTags && state.image}" class="item-count right">
+          { state.nbTags } tags
+          <i class="material-icons animated"></i>
+        </div>
       </span>
     </material-card>
-    <catalog-element if="{ state.images }" filter-results="{ props.filterResults }"
+    <catalog-element
+      if="{ state.images }"
+      filter-results="{ props.filterResults }"
+      registry-url="{ props.registryUrl }"
+      on-notify="{ props.onnNotify }"
+      on-authentication="{ props.onAuthentication }"
+      show-catalog-nb-tags="{ props.showCatalogNbTags }"
       class="animated {!state.expanded && !props.filterResults ? 'hide' : ''} {state.expanding ? 'expanding' : ''}"
-      each="{item in state.images}" item="{ item }" />
+      each="{item in state.images}"
+      item="{ item }"
+    ></catalog-element>
   </div>
   <script>
     import router from '../../scripts/router';
-    import {
-      matchSearch
-    } from '../search-bar.riot';
+    import { Http } from '../../scripts/http';
+    import { matchSearch } from '../search-bar.riot';
 
     export default {
       onBeforeMount(props, state) {
@@ -51,10 +63,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           state.repo = props.item.repo;
           state.nImages = props.item.images.length;
         }
+        if (props.showCatalogNbTags && state.image) {
+          this.getNbTags(props, state);
+        }
       },
       onBeforeUpdate(props, state) {
         if (props.filterResults && state.images) {
-          state.nImages = state.images.filter(image => matchSearch(props.filterResults, image)).length;
+          state.nImages = state.images.filter((image) => matchSearch(props.filterResults, image)).length;
         } else {
           state.nImages = state.images && state.images.length;
         }
@@ -66,20 +81,38 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         } else {
           this.update({
             expanded: !this.state.expanded,
-            expanding: true
+            expanding: true,
           });
           setTimeout(() => {
             this.update({
-              expanding: false
+              expanding: false,
             });
-          }, 50)
+          }, 50);
         }
       },
-      setLaunchListener(cb) {
-        this.triggerLaunch = cb;
+      getNbTags(props, state) {
+        const self = this;
+        const oReq = new Http({
+          onAuthentication: props.onAuthentication,
+        });
+        oReq.addEventListener('load', function () {
+          if (this.status == 200) {
+            const nbTags = (JSON.parse(this.responseText).tags || []).length;
+            self.update({ nbTags });
+          } else if (this.status == 404) {
+            props.onNotify('Server not found', true);
+          } else {
+            props.onNotify(this.responseText, true);
+          }
+        });
+        oReq.addEventListener('error', function () {
+          props.onNotify(this.getErrorMessage(), true);
+        });
+        oReq.open('GET', props.registryUrl + '/v2/' + state.image + '/tags/list');
+        oReq.send();
       },
-      matchSearch
-    }
+      matchSearch,
+    };
   </script>
   <!-- End of tag -->
 </catalog-element>

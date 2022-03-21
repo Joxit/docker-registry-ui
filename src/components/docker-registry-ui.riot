@@ -29,7 +29,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <route path="{baseRoute}">
         <catalog registry-url="{ state.registryUrl }" registry-name="{ state.name }"
           catalog-elements-limit="{ state.catalogElementsLimit }" on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }" on-authentication="{ onAuthentication }" />
+          filter-results="{ state.filter }" on-authentication="{ onAuthentication }" 
+          show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"/>
       </route>
       <route path="{baseRoute}taglist/(.*)">
         <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"

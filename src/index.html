@@ -38,12 +38,13 @@
   <docker-registry-ui registry-url="${REGISTRY_URL}" name="${REGISTRY_TITLE}" pull-url="${PULL_URL}"
     show-content-digest="${SHOW_CONTENT_DIGEST}" is-image-remove-activated="${DELETE_IMAGES}"
     catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}" single-registry="${SINGLE_REGISTRY}"
-    default-registries="${DEFAULT_REGISTRIES}" read-only-registries="${READ_ONLY_REGISTRIES}">
+    default-registries="${DEFAULT_REGISTRIES}" read-only-registries="${READ_ONLY_REGISTRIES}"
+    show-catalog-nb-tags="${SHOW_CATALOG_NB_TAGS}">
   </docker-registry-ui>
   <!-- endbuild -->
   <!-- build:keep developement -->
   <docker-registry-ui registry-url="" name="Developement Registry" pull-url="" show-content-digest="true"
-    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false">
+    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false" show-catalog-nb-tags="true">
   </docker-registry-ui>
   <!-- endbuild -->
   <!-- build:js docker-registry-ui.js -->

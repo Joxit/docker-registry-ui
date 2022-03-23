@@ -42,7 +42,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
           image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
           is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }" on-notify="{ notifySnackbar }"
-          on-authentication="{ onAuthentication }"></tag-history>
+          on-authentication="{ onAuthentication }" history-custom-labels="{ stringToArray(props.historyCustomLabels) }"></tag-history>
       </route>
     </router>
     <registry-authentication realm="{ state.realm }" scope="{ state.scope }" service="{ state.service }"
@@ -80,7 +80,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       stripHttps,
       getRegistryServers,
       setRegistryServers,
-      truthy
+      truthy,
+      stringToArray
     } from '../scripts/utils';
     import router from '../scripts/router';
 
@@ -175,7 +176,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,
       version,
-      truthy
+      truthy,
+      stringToArray
     }
   </script>
 </docker-registry-ui>

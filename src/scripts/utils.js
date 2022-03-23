@@ -76,7 +76,10 @@ export function getHistoryIcon(attribute) {
     case 'ExposedPorts':
       return 'router';
     default:
-      '';
+      if (attribute.startsWith('custom-label-')) {
+        return 'label';
+      }
+      return '';
   }
 }
 
@@ -200,4 +203,8 @@ export function decodeURI(url) {
 
 export function truthy(value) {
   return value === true || value === 'true';
+}
+
+export function stringToArray(value) {
+  return value && typeof value === 'string' ? value.split(',') : [];
 }

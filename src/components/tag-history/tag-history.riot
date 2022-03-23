@@ -20,33 +20,35 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <material-button waves-center="true" rounded="true" waves-color="#ddd" onClick="{ toTaglist }">
         <i class="material-icons">arrow_back</i>
       </material-button>
-      <h2>
-        History of { props.image }:{ props.tag } <i class="material-icons">history</i>
-      </h2>
+      <h2>History of { props.image }:{ props.tag } <i class="material-icons">history</i></h2>
     </div>
   </material-card>
   <div if="{ !state.loadend }" class="spinner-wrapper">
-    <material-spinner />
+    <material-spinner></material-spinner>
   </div>
 
-  <material-tabs if="{ state.archs && state.loadend }" useLine="{ true }" tabs="{ state.archs }"
-    onTabChanged="{ onTabChanged }" />
+  <material-tabs
+    if="{ state.archs && state.loadend }"
+    useLine="{ true }"
+    tabs="{ state.archs }"
+    onTabChanged="{ onTabChanged }"
+  ></material-tabs>
 
   <material-card each="{ element in state.elements }" class="tag-history-element">
-    <tag-history-element each="{ entry in element }" if="{ entry.value && entry.value.length > 0}" entry="{ entry }" />
+    <tag-history-element
+      each="{ entry in element }"
+      if="{ entry.value && entry.value.length > 0}"
+      entry="{ entry }"
+    ></tag-history-element>
   </material-card>
   <script>
-    import {
-      DockerImage
-    } from '../../scripts/docker-image';
-    import {
-      bytesToSize
-    } from '../../scripts/utils';
+    import { DockerImage } from '../../scripts/docker-image';
+    import { bytesToSize } from '../../scripts/utils';
     import router from '../../scripts/router';
-    import TagHistoryElement from './tag-history-element.riot'
+    import TagHistoryElement from './tag-history-element.riot';
     export default {
       components: {
-        TagHistoryElement
+        TagHistoryElement,
       },
       onBeforeMount(props, state) {
         state.elements = [];
@@ -54,9 +56,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           list: true,
           registryUrl: props.registryUrl,
           onNotify: props.onNotify,
-          onAuthentication: props.onAuthentication
+          onAuthentication: props.onAuthentication,
         });
-        state.image.fillInfo()
+        state.image.fillInfo();
       },
       onMounted(props, state) {
         state.image.on('blobs', this.processBlobs);
@@ -64,16 +66,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onTabChanged(arch, idx) {
         const state = this.state;
-        const {
-          registryUrl,
-          onNotify
-        } = this.props;
-        state.elements = []
-        state.image.variants[idx] = state.image.variants[idx] ||
+        const { registryUrl, onNotify } = this.props;
+        state.elements = [];
+        state.image.variants[idx] =
+          state.image.variants[idx] ||
           new DockerImage(this.props.image, arch.digest, {
             list: false,
             registryUrl,
-            onNotify
+            onNotify,
           });
         if (state.image.variants[idx].blobs) {
           return this.processBlobs(state.image.variants[idx].blobs);
@@ -83,6 +83,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       processBlobs(blobs) {
         const state = this.state;
+        const { historyCustomLabels } = this.props;
 
         function exec(elt) {
           const guiElements = [];
@@ -90,8 +91,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
               const value = elt[attribute];
               const guiElement = {
-                "key": attribute,
-                "value": modifySpecificAttributeTypes(attribute, value)
+                'key': attribute,
+                'value': modifySpecificAttributeTypes(attribute, value),
               };
               guiElements.push(guiElement);
             }
@@ -99,32 +100,35 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           return guiElements.sort(eltSort);
         }
         const elements = new Array(blobs.history.length + 1);
-        elements[0] = exec(getConfig(blobs));
+        elements[0] = exec(getConfig(blobs, { historyCustomLabels }));
         blobs.history.forEach(function (elt, i) {
-          elements[blobs.history.length - i] = exec(elt)
+          elements[blobs.history.length - i] = exec(elt);
         });
         this.update({
           elements,
-          loadend: true
+          loadend: true,
         });
       },
       multiArchList(manifests) {
         manifests = manifests.manifests || manifests;
         const archs = manifests.map(function (manifest) {
           return {
-            title: manifest.platform.os + '/' + manifest.platform.architecture + (manifest.platform.variant ?
-              manifest.platform.variant : ''),
-            digest: manifest.digest
-          }
+            title:
+              manifest.platform.os +
+              '/' +
+              manifest.platform.architecture +
+              (manifest.platform.variant ? manifest.platform.variant : ''),
+            digest: manifest.digest,
+          };
         });
         this.update({
-          archs
+          archs,
         });
       },
       toTaglist() {
         router.taglist(this.props.image);
-      }
-    }
+      },
+    };
     const eltIdx = function (e) {
       switch (e) {
         case 'created':
@@ -158,7 +162,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           return new Date(value).toLocaleString();
         case 'created_by':
           const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
-          return (cmd && cmd[1]) || 'RUN'
+          return (cmd && cmd[1]) || 'RUN';
         case 'size':
           return bytesToSize(value);
         case 'Entrypoint':
@@ -175,24 +179,45 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return value || '';
     };
 
-    const getConfig = function (blobs) {
-      const res = ['architecture', 'User', 'created', 'docker_version', 'os', 'Cmd', 'Entrypoint', 'Env', 'Labels',
-          'User', 'Volumes', 'WorkingDir', 'author', 'id', 'ExposedPorts'
-        ]
-        .reduce(function (acc, e) {
-          const value = blobs[e] || blobs.config[e];
-          if (value && e === 'architecture' && blobs.variant) {
-            acc[e] = value + blobs.variant;
-          } else if (value) {
-            acc[e] = value;
-          }
-          return acc;
-        }, {});
+    const getConfig = function (blobs, { historyCustomLabels }) {
+      console.log(this);
+      const res = [
+        'architecture',
+        'User',
+        'created',
+        'docker_version',
+        'os',
+        'Cmd',
+        'Entrypoint',
+        'Env',
+        'Labels',
+        'User',
+        'Volumes',
+        'WorkingDir',
+        'author',
+        'id',
+        'ExposedPorts',
+      ].reduce(function (acc, e) {
+        const value = blobs[e] || blobs.config[e];
+        if (value && e === 'architecture' && blobs.variant) {
+          acc[e] = value + blobs.variant;
+        } else if (value) {
+          acc[e] = value;
+        }
+        return acc;
+      }, {});
 
-      if (!res.author && (res.Labels && res.Labels.maintainer)) {
+      if (!res.author && res.Labels && res.Labels.maintainer) {
         res.author = blobs.config.Labels.maintainer;
         delete res.Labels.maintainer;
       }
+
+      historyCustomLabels
+        .filter((label) => res.Labels[label])
+        .forEach((label) => {
+          res[`custom-label-${label}`] = res.Labels[label];
+          delete res.Labels[label];
+        });
 
       return res;
     };

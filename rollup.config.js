@@ -12,6 +12,7 @@ import json from '@rollup/plugin-json';
 import copy from 'rollup-plugin-copy';
 import copyTransform from './rollup/copy-transform';
 import license from './rollup/license';
+import checkOutput from './rollup/check-output';
 
 const useServe = process.env.ROLLUP_SERVE === 'true';
 const output = useServe ? '.serve' : 'dist';
@@ -44,11 +45,12 @@ export default [
       dir: output,
       name: 'DockerRegistryUI',
       format: 'iife',
-      sourcemap: useServe
+      sourcemap: useServe,
     },
     plugins: [emptyDirectories(output)].concat(
       plugins,
-      html({ template: () => htmlUseref('./src/index.html', { developement: useServe, production: !useServe }) })
+      html({ template: () => htmlUseref('./src/index.html', { developement: useServe, production: !useServe }) }),
+      checkOutput(output)
     ),
   },
 ];

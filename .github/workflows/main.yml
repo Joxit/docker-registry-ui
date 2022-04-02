@@ -1,4 +1,4 @@
-name: Build and pus master/main docker images
+name: Build and push master/main docker images
 
 on:
   push:

@@ -180,7 +180,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
 
     const getConfig = function (blobs, { historyCustomLabels }) {
-      console.log(this);
       const res = [
         'architecture',
         'User',
@@ -212,12 +211,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         delete res.Labels.maintainer;
       }
 
-      historyCustomLabels
-        .filter((label) => res.Labels[label])
-        .forEach((label) => {
-          res[`custom-label-${label}`] = res.Labels[label];
-          delete res.Labels[label];
-        });
+      if (res.Labels) {
+        historyCustomLabels
+          .filter((label) => res.Labels[label])
+          .forEach((label) => {
+            res[`custom-label-${label}`] = res.Labels[label];
+            delete res.Labels[label];
+          });
+      }
 
       return res;
     };

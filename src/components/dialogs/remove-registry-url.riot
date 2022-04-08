@@ -21,8 +21,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <ul class="list">
         <li each="{ url in getRegistryServers() }">
           <span>
-            <material-button onClick="{ remove }" url="{ url }" rounded="true" waves-color="rgba(158,158,158,.4)"
-              waves-center="true">
+            <material-button
+              onClick="{ remove }"
+              url="{ url }"
+              rounded="true"
+              waves-color="rgba(158,158,158,.4)"
+              waves-center="true"
+            >
               <i class="material-icons">delete</i>
             </material-button>
             <span class="url">{ url }</span>
@@ -37,18 +42,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </div>
   </material-popup>
   <script>
-    import {
-      getRegistryServers,
-      removeRegistryServers
-    } from '../../scripts/utils';
+    import { getRegistryServers, removeRegistryServers } from '../../scripts/utils';
     export default {
       remove(event) {
         const url = event.currentTarget.attributes.url && event.currentTarget.attributes.url.value;
         removeRegistryServers(url);
         setTimeout(() => this.update(), 100);
       },
-      getRegistryServers
-    }
+      getRegistryServers,
+    };
   </script>
   <style>
     :host material-popup .popup material-button {

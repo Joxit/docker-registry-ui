@@ -2,6 +2,10 @@
   "name": "docker-registry-ui",
   "version": "2.1.0",
   "scripts": {
+    "format": "npm run format-html && npm run format-js && npm run format-riot",
+    "format-html": "find src rollup rollup.config.js -name '*.html' -exec prettier --config .prettierrc -w --parser html {} \\;",
+    "format-js": "find src rollup rollup.config.js -name '*.js' -exec prettier --config .prettierrc -w {} \\;",
+    "format-riot": "find src rollup rollup.config.js -name '*.riot' -exec prettier --config .prettierrc -w --parser html {} \\;",
     "start": "rollup -c -w --environment ROLLUP_SERVE:true",
     "build": "rollup -c",
     "build:electron": "npm run build && cd examples/electron && npm install && npm run dist"
@@ -25,8 +29,8 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "core-js": "^3.19.1",
-    "js-beautify": "^1.14.0",
     "node-sass": "^7.0.1",
+    "prettier": "^2.6.2",
     "riot": "^6.1.2",
     "riot-mui": "github:joxit/riot-5-mui#4d68d7f",
     "rollup": "^2.59.0",

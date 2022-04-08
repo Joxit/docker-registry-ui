@@ -19,35 +19,63 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-navbar>
       <div class="logo">Docker Registry UI</div>
       <search-bar on-search="{ onSearch }"></search-bar>
-      <dialogs-menu if="{props.singleRegistry !== 'true'}" on-notify="{ notifySnackbar }"
-        on-server-change="{ onServerChange }" default-registries="{ props.defaultRegistries }"
-        read-only-registries="{ truthy(props.readOnlyRegistries) }"></dialogs-menu>
+      <dialogs-menu
+        if="{props.singleRegistry !== 'true'}"
+        on-notify="{ notifySnackbar }"
+        on-server-change="{ onServerChange }"
+        default-registries="{ props.defaultRegistries }"
+        read-only-registries="{ truthy(props.readOnlyRegistries) }"
+      ></dialogs-menu>
     </material-navbar>
   </header>
   <main>
     <router base="#!">
       <route path="{baseRoute}">
-        <catalog registry-url="{ state.registryUrl }" registry-name="{ state.name }"
-          catalog-elements-limit="{ state.catalogElementsLimit }" on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }" on-authentication="{ onAuthentication }" 
-          show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"/>
+        <catalog
+          registry-url="{ state.registryUrl }"
+          registry-name="{ state.name }"
+          catalog-elements-limit="{ state.catalogElementsLimit }"
+          on-notify="{ notifySnackbar }"
+          filter-results="{ state.filter }"
+          on-authentication="{ onAuthentication }"
+          show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"
+        />
       </route>
       <route path="{baseRoute}taglist/(.*)">
-        <tag-list registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
-          image="{ router.getTagListImage() }" show-content-digest="{ truthy(props.showContentDigest) }"
-          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }" on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }" on-authentication="{ onAuthentication }"></tag-list>
+        <tag-list
+          registry-url="{ state.registryUrl }"
+          registry-name="{ state.name }"
+          pull-url="{ state.pullUrl }"
+          image="{ router.getTagListImage() }"
+          show-content-digest="{ truthy(props.showContentDigest) }"
+          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }"
+          on-notify="{ notifySnackbar }"
+          filter-results="{ state.filter }"
+          on-authentication="{ onAuthentication }"
+        ></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
-        <tag-history registry-url="{ state.registryUrl }" registry-name="{ state.name }" pull-url="{ state.pullUrl }"
-          image="{ router.getTagHistoryImage() }" tag="{ router.getTagHistoryTag() }"
-          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }" on-notify="{ notifySnackbar }"
-          on-authentication="{ onAuthentication }" history-custom-labels="{ stringToArray(props.historyCustomLabels) }"></tag-history>
+        <tag-history
+          registry-url="{ state.registryUrl }"
+          registry-name="{ state.name }"
+          pull-url="{ state.pullUrl }"
+          image="{ router.getTagHistoryImage() }"
+          tag="{ router.getTagHistoryTag() }"
+          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }"
+          on-notify="{ notifySnackbar }"
+          on-authentication="{ onAuthentication }"
+          history-custom-labels="{ stringToArray(props.historyCustomLabels) }"
+        ></tag-history>
       </route>
     </router>
-    <registry-authentication realm="{ state.realm }" scope="{ state.scope }" service="{ state.service }"
-      on-close="{ onAuthenticationClose }" on-authenticated="{ state.onAuthenticated }"
-      opened="{ state.authenticationDialogOpened }"></registry-authentication>
+    <registry-authentication
+      realm="{ state.realm }"
+      scope="{ state.scope }"
+      service="{ state.service }"
+      on-close="{ onAuthenticationClose }"
+      on-authenticated="{ state.onAuthenticated }"
+      opened="{ state.authenticationDialogOpened }"
+    ></registry-authentication>
     <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
   </main>
   <footer>
@@ -64,25 +92,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-footer>
   </footer>
   <script>
-    import {
-      version
-    } from '../../package.json';
-    import {
-      Router,
-      Route,
-    } from '@riotjs/route'
+    import { version } from '../../package.json';
+    import { Router, Route } from '@riotjs/route';
     import Catalog from './catalog/catalog.riot';
     import TagList from './tag-list/tag-list.riot';
     import TagHistory from './tag-history/tag-history.riot';
     import DialogsMenu from './dialogs/dialogs-menu.riot';
-    import SearchBar from './search-bar.riot'
-    import {
-      stripHttps,
-      getRegistryServers,
-      setRegistryServers,
-      truthy,
-      stringToArray
-    } from '../scripts/utils';
+    import SearchBar from './search-bar.riot';
+    import { stripHttps, getRegistryServers, setRegistryServers, truthy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
 
     export default {
@@ -93,22 +110,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         DialogsMenu,
         SearchBar,
         Router,
-        Route
+        Route,
       },
       onUpdated(props, state) {
         state.snackbarIsError = false;
         state.snackbarMessage = undefined;
       },
       onBeforeMount(props) {
-        if ((props.defaultRegistries && props.defaultRegistries.length > 0 && getRegistryServers().length === 0) ||
-          truthy(props.readOnlyRegistries)) {
+        if (
+          (props.defaultRegistries && props.defaultRegistries.length > 0 && getRegistryServers().length === 0) ||
+          truthy(props.readOnlyRegistries)
+        ) {
           setRegistryServers(props.defaultRegistries);
         }
 
-        // props.singleRegistry === 'true' means old static version 
-        const registryUrl = props.registryUrl ||
-          (props.singleRegistry === 'true' ? undefined : (router.getUrlQueryParam() || getRegistryServers(0))) ||
-          (window.location.origin + window.location.pathname.replace(/\/+$/, ''));
+        // props.singleRegistry === 'true' means old static version
+        const registryUrl =
+          props.registryUrl ||
+          (props.singleRegistry === 'true' ? undefined : router.getUrlQueryParam() || getRegistryServers(0)) ||
+          window.location.origin + window.location.pathname.replace(/\/+$/, '');
         this.state.registryUrl = registryUrl.replace(/\/$/, '').replace(/index(\.html?)?$/, '');
         this.state.name = props.name || stripHttps(props.registryUrl);
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
@@ -119,65 +139,59 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           registryUrl,
           name: stripHttps(registryUrl),
           pullUrl: this.pullUrl(registryUrl),
-          snackbarMessage: 'Registry server changed to `' + registryUrl + '`.'
-        })
+          snackbarMessage: 'Registry server changed to `' + registryUrl + '`.',
+        });
       },
       onAuthentication(opts, onAuthenticated) {
         if (opts && opts.realm && opts.service && opts.scope) {
-          const {
-            realm,
-            service,
-            scope,
-          } = opts;
-          const req = new XMLHttpRequest()
+          const { realm, service, scope } = opts;
+          const req = new XMLHttpRequest();
           req.addEventListener('loadend', () => {
             try {
               const bearer = JSON.parse(req.responseText);
-              onAuthenticated(bearer)
+              onAuthenticated(bearer);
             } catch (e) {
-              this.notifySnackbar(`Failed to log in: ${e.message}`, true)
+              this.notifySnackbar(`Failed to log in: ${e.message}`, true);
             }
-          })
-          req.open('GET', `${realm}?service=${service}&scope=${scope}`)
-          req.send()
+          });
+          req.open('GET', `${realm}?service=${service}&scope=${scope}`);
+          req.send();
         } else {
-          onAuthenticated()
+          onAuthenticated();
         }
       },
       onAuthenticationClose() {
         this.update({
-          authenticationDialogOpened: false
-        })
+          authenticationDialogOpened: false,
+        });
       },
       pullUrl(registryUrl, pullUrl) {
-        const url = pullUrl ||
-          (registryUrl && registryUrl.length > 0 && registryUrl) ||
-          window.location.host;
+        const url = pullUrl || (registryUrl && registryUrl.length > 0 && registryUrl) || window.location.host;
         return stripHttps(url);
       },
       notifySnackbar(message, isError) {
         if (typeof message === 'string') {
           this.update({
             snackbarMessage: message,
-            snackbarIsError: isError || false
+            snackbarIsError: isError || false,
           });
         } else if (message && message.message) {
           this.update({
             snackbarMessage: message.message,
-            snackbarIsError: message.isError
+            snackbarIsError: message.isError,
           });
         }
       },
       onSearch(value) {
         this.update({
-          filter: value
-        })
+          filter: value,
+        });
       },
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,
       version,
       truthy,
-      stringToArray
-    }
+      stringToArray,
+    };
   </script>
 </docker-registry-ui>

@@ -52,7 +52,7 @@
         const oReq = new Http({ onAuthentication });
         const self = this;
         oReq.addEventListener('loadend', function () {
-          if (this.status == 200 || this.status == 202) {
+          if (this.status === 200 || this.status === 202) {
             oReq.getContentDigest(function (digest) {
               if (!digest) {
                 onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
@@ -60,7 +60,7 @@
                 self.deleteImage({ name, tag, digest }, opts);
               }
             });
-          } else if (this.status == 404) {
+          } else if (this.status === 404) {
             onNotify(`Manifest for ${name}:${tag} not found`, true);
           } else {
             onNotify(this.responseText);
@@ -77,10 +77,10 @@
         const { registryUrl, ignoreError, onNotify, onAuthentication, onClick } = opts;
         const oReq = new Http({ onAuthentication });
         oReq.addEventListener('loadend', function () {
-          if (this.status == 200 || this.status == 202) {
+          if (this.status === 200 || this.status === 202) {
             router.taglist(name);
             onNotify(`Deleting ${name}:${tag} image. Run \`registry garbage-collect config.yml\` on your registry`);
-          } else if (this.status == 404) {
+          } else if (this.status === 404) {
             ignoreError ||
               onNotify({
                 message: 'Digest not found for this image in your registry.',

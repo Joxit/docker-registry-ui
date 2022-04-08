@@ -96,10 +96,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           onAuthentication: props.onAuthentication,
         });
         oReq.addEventListener('load', function () {
-          if (this.status == 200) {
+          if (this.status === 200) {
             const nbTags = (JSON.parse(this.responseText).tags || []).length;
             self.update({ nbTags });
-          } else if (this.status == 404) {
+          } else if (this.status === 404) {
             props.onNotify('Server not found', true);
           } else {
             props.onNotify(this.responseText, true);

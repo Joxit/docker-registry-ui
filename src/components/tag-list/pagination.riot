@@ -17,14 +17,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <pagination>
   <div class="conatianer">
     <div class="pagination-centered">
-      <material-button waves-color="rgba(158,158,158,.4)" each="{p in props.pages}"
+      <material-button
+        waves-color="rgba(158,158,158,.4)"
+        each="{p in props.pages}"
         class="{ p.current ? 'current' : ''} { p['space-left'] ? 'space-left' : '' } { p['space-right'] ? 'space-right' : ''}"
-        onClick="{() => props.onPageUpdate(p.page)}">
+        onClick="{() => props.onPageUpdate(p.page)}"
+      >
         <i if="{ p.icon }" class="material-icons">{ p.icon }</i>
         <div if="{ !p.icon }">{ p.page }</div>
       </material-button>
     </div>
   </div>
-  <script>
-  </script>
+  <script></script>
 </pagination>

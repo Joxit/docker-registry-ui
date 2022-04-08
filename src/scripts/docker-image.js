@@ -97,7 +97,7 @@ export class DockerImage {
     const oReq = new Http({ onAuthentication: this.opts.onAuthentication });
     const self = this;
     oReq.addEventListener('loadend', function () {
-      if (this.status == 200 || this.status == 202) {
+      if (this.status === 200 || this.status === 202) {
         const response = JSON.parse(this.responseText);
         if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json' && self.opts.list) {
           self.trigger('list', response);
@@ -131,7 +131,7 @@ export class DockerImage {
           self.trigger('blobs');
           self.trigger('oci-image');
         }
-      } else if (this.status == 404) {
+      } else if (this.status === 404) {
         self.opts.onNotify(`Manifest for ${self.name}:${self.tag} not found`, true);
       } else {
         self.opts.onNotify(this.responseText);
@@ -149,7 +149,7 @@ export class DockerImage {
     const oReq = new Http({ onAuthentication: this.opts.onAuthentication });
     const self = this;
     oReq.addEventListener('loadend', function () {
-      if (this.status == 200 || this.status == 202) {
+      if (this.status === 200 || this.status === 202) {
         const response = JSON.parse(this.responseText);
         self.creationDate = new Date(response.created);
         self.blobs = response;
@@ -164,7 +164,7 @@ export class DockerImage {
         self.blobs.id = blob.replace('sha256:', '');
         self.trigger('creation-date', self.creationDate);
         self.trigger('blobs', self.blobs);
-      } else if (this.status == 404) {
+      } else if (this.status === 404) {
         self.opts.onNotify(`Blobs for ${self.name}:${self.tag} not found`, true);
       } else {
         self.opts.onNotify(this.responseText);

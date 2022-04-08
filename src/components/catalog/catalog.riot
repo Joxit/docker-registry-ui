@@ -73,14 +73,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           onAuthentication: this.props.onAuthentication,
         });
         oReq.addEventListener('load', function () {
-          if (this.status == 200) {
+          if (this.status === 200) {
             repositories = JSON.parse(this.responseText).repositories || [];
             repositories.sort();
             repositories = repositories.reduce(function (acc, e) {
               const slash = e.indexOf('/');
               if (slash > 0) {
                 const repoName = e.substring(0, slash) + '/';
-                if (acc.length == 0 || acc[acc.length - 1].repo != repoName) {
+                if (acc.length === 0 || acc[acc.length - 1].repo != repoName) {
                   acc.push({
                     repo: repoName,
                     images: [],
@@ -92,7 +92,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               acc.push(e);
               return acc;
             }, []);
-          } else if (this.status == 404) {
+          } else if (this.status === 404) {
             self.props.onNotify('Server not found', true);
           } else {
             self.props.onNotify(this.responseText);

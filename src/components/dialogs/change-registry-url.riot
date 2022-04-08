@@ -32,10 +32,7 @@
     </div>
   </material-popup>
   <script>
-    import {
-      addRegistryServers,
-      getRegistryServers
-    } from '../../scripts/utils';
+    import { addRegistryServers, getRegistryServers } from '../../scripts/utils';
     import router from '../../scripts/router';
     export default {
       change(event) {
@@ -47,13 +44,13 @@
           return this.props.onNotify('The select field should start with http:// or https://.', true);
         }
         const url = addRegistryServers(select.value);
-        router.home()
+        router.home();
         this.props.onServerChange(url);
-        this.props.onClose()
+        this.props.onClose();
         setTimeout(() => router.updateUrlQueryParam(url), 100);
       },
-      getRegistryServers
-    }
+      getRegistryServers,
+    };
   </script>
   <style>
     :host select {

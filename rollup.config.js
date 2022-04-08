@@ -14,8 +14,11 @@ import copyTransform from './rollup/copy-transform';
 import license from './rollup/license';
 import checkOutput from './rollup/check-output';
 
+const devMode = process.env.NODE_ENV === 'development';
 const useServe = process.env.ROLLUP_SERVE === 'true';
-const output = useServe ? '.serve' : 'dist';
+const sourceMap = process.env.SOURCEMAP === 'true';
+const output = devMode || useServe ? '.serve' : 'dist';
+const sources = devMode || sourceMap;
 
 const plugins = [
   riot(),
@@ -45,7 +48,7 @@ export default [
       dir: output,
       name: 'DockerRegistryUI',
       format: 'iife',
-      sourcemap: useServe,
+      sourcemap: sources,
     },
     plugins: [emptyDirectories(output)].concat(
       plugins,

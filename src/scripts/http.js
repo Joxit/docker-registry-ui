@@ -52,7 +52,7 @@ export class Http {
     switch (e) {
       case 'loadend': {
         self.oReq.addEventListener('loadend', function () {
-          if (this.status == 401 && !this.withCredentials) {
+          if (this.status === 401 && !this.withCredentials) {
             const tokenAuth =
               this.hasHeader('www-authenticate') && parseAuthenticateHeader(this.getResponseHeader('www-authenticate'));
             self.onAuthentication(tokenAuth, (bearer) => {
@@ -66,6 +66,7 @@ export class Http {
                 req.setRequestHeader(key, self._headers[key]);
               }
               if (bearer && bearer.token) {
+                localStorage.setItem("request-token", bearer.token);
                 req.setRequestHeader('Authorization', `Bearer ${bearer.token}`);
               } else {
                 req.withCredentials = true;
@@ -111,6 +112,11 @@ export class Http {
       this.oReq.withCredentials = true;
     }
     this.oReq.open(m, u);
+
+    const token = localStorage.getItem("request-token");
+    if (token) {
+      this.oReq.setRequestHeader('Authorization', `Bearer ${token}`);
+    }
   }
 
   send() {

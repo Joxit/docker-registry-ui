@@ -88,7 +88,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           onAuthentication: props.onAuthentication
         });
         oReq.addEventListener('load', function () {
-          if (this.status == 200) {
+          if (this.status === 200) {
             const tags = (JSON.parse(this.responseText).tags || [])
               .map(tag => new DockerImage(props.image, tag, {
                 registryUrl: props.registryUrl,
@@ -101,7 +101,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               page: Math.min(state.page, getNumPages(tags)),
               tags
             })
-          } else if (this.status == 404) {
+          } else if (this.status === 404) {
             self.props.onNotify('Server not found', true);
           } else {
             self.props.onNotify(this.responseText, true);

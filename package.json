@@ -2,7 +2,7 @@
   "name": "docker-registry-ui",
   "version": "2.1.0",
   "scripts": {
-    "start": "ROLLUP_SERVE=true rollup -c -w",
+    "start": "rollup -c -w --environment ROLLUP_SERVE:true",
     "build": "rollup -c",
     "build:electron": "npm run build && cd examples/electron && npm install && npm run dist"
   },

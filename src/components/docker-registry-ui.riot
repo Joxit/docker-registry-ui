@@ -129,17 +129,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             service,
             scope,
           } = opts;
-          const req = new XMLHttpRequest()
+          const req = new XMLHttpRequest();
+          req.withCredentials = true;
           req.addEventListener('loadend', () => {
-            try {
-              const bearer = JSON.parse(req.responseText);
-              onAuthenticated(bearer)
-            } catch (e) {
-              this.notifySnackbar(`Failed to log in: ${e.message}`, true)
+            if (req.status === 200) {
+              try {
+                const bearer = JSON.parse(req.responseText);
+                onAuthenticated(bearer)
+              } catch (e) {
+                this.notifySnackbar(`Failed to log in: ${e.message}`, true)
+              }
+            } else {
+              this.notifySnackbar(`Failed to get token`, true)
             }
           })
-          req.open('GET', `${realm}?service=${service}&scope=${scope}`)
-          req.send()
+          req.open('GET', `${realm}?service=${service}&scope=${scope}`);
+          req.send();
         } else {
           onAuthenticated()
         }

@@ -1,0 +1,44 @@
+version: '2.4'
+services:
+  keycloak:
+    image: jboss/keycloak:16.1.1
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+    user: root
+    volumes:
+      - ./data/keycloak:/opt/jboss/keycloak/standalone/data:rw
+    networks:
+      - registry-ui-net
+    command: -Dkeycloak.profile.feature.docker=enabled -b 0.0.0.0
+
+  proxy:
+    image: nginx:stable-alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./conf/proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./conf/proxy/proxy_params.conf:/etc/nginx/proxy_params.conf:ro
+      - ./conf/proxy/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro
+      - ./conf/proxy/privkey.pem:/etc/nginx/certs/privkey.pem:ro
+    networks:
+      - registry-ui-net
+
+  ui:
+    image: joxit/docker-registry-ui:2.2.0
+    environment:
+      REGISTRY_TITLE: My Private Docker Registry
+      REGISTRY_URL: http://registry.localhost
+      SINGLE_REGISTRY: 'true'
+    networks:
+      - registry-ui-net
+
+  registry:
+    image: registry:2.8.1
+    volumes:
+      - ./conf/registry:/etc/docker/registry:ro
+      - ./data/registry:/var/lib/registry:rw
+    networks:
+      - registry-ui-net
+networks:
+  registry-ui-net:

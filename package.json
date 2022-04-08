@@ -1,6 +1,6 @@
 {
   "name": "docker-registry-ui",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "scripts": {
     "start": "rollup -c -w --environment ROLLUP_SERVE:true",
     "build": "rollup -c",

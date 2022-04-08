@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  registry-srv:
-    image: registry:2.7
+  registry:
+    image: registry:2.8.1
     restart: always
     volumes:
       - storage:/var/lib/registry
@@ -23,7 +23,7 @@ services:
       - registry-ui-net
     container_name: registry-srv
 
-  registry-ui:
+  ui:
     image: joxit/docker-registry-ui:latest
     restart: always
     ports:

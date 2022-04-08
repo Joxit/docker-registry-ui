@@ -3,8 +3,8 @@ services:
   registry:
     image: registry:2.7
     volumes:
-      - ./registry-data:/var/lib/registry
-      - ./registry.yml:/etc/docker/registry/config.yml
+      - ./data/registry:/var/lib/registry:rw
+      - ./conf/registry/config.yml:/etc/docker/registry/config.yml:ro
     networks:
       - registry-ui-net
 
@@ -16,9 +16,9 @@ services:
       - REGISTRY_TITLE=My Private Docker Registry
       - SINGLE_REGISTRY=true
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./read-write.htpasswd:/etc/nginx/auth/read-write.htpasswd:ro
-      - ./read-only.htpasswd:/etc/nginx/auth/read-only.htpasswd
+      - ./conf/proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./conf/proxy/read-write.htpasswd:/etc/nginx/auth/read-write.htpasswd:ro
+      - ./conf/proxy/read-only.htpasswd:/etc/nginx/auth/read-only.htpasswd:ro
     depends_on:
       - registry
     networks:

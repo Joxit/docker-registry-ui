@@ -3,8 +3,8 @@ services:
   registry:
     image: registry:2.7
     volumes:
-      - ./registry-data:/var/lib/registry
-      - ./registry-config/config.yml:/etc/docker/registry/config.yml
+      - ./data/registry:/var/lib/registry:rw
+      - ./conf/registry/config.yml:/etc/docker/registry/config.yml:ro
     depends_on:
       - s3-server
     network_mode: host
@@ -14,7 +14,7 @@ services:
     ports:
       - 80:80
     environment:
-      - REGISTRY_URL=http://127.0.0.1:5000
+      - REGISTRY_URL=http://localhost:5000
       - DELETE_IMAGES=true
       - SINGLE_REGISTRY=true
     depends_on:
@@ -24,7 +24,7 @@ services:
   s3-server:
     image: minio/minio:RELEASE.2019-04-09T01-22-30Z
     volumes:
-      - ./s3-server-cmd:/bin/s3-server-cmd:ro
+      - ./data/s3-server/s3-server-cmd:/bin/s3-server-cmd:ro
     environment:
       - MINIO_ACCESS_KEY=accessKey1
       - MINIO_SECRET_KEY=verySecretKey1

@@ -3,7 +3,7 @@ services:
     registry:
         image: registry:2.7
         volumes:
-            - /opt/docker-registry:/var/lib/registry
+            - ./data/registry:/var/lib/registry:rw
         environment:
             - REGISTRY_HTTP_SECRET=my_registry_secret
             - REGISTRY_STORAGE_DELETE_ENABLED=true

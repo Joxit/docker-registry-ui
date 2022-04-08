@@ -3,9 +3,9 @@ services:
   registry:
     image: registry:2.7
     volumes:
-      - ./registry-data:/var/lib/registry
-      - ./registry-config/credentials.yml:/etc/docker/registry/config.yml
-      - ./registry-config/htpasswd:/etc/docker/registry/htpasswd
+      - ./data/registry:/var/lib/registry:rw
+      - ./conf/registry/credentials.yml:/etc/docker/registry/config.yml:ro
+      - ./conf/registry/htpasswd:/etc/docker/registry/htpasswd:ro
     networks:
       - registry-ui-net
 
@@ -19,7 +19,7 @@ services:
       - NGINX_PROXY_HEADER_X_Forwarded_For=$$proxy_add_x_forwarded_for
       - SINGLE_REGISTRY=true
     volumes:
-      - ./nginx.env:/etc/nginx/.env
+      - ./conf/ui/nginx.env:/etc/nginx/.env:ro
     depends_on:
       - registry
     networks:

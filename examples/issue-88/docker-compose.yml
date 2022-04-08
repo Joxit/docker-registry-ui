@@ -5,8 +5,8 @@ services:
     image: registry:2.7
     restart: always
     volumes:
-      - storage:/var/lib/registry
-      - ./config.yml:/etc/docker/registry/config.yml:ro
+      - storage:/var/lib/registry:rw
+      - ./conf/registry/config.yml:/etc/docker/registry/config.yml:ro
     networks:
       - registry-ui-net
     container_name: registry-srv

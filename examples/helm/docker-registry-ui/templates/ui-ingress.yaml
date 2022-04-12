@@ -1,6 +1,18 @@
 {{- if .Values.ui.ingress.enabled -}}
 {{- $fullName := include "docker-registry-ui.fullname" . -}}
+{{- $svcPort := .Values.ui.service.port -}}
+{{- if and .Values.ui.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.ui.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.ui.ingress.annotations "kubernetes.io/ingress.class" .Values.ui.ingress.className}}
+  {{- end }}
+{{- end }}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
 apiVersion: extensions/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -11,6 +23,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- if and .Values.ui.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.ui.ingress.className }}
+  {{- end }}
 {{- if .Values.ui.ingress.tls }}
   tls:
   {{- range .Values.ui.ingress.tls }}
@@ -26,9 +41,21 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
+            {{- end }}
             backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+              {{- else }}
               serviceName: {{ $fullName }}
-              servicePort: http
-  {{- end }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
+          {{- end }}
+    {{- end }}
 {{- end }}

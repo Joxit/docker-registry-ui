@@ -16,16 +16,19 @@
 -->
 <copy-to-clipboard>
   <div class="copy-to-clipboard">
-    <input style="display: none; width: 1px; height: 1px;" value="{ getDockerCmd(props) }">
-    <material-button waves-center="true" rounded="true" waves-color="#ddd" onClick="{ copy }"
-      title="Copy pull command.">
+    <input style="display: none; width: 1px; height: 1px" value="{ getDockerCmd(props) }" />
+    <material-button
+      waves-center="true"
+      rounded="true"
+      waves-color="#ddd"
+      onClick="{ copy }"
+      title="Copy pull command."
+    >
       <i class="material-icons">content_copy</i>
     </material-button>
   </div>
   <script>
-    import {
-      ERROR_CAN_NOT_READ_CONTENT_DIGEST
-    } from '../../scripts/utils';
+    import { ERROR_CAN_NOT_READ_CONTENT_DIGEST } from '../../scripts/utils';
     export default {
       onMounted(props, state) {
         this.load(props, state);
@@ -37,13 +40,13 @@
         if (props.target === 'tag') {
           return `docker pull ${props.pullUrl}/${props.image.name}:${props.image.tag}`;
         } else {
-          return `docker pull ${props.pullUrl}/${props.image.name}@${props.image.digest}`
+          return `docker pull ${props.pullUrl}/${props.image.name}@${props.image.digest}`;
         }
       },
       load(props, state) {
         if (props.target !== 'tag' && !props.image.digest) {
           props.image.one('content-digest', (digest) => {
-            this.update()
+            this.update();
           });
           props.image.trigger('get-content-digest');
         }
@@ -60,8 +63,8 @@
         document.execCommand('copy');
         copyText.style.display = 'none';
 
-        this.props.onNotify('`' + copyText.value + '` has been copied to clipboard.')
-      }
-    }
+        this.props.onNotify('`' + copyText.value + '` has been copied to clipboard.');
+      },
+    };
   </script>
 </copy-to-clipboard>

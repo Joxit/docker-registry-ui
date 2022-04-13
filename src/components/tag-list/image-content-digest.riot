@@ -39,12 +39,12 @@ Copyright (C) 2016-2021 Jones Magloire @Joxit
       onResize(chars) {
         if (chars !== this.state.chars) {
           this.update({
-            chars
+            chars,
           });
         }
       },
       getTitle(image, chars) {
-        return chars >= 70 ? '' : (image.digest || '');
+        return chars >= 70 ? '' : image.digest || '';
       },
       getDigest(image, chars) {
         if (chars >= 70) {
@@ -54,7 +54,7 @@ Copyright (C) 2016-2021 Jones Magloire @Joxit
         } else {
           return image.digest && image.digest.slice(0, chars) + '...';
         }
-      }
-    }
+      },
+    };
   </script>
 </image-content-digest>

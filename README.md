@@ -6,6 +6,7 @@ title: Docker Registry User Interface
 
 ![Stars](https://img.shields.io/github/stars/joxit/docker-registry-ui.svg?logo=github&maxAge=86400)
 ![Pulls](https://img.shields.io/docker/pulls/joxit/docker-registry-ui.svg?maxAge=86400)
+[![Sponsor](https://joxit.dev/images/sponsor.svg)](https://github.com/sponsors/Joxit)
 
 ## Overview
 
@@ -18,6 +19,8 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 ## [Project Page](https://joxit.dev/docker-registry-ui), [Live Demo](https://joxit.dev/docker-registry-ui/demo/), [Examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples)
 
 ![preview](https://raw.github.com/Joxit/docker-registry-ui/main/docker-registry-ui.gif "Preview of Docker Registry UI")
+
+If you like my work and want to support it, don't hesitate to [sponsor me](https://github.com/sponsors/Joxit).
 
 ## Features
 
@@ -49,6 +52,8 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 -   Filter images and tags with a search bar. You can select the search bar with the shortcut `CRTL` + `F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)).
 -   **Forward** custom header to your backend registry via environment variable and file via `NGINX_PROXY_PASS_HEADER_*` (see [#206](https://github.com/Joxit/docker-registry-ui/pull/206)).
 -   Run the container with user nginx instead of root via `--user nginx` and listend on custom port via `NGINX_LISTEN_PORT` (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
+-   Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries via `SHOW_CATALOG_NB_TAGS` (default: `false`) (see [#161](https://github.com/Joxit/docker-registry-ui/issues/161) and [#239](https://github.com/Joxit/docker-registry-ui/pull/239)).
+-   Expose custom labels in history page, custom labels will be processed like maintainer label via `HISTORY_CUSTOM_LABELS` (see [#160](https://github.com/Joxit/docker-registry-ui/issues/160) and [#240](https://github.com/Joxit/docker-registry-ui/pull/240)).
 
 ## FAQ
 
@@ -76,6 +81,8 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
     - When you delete an image with the UI, only the reference is deleted and not the content. To remove dangling images, you need to run the garbage collector of the registry with the command `registry garbage-collect config.yml` or `docker exec registry registry garbage-collect config.yml`. (see [#77](https://github.com/Joxit/docker-registry-ui/issues/77) [#147](https://github.com/Joxit/docker-registry-ui/issues/147))
 -   Why when I delete one tag, all tags with the same SHA are deleted ?
     - This a docker registry API limitation, there is only one way to [delete images with tag](https://docs.docker.com/registry/spec/api/#deleting-an-image), it's by its `name` and its `manifest` (it's a sha of the content). So when you delete a tag, this will delete all tags of this image with the same SHA/manifest.
+-   Can I run the container with an unprivileged user ?
+    - Yes you can run the container with the `nginx` user, (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
 
 
 Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples) or open an issue.
@@ -99,6 +106,8 @@ Some env options are available for use this interface for **only one server**.
 - `NGINX_LISTEN_PORT`: Listen on a port other than 80. (default: `80` when the user is root, `8080` otherwise).
 - `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false`. (default: ` `).
 - `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false`. (default: `false`).
+- `SHOW_CATALOG_NB_TAGS`: Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries. (default: `false`).
+- `HISTORY_CUSTOM_LABELS`: Expose custom labels in history page, custom labels will be processed like maintainer label.
 
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
 

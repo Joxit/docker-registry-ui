@@ -4,7 +4,7 @@ export function bytesToSize(bytes) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   if (bytes == undefined || isNaN(bytes)) {
     return '?';
-  } else if (bytes == 0) {
+  } else if (bytes === 0) {
     return '0 Byte';
   }
   const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
@@ -76,7 +76,10 @@ export function getHistoryIcon(attribute) {
     case 'ExposedPorts':
       return 'router';
     default:
-      '';
+      if (attribute.startsWith('custom-label-')) {
+        return 'label';
+      }
+      return '';
   }
 }
 
@@ -200,4 +203,8 @@ export function decodeURI(url) {
 
 export function truthy(value) {
   return value === true || value === 'true';
+}
+
+export function stringToArray(value) {
+  return value && typeof value === 'string' ? value.split(',') : [];
 }

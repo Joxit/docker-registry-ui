@@ -15,16 +15,34 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history-button>
-  <material-button title="This will show the history of given tag" waves-center="true" rounded="true" waves-color="#ddd"
-    onClick="{ routeToHistory }">
+  <material-button
+    title="{ buttonTittle() }"
+    waves-center="true"
+    rounded="true"
+    waves-color="#ddd"
+    onClick="{ routeToHistory }"
+    disabled="{ props.image.ociImage }"
+  >
     <i class="material-icons">history</i>
   </material-button>
   <script>
     import router from '../../scripts/router';
     export default {
+      onMounted(props) {
+        props.image.one('oci-image', () => {
+          this.update();
+        });
+      },
+      buttonTittle() {
+        return !this.props.image.ociImage
+          ? 'This will show the history of given tag'
+          : 'History is unavailable on OCI index/Buildkit export cache';
+      },
       routeToHistory() {
-        router.history(this.props.image.name, this.props.image.tag)
-      }
-    }
+        if (!this.props.image.ociImage) {
+          router.history(this.props.image.name, this.props.image.tag);
+        }
+      },
+    };
   </script>
 </tag-history-button>

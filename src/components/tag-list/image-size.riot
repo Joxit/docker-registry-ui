@@ -17,9 +17,7 @@
 <image-size>
   <div title="Compressed size of your image.">{ getImageSize(props.image) }</div>
   <script>
-    import {
-      bytesToSize,
-    } from '../../scripts/utils';
+    import { bytesToSize } from '../../scripts/utils';
     export default {
       onMounted(props, state) {
         this.load(props, state);
@@ -33,15 +31,14 @@
         }
         props.image.on('size', (size) => {
           this.update({
-            size
+            size,
           });
         });
         props.image.trigger('get-size');
-
       },
       getImageSize(image) {
-        return bytesToSize(image.size)
-      }
-    }
+        return bytesToSize(image.size);
+      },
+    };
   </script>
 </image-size>

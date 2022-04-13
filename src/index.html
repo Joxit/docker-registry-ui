@@ -16,62 +16,78 @@
 -->
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- build:css docker-registry-ui.css -->
+    <link href="../node_modules/riot-mui/build/styles/riot-mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="material-icons.css" rel="stylesheet" type="text/css" />
+    <link href="roboto.css" rel="stylesheet" type="text/css" />
+    <!-- endbuild -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:site_name" content="Docker Registry UI" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@Joxit" />
+    <meta name="twitter:creator" content="@Jones Magloire" />
+    <title>Docker Registry UI</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <!-- build:css docker-registry-ui.css -->
-  <link href="../node_modules/riot-mui/build/styles/riot-mui.min.css" rel="stylesheet" type="text/css">
-  <link href="style.css" rel="stylesheet" type="text/css">
-  <link href="material-icons.css" rel="stylesheet" type="text/css">
-  <link href="roboto.css" rel="stylesheet" type="text/css">
-  <!-- endbuild -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:site_name" content="Docker Registry UI" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="@Joxit" />
-  <meta name="twitter:creator" content="@Jones Magloire" />
-  <title>Docker Registry UI</title>
-</head>
-
-<body>
-  <!-- build:keep production -->
-  <docker-registry-ui registry-url="${REGISTRY_URL}" name="${REGISTRY_TITLE}" pull-url="${PULL_URL}"
-    show-content-digest="${SHOW_CONTENT_DIGEST}" is-image-remove-activated="${DELETE_IMAGES}"
-    catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}" single-registry="${SINGLE_REGISTRY}"
-    default-registries="${DEFAULT_REGISTRIES}" read-only-registries="${READ_ONLY_REGISTRIES}">
-  </docker-registry-ui>
-  <!-- endbuild -->
-  <!-- build:keep developement -->
-  <docker-registry-ui registry-url="" name="Developement Registry" pull-url="" show-content-digest="true"
-    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false">
-  </docker-registry-ui>
-  <!-- endbuild -->
-  <!-- build:js docker-registry-ui.js -->
-  <script src="../node_modules/riot/riot+compiler.min.js"></script>
-  <script src="../node_modules/riot-route/dist/route.js"></script>
-  <script src="../node_modules/riot-mui/build/js/riot-mui.js"></script>
-  <script src="tags/catalog.riot" type="riot/tag"></script>
-  <script src="tags/catalog-element.riot" type="riot/tag"></script>
-  <script src="tags/tag-history-button.riot" type="riot/tag"></script>
-  <script src="tags/tag-history.riot" type="riot/tag"></script>
-  <script src="tags/tag-history-element.riot" type="riot/tag"></script>
-  <script src="tags/taglist.riot" type="riot/tag"></script>
-  <script src="tags/image-tag.riot" type="riot/tag"></script>
-  <script src="tags/remove-image.riot" type="riot/tag"></script>
-  <script src="tags/copy-to-clipboard.riot" type="riot/tag"></script>
-  <script src="tags/dialogs/add.riot" type="riot/tag"></script>
-  <script src="tags/dialogs/change.riot" type="riot/tag"></script>
-  <script src="tags/dialogs/remove.riot" type="riot/tag"></script>
-  <script src="tags/dialogs/menu.riot" type="riot/tag"></script>
-  <script src="tags/image-size.riot" type="riot/tag"></script>
-  <script src="tags/image-date.riot" type="riot/tag"></script>
-  <script src="tags/image-content-digest.riot" type="riot/tag"></script>
-  <script src="tags/pagination.riot" type="riot/tag"></script>
-  <script src="tags/app.riot" type="riot/tag"></script>
-  <script src="scripts/http.js"></script>
-  <script src="scripts/script.js"></script>
-  <script src="scripts/utils.js"></script>
-  <!-- endbuild -->
-</body>
-
+  <body>
+    <!-- build:keep production -->
+    <docker-registry-ui
+      registry-url="${REGISTRY_URL}"
+      name="${REGISTRY_TITLE}"
+      pull-url="${PULL_URL}"
+      show-content-digest="${SHOW_CONTENT_DIGEST}"
+      is-image-remove-activated="${DELETE_IMAGES}"
+      catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}"
+      single-registry="${SINGLE_REGISTRY}"
+      default-registries="${DEFAULT_REGISTRIES}"
+      read-only-registries="${READ_ONLY_REGISTRIES}"
+      show-catalog-nb-tags="${SHOW_CATALOG_NB_TAGS}"
+      history-custom-labels="${HISTORY_CUSTOM_LABELS}"
+    >
+    </docker-registry-ui>
+    <!-- endbuild -->
+    <!-- build:keep developement -->
+    <docker-registry-ui
+      registry-url=""
+      name="Developement Registry"
+      pull-url=""
+      show-content-digest="true"
+      is-image-remove-activated="true"
+      catalog-elements-limit="1000"
+      single-registry="false"
+      show-catalog-nb-tags="true"
+      history-custom-labels="first_custom_labels,second_custom_labels"
+    >
+    </docker-registry-ui>
+    <!-- endbuild -->
+    <!-- build:js docker-registry-ui.js -->
+    <script src="../node_modules/riot/riot+compiler.min.js"></script>
+    <script src="../node_modules/riot-route/dist/route.js"></script>
+    <script src="../node_modules/riot-mui/build/js/riot-mui.js"></script>
+    <script src="tags/catalog.riot" type="riot/tag"></script>
+    <script src="tags/catalog-element.riot" type="riot/tag"></script>
+    <script src="tags/tag-history-button.riot" type="riot/tag"></script>
+    <script src="tags/tag-history.riot" type="riot/tag"></script>
+    <script src="tags/tag-history-element.riot" type="riot/tag"></script>
+    <script src="tags/taglist.riot" type="riot/tag"></script>
+    <script src="tags/image-tag.riot" type="riot/tag"></script>
+    <script src="tags/remove-image.riot" type="riot/tag"></script>
+    <script src="tags/copy-to-clipboard.riot" type="riot/tag"></script>
+    <script src="tags/dialogs/add.riot" type="riot/tag"></script>
+    <script src="tags/dialogs/change.riot" type="riot/tag"></script>
+    <script src="tags/dialogs/remove.riot" type="riot/tag"></script>
+    <script src="tags/dialogs/menu.riot" type="riot/tag"></script>
+    <script src="tags/image-size.riot" type="riot/tag"></script>
+    <script src="tags/image-date.riot" type="riot/tag"></script>
+    <script src="tags/image-content-digest.riot" type="riot/tag"></script>
+    <script src="tags/pagination.riot" type="riot/tag"></script>
+    <script src="tags/app.riot" type="riot/tag"></script>
+    <script src="scripts/http.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/utils.js"></script>
+    <!-- endbuild -->
+  </body>
 </html>

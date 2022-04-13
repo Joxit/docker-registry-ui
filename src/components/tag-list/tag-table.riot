@@ -15,39 +15,61 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-table>
-  <confirm-delete-image opened="{ state.confirmDeleteImage }" on-click="{ onConfirmDeleteImageClick }"
-    registry-url="{ props.registryUrl }" on-notify="{ props.onNotify }" on-authentication="{ props.onAuthentication }"
-    tags="{ props.tags }" to-delete="{ state.toDelete }"></confirm-delete-image>
+  <confirm-delete-image
+    opened="{ state.confirmDeleteImage }"
+    on-click="{ onConfirmDeleteImageClick }"
+    registry-url="{ props.registryUrl }"
+    on-notify="{ props.onNotify }"
+    on-authentication="{ props.onAuthentication }"
+    tags="{ props.tags }"
+    to-delete="{ state.toDelete }"
+  ></confirm-delete-image>
   <material-card class="taglist">
-    <table style="border: none;">
+    <table style="border: none">
       <thead>
         <tr>
           <th
             class="creation-date { (state.desc && state.orderType === 'date') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
-            onclick="{() => onPageReorder('date') }">
+            onclick="{() => onPageReorder('date') }"
+          >
             Creation date
           </th>
           <th
             class="image-size { (state.desc && state.orderType === 'size') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
-            onclick="{() => onPageReorder('size') }">
+            onclick="{() => onPageReorder('size') }"
+          >
             Size
           </th>
           <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th>
 
-          <th id="image-tag-header"
+          <th
+            id="image-tag-header"
             class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
-            onclick="{ onReverseOrder }">Tag
+            onclick="{ onReverseOrder }"
+          >
+            Tag
           </th>
           <th class="show-tag-history">History</th>
-          <th class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
-            if="{ props.isImageRemoveActivated }">
-            <material-checkbox class="indeterminate" checked="{ state.multiDelete }"
+          <th
+            class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
+            if="{ props.isImageRemoveActivated }"
+          >
+            <material-checkbox
+              class="indeterminate"
+              checked="{ state.multiDelete }"
               if="{ state.toDelete.size === 0 || state.singleDeleteAction }"
-              title="Toggle multi-delete. Alt+Click to select all tags." onChange="{ onRemoveImageHeaderChange }">
+              title="Toggle multi-delete. Alt+Click to select all tags."
+              onChange="{ onRemoveImageHeaderChange }"
+            >
             </material-checkbox>
-            <material-button waves-center="true" rounded="true" waves-color="#ddd"
-              title="This will delete selected images." onClick="{ deleteImages }"
-              if="{ state.toDelete.size > 0 && !state.singleDeleteAction }">
+            <material-button
+              waves-center="true"
+              rounded="true"
+              waves-color="#ddd"
+              title="This will delete selected images."
+              onClick="{ deleteImages }"
+              if="{ state.toDelete.size > 0 && !state.singleDeleteAction }"
+            >
               <i class="material-icons">delete</i>
             </material-button>
           </th>
@@ -63,30 +85,42 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </td>
           <td if="{ props.showContentDigest }">
             <image-content-digest image="{ image }" />
-            <copy-to-clipboard target="digest" image="{ image }" pull-url="{ props.pullUrl }"
-              on-notify="{ props.onNotify }" />
+            <copy-to-clipboard
+              target="digest"
+              image="{ image }"
+              pull-url="{ props.pullUrl }"
+              on-notify="{ props.onNotify }"
+            />
           </td>
           <td>
             <image-tag image="{ image }" />
-            <copy-to-clipboard target="tag" image="{ image }" pull-url="{ props.pullUrl }"
-              on-notify="{ props.onNotify }" />
+            <copy-to-clipboard
+              target="tag"
+              image="{ image }"
+              pull-url="{ props.pullUrl }"
+              on-notify="{ props.onNotify }"
+            />
           </td>
           <td class="show-tag-history">
             <tag-history-button image="{ image }" />
           </td>
           <td if="{ props.isImageRemoveActivated }" class="remove-tag">
-            <remove-image multi-delete="{ state.multiDelete }" image="{ image }" registry-url="{ props.registryUrl }"
-              handleCheckboxChange="{ onRemoveImageChange }" checked="{ state.toDelete.has(image) }"
-              on-notify="{ props.onNotify }" on-authentication="{ props.onAuthentication }" />
+            <remove-image
+              multi-delete="{ state.multiDelete }"
+              image="{ image }"
+              registry-url="{ props.registryUrl }"
+              handleCheckboxChange="{ onRemoveImageChange }"
+              checked="{ state.toDelete.has(image) }"
+              on-notify="{ props.onNotify }"
+              on-authentication="{ props.onAuthentication }"
+            />
           </td>
         </tr>
       </tbody>
     </table>
   </material-card>
   <script>
-    import {
-      getPage,
-    } from '../../scripts/utils';
+    import { getPage } from '../../scripts/utils';
     import ImageDate from './image-date.riot';
     import ImageSize from './image-size.riot';
     import ImageTag from './image-tag.riot';
@@ -94,9 +128,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import CopyToClipboard from './copy-to-clipboard.riot';
     import TagHistoryButton from './tag-history-button.riot';
     import RemoveImage from './remove-image.riot';
-    import {
-      matchSearch
-    } from '../search-bar.riot';
+    import { matchSearch } from '../search-bar.riot';
     import ConfirmDeleteImage from '../dialogs/confirm-delete-image.riot';
     const ACTION_CHECK_TO_DELETE = 'CHECK';
     const ACTION_UNCHECK_TO_DELETE = 'UNCHECK';
@@ -118,18 +150,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           toDelete: new Set(),
           multiDelete: false,
           page: props.page,
-        }
+        };
       },
       onBeforeUpdate(props, state) {
         if (state.page !== props.page) {
           state.toDelete.clear();
         }
-        state.page = props.page
+        state.page = props.page;
       },
       deleteImages() {
         this.update({
-          confirmDeleteImage: true
-        })
+          confirmDeleteImage: true,
+        });
       },
       onConfirmDeleteImageClick() {
         if (this.state.singleDeleteAction) {
@@ -137,22 +169,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         this.update({
           singleDeleteAction: false,
-          confirmDeleteImage: false
-        })
+          confirmDeleteImage: false,
+        });
       },
       onRemoveImageHeaderChange(checked, event) {
         if (event.altKey === true) {
           const tags = getPage(this.props.tags, this.props.page);
-          tags.filter(image => matchSearch(this.props.filterResults, image.tag))
-            .forEach(tag => this.state.toDelete.add(tag));
+          tags
+            .filter((image) => matchSearch(this.props.filterResults, image.tag))
+            .forEach((tag) => this.state.toDelete.add(tag));
           this.update({
             multiDelete: true,
-            toDelete: this.state.toDelete
-          })
+            toDelete: this.state.toDelete,
+          });
         } else {
           this.update({
-            multiDelete: checked
-          })
+            multiDelete: checked,
+          });
         }
       },
       onRemoveImageChange(action, image) {
@@ -177,8 +210,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.update({
           toDelete: this.state.toDelete,
           confirmDeleteImage,
-          singleDeleteAction
-        })
+          singleDeleteAction,
+        });
       },
       onReverseOrder() {
         this.state.orderType = null;
@@ -188,30 +221,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onPageReorder(type) {
         this.update({
           orderType: type,
-          desc: (this.state.orderType && this.state.orderType !== type) || !this.state.desc
-        })
+          desc: (this.state.orderType && this.state.orderType !== type) || !this.state.desc,
+        });
       },
       getPage(tags, page) {
         const sortedTags = getPage(tags, page);
         if (this.state.orderType === 'date') {
           sortedTags.sort((e1, e2) =>
-            !this.state.desc ?
-            e2.creationDate.getTime() - e1.creationDate.getTime() :
-            e1.creationDate.getTime() - e2.creationDate.getTime());
+            !this.state.desc
+              ? e2.creationDate.getTime() - e1.creationDate.getTime()
+              : e1.creationDate.getTime() - e2.creationDate.getTime()
+          );
         } else if (this.state.orderType === 'size') {
-          sortedTags.sort((e1, e2) =>
-            !this.state.desc ?
-            e2.size - e1.size :
-            e1.size - e2.size);
+          sortedTags.sort((e1, e2) => (!this.state.desc ? e2.size - e1.size : e1.size - e2.size));
         }
         return sortedTags;
       },
-      matchSearch
-    }
-    export {
-      ACTION_CHECK_TO_DELETE,
-      ACTION_UNCHECK_TO_DELETE,
-      ACTION_DELETE_IMAGE
-    }
+      matchSearch,
+    };
+    export { ACTION_CHECK_TO_DELETE, ACTION_UNCHECK_TO_DELETE, ACTION_DELETE_IMAGE };
   </script>
 </tag-table>

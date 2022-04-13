@@ -16,15 +16,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-list>
   <material-card class="header">
-    <div class="material-card-title-action ">
+    <div class="material-card-title-action">
       <material-button waves-center="true" rounded="true" waves-color="#ddd" onClick="{ router.home }">
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
         Tags of { props.image }
-        <div class="source-hint">
-          Sourced from { state.registryName + '/' + props.image }
-        </div>
+        <div class="source-hint">Sourced from { state.registryName + '/' + props.image }</div>
         <div class="item-count">{ state.tags.length } tags</div>
       </h2>
     </div>
@@ -36,30 +34,31 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
-  <tag-table if="{ state.loadend }" tags="{state.tags}" asc="{state.asc}" page="{ state.page }"
-    show-content-digest="{props.showContentDigest}" is-image-remove-activated="{props.isImageRemoveActivated}"
-    onReverseOrder="{ onReverseOrder }" registry-url="{ props.registryUrl }" pull-url="{ props.pullUrl }"
-    on-notify="{ props.onNotify }" filter-results="{ props.filterResults }"
-    on-authentication="{ props.onAuthentication }">
+  <tag-table
+    if="{ state.loadend }"
+    tags="{state.tags}"
+    asc="{state.asc}"
+    page="{ state.page }"
+    show-content-digest="{props.showContentDigest}"
+    is-image-remove-activated="{props.isImageRemoveActivated}"
+    onReverseOrder="{ onReverseOrder }"
+    registry-url="{ props.registryUrl }"
+    pull-url="{ props.pullUrl }"
+    on-notify="{ props.onNotify }"
+    filter-results="{ props.filterResults }"
+    on-authentication="{ props.onAuthentication }"
+  >
   </tag-table>
 
   <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
 
   <script>
-    import {
-      Http
-    } from '../../scripts/http';
-    import {
-      DockerImage,
-      compare
-    } from '../../scripts/docker-image';
-    import {
-      getNumPages,
-      getPageLabels
-    } from '../../scripts/utils'
-    import Pagination from './pagination.riot'
-    import TagTable from './tag-table.riot'
-    import router from '../../scripts/router'
+    import { Http } from '../../scripts/http';
+    import { DockerImage, compare } from '../../scripts/docker-image';
+    import { getNumPages, getPageLabels } from '../../scripts/utils';
+    import Pagination from './pagination.riot';
+    import TagTable from './tag-table.riot';
+    import router from '../../scripts/router';
     export default {
       components: {
         Pagination,
@@ -71,11 +70,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           tags: [],
           loadend: false,
           asc: true,
-          page: router.getPageQueryParam() || 1
-        }
+          page: router.getPageQueryParam() || 1,
+        };
       },
       onMounted(props, state) {
-        this.display(props, state)
+        this.display(props, state);
         window.addEventListener('resize', this.onResize);
         // this may be run before the final document size is available, so schedule
         //  a correction once everything is set up.
@@ -85,23 +84,26 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.tags = [];
         const self = this;
         const oReq = new Http({
-          onAuthentication: props.onAuthentication
+          onAuthentication: props.onAuthentication,
         });
         oReq.addEventListener('load', function () {
-          if (this.status == 200) {
+          if (this.status === 200) {
             const tags = (JSON.parse(this.responseText).tags || [])
-              .map(tag => new DockerImage(props.image, tag, {
-                registryUrl: props.registryUrl,
-                onNotify: props.onNotify,
-                onAuthentication: props.onAuthentication
-              }))
+              .map(
+                (tag) =>
+                  new DockerImage(props.image, tag, {
+                    registryUrl: props.registryUrl,
+                    onNotify: props.onNotify,
+                    onAuthentication: props.onAuthentication,
+                  })
+              )
               .sort(compare);
             window.requestAnimationFrame(self.onResize);
             self.update({
               page: Math.min(state.page, getNumPages(tags)),
-              tags
-            })
-          } else if (this.status == 404) {
+              tags,
+            });
+          } else if (this.status === 404) {
             self.props.onNotify('Server not found', true);
           } else {
             self.props.onNotify(this.responseText, true);
@@ -113,7 +115,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         });
         oReq.addEventListener('loadend', function () {
           self.update({
-            loadend: true
+            loadend: true,
           });
         });
         oReq.open('GET', props.registryUrl + '/v2/' + props.image + '/tags/list');
@@ -123,7 +125,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
       onPageUpdate(page) {
         this.update({
-          page: page
+          page: page,
         });
         router.updatePageQueryParam(page);
       },
@@ -143,8 +145,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           // SHA256:12345678 + scaled between 1024 and 1440px
           chars = 15 + 56 * ((innerWidth - 1024) / 416);
         }
-        if (max > 20) chars -= (max - 20);
-        chars = Math.floor(chars)
+        if (max > 20) chars -= max - 20;
+        chars = Math.floor(chars);
         this.state.tags.map(function (image) {
           image.trigger('content-digest-chars', chars);
         });
@@ -162,7 +164,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       getPageLabels,
       getNumPages,
-      router
-    }
+      router,
+    };
   </script>
 </tag-list>

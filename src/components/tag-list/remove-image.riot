@@ -15,29 +15,35 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
-  <material-button waves-center="true" rounded="true" waves-color="#ddd" title="This will delete the image."
-    if="{ !props.multiDelete }" disabled="{ !state.digest }" onClick="{ deleteImage }">
+  <material-button
+    waves-center="true"
+    rounded="true"
+    waves-color="#ddd"
+    title="This will delete the image."
+    if="{ !props.multiDelete }"
+    disabled="{ !state.digest }"
+    onClick="{ deleteImage }"
+  >
     <i class="material-icons">delete</i>
   </material-button>
-  <material-checkbox if="{ props.multiDelete }" title="Select this tag to delete it." disabled="{ !state.digest }"
-    onChange="{ handleCheckboxChange }" checked="{ state.checked }">
+  <material-checkbox
+    if="{ props.multiDelete }"
+    title="Select this tag to delete it."
+    disabled="{ !state.digest }"
+    onChange="{ handleCheckboxChange }"
+    checked="{ state.checked }"
+  >
   </material-checkbox>
   <script>
-    import {
-      Http
-    } from '../../scripts/http';
-    import router from '../../scripts/router'
-    import {
-      ACTION_CHECK_TO_DELETE,
-      ACTION_UNCHECK_TO_DELETE,
-      ACTION_DELETE_IMAGE
-    } from './tag-table.riot';
+    import { Http } from '../../scripts/http';
+    import router from '../../scripts/router';
+    import { ACTION_CHECK_TO_DELETE, ACTION_UNCHECK_TO_DELETE, ACTION_DELETE_IMAGE } from './tag-table.riot';
     export default {
       onBeforeMount(props, state) {
         state.checked = props.checked;
         props.image.one('content-digest', (digest) => {
           this.update({
-            digest
+            digest,
           });
         });
       },
@@ -53,7 +59,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       handleCheckboxChange(checked) {
         const action = checked ? ACTION_CHECK_TO_DELETE : ACTION_UNCHECK_TO_DELETE;
         this.props.handleCheckboxChange(action, this.props.image);
-      }
-    }
+      },
+    };
   </script>
 </remove-image>

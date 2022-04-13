@@ -15,17 +15,16 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history-element class="{ state.key }">
-  <div class="headline"><i class="material-icons">{ state.icon }</i>
+  <div class="headline">
+    <i class="material-icons">{ state.icon }</i>
     <p>{ state.name }</p>
   </div>
   <div class="content">
-    <div class="value" if="{ state.value }"> { state.value }</div>
-    <div class="values value" each="{ value in state.values }" if="{ state.values }"> { value }</div>
+    <div class="value" if="{ state.value }">{ state.value }</div>
+    <div class="values value" each="{ value in state.values }" if="{ state.values }">{ value }</div>
   </div>
   <script>
-    import {
-      getHistoryIcon
-    } from '../../scripts/utils';
+    import { getHistoryIcon } from '../../scripts/utils';
     export default {
       onBeforeStart(props, state) {
         state.key = props.entry.key;
@@ -48,14 +47,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           return name;
         } else if (name === 'os') {
           return 'OS';
+        } else if (name.startsWith('custom-label-')) {
+          name = name.replace('custom-label-', '');
         }
-        return name.replace(/([a-z])([A-Z])/g, '$1 $2')
-          .replace('_', ' ')
+        return name
+          .replace(/([a-z])([A-Z])/g, '$1 $2')
+          .replace(/[_-]/g, ' ')
           .split(' ')
-          .map(word => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+          .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
           .join(' ');
-      }
-    }
+      },
+    };
   </script>
   <style>
     :host.Labels .value,
@@ -70,7 +72,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     :host.docker_version .headline .material-icons {
       background-size: 24px auto;
-      background-image: url("images/docker-logo.svg");
+      background-image: url('images/docker-logo.svg');
       background-repeat: no-repeat;
     }
 

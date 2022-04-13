@@ -1,9 +1,7 @@
 <search-bar>
   <material-input placeholder="Search in page"></material-input>
   <script>
-    import {
-      router
-    } from '@riotjs/route';
+    import { router } from '@riotjs/route';
 
     export default {
       onMounted(props, state) {
@@ -11,16 +9,16 @@
         let value = '';
         const notify = () => {
           if (value !== input.value) {
-            props.onSearch(input.value.toLowerCase())
+            props.onSearch(input.value.toLowerCase());
           }
           value = input.value;
-        }
+        };
         input.addEventListener('keyup', notify);
         router.on.value(() => {
           input.value = '';
           notify();
-        })
-        window.addEventListener('keydown', e => {
+        });
+        window.addEventListener('keydown', (e) => {
           // F3 or CTRL + F
           if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
             // already focused, fallback to default behavior
@@ -31,9 +29,9 @@
               input.focus();
             }
           }
-        })
-      }
-    }
+        });
+      },
+    };
 
     export function matchSearch(search, value) {
       return !search || (value && value.toLowerCase().indexOf(search) >= 0);

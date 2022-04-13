@@ -52,7 +52,7 @@ export class Http {
     switch (e) {
       case 'loadend': {
         self.oReq.addEventListener('loadend', function () {
-          if (this.status == 401 && !this.withCredentials) {
+          if (this.status === 401 && !this.withCredentials) {
             const tokenAuth =
               this.hasHeader('www-authenticate') && parseAuthenticateHeader(this.getResponseHeader('www-authenticate'));
             self.onAuthentication(tokenAuth, (bearer) => {

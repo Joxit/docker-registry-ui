@@ -13,7 +13,16 @@
 
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
---><!DOCTYPE html><html><head><meta charset="UTF-8"><link href="docker-registry-ui.css" rel="stylesheet" type="text/css"><meta name="viewport" content="width=device-width, initial-scale=1"><meta property="og:site_name" content="Docker Registry UI" /><meta name="twitter:card" content="summary" /><meta name="twitter:site" content="@Joxit" /><meta name="twitter:creator" content="@Jones Magloire" /><title>Docker Registry UI</title></head><body><docker-registry-ui registry-url="${REGISTRY_URL}" name="${REGISTRY_TITLE}" pull-url="${PULL_URL}"
-    show-content-digest="${SHOW_CONTENT_DIGEST}" is-image-remove-activated="${DELETE_IMAGES}"
-    catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}" single-registry="${SINGLE_REGISTRY}"
-    default-registries="${DEFAULT_REGISTRIES}" read-only-registries="${READ_ONLY_REGISTRIES}"></docker-registry-ui><script src="docker-registry-ui.js"></script></body></html>
+--><!DOCTYPE html><html><head><meta charset="UTF-8" /><link href="docker-registry-ui.css" rel="stylesheet" type="text/css"><meta name="viewport" content="width=device-width, initial-scale=1" /><meta property="og:site_name" content="Docker Registry UI" /><meta name="twitter:card" content="summary" /><meta name="twitter:site" content="@Joxit" /><meta name="twitter:creator" content="@Jones Magloire" /><title>Docker Registry UI</title></head><body><docker-registry-ui
+      registry-url="${REGISTRY_URL}"
+      name="${REGISTRY_TITLE}"
+      pull-url="${PULL_URL}"
+      show-content-digest="${SHOW_CONTENT_DIGEST}"
+      is-image-remove-activated="${DELETE_IMAGES}"
+      catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}"
+      single-registry="${SINGLE_REGISTRY}"
+      default-registries="${DEFAULT_REGISTRIES}"
+      read-only-registries="${READ_ONLY_REGISTRIES}"
+      show-catalog-nb-tags="${SHOW_CATALOG_NB_TAGS}"
+      history-custom-labels="${HISTORY_CUSTOM_LABELS}"
+    ></docker-registry-ui><script src="docker-registry-ui.js"></script></body></html>

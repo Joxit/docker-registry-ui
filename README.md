@@ -148,6 +148,7 @@ And you need to add these HEADERS:
 http:
   headers:
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
+    Access-Control-Allow-Headers: ['Authorization', 'Accept']
     Access-Control-Expose-Headers: ['Docker-Content-Digest']
 ```
 

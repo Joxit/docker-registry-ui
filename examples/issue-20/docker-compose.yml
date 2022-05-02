@@ -11,6 +11,7 @@ services:
     image: joxit/docker-registry-ui:latest
     environment:
       - SINGLE_REGISTRY=true
+      - NGINX_CUSTOM_CONF=true
       - REGISTRY_TITLE=My Private Docker Registry
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf

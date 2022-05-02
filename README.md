@@ -100,6 +100,7 @@ Some env options are available for use this interface for **only one server**.
 - `SHOW_CONTENT_DIGEST`: Show content digest in docker tag list. (default: `false`)
 - `CATALOG_ELEMENTS_LIMIT`: Limit the number of elements in the catalog page. (default: `100000`).
 - `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default: `false`).
+- `NGINX_CUSTOM_CONF`: Set to **true** if you are mounting your own `/etc/nginx/conf.d/default.conf` file. This will render all other nginx options useless.
 - `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`.
 - `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **set custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
 - `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **forward custom headers** to your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.

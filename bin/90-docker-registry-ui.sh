@@ -58,11 +58,13 @@ if [ -n "${NGINX_PROXY_PASS_URL}" ] ; then
 fi
 
 if [ "$(whoami)" != "root" ]; then
-  if [ "$NGINX_LISTEN_PORT" = 80 ]; then
+  if [ "$NGINX_LISTEN_PORT" = "80" ]; then
     NGINX_LISTEN_PORT="8080"
   fi
   sed -i "/user  nginx;/d" /etc/nginx/nginx.conf
   sed -i "s,/var/run/nginx.pid,/tmp/nginx.pid," /etc/nginx/nginx.conf
 fi
 
-sed -i "s,listen       80;,listen       $NGINX_LISTEN_PORT;," /etc/nginx/conf.d/default.conf
+if [ "$NGINX_LISTEN_PORT" != "80" ]; then
+  sed -i "s,listen       80;,listen       $NGINX_LISTEN_PORT;," /etc/nginx/conf.d/default.conf
+fi

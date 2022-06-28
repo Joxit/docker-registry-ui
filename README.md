@@ -102,7 +102,7 @@ Some env options are available for use this interface for **only one server**.
 - `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default: `false`).
 - `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`.
 - `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **set custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
-- `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **forward custom headers** to your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
+- `NGINX_PROXY_PASS_HEADER_*`: Update the default Nginx configuration and **forward custom headers** to your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
 - `NGINX_LISTEN_PORT`: Listen on a port other than 80. (default: `80` when the user is root, `8080` otherwise).
 - `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false`. (default: ` `).
 - `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false`. (default: `false`).

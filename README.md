@@ -7,6 +7,7 @@ title: Docker Registry User Interface
 ![Stars](https://img.shields.io/github/stars/joxit/docker-registry-ui.svg?logo=github&maxAge=86400)
 ![Pulls](https://img.shields.io/docker/pulls/joxit/docker-registry-ui.svg?maxAge=86400)
 [![Sponsor](https://joxit.dev/images/sponsor.svg)](https://github.com/sponsors/Joxit)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/joxit)](https://artifacthub.io/packages/search?repo=joxit)
 
 ## Overview
 

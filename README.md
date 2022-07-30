@@ -17,7 +17,7 @@ You may need the [migration guide from 1.x to 2.x](https://github.com/Joxit/dock
 
 This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
 
-## [Project Page](https://joxit.dev/docker-registry-ui), [Live Demo](https://joxit.dev/docker-registry-ui/demo/), [Examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples)
+## [Project Page](https://joxit.dev/docker-registry-ui), [Live Demo](https://joxit.dev/docker-registry-ui/demo/), [Examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples), [Helm Chart](https://helm.joxit.dev/)
 
 ![preview](https://raw.github.com/Joxit/docker-registry-ui/main/docker-registry-ui.gif "Preview of Docker Registry UI")
 
@@ -55,6 +55,7 @@ If you like my work and want to support it, don't hesitate to [sponsor me](https
 -   Run the container with user nginx instead of root via `--user nginx` and listend on custom port via `NGINX_LISTEN_PORT` (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
 -   Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries via `SHOW_CATALOG_NB_TAGS` (default: `false`) (see [#161](https://github.com/Joxit/docker-registry-ui/issues/161) and [#239](https://github.com/Joxit/docker-registry-ui/pull/239)).
 -   Expose custom labels in history page, custom labels will be processed like maintainer label via `HISTORY_CUSTOM_LABELS` (see [#160](https://github.com/Joxit/docker-registry-ui/issues/160) and [#240](https://github.com/Joxit/docker-registry-ui/pull/240)).
+-   Access to the official Helm Chart: https://helm.joxit.dev/
 
 ## FAQ
 

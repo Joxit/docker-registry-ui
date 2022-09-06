@@ -109,7 +109,7 @@ export class DockerImage {
           return;
         }
         self.ociImage = response.mediaType === 'application/vnd.oci.image.index.v1+json';
-        self.layers = self.ociImage ? response.manifests : response.layers;
+        self.layers = response.layers || response.manifests;
         self.size = self.layers.reduce(function (acc, e) {
           return acc + e.size;
         }, 0);

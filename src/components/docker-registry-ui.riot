@@ -52,6 +52,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           on-notify="{ notifySnackbar }"
           filter-results="{ state.filter }"
           on-authentication="{ onAuthentication }"
+          use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
         ></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
@@ -65,6 +66,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           on-notify="{ notifySnackbar }"
           on-authentication="{ onAuthentication }"
           history-custom-labels="{ stringToArray(props.historyCustomLabels) }"
+          use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
         ></tag-history>
       </route>
     </router>
@@ -133,6 +135,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.name = props.name || stripHttps(props.registryUrl);
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
         this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
+        this.state.useControlCacheHeader = props.useControlCacheHeader;
       },
       onServerChange(registryUrl) {
         this.update({

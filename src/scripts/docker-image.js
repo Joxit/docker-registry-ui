@@ -46,7 +46,7 @@ export function compare(e1, e2) {
 }
 
 export class DockerImage {
-  constructor(name, tag, { list, registryUrl, onNotify, onAuthentication }) {
+  constructor(name, tag, { list, registryUrl, onNotify, onAuthentication, useControlCacheHeader }) {
     this.name = name;
     this.tag = tag;
     this.chars = 0;
@@ -55,6 +55,7 @@ export class DockerImage {
       registryUrl,
       onNotify,
       onAuthentication,
+      useControlCacheHeader,
     };
     this.ociImage = false;
     observable(this);
@@ -143,6 +144,9 @@ export class DockerImage {
       'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json' +
         (self.opts.list ? ', application/vnd.docker.distribution.manifest.list.v2+json' : '')
     );
+    if (self.opts.useControlCacheHeader) {
+      oReq.setRequestHeader('Cache-Control', 'no-store, no-cache');
+    }
     oReq.send();
   }
   getBlobs(blob) {
@@ -165,7 +169,9 @@ export class DockerImage {
         self.trigger('creation-date', self.creationDate);
         self.trigger('blobs', self.blobs);
       } else if (this.status === 404) {
-        self.opts.onNotify(`Blobs for ${self.name}:${self.tag} not found`, true);
+        self.opts.onNotify(`Blobs for ${self.name}:${self.tag} not found: blob '${self.blobs}'`, true);
+      } else if (!this.responseText) {
+        self.opts.onNotify(`Can"t get blobs for ${self.name}:${self.tag}: blob '${self.blobs}' (no message error)`, true);
       } else {
         self.opts.onNotify(this.responseText);
       }

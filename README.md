@@ -110,6 +110,7 @@ Some env options are available for use this interface for **only one server**.
 - `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false`. (default: `false`).
 - `SHOW_CATALOG_NB_TAGS`: Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries. (default: `false`).
 - `HISTORY_CUSTOM_LABELS`: Expose custom labels in history page, custom labels will be processed like maintainer label.
+- `USE_CONTROL_CACHE_HEADER`: Use `Control-Cache` header and set to `no-store, no-cache`. This will avoid some issues on multi-arch images (see [#260](https://github.com/Joxit/docker-registry-ui/issues/260)). This option requires registry configuration: `Access-Control-Allow-Headers` with `Cache-Control`. (default: `false`).
 
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
 
@@ -128,7 +129,7 @@ http:
   headers:
     Access-Control-Allow-Origin: ['http://registry.example.com']
     Access-Control-Allow-Credentials: [true]
-    Access-Control-Allow-Headers: ['Authorization', 'Accept']
+    Access-Control-Allow-Headers: ['Authorization', 'Accept', 'Cache-Control']
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional
 ```
 
@@ -150,7 +151,7 @@ And you need to add these HEADERS:
 http:
   headers:
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
-    Access-Control-Allow-Headers: ['Authorization', 'Accept']
+    Access-Control-Allow-Headers: ['Authorization', 'Accept', 'Cache-Control']
     Access-Control-Expose-Headers: ['Docker-Content-Digest']
 ```
 
@@ -178,7 +179,7 @@ http:
     X-Content-Type-Options: [nosniff]
     Access-Control-Allow-Origin: ['http://127.0.0.1:8000']
     Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
-    Access-Control-Allow-Headers: ['Authorization', 'Accept']
+    Access-Control-Allow-Headers: ['Authorization', 'Accept', 'Cache-Control']
     Access-Control-Max-Age: [1728000]
     Access-Control-Allow-Credentials: [true]
     Access-Control-Expose-Headers: ['Docker-Content-Digest']

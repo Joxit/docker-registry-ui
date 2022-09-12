@@ -57,6 +57,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           registryUrl: props.registryUrl,
           onNotify: props.onNotify,
           onAuthentication: props.onAuthentication,
+          useControlCacheHeader: props.useControlCacheHeader,
         });
         state.image.fillInfo();
       },
@@ -66,7 +67,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onTabChanged(arch, idx) {
         const state = this.state;
-        const { registryUrl, onNotify } = this.props;
+        const { registryUrl, onNotify, useControlCacheHeader } = this.props;
         state.elements = [];
         state.image.variants[idx] =
           state.image.variants[idx] ||
@@ -74,6 +75,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             list: false,
             registryUrl,
             onNotify,
+            useControlCacheHeader,
           });
         if (state.image.variants[idx].blobs) {
           return this.processBlobs(state.image.variants[idx].blobs);

@@ -10,6 +10,7 @@ sed -i "s~\${DEFAULT_REGISTRIES}~${DEFAULT_REGISTRIES}~" index.html
 sed -i "s~\${READ_ONLY_REGISTRIES}~${READ_ONLY_REGISTRIES}~" index.html
 sed -i "s~\${SHOW_CATALOG_NB_TAGS}~${SHOW_CATALOG_NB_TAGS}~" index.html
 sed -i "s~\${HISTORY_CUSTOM_LABELS}~${HISTORY_CUSTOM_LABELS}~" index.html
+sed -i "s~\${USE_CONTROL_CACHE_HEADER}~${USE_CONTROL_CACHE_HEADER}~" index.html
 
 if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
   sed -i "s/\${DELETE_IMAGES}/false/" index.html

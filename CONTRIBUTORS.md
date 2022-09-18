@@ -37,3 +37,5 @@
 - 三十文 [@xfduan](https://github.com/xfduan)
 - Aram Akhavan [@kaysond](https://github.com/kaysond)
 - Jason Tackaberry [@jtackaberry](https://github.com/jtackaberry)
+- Maxime Loliée [@loliee](https://github.com/loliee)
+- Enrico [@Enrico204](https://github.com/Enrico204)

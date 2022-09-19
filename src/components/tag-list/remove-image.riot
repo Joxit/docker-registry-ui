@@ -21,7 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     waves-color="#ddd"
     title="This will delete the image."
     if="{ !props.multiDelete }"
-    disabled="{ !state.digest }"
+    disabled="{ !state.contentDigest }"
     onClick="{ deleteImage }"
   >
     <i class="material-icons">delete</i>
@@ -29,7 +29,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-checkbox
     if="{ props.multiDelete }"
     title="Select this tag to delete it."
-    disabled="{ !state.digest }"
+    disabled="{ !state.contentDigest }"
     onChange="{ handleCheckboxChange }"
     checked="{ state.checked }"
   >
@@ -41,9 +41,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     export default {
       onBeforeMount(props, state) {
         state.checked = props.checked;
-        props.image.one('content-digest', (digest) => {
+        props.image.one('content-digest', (contentDigest) => {
           this.update({
-            digest,
+            contentDigest,
           });
         });
       },

@@ -84,8 +84,8 @@ export class DockerImage {
       return this.trigger('content-digest-chars', this.chars);
     });
     this.on('get-content-digest', function () {
-      if (this.digest !== undefined) {
-        return this.trigger('content-digest', this.digest);
+      if (this.contentDigest !== undefined) {
+        return this.trigger('content-digest', this.contentDigest);
       }
       return this.fillInfo();
     });
@@ -117,10 +117,10 @@ export class DockerImage {
         self.sha256 = response.config && response.config.digest;
         self.trigger('size', self.size);
         self.trigger('sha256', self.sha256);
-        oReq.getContentDigest(function (digest) {
-          self.digest = digest;
-          self.trigger('content-digest', digest);
-          if (!digest) {
+        oReq.getContentDigest(function (contentDigest) {
+          self.contentDigest = contentDigest;
+          self.trigger('content-digest', contentDigest);
+          if (!contentDigest) {
             self.opts.onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
           }
         });

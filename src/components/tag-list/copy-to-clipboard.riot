@@ -40,12 +40,12 @@
         if (props.target === 'tag') {
           return `docker pull ${props.pullUrl}/${props.image.name}:${props.image.tag}`;
         } else {
-          return `docker pull ${props.pullUrl}/${props.image.name}@${props.image.digest}`;
+          return `docker pull ${props.pullUrl}/${props.image.name}@${props.image.contentDigest}`;
         }
       },
       load(props, state) {
-        if (props.target !== 'tag' && !props.image.digest) {
-          props.image.one('content-digest', (digest) => {
+        if (props.target !== 'tag' && !props.image.contentDigest) {
+          props.image.one('content-digest', (contentDigest) => {
             this.update();
           });
           props.image.trigger('get-content-digest');

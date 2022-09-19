@@ -92,6 +92,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               .map(
                 (tag) =>
                   new DockerImage(props.image, tag, {
+                    list: true,
                     registryUrl: props.registryUrl,
                     onNotify: props.onNotify,
                     onAuthentication: props.onAuthentication,

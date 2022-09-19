@@ -15,7 +15,7 @@ Copyright (C) 2016-2021 Jones Magloire @Joxit
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <image-content-digest>
-  <div title="{ getTitle(props.image, state.chars) }">{ getDigest(props.image, state.chars) }</div>
+  <div title="{ getTitle(props.image, state.chars) }">{ getContentDigest(props.image, state.chars) }</div>
   <script>
     export default {
       onMounted(props, state) {
@@ -25,12 +25,12 @@ Copyright (C) 2016-2021 Jones Magloire @Joxit
         this.load(props, state);
       },
       load(props, state) {
-        if (props.image.digest) {
+        if (props.image.contentDigest) {
           return;
         }
         state.chars = -1;
-        props.image.one('content-digest', (digest) => {
-          this.digest = digest;
+        props.image.one('content-digest', (contentDigest) => {
+          this.contentDigest = contentDigest;
           props.image.on('content-digest-chars', this.onResize);
           props.image.trigger('get-content-digest-chars');
         });
@@ -44,15 +44,15 @@ Copyright (C) 2016-2021 Jones Magloire @Joxit
         }
       },
       getTitle(image, chars) {
-        return chars >= 70 ? '' : image.digest || '';
+        return chars >= 70 ? '' : image.contentDigest || '';
       },
-      getDigest(image, chars) {
+      getContentDigest(image, chars) {
         if (chars >= 70) {
-          return image.digest || '';
+          return image.contentDigest || '';
         } else if (chars <= 0) {
           return '';
         } else {
-          return image.digest && image.digest.slice(0, chars) + '...';
+          return image.contentDigest && image.contentDigest.slice(0, chars) + '...';
         }
       },
     };

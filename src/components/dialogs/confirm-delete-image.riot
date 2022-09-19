@@ -36,13 +36,13 @@
     import router from '../../scripts/router';
     export default {
       displayImagesToDelete(toDelete, tags) {
-        const digests = new Set();
+        const contentDigests = new Set();
         toDelete.forEach((image) => {
-          if (image.digest) {
-            digests.add(image.digest);
+          if (image.contentDigest) {
+            contentDigests.add(image.contentDigest);
           }
         });
-        return tags.filter((image) => digests.has(image.digest));
+        return tags.filter((image) => contentDigests.has(image.contentDigest));
       },
       deleteImages() {
         this.props.toDelete.forEach((image) => this.getContentDigestThenDelete(image, this.props));
@@ -53,11 +53,11 @@
         const self = this;
         oReq.addEventListener('loadend', function () {
           if (this.status === 200 || this.status === 202) {
-            oReq.getContentDigest(function (digest) {
-              if (!digest) {
+            oReq.getContentDigest(function (contentDigest) {
+              if (!contentDigest) {
                 onNotify(ERROR_CAN_NOT_READ_CONTENT_DIGEST);
               } else {
-                self.deleteImage({ name, tag, digest }, opts);
+                self.deleteImage({ name, tag, contentDigest }, opts);
               }
             });
           } else if (this.status === 404) {
@@ -73,7 +73,7 @@
         );
         oReq.send();
       },
-      deleteImage({ name, tag, digest }, opts) {
+      deleteImage({ name, tag, contentDigest }, opts) {
         const { registryUrl, ignoreError, onNotify, onAuthentication, onClick } = opts;
         const oReq = new Http({ onAuthentication });
         oReq.addEventListener('loadend', function () {
@@ -91,7 +91,7 @@
           }
           onClick();
         });
-        oReq.open('DELETE', `${registryUrl}/v2/${name}/manifests/${digest}`);
+        oReq.open('DELETE', `${registryUrl}/v2/${name}/manifests/${contentDigest}`);
         oReq.setRequestHeader(
           'Accept',
           'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json'

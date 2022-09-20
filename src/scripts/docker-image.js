@@ -171,7 +171,10 @@ export class DockerImage {
       } else if (this.status === 404) {
         self.opts.onNotify(`Blobs for ${self.name}:${self.tag} not found: blob '${self.blobs}'`, true);
       } else if (!this.responseText) {
-        self.opts.onNotify(`Can"t get blobs for ${self.name}:${self.tag}: blob '${self.blobs}' (no message error)`, true);
+        self.opts.onNotify(
+          `Can"t get blobs for ${self.name}:${self.tag}: blob '${self.blobs}' (no message error)`,
+          true
+        );
       } else {
         self.opts.onNotify(this.responseText);
       }

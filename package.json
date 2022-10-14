@@ -1,6 +1,6 @@
 {
   "name": "docker-registry-ui",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "scripts": {
     "format": "npm run format-html && npm run format-js && npm run format-riot",
     "format-html": "find src rollup rollup.config.js -name '*.html' -exec prettier --config .prettierrc -w --parser html {} \\;",

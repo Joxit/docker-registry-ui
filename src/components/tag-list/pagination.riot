@@ -18,10 +18,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <div class="conatianer">
     <div class="pagination-centered">
       <material-button
+        aria-label="page-{ p.page }"
         waves-color="rgba(158,158,158,.4)"
-        each="{p in props.pages}"
+        each="{ (p, idx) in props.pages}"
         class="{ p.current ? 'current' : ''} { p['space-left'] ? 'space-left' : '' } { p['space-right'] ? 'space-right' : ''}"
-        onClick="{() => props.onPageUpdate(p.page)}"
+        onClick="{() => props.onPageUpdate(idx)}"
       >
         <i if="{ p.icon }" class="material-icons">{ p.icon }</i>
         <div if="{ !p.icon }">{ p.page }</div>

@@ -125,7 +125,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.asc = true;
       },
 
-      onPageUpdate(page) {
+      onPageUpdate(idx) {
+        const labels = getPageLabels(this.state.page, getNumPages(this.state.tags));
+        const page = labels[idx].page;
         this.update({
           page: page,
         });

@@ -85,7 +85,8 @@ If you like my work and want to support it, don't hesitate to [sponsor me](https
     - This a docker registry API limitation, there is only one way to [delete images with tag](https://docs.docker.com/registry/spec/api/#deleting-an-image), it's by its `name` and its `manifest` (it's a sha of the content). So when you delete a tag, this will delete all tags of this image with the same SHA/manifest.
 -   Can I run the container with an unprivileged user ?
     - Yes you can run the container with the `nginx` user, (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
-
+-   Can I use the UI with a docker hub mirror and show `library/*` images ?
+    - Yes but it is at your own risk using two regstry servers, check the comment [#155](https://github.com/Joxit/docker-registry-ui/issues/155#issuecomment-1286052124).
 
 Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples) or open an issue.
 

@@ -40,3 +40,4 @@
 - Maxime Loliée [@loliee](https://github.com/loliee)
 - Enrico [@Enrico204](https://github.com/Enrico204)
 - [@clyvari](https://github.com/clyvari)
+- Laszlo Boros [@Semmu](https://github.com/Semmu)

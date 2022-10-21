@@ -87,6 +87,8 @@ If you like my work and want to support it, don't hesitate to [sponsor me](https
     - Yes you can run the container with the `nginx` user, (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
 -   Can I use the UI with a docker hub mirror and show `library/*` images ?
     - Yes but it is at your own risk using two regstry servers, check the comment [#155](https://github.com/Joxit/docker-registry-ui/issues/155#issuecomment-1286052124).
+-   How to fix CORS issue on s3 bucket ?
+    - You should add a CORS Policy on your bucket, check the issue [#193](https://github.com/Joxit/docker-registry-ui/issues/193).
 
 Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples) or open an issue.
 

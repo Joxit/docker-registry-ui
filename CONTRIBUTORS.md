@@ -42,3 +42,4 @@
 - [@clyvari](https://github.com/clyvari)
 - Laszlo Boros [@Semmu](https://github.com/Semmu)
 - [@JKDingwall](https://github.com/JKDingwall)
+- Martin Herren [@MartinHerren](https://github.com/MartinHerren)

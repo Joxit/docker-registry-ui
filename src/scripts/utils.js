@@ -8,7 +8,12 @@ export function bytesToSize(bytes) {
     return '0 Byte';
   }
   const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-  return Math.ceil(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
+  const number = bytes / Math.pow(1024, i);
+  if (number < 10) {
+    const decimal = (bytes - Math.floor(number) * Math.pow(1024, i)) / Math.pow(1024, i);
+    return `${Math.floor(number)}.${Math.floor(decimal * 10)} ${sizes[i]}`;
+  }
+  return Math.ceil(number) + ' ' + sizes[i];
 }
 
 export function dateFormat(date) {

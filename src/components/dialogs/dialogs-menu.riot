@@ -36,14 +36,22 @@
     on-server-change="{ props.onServerChange }"
   ></remove-registry-url>
   <div class="container">
-    <material-button onClick="{ onClick }" waves-center="true" rounded="true" waves-opacity="0.6" waves-duration="600">
+    <material-button
+      onClick="{ onClick }"
+      waves-center="true"
+      waves-opacity="0.6"
+      waves-duration="600"
+      color="rgba(0,0,0,0)"
+      text-color="#fff"
+      icon
+    >
       <i class="material-icons">more_vert</i>
     </material-button>
     <material-dropdown-list
       items="{ dropdownItems.filter(item => item.ro || !props.readOnlyRegistries) }"
       onSelect="{ onDropdownSelect }"
       opened="{ state.isDropdownOpened }"
-    />
+    ></material-dropdown-list>
   </div>
   <div class="overlay" onclick="{ onClick }" if="{ state.isDropdownOpened }"></div>
   <script>
@@ -114,14 +122,12 @@
       z-index: 10;
     }
 
-    :host material-button {
-      background: rgba(255, 255, 255, 0);
+    :host material-button button {
       float: right;
       z-index: 2;
     }
 
     :host material-button .content i.material-icons {
-      color: #fff;
       font-size: 24px;
     }
 

@@ -32,6 +32,7 @@
  
 html > body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
+  font-size: 16px;
 }
 
 html, body {
@@ -115,14 +116,6 @@ material-spinner {
   margin-top: 50px;
   display: flex;
   flex-direction: column;
-}
-
-material-navbar {
-  height: 64px;
-}
-
-material-navbar nav-wrapper {
-  display: flex;
 }
 
 .logo {
@@ -260,13 +253,15 @@ material-card table th {
   text-align: left;
 }
 
-material-card material-button:hover,
+material-card .material-card-title-action material-button:hover a,
+material-card .material-card-title-action material-button:hover button,
 material-card table tbody tr:hover,
 pagination material-button:hover  {
-  background-color: #eee;
+  background-color: #eee !important;
 }
 
-material-card material-button,
+material-card material-button a,
+material-card material-button button,
 material-card table tbody tr,
 pagination material-button  {
   transition-duration: .28s;

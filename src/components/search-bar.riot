@@ -1,5 +1,5 @@
 <search-bar>
-  <material-input placeholder="Search in page"></material-input>
+  <material-input label="Search in page" text-color="#fff" label-color="#aaa"></material-input>
   <script>
     import { router } from '@riotjs/route';
 
@@ -39,10 +39,9 @@
   </script>
   <style>
     :host material-input {
-      position: absolute;
-      top: 0em;
-      right: 64px;
+      line-height: initial;
       max-width: 20%;
+      min-width: 13em;
     }
 
     @media screen and (max-width: 400px) {

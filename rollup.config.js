@@ -7,12 +7,12 @@ import { babel } from '@rollup/plugin-babel';
 import scss from 'rollup-plugin-scss';
 import serve from 'rollup-plugin-serve';
 import html from '@rollup/plugin-html';
-import htmlUseref from './rollup/html-useref';
+import htmlUseref from './rollup/html-useref.js';
 import json from '@rollup/plugin-json';
 import copy from 'rollup-plugin-copy';
-import copyTransform from './rollup/copy-transform';
-import license from './rollup/license';
-import checkOutput from './rollup/check-output';
+import copyTransform from './rollup/copy-transform.js';
+import license from './rollup/license.js';
+import checkOutput from './rollup/check-output.js';
 
 const useServe = process.env.ROLLUP_SERVE === 'true';
 const output = useServe ? '.serve' : 'dist';
@@ -22,7 +22,7 @@ const plugins = [
   json(),
   nodeResolve(),
   commonjs(),
-  scss({ output: `./${output}/docker-registry-ui.css`, outputStyle: 'compressed' }),
+  scss({ fileName: `docker-registry-ui.css`, outputStyle: 'compressed' }),
   babel({ babelHelpers: 'bundled', presets: [['@babel/env', { useBuiltIns: 'usage', corejs: { version: '2' } }]] }),
   copy({
     targets: [

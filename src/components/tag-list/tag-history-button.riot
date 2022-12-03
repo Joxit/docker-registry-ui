@@ -17,11 +17,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-history-button>
   <material-button
     title="{ buttonTittle() }"
-    waves-center="true"
-    rounded="true"
+    color="rgba(0,0,0,0)"
+    text-color="#777"
     waves-color="#ddd"
-    onClick="{ routeToHistory }"
+    waves-center="true"
+    href="{ routeToHistory() }"
     disabled="{ props.image.ociImage }"
+    icon
   >
     <i class="material-icons">history</i>
   </material-button>
@@ -40,7 +42,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       routeToHistory() {
         if (!this.props.image.ociImage) {
-          router.history(this.props.image.name, this.props.image.tag);
+          return router.history(this.props.image.name, this.props.image.tag);
         }
       },
     };

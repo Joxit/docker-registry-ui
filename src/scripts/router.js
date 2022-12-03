@@ -59,7 +59,7 @@ function baseUrl(qs) {
 
 export default {
   home() {
-    router.push(baseUrl({ page: null }));
+    return baseUrl({ page: null });
   },
   taglist(image) {
     router.push(`${baseUrl({ page: null })}#!/taglist/${image}`);
@@ -68,7 +68,7 @@ export default {
     return getCurrentRoute().replace(/^.*(#!)?\/?taglist\//, '');
   },
   history(image, tag) {
-    router.push(`${baseUrl({ page: null })}#!/taghistory/image/${image}/tag/${tag}`);
+    return `${baseUrl({ page: null })}#!/taghistory/image/${image}/tag/${tag}`;
   },
   getTagHistoryImage() {
     return getCurrentRoute().replace(/^.*(#!)?\/?taghistory\/image\/(.*)\/tag\/(.*)\/?$/, '$2');

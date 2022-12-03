@@ -16,13 +16,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
   <material-button
-    waves-center="true"
-    rounded="true"
+    color="rgba(0,0,0,0)"
+    text-color="#777"
     waves-color="#ddd"
+    waves-center="true"
     title="This will delete the image."
     if="{ !props.multiDelete }"
     disabled="{ !state.contentDigest }"
     onClick="{ deleteImage }"
+    icon
   >
     <i class="material-icons">delete</i>
   </material-button>

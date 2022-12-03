@@ -15,19 +15,56 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <pagination>
-  <div class="conatianer">
+  <div class="container">
     <div class="pagination-centered">
       <material-button
         aria-label="page-{ p.page }"
+        color="rgba(0, 0, 0, { p.current ? 0.12 : 0 } )"
+        text-color="#000"
         waves-color="rgba(158,158,158,.4)"
         each="{ (p, idx) in props.pages}"
         class="{ p.current ? 'current' : ''} { p['space-left'] ? 'space-left' : '' } { p['space-right'] ? 'space-right' : ''}"
-        onClick="{() => props.onPageUpdate(idx)}"
+        onClick="{(e) => props.onPageUpdate(idx)}"
+        outlined
       >
         <i if="{ p.icon }" class="material-icons">{ p.icon }</i>
-        <div if="{ !p.icon }">{ p.page }</div>
+        <template if="{ !p.icon }">{ p.page }</template>
       </material-button>
     </div>
   </div>
   <script></script>
+  <style>
+    :host .container {
+      display: flex;
+    }
+
+    :host .container .pagination-centered {
+      margin: auto;
+    }
+
+    :host material-button > :first-child {
+      padding: 0;
+      min-width: 40px;
+    }
+
+    :host material-button > :first-child .content {
+      display: flex;
+      align-content: center;
+      flex-direction: column;
+      font-size: 16px;
+      line-height: 42px;
+    }
+
+    :host material-button.current > :first-child.space-left {
+      margin-left: 85px;
+    }
+
+    :host material-button.current > :first-child.space-right {
+      margin-right: 85px;
+    }
+
+    :host material-button .content i.material-icons {
+      height: unset;
+    }
+  </style>
 </pagination>

@@ -60,27 +60,20 @@ html, body {
   font-weight: inherit;
 }
 
-material-card, material-tabs, pagination .conatianer {
+material-card,
+material-tabs,
+pagination .container {
   max-width: 95%;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-pagination .conatianer {
-  display: flex;
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-}
-
-pagination .conatianer .pagination-centered {
-  margin: auto;
-}
-
 /* 1515px * 0.95 = 1440px */
 @media screen and (min-width: 1515px){
-  material-card, material-tabs, pagination .conatianer {
+  material-card,
+  material-tabs,
+  pagination .container {
     max-width: 1440px;
   }
 }
@@ -256,14 +249,14 @@ material-card table th {
 material-card .material-card-title-action material-button:hover a,
 material-card .material-card-title-action material-button:hover button,
 material-card table tbody tr:hover,
-pagination material-button:hover  {
+pagination material-button:hover > :first-child {
   background-color: #eee !important;
 }
 
 material-card material-button a,
 material-card material-button button,
 material-card table tbody tr,
-pagination material-button  {
+pagination material-button > :first-child {
   transition-duration: .28s;
   transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-property: background-color;
@@ -324,8 +317,7 @@ material-snackbar .toast {
   height: auto;
 }
 
-material-popup material-button,
-pagination material-button {
+material-popup material-button {
   background-color: #fff;
   color: #000;
 }
@@ -410,8 +402,7 @@ tag-history-button button {
   border: none;
 }
 
-material-card material-button,
-pagination material-button {
+material-card material-button {
   max-height: 30px;
   max-width: 30px;
 }
@@ -420,8 +411,7 @@ material-button:hover material-waves {
   background: none;
 }
 
-material-card material-button,
-pagination material-button {
+material-card material-button {
   background-color: inherit;
 }
 
@@ -483,30 +473,4 @@ material-checkbox .checkbox {
 
 material-checkbox .checkbox.checked {
   background-color: #777;
-}
-
-pagination material-button {
-  padding: 0.2em 0.75em;
-}
-
-pagination material-button .content {
-  display: flex;
-  align-content: center;
-  line-height: 1.9em;
-}
-
-pagination material-button.current {
-  border: 1px solid rgba(0, 0, 0, .12);
-}
-
-pagination material-button.current.space-left {
-  margin-left: 85px;
-}
-
-pagination material-button.current.space-right {
-  margin-right: 85px;
-}
-
-pagination material-button .content i.material-icons {
-  color: #000;
 }

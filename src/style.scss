@@ -392,21 +392,6 @@ taglist .image-size {
   width: 7em;
 }
 
-catalog material-card,
-tag-history material-card {
-  min-height: auto;
-}
-
-tag-history-button button {
-  background: none;
-  border: none;
-}
-
-material-card material-button {
-  max-height: 30px;
-  max-width: 30px;
-}
-
 material-button:hover material-waves {
   background: none;
 }

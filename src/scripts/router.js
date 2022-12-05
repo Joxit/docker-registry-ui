@@ -62,6 +62,9 @@ export default {
     return baseUrl({ page: null });
   },
   taglist(image) {
+    return `${baseUrl({ page: null })}#!/taglist/${image}`;
+  },
+  goTaglist(image) {
     router.push(`${baseUrl({ page: null })}#!/taglist/${image}`);
   },
   getTagListImage() {

@@ -174,7 +174,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           confirmDeleteImage: false,
         });
       },
-      onRemoveImageHeaderChange(checked, event) {
+      onRemoveImageHeaderChange(event) {
         if (event.altKey === true) {
           const tags = getPage(this.props.tags, this.props.page);
           tags
@@ -186,7 +186,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           });
         } else {
           this.update({
-            multiDelete: checked,
+            multiDelete: event.target.checked,
           });
         }
       },

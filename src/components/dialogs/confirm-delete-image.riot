@@ -16,17 +16,17 @@
 -->
 <confirm-delete-image>
   <material-popup opened="{ props.opened }" onClick="{ props.onClick }">
-    <div slot="title">These images will be deleted</div>
-    <div slot="content">
+    <div class="material-popup-title">These images will be deleted</div>
+    <div class="material-popup-content">
       <ul>
         <li each="{ image in displayImagesToDelete(props.toDelete, props.tags) }">{ image.name }:{ image.tag }</li>
       </ul>
     </div>
-    <div slot="action">
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ deleteImages }">
+    <div class="material-popup-action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ deleteImages }" color="#000" inverted>
         Delete
       </material-button>
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClick }">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClick }" color="#000" inverted>
         Cancel
       </material-button>
     </div>

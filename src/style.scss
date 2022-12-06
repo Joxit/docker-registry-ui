@@ -89,8 +89,6 @@ material-tabs {
 
 material-tabs material-button,
 material-tabs material-button .content .text {
-  background-color: #fff;
-  color: #aaa;
   text-transform: none;
 }
 
@@ -246,17 +244,14 @@ material-card table th {
   text-align: left;
 }
 
-material-card .material-card-title-action material-button:hover a,
+material-button:hover > :first-child[inverted='true'],
 material-card .material-card-title-action material-button:hover button,
-material-card table tbody tr:hover,
-pagination material-button:hover > :first-child {
+material-card table tbody tr:hover {
   background-color: #eee !important;
 }
 
-material-card material-button a,
-material-card material-button button,
-material-card table tbody tr,
-pagination material-button > :first-child {
+material-button > :first-child[inverted='true'],
+material-card table tbody tr {
   transition-duration: .28s;
   transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-property: background-color;
@@ -317,18 +312,13 @@ material-snackbar .toast {
   height: auto;
 }
 
-material-popup material-button {
-  background-color: #fff;
-  color: #000;
-}
-
 material-popup material-button:hover material-waves {
   background-color: hsla(0, 0%, 75%, .2);
 }
 
-material-popup .popup {
+material-popup .popup > .content {
+  padding: 1em;
   max-width: 450px;
-  top: 2em;
 }
 
 footer {

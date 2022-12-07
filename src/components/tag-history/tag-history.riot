@@ -18,12 +18,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-card>
     <div class="material-card-title-action">
       <material-button
-        color="rgba(0,0,0,0)"
-        text-color="#777"
+        color="#777"
         waves-center="true"
         rounded="true"
         waves-color="#ddd"
         href="{ toTaglist() }"
+        inverted
         icon
       >
         <i class="material-icons">arrow_back</i>
@@ -37,9 +37,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <material-tabs
     if="{ state.archs && state.loadend }"
+    color="#25313b"
+    text-color="#fff"
     useLine="{ true }"
     tabs="{ state.archs }"
     onTabChanged="{ onTabChanged }"
+    inverted
   ></material-tabs>
 
   <material-card each="{ element in state.elements }">

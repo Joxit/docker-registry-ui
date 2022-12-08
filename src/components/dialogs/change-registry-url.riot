@@ -15,18 +15,18 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <change-registry-url>
-  <material-popup opened="{ props.opened }" onClick="{ props.onClick }">
-    <div slot="title">Change your Server ?</div>
-    <div slot="content">
+  <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
+    <div class="material-popup-title">Change your Server ?</div>
+    <div class="material-popup-content">
       <select>
         <option each="{ url in getRegistryServers() }" value="{ url }">{ url }</option>
       </select>
     </div>
-    <div slot="action">
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ change }">
+    <div class="material-popup-action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ change }" color="#000" inverted>
         Change
       </material-button>
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }" color="#000" inverted>
         Cancel
       </material-button>
     </div>
@@ -62,6 +62,7 @@
       background: 0 0;
       border: none;
       font-weight: 400;
+      font-size: 1em;
       line-height: 24px;
       height: 24px;
       border-bottom: 1px solid #2f6975;

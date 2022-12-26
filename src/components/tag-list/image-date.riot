@@ -20,13 +20,21 @@
     import { dateFormat } from '../../scripts/utils';
     export default {
       onMounted(props) {
-        props.image.one('creation-date', (date) => {
-          this.update({
-            date: date,
-            localDate: date && date.toLocaleString(),
+        this.loadCreationDate(props);
+      },
+      onUpdated(props) {
+        this.loadCreationDate(props);
+      },
+      loadCreationDate(props) {
+        if (!props.image.creationDate && !props.image.ociImage) {
+          props.image.one('creation-date', (date) => {
+            this.update({
+              date: date,
+              localDate: date && date.toLocaleString(),
+            });
           });
-        });
-        props.image.trigger('get-date');
+          props.image.trigger('get-date');
+        }
       },
       getDate(image) {
         return !image.ociImage ? `${dateFormat(image.creationDate)} ago` : 'Not Available';

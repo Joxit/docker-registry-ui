@@ -35,7 +35,7 @@
     on-notify="{ props.onNotify }"
     on-server-change="{ props.onServerChange }"
   ></remove-registry-url>
-  <div class="container">
+  <div class="material-dropdown-wrapper">
     <material-button
       onClick="{ onClick }"
       waves-center="true"
@@ -47,11 +47,11 @@
     >
       <i class="material-icons">more_vert</i>
     </material-button>
-    <material-dropdown-list
+    <material-dropdown
       items="{ dropdownItems.filter(item => item.ro || !props.readOnlyRegistries) }"
-      onSelect="{ onDropdownSelect }"
+      on-click="{ onDropdownSelect }"
       opened="{ state.isDropdownOpened }"
-    ></material-dropdown-list>
+    ></material-dropdown>
   </div>
   <div class="overlay" onclick="{ onClick }" if="{ state.isDropdownOpened }"></div>
   <script>
@@ -82,9 +82,9 @@
           ro: false,
         },
       ],
-      onDropdownSelect(key, item) {
+      onDropdownSelect(event) {
         this.update({
-          [item.name]: true,
+          [event.target.item]: true,
           isDropdownOpened: false,
         });
       },
@@ -104,13 +104,15 @@
     };
   </script>
   <style>
-    :host > .container {
-      position: absolute;
-      top: 0px;
-      right: 16px;
+    :host > .material-dropdown-wrapper {
       color: #000;
       list-style-type: disc;
       margin-block-start: 0.7em;
+    }
+
+    :host .material-dropdown-wrapper material-dropdown .material-dropdown-container {
+      right: 0;
+      top: 2em;
     }
 
     :host .overlay {
@@ -129,22 +131,6 @@
 
     :host material-button .content i.material-icons {
       font-size: 24px;
-    }
-
-    :host material-dropdown-list {
-      display: inline-block;
-      position: relative;
-    }
-
-    :host material-dropdown-list ul.dropdown-content {
-      min-width: 156px;
-      padding: 8px 0;
-      margin: 0;
-    }
-
-    :host material-dropdown-list ul.dropdown-content li span {
-      font-size: 1rem;
-      line-height: 1.2em;
     }
 
     :host material-popup * {

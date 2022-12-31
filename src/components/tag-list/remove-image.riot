@@ -16,13 +16,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
   <material-button
-    waves-center="true"
-    rounded="true"
+    color="rgba(0,0,0,0)"
+    text-color="#777"
     waves-color="#ddd"
+    waves-center="true"
     title="This will delete the image."
     if="{ !props.multiDelete }"
     disabled="{ !state.contentDigest }"
     onClick="{ deleteImage }"
+    icon
   >
     <i class="material-icons">delete</i>
   </material-button>
@@ -56,8 +58,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       deleteImage() {
         this.props.handleCheckboxChange(ACTION_DELETE_IMAGE, this.props.image);
       },
-      handleCheckboxChange(checked) {
-        const action = checked ? ACTION_CHECK_TO_DELETE : ACTION_UNCHECK_TO_DELETE;
+      handleCheckboxChange(event) {
+        const action = event.target.checked ? ACTION_CHECK_TO_DELETE : ACTION_UNCHECK_TO_DELETE;
         this.props.handleCheckboxChange(action, this.props.image);
       },
     };

@@ -16,17 +16,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-registry-url>
   <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
-    <div slot="title">Remove your Registry Server ?</div>
-    <div slot="content">
+    <div class="material-popup-title">Remove your Registry Server ?</div>
+    <div class="material-popup-content">
       <ul class="list">
         <li each="{ url in getRegistryServers() }">
           <span>
             <material-button
-              onClick="{ remove }"
+              onClick="{ remove(url) }"
               url="{ url }"
-              rounded="true"
               waves-color="rgba(158,158,158,.4)"
               waves-center="true"
+              inverted
+              icon
             >
               <i class="material-icons">delete</i>
             </material-button>
@@ -35,8 +36,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         </li>
       </ul>
     </div>
-    <div slot="action">
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }">
+    <div class="material-popup-action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }" color="#000" inverted>
         Close
       </material-button>
     </div>
@@ -44,10 +45,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <script>
     import { getRegistryServers, removeRegistryServers } from '../../scripts/utils';
     export default {
-      remove(event) {
-        const url = event.currentTarget.attributes.url && event.currentTarget.attributes.url.value;
-        removeRegistryServers(url);
-        setTimeout(() => this.update(), 100);
+      remove(url) {
+        return (event) => {
+          console.log(url, event)
+          removeRegistryServers(url);
+          setTimeout(() => this.update(), 100);
+        }
       },
       getRegistryServers,
     };

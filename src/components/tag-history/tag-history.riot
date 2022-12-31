@@ -15,9 +15,17 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history>
-  <material-card ref="tag-history-tag" class="tag-history header">
+  <material-card>
     <div class="material-card-title-action">
-      <material-button waves-center="true" rounded="true" waves-color="#ddd" onClick="{ toTaglist }">
+      <material-button
+        color="#777"
+        waves-center="true"
+        rounded="true"
+        waves-color="#ddd"
+        href="{ toTaglist() }"
+        inverted
+        icon
+      >
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>History of { props.image }:{ props.tag } <i class="material-icons">history</i></h2>
@@ -29,12 +37,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <material-tabs
     if="{ state.archs && state.loadend }"
+    color="#25313b"
+    text-color="#fff"
     useLine="{ true }"
     tabs="{ state.archs }"
     onTabChanged="{ onTabChanged }"
+    inverted
   ></material-tabs>
 
-  <material-card each="{ element in state.elements }" class="tag-history-element">
+  <material-card each="{ element in state.elements }">
     <tag-history-element
       each="{ entry in element }"
       if="{ entry.value && entry.value.length > 0}"
@@ -128,7 +139,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         });
       },
       toTaglist() {
-        router.taglist(this.props.image);
+        return router.taglist(this.props.image);
       },
     };
     const eltIdx = function (e) {

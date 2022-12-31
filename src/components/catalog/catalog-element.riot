@@ -21,7 +21,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     if="{!props.filterResults || state.nImages > 0 || matchSearch(props.filterResults, state.image)}"
   >
     <material-card class="list highlight" expanded="{state.expanded}" onclick="{ onClick }">
-      <material-waves center="true" color="#ddd"></material-waves>
+      <a if="{ state.image }" href="{ router.taglist(state.image) }">
+        <material-waves center="true" color="#ddd"></material-waves>
+      </a>
+      <material-waves if="{ state.images }" center="true" color="#ddd"></material-waves>
       <span>
         <i class="material-icons">send</i>
         { state.image || state.repo }
@@ -76,9 +79,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onClick() {
         const state = this.state;
-        if (!state.repo) {
-          router.taglist(state.image);
-        } else {
+        if (state.repo) {
           this.update({
             expanded: !this.state.expanded,
             expanding: true,
@@ -112,6 +113,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.send();
       },
       matchSearch,
+      router,
     };
   </script>
   <!-- End of tag -->

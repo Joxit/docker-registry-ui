@@ -17,7 +17,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-list>
   <material-card class="header">
     <div class="material-card-title-action">
-      <material-button waves-center="true" rounded="true" waves-color="#ddd" onClick="{ router.home }">
+      <material-button
+        color="#777"
+        waves-color="#ddd"
+        waves-center="true"
+        href="{ router.home() }"
+        icon
+        inverted
+      >
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>

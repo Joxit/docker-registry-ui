@@ -23,18 +23,20 @@
 @import 'riot-mui/src/material-elements/material-checkbox/material-checkbox.scss';
 @import 'riot-mui/src/material-elements/material-tabs/material-tabs.scss';
 @import 'riot-mui/src/material-elements/material-snackbar/material-snackbar.scss';
-@import 'riot-mui/src/material-elements/material-dropdown-list/material-dropdown-list.scss';
+@import 'riot-mui/src/material-elements/material-dropdown/material-dropdown.scss';
 @import 'riot-mui/src/material-elements/material-popup/material-popup.scss';
 @import 'riot-mui/src/material-elements/material-input/material-input.scss';
 
 @import './roboto.scss';
 @import './material-icons.scss';
- 
+
 html > body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
+  font-size: 16px;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   height: 100%;
 }
@@ -59,44 +61,35 @@ html, body {
   font-weight: inherit;
 }
 
-material-card, material-tabs, pagination .conatianer {
+material-card,
+material-tabs,
+pagination .container {
   max-width: 95%;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-pagination .conatianer {
-  display: flex;
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-}
-
-pagination .conatianer .pagination-centered {
-  margin: auto;
-}
-
 /* 1515px * 0.95 = 1440px */
-@media screen and (min-width: 1515px){
-  material-card, material-tabs, pagination .conatianer {
+@media screen and (min-width: 1515px) {
+  material-card,
+  material-tabs,
+  pagination .container {
     max-width: 1440px;
   }
 }
 
 material-tabs {
   display: block;
-  -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-  -ms-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
-  -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
-  -o-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -ms-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -o-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 material-tabs material-button,
 material-tabs material-button .content .text {
-  background-color: #fff;
-  color: #aaa;
   text-transform: none;
 }
 
@@ -117,20 +110,12 @@ material-spinner {
   flex-direction: column;
 }
 
-material-navbar {
-  height: 64px;
-}
-
-material-navbar nav-wrapper {
-  display: flex;
-}
-
 .logo {
   padding: 0 16px 0 72px;
   text-decoration: none;
   font-size: 20px;
   line-height: 1;
-  letter-spacing: .02em;
+  letter-spacing: 0.02em;
   font-weight: 400;
 }
 
@@ -169,18 +154,22 @@ h2 {
   overflow: hidden;
 }
 
+docker-registry-ui material-button > :first-child .content i.material-icons,
+docker-registry-ui material-button > :first-child .content i.material-icons.material-icons {
+  font-size: 24px;
+}
+
 .list > span i.material-icons,
 .list > li i.material-icons {
   margin-right: 32px;
   height: 24px;
   width: 24px;
-  font-size: 24px;
   box-sizing: border-box;
   color: #757575;
 }
 
 .list > span .right i.material-icons.animated {
-  transition: all 350ms cubic-bezier(.4,0,.2,1);
+  transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
   margin-right: 10px;
 }
 
@@ -237,7 +226,7 @@ material-card table {
   width: 100%;
   border: none;
   position: relative;
-  border: 1px solid rgba(0, 0, 0, .12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-collapse: collapse;
   white-space: nowrap;
   font-size: 13px;
@@ -250,7 +239,7 @@ material-card table th {
   vertical-align: bottom;
   line-height: 24px;
   height: 48px;
-  color: rgba(0, 0, 0, .54);
+  color: rgba(0, 0, 0, 0.54);
   box-sizing: border-box;
   padding: 0 18px 12px 18px;
   text-align: right;
@@ -260,17 +249,16 @@ material-card table th {
   text-align: left;
 }
 
-material-card material-button:hover,
-material-card table tbody tr:hover,
-pagination material-button:hover  {
-  background-color: #eee;
+material-button:hover > :first-child[inverted='true'],
+material-card .material-card-title-action material-button:hover button,
+material-card table tbody tr:hover {
+  background-color: #eee !important;
 }
 
-material-card material-button,
-material-card table tbody tr,
-pagination material-button  {
-  transition-duration: .28s;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+material-button > :first-child[inverted='true'],
+material-card table tbody tr {
+  transition-duration: 0.28s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-property: background-color;
 }
 
@@ -283,8 +271,8 @@ material-card table td {
   font-size: 16px;
   position: relative;
   height: 48px;
-  border-top: 1px solid rgba(0, 0, 0, .12);
-  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   padding: 12px 18px;
   box-sizing: border-box;
   vertical-align: middle;
@@ -292,27 +280,30 @@ material-card table td {
 }
 
 tag-history-button button:hover,
-material-card table th.material-card-th-sorted-ascending:hover, material-card table th.material-card-th-sorted-descending:hover {
+material-card table th.material-card-th-sorted-ascending:hover,
+material-card table th.material-card-th-sorted-descending:hover {
   cursor: pointer;
 }
 
-material-card table th.material-card-th-sorted-ascending:hover:before, material-card table th.material-card-th-sorted-descending:hover:before {
-  color: rgba(0, 0, 0, .26);
+material-card table th.material-card-th-sorted-ascending:hover:before,
+material-card table th.material-card-th-sorted-descending:hover:before {
+  color: rgba(0, 0, 0, 0.26);
 }
 
-material-card table th.material-card-th-sorted-ascending:before, material-card table th.material-card-th-sorted-descending:before {
+material-card table th.material-card-th-sorted-ascending:before,
+material-card table th.material-card-th-sorted-descending:before {
   font-family: 'Material Icons';
   font-weight: 400;
   font-style: normal;
   line-height: 1;
   font-size: 16px;
-  content: "\e5d8";
+  content: '\e5d8';
   margin-right: 5px;
   vertical-align: sub;
 }
 
 material-card table th.material-card-th-sorted-descending:before {
-  content: "\e5db";
+  content: '\e5db';
 }
 
 material-button .content i.material-icons,
@@ -329,19 +320,13 @@ material-snackbar .toast {
   height: auto;
 }
 
-material-popup material-button,
-pagination material-button {
-  background-color: #fff;
-  color: #000;
-}
-
 material-popup material-button:hover material-waves {
-  background-color: hsla(0, 0%, 75%, .2);
+  background-color: hsla(0, 0%, 75%, 0.2);
 }
 
-material-popup .popup {
+material-popup .popup > .content {
+  padding: 1em;
   max-width: 450px;
-  top: 2em;
 }
 
 footer {
@@ -366,7 +351,8 @@ material-footer {
   /* 5 + 2 + 3 + 24 + 3 + 2 + 18 */
   padding-right: 57px;
 }
-image-tag, .copy-to-clipboard {
+image-tag,
+.copy-to-clipboard {
   display: inline-block;
 }
 image-content-digest {
@@ -405,28 +391,11 @@ taglist .image-size {
   width: 7em;
 }
 
-catalog material-card,
-tag-history material-card {
-  min-height: auto;
-}
-
-tag-history-button button {
-  background: none;
-  border: none;
-}
-
-material-card material-button,
-pagination material-button {
-  max-height: 30px;
-  max-width: 30px;
-}
-
 material-button:hover material-waves {
   background: none;
 }
 
-material-card material-button,
-pagination material-button {
+material-card material-button {
   background-color: inherit;
 }
 
@@ -436,7 +405,7 @@ catalog-element material-card {
 }
 
 catalog-element catalog-element material-card {
-  transition: all 350ms cubic-bezier(.4,0,.2,1);
+  transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
   position: relative;
 }
@@ -451,7 +420,7 @@ catalog-element catalog-element > .content {
   margin-left: 3em;
 }
 
-@media screen and (min-width: 1515px){
+@media screen and (min-width: 1515px) {
   catalog-element catalog-element > .content material-card {
     max-width: calc(1440px - 3em);
   }
@@ -488,30 +457,4 @@ material-checkbox .checkbox {
 
 material-checkbox .checkbox.checked {
   background-color: #777;
-}
-
-pagination material-button {
-  padding: 0.2em 0.75em;
-}
-
-pagination material-button .content {
-  display: flex;
-  align-content: center;
-  line-height: 1.9em;
-}
-
-pagination material-button.current {
-  border: 1px solid rgba(0, 0, 0, .12);
-}
-
-pagination material-button.current.space-left {
-  margin-left: 85px;
-}
-
-pagination material-button.current.space-right {
-  margin-right: 85px;
-}
-
-pagination material-button .content i.material-icons {
-  color: #000;
 }

@@ -17,15 +17,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <docker-registry-ui>
   <header>
     <material-navbar>
-      <div class="logo">Docker Registry UI</div>
-      <search-bar on-search="{ onSearch }"></search-bar>
-      <dialogs-menu
-        if="{props.singleRegistry !== 'true'}"
-        on-notify="{ notifySnackbar }"
-        on-server-change="{ onServerChange }"
-        default-registries="{ props.defaultRegistries }"
-        read-only-registries="{ truthy(props.readOnlyRegistries) }"
-      ></dialogs-menu>
+      <span class="logo">Docker Registry UI</span>
+      <div class="menu">
+        <search-bar on-search="{ onSearch }"></search-bar>
+        <dialogs-menu
+          if="{props.singleRegistry !== 'true'}"
+          on-notify="{ notifySnackbar }"
+          on-server-change="{ onServerChange }"
+          default-registries="{ props.defaultRegistries }"
+          read-only-registries="{ truthy(props.readOnlyRegistries) }"
+        ></dialogs-menu>
+      </div>
     </material-navbar>
   </header>
   <main>
@@ -81,9 +83,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
   </main>
   <footer>
-    <material-footer>
-      <a slot="logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI { version }</a>
-      <ul slot="link-list">
+    <material-footer mini="true">
+      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI { version }</a>
+      <ul>
         <li>
           <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
         </li>
@@ -197,4 +199,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       stringToArray,
     };
   </script>
+  <style>
+    material-navbar {
+      height: 64px;
+    }
+    
+    material-navbar .menu {
+      display: flex;
+    }
+  </style>
 </docker-registry-ui>

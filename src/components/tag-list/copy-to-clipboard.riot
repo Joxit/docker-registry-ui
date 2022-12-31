@@ -18,11 +18,13 @@
   <div class="copy-to-clipboard">
     <input style="display: none; width: 1px; height: 1px" value="{ getDockerCmd(props) }" />
     <material-button
-      waves-center="true"
-      rounded="true"
+      color="rgba(0,0,0,0)"
+      text-color="#777"
       waves-color="#ddd"
+      waves-center="true"
       onClick="{ copy }"
       title="Copy pull command."
+      icon
     >
       <i class="material-icons">content_copy</i>
     </material-button>

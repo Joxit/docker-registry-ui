@@ -16,16 +16,16 @@
 -->
 <add-registry-url>
   <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
-    <div slot="title">Add your Server ?</div>
-    <div slot="content">
-      <material-input onkeyup="{ onKeyUp }" placeholder="Server URL"></material-input>
+    <div class="material-popup-title">Add your Server ?</div>
+    <div class="material-popup-content">
+      <material-input onkeyup="{ onKeyUp }" label="Server URL" label-color="#666" valid="{ registryUrlValidator }"></material-input>
       <span>Write your URL without /v2</span>
     </div>
-    <div slot="action">
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ add }">
+    <div class="material-popup-action">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ add }" color="#000" inverted>
         Add
       </material-button>
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }">
+      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }" color="#000" inverted>
         Cancel
       </material-button>
     </div>
@@ -55,6 +55,9 @@
         this.props.onClose();
         setTimeout(() => router.updateUrlQueryParam(url), 100);
       },
+      registryUrlValidator(input) {
+        return /^https?:\/\//.test(input) && !/\/v2\/?$/.test(input)
+      }
     };
   </script>
 </add-registry-url>

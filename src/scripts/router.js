@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import { router, getCurrentRoute } from '@riotjs/route';
+import { getCurrentRoute } from '@riotjs/route';
 import { encodeURI, decodeURI } from './utils';
 
 function getQueryParams() {
@@ -59,16 +59,16 @@ function baseUrl(qs) {
 
 export default {
   home() {
-    router.push(baseUrl({ page: null }));
+    return baseUrl({ page: null });
   },
   taglist(image) {
-    router.push(`${baseUrl({ page: null })}#!/taglist/${image}`);
+    return `${baseUrl({ page: null })}#!/taglist/${image}`;
   },
   getTagListImage() {
     return getCurrentRoute().replace(/^.*(#!)?\/?taglist\//, '');
   },
   history(image, tag) {
-    router.push(`${baseUrl({ page: null })}#!/taghistory/image/${image}/tag/${tag}`);
+    return `${baseUrl({ page: null })}#!/taghistory/image/${image}/tag/${tag}`;
   },
   getTagHistoryImage() {
     return getCurrentRoute().replace(/^.*(#!)?\/?taghistory\/image\/(.*)\/tag\/(.*)\/?$/, '$2');

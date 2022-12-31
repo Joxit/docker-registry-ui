@@ -10,7 +10,7 @@ import {
   MaterialCheckbox,
   MaterialTabs,
   MaterialSnackbar,
-  MaterialDropdownList,
+  MaterialDropdown,
   MaterialPopup,
   MaterialInput,
 } from 'riot-mui';
@@ -28,7 +28,7 @@ register('material-waves', MaterialWaves);
 register('material-checkbox', MaterialCheckbox);
 register('material-snackbar', MaterialSnackbar);
 register('material-tabs', MaterialTabs);
-register('material-dropdown-list', MaterialDropdownList);
+register('material-dropdown', MaterialDropdown);
 register('material-popup', MaterialPopup);
 register('material-input', MaterialInput);
 

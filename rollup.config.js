@@ -1,7 +1,7 @@
 import riot from 'rollup-plugin-riot';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import { emptyDirectories } from 'rollup-plugin-app-utils';
 import { babel } from '@rollup/plugin-babel';
 import scss from 'rollup-plugin-scss';

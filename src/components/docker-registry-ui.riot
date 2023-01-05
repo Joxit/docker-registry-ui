@@ -41,7 +41,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           filter-results="{ state.filter }"
           on-authentication="{ onAuthentication }"
           show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"
-        />
+        ></catalog>
       </route>
       <route path="{baseRoute}taglist/(.*)">
         <tag-list
@@ -84,7 +84,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </main>
   <footer>
     <material-footer mini="true">
-      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">Docker Registry UI { version }</a>
+      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">
+        Docker Registry UI { version }
+      </a>
       <ul>
         <li>
           <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
@@ -105,6 +107,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import SearchBar from './search-bar.riot';
     import { stripHttps, getRegistryServers, setRegistryServers, truthy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
+    import { loadTheme } from '../scripts/theme';
 
     export default {
       components: {
@@ -138,6 +141,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
         this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
         this.state.useControlCacheHeader = props.useControlCacheHeader;
+        loadTheme(props, this.root.style);
       },
       onServerChange(registryUrl) {
         this.update({
@@ -200,10 +204,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
+    :host {
+      display: block;
+      background-color: var(--background);
+      color: var(--primary-text);
+    }
     material-navbar {
       height: 64px;
     }
-    
+
     material-navbar .menu {
       display: flex;
     }

@@ -60,7 +60,9 @@ body {
   text-decoration: none;
   font-weight: inherit;
 }
-
+material-card {
+  background-color: var(--background);
+}
 material-card,
 material-tabs,
 pagination .container {
@@ -141,7 +143,7 @@ h2 {
 }
 
 .list.highlight:hover {
-  background-color: #eee;
+  background-color: var(--hover-background);
   cursor: pointer;
 }
 
@@ -165,7 +167,7 @@ docker-registry-ui material-button > :first-child .content i.material-icons.mate
   height: 24px;
   width: 24px;
   box-sizing: border-box;
-  color: #757575;
+  color: var(--neutral-text);
 }
 
 .list > span .right i.material-icons.animated {
@@ -230,7 +232,6 @@ material-card table {
   border-collapse: collapse;
   white-space: nowrap;
   font-size: 13px;
-  background-color: #fff;
   border: none;
 }
 
@@ -239,7 +240,7 @@ material-card table th {
   vertical-align: bottom;
   line-height: 24px;
   height: 48px;
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--neutral-text);
   box-sizing: border-box;
   padding: 0 18px 12px 18px;
   text-align: right;
@@ -249,10 +250,10 @@ material-card table th {
   text-align: left;
 }
 
-material-button:hover > :first-child[inverted='true'],
+material-button:hover > :first-child,
 material-card .material-card-title-action material-button:hover button,
 material-card table tbody tr:hover {
-  background-color: #eee !important;
+  background-color: rgba(0, 0, 0, 0.12) !important;
 }
 
 material-button > :first-child[inverted='true'],
@@ -308,7 +309,7 @@ material-card table th.material-card-th-sorted-descending:before {
 
 material-button .content i.material-icons,
 .material-icons {
-  color: #777;
+  color: var(--neutral-text);
 }
 
 material-button[disabled] .content i.material-icons,
@@ -318,10 +319,6 @@ material-checkbox[disabled] .content i.material-icons {
 
 material-snackbar .toast {
   height: auto;
-}
-
-material-popup material-button:hover material-waves {
-  background-color: hsla(0, 0%, 75%, 0.2);
 }
 
 material-popup .popup > .content {
@@ -452,9 +449,9 @@ material-checkbox.indeterminate .checkbox.checked .checkmark {
 }
 
 material-checkbox .checkbox {
-  border-color: #777;
+  border-color: var(--neutral-text);
 }
 
 material-checkbox .checkbox.checked {
-  background-color: #777;
+  background-color: var(--neutral-text);
 }

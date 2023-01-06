@@ -105,9 +105,14 @@
   </script>
   <style>
     :host > .material-dropdown-wrapper {
-      color: #000;
+      color: var(--primary-text);
       list-style-type: disc;
       margin-block-start: 0.7em;
+    }
+    material-dropdown .material-dropdown-container,
+    material-dropdown .material-dropdown-container .material-dropdown-item {
+      background-color: var(--background);
+      color: var(--primary-text);
     }
 
     :host .material-dropdown-wrapper material-dropdown .material-dropdown-container {

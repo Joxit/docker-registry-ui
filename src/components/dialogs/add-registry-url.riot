@@ -18,14 +18,14 @@
   <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
     <div class="material-popup-title">Add your Server ?</div>
     <div class="material-popup-content">
-      <material-input onkeyup="{ onKeyUp }" label="Server URL" label-color="#666" valid="{ registryUrlValidator }"></material-input>
+      <material-input onkeyup="{ onKeyUp }" label="Server URL" text-color="var(--primary-text)" label-color="var(--neutral-text)" valid="{ registryUrlValidator }"></material-input>
       <span>Write your URL without /v2</span>
     </div>
     <div class="material-popup-action">
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ add }" color="#000" inverted>
+      <material-button class="dialog-button" waves-color="var(--hover-background)" onClick="{ add }" color="inherit" text-color="var(--primary-text)">
         Add
       </material-button>
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }" color="#000" inverted>
+      <material-button class="dialog-button" waves-color="var(--hover-background)" onClick="{ props.onClose }" color="inherit" text-color="var(--primary-text)">
         Cancel
       </material-button>
     </div>

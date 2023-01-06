@@ -23,10 +23,10 @@
       </select>
     </div>
     <div class="material-popup-action">
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ change }" color="#000" inverted>
+      <material-button class="dialog-button" waves-color="var(--hover-background)" onClick="{ change }"  color="inherit" text-color="var(--primary-text)">
         Change
       </material-button>
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }" color="#000" inverted>
+      <material-button class="dialog-button" waves-color="var(--hover-background)" onClick="{ props.onClose }"  color="inherit" text-color="var(--primary-text)">
         Cancel
       </material-button>
     </div>
@@ -70,6 +70,10 @@
       -moz-appearance: none;
       -webkit-appearance: none;
       margin: 1.5em 0;
+      color: var(--primary-text);
+    }
+    :host select option {
+      background-color: var(--background);
     }
   </style>
 </change-registry-url>

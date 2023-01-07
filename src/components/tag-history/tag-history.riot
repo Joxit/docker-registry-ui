@@ -23,7 +23,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         waves-color="var(--hover-background)"
         waves-center="true"
         rounded="true"
-        waves-color="#ddd"
         href="{ toTaglist() }"
         icon
       >
@@ -38,12 +37,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <material-tabs
     if="{ state.archs && state.loadend }"
-    color="#25313b"
-    text-color="#fff"
+    color="var(--background)"
+    text-color="var(--primary-text)"
+    text-selected-color="var(--accent-text)"
+    line-color="var(--background)"
+    line-selected-color="var(--accent-text)"
     useLine="{ true }"
     tabs="{ state.archs }"
     onTabChanged="{ onTabChanged }"
-    inverted
   ></material-tabs>
 
   <material-card each="{ element in state.elements }">

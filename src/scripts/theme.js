@@ -3,12 +3,14 @@ const LIGHT_THEME = {
   'neutral-text': '#777',
   'background': '#fff',
   'hover-background': '#eee',
+  'accent-text': 'rgba(0,0,0,0.26)',
 };
 const DARK_THEME = {
   'primary-text': '#8A9EBA',
   'neutral-text': '#36527A',
   'background': '#22272e',
   'hover-background': '#30404D',
+  'accent-text': '#5684C4',
 };
 
 let THEME;

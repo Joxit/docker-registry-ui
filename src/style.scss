@@ -95,13 +95,6 @@ material-tabs material-button .content .text {
   text-transform: none;
 }
 
-material-tabs .line-wrapper .line {
-  background-color: #25313b;
-}
-material-tabs material-button.selected .content .text {
-  color: #25313b;
-}
-
 material-spinner {
   align-self: center;
 }
@@ -143,7 +136,7 @@ h2 {
 }
 
 .list.highlight:hover {
-  background-color: var(--hover-background);
+  background-color: rgba(0, 0, 0, 0.12);
   cursor: pointer;
 }
 
@@ -250,7 +243,6 @@ material-card table th {
   text-align: left;
 }
 
-material-button:hover > :first-child,
 material-card .material-card-title-action material-button:hover button,
 material-card table tbody tr:hover {
   background-color: rgba(0, 0, 0, 0.12) !important;
@@ -288,7 +280,7 @@ material-card table th.material-card-th-sorted-descending:hover {
 
 material-card table th.material-card-th-sorted-ascending:hover:before,
 material-card table th.material-card-th-sorted-descending:hover:before {
-  color: rgba(0, 0, 0, 0.26);
+  color: var(--accent-text);
 }
 
 material-card table th.material-card-th-sorted-ascending:before,
@@ -388,10 +380,6 @@ taglist .creation-date {
 
 taglist .image-size {
   width: 7em;
-}
-
-material-button:hover material-waves {
-  background: none;
 }
 
 material-card material-button {

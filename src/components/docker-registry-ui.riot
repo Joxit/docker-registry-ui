@@ -141,7 +141,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
         this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
         this.state.useControlCacheHeader = props.useControlCacheHeader;
-        loadTheme(props, this.root.style);
+        loadTheme(props, this.root.parentNode.style);
       },
       onServerChange(registryUrl) {
         this.update({
@@ -204,17 +204,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    :host {
-      display: block;
-      background-color: var(--background);
-      color: var(--primary-text);
-    }
     material-navbar {
       height: 64px;
+      color: var(--header-text);
+      background-color: var(--header-background);
     }
 
     material-navbar .menu {
       display: flex;
+    }
+
+    material-footer {
+      color: var(--footer-neutral-text);
+      background-color: var(--footer-background);
+    }
+    material-footer .material-footer-logo {
+      color: var(--footer-text);
     }
   </style>
 </docker-registry-ui>

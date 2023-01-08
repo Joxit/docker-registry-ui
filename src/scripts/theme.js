@@ -3,14 +3,24 @@ const LIGHT_THEME = {
   'neutral-text': '#777',
   'background': '#fff',
   'hover-background': '#eee',
-  'accent-text': 'rgba(0,0,0,0.26)',
+  'accent-text': '#6680a1',
+  'header-text': '#fff',
+  'header-background': '#25313b',
+  'footer-text': '#fff',
+  'footer-neutral-text': '#999',
+  'footer-background': '#555',
 };
 const DARK_THEME = {
   'primary-text': '#8A9EBA',
   'neutral-text': '#36527A',
   'background': '#22272e',
   'hover-background': '#30404D',
-  'accent-text': '#5684C4',
+  'accent-text': '#5684FF',
+  'header-text': '#fff',
+  'header-background': '#333A45',
+  'footer-text': '#fff',
+  'footer-neutral-text': '#999',
+  'footer-background': '#555',
 };
 
 let THEME;

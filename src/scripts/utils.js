@@ -80,6 +80,8 @@ export function getHistoryIcon(attribute) {
       return 'get_app';
     case 'ExposedPorts':
       return 'router';
+    case 'comment':
+      return 'chat';
     default:
       if (attribute.startsWith('custom-label-')) {
         return 'label';

@@ -13,6 +13,7 @@ import copy from 'rollup-plugin-copy';
 import copyTransform from './rollup/copy-transform.js';
 import license from './rollup/license.js';
 import checkOutput from './rollup/check-output.js';
+import importSVG from './rollup/import-svg.js';
 
 const useServe = process.env.ROLLUP_SERVE === 'true';
 const output = useServe ? '.serve' : 'dist';
@@ -20,6 +21,7 @@ const output = useServe ? '.serve' : 'dist';
 const plugins = [
   riot(),
   json(),
+  importSVG(),
   nodeResolve(),
   commonjs(),
   scss({ fileName: `docker-registry-ui.css`, outputStyle: 'compressed' }),

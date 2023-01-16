@@ -47,7 +47,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onMounted(props, state) {
         const dockerVersion = this.$('#docker_verion');
         if (dockerVersion) {
-          dockerVersion.innerHTML = dockerVersionIcon().outerHTML;
+          dockerVersion.innerHTML = dockerVersionIcon().firstElementChild.outerHTML;
         }
       },
       cleanName(name) {

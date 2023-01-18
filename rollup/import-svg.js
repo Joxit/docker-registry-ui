@@ -1,10 +1,10 @@
-import {extname} from 'path';
+import { extname } from 'path';
 
-const injectNode = (svg) => (`
+const injectNode = (svg) => `
 export default function() {
   return (new DOMParser().parseFromString(${svg}, 'image/svg+xml'));
 };
-`);
+`;
 
 /**
  * @param options
@@ -13,7 +13,6 @@ export default function() {
  * @param options.stringify - if true returns String, otherwise returns DOM Node
  */
 export default function () {
-
   return {
     name: 'import-svg',
     transform: (code, id) => {
@@ -26,4 +25,4 @@ export default function () {
       };
     },
   };
-};
+}

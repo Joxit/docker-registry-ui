@@ -65,9 +65,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <material-button
               if="{ state.toDelete.size > 0 && !state.singleDeleteAction }"
               waves-center="true"
-              color="#fff"
-              text-color="#777"
-              waves-color="#ddd"
+              color="inherit"
+              text-color="var(--neutral-background)"
+              waves-color="var(--hover-background)"
               title="This will delete selected images."
               onClick="{ deleteImages }"
               icon

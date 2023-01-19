@@ -19,8 +19,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="pagination-centered">
       <material-button
         aria-label="page-{ p.page }"
-        color="rgba(0, 0, 0, { p.current ? 0.12 : 0 } )"
-        text-color="#000"
+        color="{ p.current ? 'var(--accent-text)' : 'rgba(0, 0, 0, 0 )' }"
+        text-color="{ p.current ? 'var(--accent-text)' : 'var(--primary-text)' }"
         waves-color="rgba(158,158,158,.4)"
         each="{ (p, idx) in props.pages}"
         class="{ p.current ? 'current' : ''} { p['space-left'] ? 'space-left' : '' } { p['space-right'] ? 'space-right' : ''}"
@@ -45,6 +45,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     :host material-button > :first-child {
       padding: 0;
       min-width: 40px;
+      min-height: 44px;
     }
 
     :host material-button > :first-child .content {

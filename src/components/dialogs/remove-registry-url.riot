@@ -38,7 +38,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </ul>
     </div>
     <div class="material-popup-action">
-      <material-button class="dialog-button" waves-color="rgba(158,158,158,.4)" onClick="{ props.onClose }" color="inherit" text-color="var(--primary-text)">
+      <material-button
+        class="dialog-button"
+        waves-color="rgba(158,158,158,.4)"
+        onClick="{ props.onClose }"
+        color="inherit"
+        text-color="var(--primary-text)"
+      >
         Close
       </material-button>
     </div>
@@ -48,10 +54,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     export default {
       remove(url) {
         return (event) => {
-          console.log(url, event)
           removeRegistryServers(url);
           setTimeout(() => this.update(), 100);
-        }
+        };
       },
       getRegistryServers,
     };

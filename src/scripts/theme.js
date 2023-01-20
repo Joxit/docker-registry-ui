@@ -31,8 +31,18 @@ const normalizeKey = (k) =>
     .toLowerCase()
     .replace(/^theme-/, '');
 
+const preferDarkMode = ({ theme }) => {
+  if (theme === 'auto') {
+    if (typeof window.matchMedia === 'function') {
+      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+      return prefersDarkScheme && prefersDarkScheme.matches;
+    }
+  }
+  return theme === 'dark';
+};
+
 export const loadTheme = (props, style) => {
-  THEME = props.theme == 'dark' ? DARK_THEME : LIGHT_THEME;
+  THEME = preferDarkMode(props) ? DARK_THEME : LIGHT_THEME;
   Object.entries(props)
     .filter(([k, v]) => v && /^theme[A-Z]/.test(k))
     .map(([k, v]) => [normalizeKey(k), v])

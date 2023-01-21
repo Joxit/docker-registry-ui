@@ -116,6 +116,12 @@ material-spinner {
   font-weight: 400;
 }
 
+@media screen and (max-width: 600px) {
+  .logo {
+    padding-left: 0;
+  }
+}
+
 h2 {
   padding: 16px;
   margin: auto;

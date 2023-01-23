@@ -114,8 +114,27 @@ Some env options are available for use this interface for **only one server**.
 - `SHOW_CATALOG_NB_TAGS`: Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries. (default: `false`).
 - `HISTORY_CUSTOM_LABELS`: Expose custom labels in history page, custom labels will be processed like maintainer label.
 - `USE_CONTROL_CACHE_HEADER`: Use `Control-Cache` header and set to `no-store, no-cache`. This will avoid some issues on multi-arch images (see [#260](https://github.com/Joxit/docker-registry-ui/issues/260)). This option requires registry configuration: `Access-Control-Allow-Headers` with `Cache-Control`. (default: `false`).
+- `THEME`: Chose your default theme, could be `dark`, `light` or `auto`. (default: `auto`). Since 2.4.0
+- `THEME_*`: See table in [Theme options](#theme-options) section. Since 2.4.0
 
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
+
+### Theme options
+
+This featureswas added to version 2.4.0. See more about this in [#283](https://github.com/Joxit/docker-registry-ui/pull/283).
+
+| Environment variable | light theme value | dark theme value |
+| --- | --- | --- |
+| `THEME_PRIMARY_TEXT` | `#25313b` | `#8A9EBA` |
+| `THEME_NEUTRAL_TEXT` | `#777777` | `#36527A` |
+| `THEME_BACKGROUND` | `#ffffff` | `#22272e` |
+| `THEME_HOVER_BACKGROUND` | `#eeeeee` | `#30404D` |
+| `THEME_ACCENT_TEXT` | `#6680a1` | `#5684FF` |
+| `THEME_HEADER_TEXT` | `#ffffff` | `#ffffff` |
+| `THEME_HEADER_BACKGROUND` | `#25313b` | `#333A45` |
+| `THEME_FOOTER_TEXT` | `#ffffff` | `#ffffff` |
+| `THEME_FOOTER_NEUTRAL_TEXT` | `#999999` | `#999999` |
+| `THEME_FOOTER_BACKGROUND` | `#555555` | `#555555` |
 
 ## Using CORS
 

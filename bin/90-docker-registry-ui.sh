@@ -12,6 +12,10 @@ sed -i "s~\${SHOW_CATALOG_NB_TAGS}~${SHOW_CATALOG_NB_TAGS}~" index.html
 sed -i "s~\${HISTORY_CUSTOM_LABELS}~${HISTORY_CUSTOM_LABELS}~" index.html
 sed -i "s~\${USE_CONTROL_CACHE_HEADER}~${USE_CONTROL_CACHE_HEADER}~" index.html
 
+grep -o 'THEME[A-Z_]*' index.html | while read e; do
+  sed -i "s~\${$e}~$(printenv $e)~" index.html
+done
+
 if [ -z "${DELETE_IMAGES}" ] || [ "${DELETE_IMAGES}" = false ] ; then
   sed -i "s/\${DELETE_IMAGES}/false/" index.html
 else

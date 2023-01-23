@@ -16,8 +16,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history-element class="{ state.key }">
   <div class="headline">
-    <i class="material-icons">{ state.icon }</i>
-    <p>{ state.name }</p>
+    <i if="{ state.key !== 'docker_version' }" class="material-icons">{ state.icon }</i>
+    <span if="{ state.key === 'docker_version' }" id="docker_verion"></span>
+    <span>{ state.name }</span>
   </div>
   <div class="content">
     <div class="value" if="{ state.value }">{ state.value }</div>
@@ -25,6 +26,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </div>
   <script>
     import { getHistoryIcon } from '../../scripts/utils';
+    import dockerVersionIcon from '../../images/docker-logo.svg';
     export default {
       onBeforeStart(props, state) {
         state.key = props.entry.key;
@@ -41,6 +43,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onBeforeUpdate(props, state) {
         this.onBeforeStart(props, state);
+      },
+      onMounted(props, state) {
+        const dockerVersion = this.$('#docker_verion');
+        if (dockerVersion) {
+          dockerVersion.innerHTML = dockerVersionIcon().firstElementChild.outerHTML;
+        }
       },
       cleanName(name) {
         if (name === 'id') {
@@ -70,10 +78,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       padding: 0px;
     }
 
-    :host.docker_version .headline .material-icons {
-      background-size: 24px auto;
-      background-image: url('images/docker-logo.svg');
-      background-repeat: no-repeat;
+    :host.docker_version .headline .material-icons,
+    :host.docker_version .headline #docker_verion {
+      height: 24px;
     }
 
     :host {
@@ -93,12 +100,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       overflow-x: initial;
     }
 
-    :host .headline p {
+    :host .headline {
+      height: 24px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       font-weight: bold;
-      line-height: 20px;
-      position: relative;
-      display: inline;
-      top: -4px;
+    }
+    :host .headline * {
+      margin-right: 6px;
     }
 
     :host.id div.value {

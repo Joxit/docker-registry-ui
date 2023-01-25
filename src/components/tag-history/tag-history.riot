@@ -29,6 +29,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>History of { props.image }:{ props.tag } <i class="material-icons">history</i></h2>
+      <material-button
+        text-color="var(--accent-text)"
+        color="inherit"
+        waves-color="var(--hover-background)"
+        waves-center="true"
+        rounded="true"
+        outlined
+      >
+        Dockerfile
+      </material-button>
     </div>
   </material-card>
   <div if="{ !state.loadend }" class="spinner-wrapper">
@@ -238,4 +248,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return res;
     };
   </script>
+  <style>
+    h2 {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  </style>
 </tag-history>

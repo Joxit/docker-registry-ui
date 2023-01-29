@@ -1,0 +1,68 @@
+<!--
+Copyright (C) 2016-2023 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<dockerfile>
+  <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
+    <div class="material-popup-title">Dockerfile</div>
+    <div class="material-popup-content">
+      <template each="{ (_, idx) in props.elements }">
+        <template
+          each="{ element in props.elements[props.elements.length - 1 - idx].filter(e => e.key === 'created_by') }"
+        >
+          <div class="instruction">
+            <span class="keyword">{ element.value }</span>
+            <span>{ ' ' + element.content }</span>
+          </div>
+        </template>
+      </template>
+    </div>
+    <div class="material-popup-action">
+      <material-button
+        class="dialog-button"
+        waves-color="rgba(158,158,158,.4)"
+        onClick="{ props.onClose }"
+        color="inherit"
+        text-color="var(--primary-text)"
+      >
+        Close
+      </material-button>
+    </div>
+  </material-popup>
+  <style>
+    :host material-popup .popup material-button {
+      margin-right: 1em;
+    }
+    :host material-popup .popup > .content {
+      max-width: 75em;
+      width: 80%;
+    }
+    :host .material-popup-content {
+      background-color: var(--hover-background);
+    }
+    @media screen and (max-width: 800px) {
+      :host material-popup .popup > .content {
+        width: 100%;
+      }
+    }
+    :host .instruction {
+      font-family: 'Roboto Mono', monospace !important;
+      margin: 0.75em 0;
+    }
+    :host .instruction .keyword {
+      color: var(--accent-text);
+    }
+  </style>
+</dockerfile>

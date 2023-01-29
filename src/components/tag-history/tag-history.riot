@@ -29,11 +29,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>History of { props.image }:{ props.tag } <i class="material-icons">history</i></h2>
+      <material-button
+        text-color="var(--accent-text)"
+        color="inherit"
+        waves-color="var(--hover-background)"
+        waves-center="true"
+        rounded="true"
+        outlined
+        onClick="{ showDockerfile }"
+      >
+        Dockerfile
+      </material-button>
     </div>
   </material-card>
   <div if="{ !state.loadend }" class="spinner-wrapper">
     <material-spinner></material-spinner>
   </div>
+  <dockerfile
+    opened="{ state.showDockerfile }"
+    on-close="{ onDockerfileClose }"
+    elements="{ state.elements }"
+  ></dockerfile>
 
   <material-tabs
     if="{ state.archs && state.loadend }"
@@ -57,11 +73,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <script>
     import { DockerImage } from '../../scripts/docker-image';
     import { bytesToSize } from '../../scripts/utils';
+    import Dockerfile from '../dialogs/dockerfile.riot';
     import router from '../../scripts/router';
     import TagHistoryElement from './tag-history-element.riot';
     export default {
       components: {
         TagHistoryElement,
+        Dockerfile,
       },
       onBeforeMount(props, state) {
         state.elements = [];
@@ -105,10 +123,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           for (var attribute in elt) {
             if (elt.hasOwnProperty(attribute) && attribute != 'empty_layer') {
               const value = elt[attribute];
-              const guiElement = {
-                'key': attribute,
-                'value': modifySpecificAttributeTypes(attribute, value),
-              };
+              const guiElement = modifySpecificAttributeTypes(attribute, value);
               guiElements.push(guiElement);
             }
           }
@@ -143,6 +158,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       toTaglist() {
         return router.taglist(this.props.image);
       },
+      showDockerfile() {
+        console.log(this);
+        this.update({ showDockerfile: true });
+      },
+      onDockerfileClose() {
+        this.update({ showDockerfile: false });
+      },
     };
     const eltIdx = function (e) {
       switch (e) {
@@ -171,27 +193,47 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return eltIdx(e1.key) - eltIdx(e2.key);
     };
 
-    const modifySpecificAttributeTypes = function (attribute, value) {
-      switch (attribute) {
+    const parseCreatedBy = (value) => {
+      if (value.startsWith('COPY')) {
+        return {
+          value: 'COPY',
+          content: value.replace(/^COPY /, ''),
+        };
+      }
+      let cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+) (.*)/);
+      return {
+        value: (cmd && cmd[1]) || 'RUN',
+        content: (cmd && cmd[2]) || value.replace(/^\/bin\/sh *-c *(#\(nop\))?/, ''),
+      };
+    };
+
+    const modifySpecificAttributeTypes = function (key, value) {
+      switch (key) {
         case 'created':
-          return new Date(value).toLocaleString();
+          return { key, value: new Date(value).toLocaleString() };
         case 'created_by':
-          const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+)/);
-          return (cmd && cmd[1]) || 'RUN';
+          const cmd = value.match(/\/bin\/sh *-c *#\(nop\) *([A-Z]+) (.*)/);
+          return {
+            key,
+            ...parseCreatedBy(value),
+          };
         case 'size':
-          return bytesToSize(value);
+          return { key, value: bytesToSize(value) };
         case 'Entrypoint':
         case 'Cmd':
-          return (value || []).join(' ');
+          return { key, value: (value || []).join(' ') };
         case 'Labels':
-          return Object.keys(value || {}).map(function (elt) {
-            return value[elt] ? elt + '=' + value[elt] : '';
-          });
+          return {
+            key,
+            value: Object.keys(value || {}).map(function (elt) {
+              return value[elt] ? elt + '=' + value[elt] : '';
+            }),
+          };
         case 'Volumes':
         case 'ExposedPorts':
-          return Object.keys(value);
+          return { key, value: Object.keys(value) };
       }
-      return value || '';
+      return { key, value: value || '' };
     };
 
     const getConfig = function (blobs, { historyCustomLabels }) {
@@ -238,4 +280,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       return res;
     };
   </script>
+  <style>
+    h2 {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  </style>
 </tag-history>

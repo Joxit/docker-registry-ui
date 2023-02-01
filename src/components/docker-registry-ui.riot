@@ -80,6 +80,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       on-authenticated="{ state.onAuthenticated }"
       opened="{ state.authenticationDialogOpened }"
     ></registry-authentication>
+    <error-page
+      if="{ state.pageError }"
+      code="{ state.pageError.code }"
+      status="{ state.pageError.status }"
+      message="{ state.pageError.message }"
+      url="{ state.pageError.url }"
+    ></error-page>
     <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
   </main>
   <footer>
@@ -105,6 +112,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagHistory from './tag-history/tag-history.riot';
     import DialogsMenu from './dialogs/dialogs-menu.riot';
     import SearchBar from './search-bar.riot';
+    import ErrorPage from './error-page.riot';
     import { stripHttps, getRegistryServers, setRegistryServers, truthy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
@@ -118,6 +126,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         SearchBar,
         Router,
         Route,
+        ErrorPage,
       },
       onUpdated(props, state) {
         state.snackbarIsError = false;
@@ -184,6 +193,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             snackbarMessage: message,
             snackbarIsError: isError || false,
           });
+        } else if (message && message.code) {
+          this.update({
+            pageError: message,
+          });
+          setTimeout(() => delete this.state['pageError'], 1000);
         } else if (message && message.message) {
           this.update({
             snackbarMessage: message.message,

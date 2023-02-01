@@ -69,6 +69,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.registryUrl = props.registryUrl;
         let repositories = [];
         const self = this;
+        const catalogUrl = `${props.registryUrl}/v2/_catalog?n=${state.catalogElementsLimit}`;
         const oReq = new Http({
           onAuthentication: this.props.onAuthentication,
         });
@@ -93,7 +94,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               return acc;
             }, []);
           } else if (this.status === 404) {
-            self.props.onNotify('Server not found', true);
+            self.props.onNotify({ code: 'CATALOG_NOT_FOUND', url: catalogUrl }, true);
           } else {
             self.props.onNotify(this.responseText);
           }
@@ -109,7 +110,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             loadend: true,
           });
         });
-        oReq.open('GET', `${props.registryUrl}/v2/_catalog?n=${state.catalogElementsLimit}`);
+        oReq.open('GET', catalogUrl);
         oReq.send();
       },
     };

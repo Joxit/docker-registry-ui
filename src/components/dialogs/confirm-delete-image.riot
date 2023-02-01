@@ -109,9 +109,13 @@
           'application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json'
         );
         oReq.addEventListener('error', function () {
+          const credMsg = this.withCredentials
+            ? ' When you use credentials on a different hostname, the registry server may fail preflight requests. Check FAQ and issue #104.'
+            : '';
           onNotify({
             message:
-              "An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: ['DELETE'].",
+              "An error occurred when deleting image. Check if your server accept DELETE methods Access-Control-Allow-Methods: ['DELETE']." +
+              credMsg,
             isError: true,
           });
         });

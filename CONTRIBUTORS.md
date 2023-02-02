@@ -43,3 +43,4 @@
 - Laszlo Boros [@Semmu](https://github.com/Semmu)
 - [@JKDingwall](https://github.com/JKDingwall)
 - Martin Herren [@MartinHerren](https://github.com/MartinHerren)
+- John Daktylidis [@Greek64](https://github.com/Greek64)

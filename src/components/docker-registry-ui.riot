@@ -140,6 +140,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           setRegistryServers(props.defaultRegistries);
         }
 
+        window.onselectstart = (e) => {
+          if (e.target && e.target.className) {
+            return !['checkbox', 'checkmark', 'remove-tag'].find((elt) => e.target.className.indexOf(elt) >= 0);
+          }
+        };
+
         // props.singleRegistry === 'true' means old static version
         const registryUrl =
           props.registryUrl ||

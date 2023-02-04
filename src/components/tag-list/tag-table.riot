@@ -183,23 +183,32 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           this.update({
             multiDelete: true,
             toDelete: this.state.toDelete,
+            slectedImage: undefined,
           });
         } else {
           this.update({
             multiDelete: event.target.checked,
+            slectedImage: undefined,
           });
         }
       },
-      onRemoveImageChange(action, image) {
+      onRemoveImageChange(action, image, shiftKey) {
         let confirmDeleteImage = false;
         let singleDeleteAction = false;
+        let slectedImage = undefined;
         switch (action) {
           case ACTION_CHECK_TO_DELETE: {
             this.state.toDelete.add(image);
+            if (shiftKey) {
+              slectedImage = this.supportShiftKey(image, true);
+            }
             break;
           }
           case ACTION_UNCHECK_TO_DELETE: {
             this.state.toDelete.delete(image);
+            if (shiftKey) {
+              slectedImage = this.supportShiftKey(image, false);
+            }
             break;
           }
           case ACTION_DELETE_IMAGE: {
@@ -213,7 +222,32 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           toDelete: this.state.toDelete,
           confirmDeleteImage,
           singleDeleteAction,
+          slectedImage,
         });
+      },
+      supportShiftKey(selectedImage, addOrRemove) {
+        if (!this.state.slectedImage) {
+          return selectedImage;
+        } else {
+          let shouldChange = false;
+          const tags = getPage(this.props.tags, this.props.page);
+          tags
+            .filter((image) => {
+              if (image == this.state.slectedImage || image == selectedImage) {
+                shouldChange = !shouldChange;
+                return true;
+              }
+              return shouldChange;
+            })
+            .forEach((image) => {
+              if (addOrRemove) {
+                this.state.toDelete.add(image);
+              } else {
+                this.state.toDelete.delete(image);
+              }
+            });
+          return undefined;
+        }
       },
       onReverseOrder() {
         this.state.orderType = null;

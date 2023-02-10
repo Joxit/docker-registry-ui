@@ -265,8 +265,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         if (this.state.orderType === 'date') {
           sortedTags.sort((e1, e2) =>
             !this.state.desc
-              ? e2.creationDate.getTime() - e1.creationDate.getTime()
-              : e1.creationDate.getTime() - e2.creationDate.getTime()
+              ? (e2.creationDate?.getTime()||0) - (e1.creationDate?.getTime()||0)
+              : (e1.creationDate?.getTime()||0) - (e2.creationDate?.getTime()||0)
           );
         } else if (this.state.orderType === 'size') {
           sortedTags.sort((e1, e2) => (!this.state.desc ? e2.size - e1.size : e1.size - e2.size));

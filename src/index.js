@@ -13,6 +13,7 @@ import {
   MaterialDropdown,
   MaterialPopup,
   MaterialInput,
+  MaterialSwitch,
 } from 'riot-mui';
 
 import DockerRegistryUI from './components/docker-registry-ui.riot';
@@ -31,6 +32,7 @@ register('material-tabs', MaterialTabs);
 register('material-dropdown', MaterialDropdown);
 register('material-popup', MaterialPopup);
 register('material-input', MaterialInput);
+register('material-switch', MaterialSwitch);
 
 const createApp = component(DockerRegistryUI);
 const tags = document.getElementsByTagName('docker-registry-ui');

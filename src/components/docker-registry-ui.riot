@@ -101,6 +101,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <li>
           <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">License AGPL-3.0</a>
         </li>
+        <li if="{ props.theme === 'auto' }">
+          <material-switch on-change="{ onThemeChange }" checked="{ state.themeSwitch }"></material-switch>
+        </li>
       </ul>
     </material-footer>
   </footer>
@@ -156,7 +159,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
         this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
         this.state.useControlCacheHeader = props.useControlCacheHeader;
-        loadTheme(props, this.root.parentNode.style);
+        const theme = loadTheme(props, this.root.parentNode.style);
+        this.state.themeSwitch = theme === 'dark';
       },
       onServerChange(registryUrl) {
         this.update({
@@ -215,6 +219,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.update({
           filter: value,
         });
+      },
+      onThemeChange(e) {
+        const theme = e.target.checked ? 'dark' : 'light';
+        loadTheme({ ...this.props, theme }, this.root.parentNode.style);
+        this.update({ themeSwitch: e.target.checked });
       },
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,

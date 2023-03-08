@@ -42,10 +42,12 @@ const preferDarkMode = ({ theme }) => {
 };
 
 export const loadTheme = (props, style) => {
-  THEME = preferDarkMode(props) ? DARK_THEME : LIGHT_THEME;
+  const isDarkMode = preferDarkMode(props);
+  THEME = isDarkMode ? { ...DARK_THEME } : { ...LIGHT_THEME };
   Object.entries(props)
     .filter(([k, v]) => v && /^theme[A-Z]/.test(k))
     .map(([k, v]) => [normalizeKey(k), v])
     .forEach(([k, v]) => (THEME[k] = v));
   Object.entries(THEME).forEach(([k, v]) => style.setProperty(`--${k}`, v));
+  return isDarkMode ? 'dark' : 'light';
 };

@@ -102,7 +102,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">License AGPL-3.0</a>
         </li>
         <li if="{ props.theme === 'auto' }">
-          <material-switch on-change="{ onThemeChange }" checked="{ state.themeSwitch }"></material-switch>
+          <material-switch
+            on-change="{ onThemeChange }"
+            checked="{ state.themeSwitch }"
+            track-selected-color="var(--accent-text)"
+            outline-selected-color="var(--accent-text)"
+          >
+            <i slot="thumb-icon" class="material-icons" style="color: white; font-size: 0.75em">wb_sunny</i>
+            <i slot="thumb-selected-icon" class="material-icons" style="color: #79747e; font-size: 0.75em">
+              brightness_2
+            </i>
+          </material-switch>
         </li>
       </ul>
     </material-footer>
@@ -253,6 +263,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     }
     material-footer .material-footer-logo {
       color: var(--footer-text);
+    }
+
+    material-switch i {
+      user-select: none;
     }
   </style>
 </docker-registry-ui>

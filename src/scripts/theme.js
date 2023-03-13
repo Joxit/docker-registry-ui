@@ -23,6 +23,8 @@ const DARK_THEME = {
   'footer-background': '#555',
 };
 
+const LOCAL_STORAGE_THEME = 'registryUiTheme';
+
 let THEME;
 
 const normalizeKey = (k) =>
@@ -33,9 +35,16 @@ const normalizeKey = (k) =>
 
 const preferDarkMode = ({ theme }) => {
   if (theme === 'auto') {
-    if (typeof window.matchMedia === 'function') {
-      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-      return prefersDarkScheme && prefersDarkScheme.matches;
+    switch (localStorage.getItem(LOCAL_STORAGE_THEME)) {
+      case 'dark':
+        return true;
+      case 'light':
+        return false;
+      default:
+        if (typeof window.matchMedia === 'function') {
+          const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+          return prefersDarkScheme && prefersDarkScheme.matches;
+        }
     }
   }
   return theme === 'dark';
@@ -49,5 +58,7 @@ export const loadTheme = (props, style) => {
     .map(([k, v]) => [normalizeKey(k), v])
     .forEach(([k, v]) => (THEME[k] = v));
   Object.entries(THEME).forEach(([k, v]) => style.setProperty(`--${k}`, v));
-  return isDarkMode ? 'dark' : 'light';
+  const theme = isDarkMode ? 'dark' : 'light';
+  localStorage.setItem(LOCAL_STORAGE_THEME, theme);
+  return theme;
 };

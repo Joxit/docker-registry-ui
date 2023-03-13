@@ -341,6 +341,9 @@ main {
 
 material-footer {
   padding: 0.5em 1em;
+  li {
+    align-self: center;
+  }
 }
 
 .copy-to-clipboard {

@@ -34,7 +34,7 @@
     "node-sass": "^8.0.0",
     "prettier": "^2.8.1",
     "riot": "^7.1.0",
-    "riot-mui": "github:joxit/riot-5-mui#b892806",
+    "riot-mui": "github:joxit/riot-5-mui#a97f2d3",
     "rollup": "^3.9.0",
     "rollup-plugin-app-utils": "^1.0.6",
     "rollup-plugin-copy": "^3.4.0",

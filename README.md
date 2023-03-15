@@ -23,39 +23,23 @@ This web user interface uses [Riot](https://github.com/Riot/riot) the react-like
 
 If you like my work and want to support it, don't hesitate to [sponsor me](https://github.com/sponsors/Joxit).
 
-## Features
+## Hidden Features
 
--   List all your repositories/images.
--   List all tags for a image.
--   Sort the tag list with number compatibility (see [#46](https://github.com/Joxit/docker-registry-ui/pull/46)).
--   Use a secured docker registry.
--   Display image size (see [#30](https://github.com/Joxit/docker-registry-ui/issues/30)).
--   Multi arch supports, Alpine and Debian based images with supports for arm32v7 and arm64v8.
--   Copy `docker pull` command to clipboard (see [#42](https://github.com/Joxit/docker-registry-ui/issues/42)).
--   Show sha256 for specific tag (hover image tag).
--   Display image creation date (see [#49](https://github.com/Joxit/docker-registry-ui/issues/49))
--   Display image history (see [#58](https://github.com/Joxit/docker-registry-ui/pull/58) & [#61](https://github.com/Joxit/docker-registry-ui/pull/61)).
--   Image aggregation (see [#56](https://github.com/Joxit/docker-registry-ui/issues/56)).
--   Display image/tag count (see [#56 issue comment](https://github.com/Joxit/docker-registry-ui/issues/56#issuecomment-449246524)).
--   Select multiple tags to delete (see [#29](https://github.com/Joxit/docker-registry-ui/issues/29)).
--   Select all tags with ALT + Click to delete (see [#80](https://github.com/Joxit/docker-registry-ui/issues/80)).
--   One interface for many registries (when `SINGLE_REGISTRY=false`).
--   Share your docker registry with query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`) (when `SINGLE_REGISTRY=false`).
--   Use the UI as reverse proxy (with `NGINX_PROXY_PASS_URL` environment variable) to your docker registry (This will avoid CORS).
--   Add Title when using `REGISTRY_TITLE` (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28)).
--   Customise docker pull command on static registry UI (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)).
--   Add custom header via environment variable and file via `NGINX_PROXY_HEADER_*` (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89))
--   Show/Hide content digest in taglist via `SHOW_CONTENT_DIGEST` (values are: [`true`, `false`], default: `false`) (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126)).
--   Limit the number of elements in the image list via `CATALOG_ELEMENTS_LIMIT` (see [#127](https://github.com/Joxit/docker-registry-ui/pull/127)).
--   Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134))
--   Set a list of default registries with `DEFAULT_REGISTRIES` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)).
--   Desactivate add and remove regisitries with `READ_ONLY_REGISTRIES` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)).
--   Filter images and tags with a search bar. You can select the search bar with the shortcut `CRTL` + `F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)).
--   **Forward** custom header to your backend registry via environment variable and file via `NGINX_PROXY_PASS_HEADER_*` (see [#206](https://github.com/Joxit/docker-registry-ui/pull/206)).
--   Run the container with user nginx instead of root via `--user nginx` and listend on custom port via `NGINX_LISTEN_PORT` (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
--   Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries via `SHOW_CATALOG_NB_TAGS` (default: `false`) (see [#161](https://github.com/Joxit/docker-registry-ui/issues/161) and [#239](https://github.com/Joxit/docker-registry-ui/pull/239)).
--   Expose custom labels in history page, custom labels will be processed like maintainer label via `HISTORY_CUSTOM_LABELS` (see [#160](https://github.com/Joxit/docker-registry-ui/issues/160) and [#240](https://github.com/Joxit/docker-registry-ui/pull/240)).
--   Access to the official Helm Chart: https://helm.joxit.dev/
+- Many ways to delete multiple images at once
+  - Select multiple tags to delete with checkboxes (see [#29](https://github.com/Joxit/docker-registry-ui/issues/29) and [#79](https://github.com/Joxit/docker-registry-ui/pull/79)). Since 1.2.0
+  - Select all tags of the page with `ALT + Click` on the indeterminate checkbox (see [#80](https://github.com/Joxit/docker-registry-ui/issues/80) and [#81](https://github.com/Joxit/docker-registry-ui/pull/81)). Since 1.2.1
+  - Select all contigous tags between two tags with `Shift + Click` on the first tag then `Shift + Click` on the second tag (see [#287](https://github.com/Joxit/docker-registry-ui/pull/287)). Since 2.4.0
+- Show sha256 for specific tag (hover image tag).
+- Sort the tag list with number compatibility (see [#45](https://github.com/Joxit/docker-registry-ui/pull/45) and [#46](https://github.com/Joxit/docker-registry-ui/pull/46)). Since 0.4.0
+- Share your docker registry UI without installation or when you are deploying a UI with  `SINGLE_REGISTRY=false`.
+  - Use the public demo and the query parameter `url` (e.g. `https://joxit.dev/docker-registry-ui/demo?url=https://registry.example.com`). If you need credentials on your private registry, you must set the `Access-Control-Allow-Origin` to `https://joxit.dev`.
+  - You can use a single interface with many registry, add them in the menu in the top right of the page.
+- Filter images and tags with the search bar.
+  - You can select the search bar with the shortcut `CRTL + F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)). Since 2.1.0
+- Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134)). Since 1.5.0
+- Show the content of the dockerfile (see [#286](https://github.com/Joxit/docker-registry-ui/pull/286)). Since 2.4.0
+
+Checkout all options in [Available options](#available-options) section.
 
 ## FAQ
 
@@ -84,7 +68,7 @@ If you like my work and want to support it, don't hesitate to [sponsor me](https
 -   Why when I delete one tag, all tags with the same SHA are deleted ?
     - This a docker registry API limitation, there is only one way to [delete images with tag](https://docs.docker.com/registry/spec/api/#deleting-an-image), it's by its `name` and its `manifest` (it's a sha of the content). So when you delete a tag, this will delete all tags of this image with the same SHA/manifest.
 -   Can I run the container with an unprivileged user ?
-    - Yes you can run the container with the `nginx` user, (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224)).
+    - Yes you can run the container with the `nginx` user with the option `--user nginx`, this will also update the listen port to `8080` (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224) and [#234](https://github.com/Joxit/docker-registry-ui/pull/234)).
 -   Can I use the UI with a docker hub mirror and show `library/*` images ?
     - Yes but it is at your own risk using two regstry servers, check the comment [#155](https://github.com/Joxit/docker-registry-ui/issues/155#issuecomment-1286052124).
 -   How to fix CORS issue on s3 bucket ?
@@ -96,26 +80,26 @@ Need more informations ? Try my [examples](https://github.com/Joxit/docker-regis
 
 You can run the container with the unprivileged user `nginx`, see the discussion [#224](https://github.com/Joxit/docker-registry-ui/issues/224).
 
-Some env options are available for use this interface for **only one server**.
+Some env options are available for use this interface for **only one server** (when `SINGLE_REGISTRY=true`).
 
-- `REGISTRY_URL`: The default url of your docker registry. You may need CORS configuration on your registry. This is usually the domain name or IP of your registry reachable by your computer (e.g `http://registry.example.com`). (default: derived from the hostname of your UI).
-- `REGISTRY_TITLE`: Set a custom title for your user interface. (default: value derived from `REGISTRY_URL`).
-- `PULL_URL`: Set a custom url when you copy the `docker pull` command. (default: value derived from `REGISTRY_URL`).
+- `REGISTRY_URL`: The default url of your docker registry. You **may need CORS configuration** on your registry. This is usually the domain name or IP of your registry reachable by your computer (e.g `http://registry.example.com`). (default: derived from the hostname of your UI).
+- `REGISTRY_TITLE`: Set a custom title for your user interface. (default: value derived from `REGISTRY_URL`) (see [#28](https://github.com/Joxit/docker-registry-ui/issues/28) and [#32](https://github.com/Joxit/docker-registry-ui/issues/32)). Since 0.3.4
+- `PULL_URL`: Set a custom url when you copy the `docker pull` command (see [#71](https://github.com/Joxit/docker-registry-ui/issues/71)). (default: value derived from `REGISTRY_URL`). Since 1.1.0
 - `DELETE_IMAGES`: Set if we can delete images from the UI. (default: `false`)
-- `SHOW_CONTENT_DIGEST`: Show content digest in docker tag list. (default: `false`)
-- `CATALOG_ELEMENTS_LIMIT`: Limit the number of elements in the catalog page. (default: `100000`).
-- `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default: `false`).
-- `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`.
-- `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **set custom headers** for your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
-- `NGINX_PROXY_PASS_HEADER_*`: Update the default Nginx configuration and **forward custom headers** to your backend docker registry. Only when `NGINX_PROXY_PASS_URL` is used.
-- `NGINX_LISTEN_PORT`: Listen on a port other than 80. (default: `80` when the user is root, `8080` otherwise).
-- `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false`. (default: ` `).
-- `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false`. (default: `false`).
-- `SHOW_CATALOG_NB_TAGS`: Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries. (default: `false`).
-- `HISTORY_CUSTOM_LABELS`: Expose custom labels in history page, custom labels will be processed like maintainer label.
-- `USE_CONTROL_CACHE_HEADER`: Use `Control-Cache` header and set to `no-store, no-cache`. This will avoid some issues on multi-arch images (see [#260](https://github.com/Joxit/docker-registry-ui/issues/260)). This option requires registry configuration: `Access-Control-Allow-Headers` with `Cache-Control`. (default: `false`).
-- `THEME`: Chose your default theme, could be `dark`, `light` or `auto`. (default: `auto`). Since 2.4.0
-- `THEME_*`: See table in [Theme options](#theme-options) section. Since 2.4.0
+- `SHOW_CONTENT_DIGEST`: Show/Hide content digest in docker tag list (see [#126](https://github.com/Joxit/docker-registry-ui/issues/126) and [#131](https://github.com/Joxit/docker-registry-ui/pull/131)). (default: `false`). Since 1.4.9
+- `CATALOG_ELEMENTS_LIMIT`: Limit the number of elements in the catalog page (see [#39](https://github.com/Joxit/docker-registry-ui/issues/39), [#127](https://github.com/Joxit/docker-registry-ui/pull/127) and [#132](https://github.com/Joxit/docker-registry-ui/pull/132)). (default: `100000`). Since 1.4.9
+- `SINGLE_REGISTRY`: Remove the menu that show the dialogs to add, remove and change the endpoint of your docker registry. (default: `false`). Since 2.0.0
+- `NGINX_PROXY_PASS_URL`: Update the default Nginx configuration and set the **proxy_pass** to your backend docker registry (this avoid CORS configuration). This is usually the name of your registry container in the form `http://registry:5000`. Since 2.0.0
+- `NGINX_PROXY_HEADER_*`: Update the default Nginx configuration and **set custom headers** for your backend docker registry via environment variable and file (`/etc/nginx/.env`). Only when `NGINX_PROXY_PASS_URL` is used (see [#89](https://github.com/Joxit/docker-registry-ui/pull/89)). Since 1.2.3
+- `NGINX_PROXY_PASS_HEADER_*`: Update the default Nginx configuration and **forward custom headers** to your backend docker registry via environment variable and file (`/etc/nginx/.env`). Only when `NGINX_PROXY_PASS_URL` is used (see [#206](https://github.com/Joxit/docker-registry-ui/issues/206)). Since 2.1.0
+- `NGINX_LISTEN_PORT`: Listen on a port other than 80, you can also change the default user and set to nginx `--user nginx` (see [#224](https://github.com/Joxit/docker-registry-ui/issues/224) and [#234](https://github.com/Joxit/docker-registry-ui/pull/234)). (default: `80` when the user is root, `8080` otherwise). Since 2.2.0
+- `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)). (default: ` `). Since 2.1.0
+- `READ_ONLY_REGISTRIES`: Desactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)). (default: `false`). Since 2.1.0
+- `SHOW_CATALOG_NB_TAGS`: Show number of tags per images on catalog page. This will produce + nb images requests, not recommended on large registries (see [#161](https://github.com/Joxit/docker-registry-ui/issues/161) and [#239](https://github.com/Joxit/docker-registry-ui/pull/239)). (default: `false`). Since 2.2.0
+- `HISTORY_CUSTOM_LABELS`: Expose custom labels in history page, custom labels will be processed like maintainer label (see [#160](https://github.com/Joxit/docker-registry-ui/issues/160) and [#240](https://github.com/Joxit/docker-registry-ui/pull/240)). Since 2.2.0
+- `USE_CONTROL_CACHE_HEADER`: Use `Control-Cache` header and set to `no-store, no-cache`. This will avoid some issues on multi-arch images (see [#260](https://github.com/Joxit/docker-registry-ui/issues/260) and [#265](https://github.com/Joxit/docker-registry-ui/pull/265)). This option requires registry configuration: `Access-Control-Allow-Headers` with `Cache-Control`. (default: `false`). Since 2.3.0
+- `THEME`: Chose your default theme, could be `dark`, `light` or `auto` (see [#283](https://github.com/Joxit/docker-registry-ui/pull/283)). When auto is selected, you will have a switch to manually change from light to dark and vice-versa (see [#291](https://github.com/Joxit/docker-registry-ui/pull/291)). (default: `auto`). Since 2.4.0
+- `THEME_*`: See table in [Theme options](#theme-options) section (see [#283](https://github.com/Joxit/docker-registry-ui/pull/283)). Since 2.4.0
 
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
 
@@ -157,9 +141,11 @@ http:
 
 An alternative for CORS issues is a plugin on your browser, more info [here](https://github.com/Joxit/docker-registry-ui/issues/25#issuecomment-621104846) (thank you [xmontero](https://github.com/xmontero)).
 
+:warning: If you are using credential and still having issues, please read the the line about preflight requests and the bug in docker registry server in the [FAQ](#faq) before posting any issues.
+
 ## Using delete
 
-For deleting images, you need to activate the delete feature in your registry:
+For deleting images, you need to activate the delete feature in the UI with `DELETE_IMAGES=true` and in your registry:
 
 ```yml
 storage:
@@ -176,8 +162,6 @@ http:
     Access-Control-Allow-Headers: ['Authorization', 'Accept', 'Cache-Control']
     Access-Control-Expose-Headers: ['Docker-Content-Digest']
 ```
-
-If you are running the **static interface** don't forget the environment variable `DELETE_IMAGES`.
 
 ## Registry example
 
@@ -212,8 +196,9 @@ auth:
 ```
 
 ## Standalone Application
+
 If you do not want to install the docker-registry-ui on your server, you may
-check out the [Electron](examples/electron/README.md) standalone application.
+check out the [Electron](examples/electron/README.md) standalone application (not updated).
 
 ## All examples
 

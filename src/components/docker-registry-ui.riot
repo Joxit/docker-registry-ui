@@ -101,7 +101,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <li>
           <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">License AGPL-3.0</a>
         </li>
-        <li if="{ props.theme === 'auto' }">
+        <li if="{ props.theme === 'auto' || props.theme === '' }">
           <material-switch
             on-change="{ onThemeChange }"
             checked="{ state.themeSwitch }"

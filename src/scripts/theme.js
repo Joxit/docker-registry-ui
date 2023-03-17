@@ -34,7 +34,7 @@ const normalizeKey = (k) =>
     .replace(/^theme-/, '');
 
 const preferDarkMode = ({ theme }) => {
-  if (theme === 'auto') {
+  if (theme === 'auto' || theme === "") {
     switch (localStorage.getItem(LOCAL_STORAGE_THEME)) {
       case 'dark':
         return true;

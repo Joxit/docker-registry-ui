@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2016-2018 Jones Magloire @Joxit
+ Copyright (C) 2016-2023 Jones Magloire @Joxit
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -16,55 +16,72 @@
 -->
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../dist/docker-registry-ui.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui"
+    />
+    <meta
+      property="og:description"
+      content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui"
+    />
+    <link rel="canonical" href="https://joxit.dev/docker-registry-ui/demo/" />
+    <meta property="og:url" content="https://joxit.dev/docker-registry-ui/demo/" />
+    <meta property="og:site_name" content="Live Demo | Docker Registry User Interface" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@Joxit" />
+    <meta name="twitter:creator" content="@Jones Magloire" />
+    <title>Live Demo | Docker Registry User Interface</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="../dist/docker-registry-ui.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:locale" content="en_US" />
-  <meta name="description"
-    content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui" />
-  <meta property="og:description"
-    content="This is the live demo for Docker Registry User Interface. Try it now! Sources : https://github.com/Joxit/docker-registry-ui" />
-  <link rel="canonical" href="https://joxit.dev/docker-registry-ui/demo/" />
-  <meta property="og:url" content="https://joxit.dev/docker-registry-ui/demo/" />
-  <meta property="og:site_name" content="Live Demo | Docker Registry User Interface" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="@Joxit" />
-  <meta name="twitter:creator" content="@Jones Magloire" />
-  <title>Live Demo | Docker Registry User Interface</title>
-</head>
-
-<body>
-  <docker-registry-ui registry-url="" name="Demo Docker Registry UI" pull-url="" show-content-digest="true"
-    is-image-remove-activated="true" catalog-elements-limit="1000" single-registry="false" default-registries="https://joxit.dev/docker-registry-demo">
+  <body>
+    <docker-registry-ui
+      registry-url=""
+      name="Demo Docker Registry UI"
+      pull-url=""
+      show-content-digest="true"
+      is-image-remove-activated="true"
+      catalog-elements-limit="1000"
+      single-registry="false"
+      default-registries="https://joxit.dev/docker-registry-demo"
+      show-catalog-nb-tags="true"
+      theme="auto"
+    />
     <script>
       if (localStorage.getItem('registryServer')) {
-        localStorage.setItem('registryServer',
-          localStorage.getItem('registryServer').replace(
-            'https://raw.githubusercontent.com/Joxit/docker-registry-ui/master/demo',
-            'https://joxit.dev/docker-registry-demo'
-          )
-        )
+        localStorage.setItem(
+          'registryServer',
+          localStorage
+            .getItem('registryServer')
+            .replace(
+              'https://raw.githubusercontent.com/Joxit/docker-registry-ui/master/demo',
+              'https://joxit.dev/docker-registry-demo'
+            )
+        );
       }
     </script>
     <script src="../dist/docker-registry-ui.js"></script>
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r;
-      i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date();
-      a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0];
-      a.async = 1;
-      a.src = g;
-      m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'G-T158HYBVZ2', 'auto');
-    ga('send', 'pageview');
-  </script>
-</body>
-
+      ga('create', 'G-T158HYBVZ2', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
 </html>

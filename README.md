@@ -1,4 +1,4 @@
-# Docker Registry UI
+# Docker Registry User Interface
 
 [![Stars](https://img.shields.io/github/stars/joxit/docker-registry-ui.svg?logo=github&maxAge=86400)](https://github.com/Joxit/docker-registry-ui/stargazers)
 [![Pulls](https://img.shields.io/docker/pulls/joxit/docker-registry-ui.svg?maxAge=86400)](https://hub.docker.com/r/joxit/docker-registry-ui)
@@ -13,11 +13,11 @@ You may need the [migration guide from 1.x to 2.x](https://github.com/Joxit/dock
 
 This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
 
+If you like my work and want to support it, don't hesitate to [sponsor me](https://github.com/sponsors/Joxit).
+
 ## [Project Page](https://joxit.dev/docker-registry-ui), [Live Demo](https://joxit.dev/docker-registry-ui/demo/), [Examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples), [Helm Chart](https://helm.joxit.dev/)
 
 ![preview](https://raw.github.com/Joxit/docker-registry-ui/main/docker-registry-ui.gif "Preview of Docker Registry UI")
-
-If you like my work and want to support it, don't hesitate to [sponsor me](https://github.com/sponsors/Joxit).
 
 ## Hidden Features
 

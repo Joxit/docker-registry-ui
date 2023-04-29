@@ -390,6 +390,12 @@ taglist .creation-date {
   width: 10em;
 }
 
+material-card td.creation-date,
+material-card th.creation-date {
+  text-align: left;
+  max-width: 10em;
+}
+
 taglist .image-size {
   width: 7em;
 }

@@ -20,7 +20,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     class="content"
     if="{!props.filterResults || state.nImages > 0 || matchSearch(props.filterResults, state.image)}"
   >
-    <material-card class="list highlight" expanded="{state.expanded}" onclick="{ onClick }">
+    <material-card
+      class="list highlight"
+      expanded="{state.expanded}"
+      onclick="{ onClick }"
+      if="{ !props.showCatalogNbTags || state.nbTags !== 0 }"
+    >
       <a if="{ state.image }" href="{ router.taglist(state.image) }">
         <material-waves center="true" color="#ddd"></material-waves>
       </a>

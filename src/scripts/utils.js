@@ -220,3 +220,22 @@ export function truthy(value) {
 export function stringToArray(value) {
   return value && typeof value === 'string' ? value.split(',') : [];
 }
+
+export const taglistOrderVariants = (taglistOrder) => {
+  switch (taglistOrder) {
+    case 'desc':
+    case 'alpha-desc':
+      return 'alpha-desc;num-desc';
+    case 'asc':
+    case 'num-asc':
+      return 'num-asc;alpha-asc';
+    default:
+      if (!taglistOrder) {
+        return 'num-asc;alpha-asc';
+      } else if (taglistOrder.indexOf(';') === -1) {
+        return taglistOrder.startsWith('num-') ? `${taglistOrder};alpha-asc` : `${taglistOrder};num-asc`;
+      } else {
+        return taglistOrder;
+      }
+  }
+};

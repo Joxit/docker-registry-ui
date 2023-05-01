@@ -1,3 +1,4 @@
+import { DockerRegistryUIError } from './error.js';
 const LOCAL_STORAGE_KEY = 'registryServer';
 
 export function bytesToSize(bytes) {
@@ -221,21 +222,25 @@ export function stringToArray(value) {
   return value && typeof value === 'string' ? value.split(',') : [];
 }
 
+const TAGLIST_ORDER_REGEX = /(alpha-(asc|desc);num-(asc|desc))|(num-(asc|desc);alpha-(asc|desc))/;
+
 export const taglistOrderVariants = (taglistOrder) => {
   switch (taglistOrder) {
     case 'desc':
-    case 'alpha-desc':
       return 'alpha-desc;num-desc';
     case 'asc':
-    case 'num-asc':
       return 'num-asc;alpha-asc';
+    case 'alpha-desc':
+    case 'alpha-asc':
+    case 'num-desc':
+    case 'num-asc':
+      return `${taglistOrder};${taglistOrder.startsWith('num') ? 'alpha' : 'num'}-asc`;
     default:
       if (!taglistOrder) {
         return 'num-asc;alpha-asc';
-      } else if (taglistOrder.indexOf(';') === -1) {
-        return taglistOrder.startsWith('num-') ? `${taglistOrder};alpha-asc` : `${taglistOrder};num-asc`;
-      } else {
+      } else if (TAGLIST_ORDER_REGEX.test(taglistOrder)) {
         return taglistOrder;
       }
+      throw new DockerRegistryUIError(`The order \`${taglistOrder}\` is not recognized.`);
   }
 };

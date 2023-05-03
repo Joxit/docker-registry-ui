@@ -67,6 +67,8 @@ export class Http {
               }
               if (bearer && bearer.token) {
                 req.setRequestHeader('Authorization', `Bearer ${bearer.token}`);
+              } else if (bearer && bearer.access_token) {
+                req.setRequestHeader('Authorization', `Bearer ${bearer.access_token}`);
               } else {
                 req.withCredentials = true;
               }

@@ -5,8 +5,8 @@ services:
     image: registry:2.7
     restart: always
     volumes:
-      - storage:/var/lib/registry
-      - ./htpasswd:/etc/docker/registry/htpasswd
+      - storage:/var/lib/registry:rw
+      - ./conf/registry/htpasswd:/etc/docker/registry/htpasswd:ro
     ports:
       - 5000:5000
     environment:

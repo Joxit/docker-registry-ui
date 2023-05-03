@@ -11,7 +11,7 @@ services:
       REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin: "['*']"
       REGISTRY_STORAGE_DELETE_ENABLED: 'true'
     volumes:
-      - ./data:/var/lib/registry
+      - ./data/registry:/var/lib/registry:rw
 
   registry_2:
     image: registry:latest
@@ -23,7 +23,7 @@ services:
       REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin: "['*']"
       REGISTRY_STORAGE_DELETE_ENABLED: 'true'
     volumes:
-      - ./data:/var/lib/registry
+      - ./data/registry:/var/lib/registry:rw
 
   ui:
     image: joxit/docker-registry-ui:latest

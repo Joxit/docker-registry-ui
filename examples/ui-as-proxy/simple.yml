@@ -3,7 +3,7 @@ services:
   registry:
     image: registry:2.7
     volumes:
-      - ./registry-data:/var/lib/registry
+      - ./data/registry:/var/lib/registry:rw
     networks:
       - registry-ui-net
 

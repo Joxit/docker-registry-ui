@@ -5,8 +5,8 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - ./registry-data:/var/lib/registry
-      - ./registry-config/simple.yml:/etc/docker/registry/config.yml
+      - ./data/registry:/var/lib/registry:rw
+      - ./conf/registry/simple.yml:/etc/docker/registry/config.yml:ro
 
   ui:
     image: joxit/docker-registry-ui:latest

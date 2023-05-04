@@ -244,3 +244,21 @@ export const taglistOrderVariants = (taglistOrder) => {
       throw new DockerRegistryUIError(`The order \`${taglistOrder}\` is not recognized.`);
   }
 };
+
+export function talgistOrderParser(taglistOrder) {
+  const orders = taglistOrderVariants(taglistOrder)
+    .split(';')
+    .filter((e) => e)
+    .map((e) => e.split('-').filter((e) => e))
+    .reduce((acc, e, idx) => {
+      if (e.length > 1) {
+        acc[e[0] + 'Asc'] = e[1] === 'asc';
+      }
+      if (idx === 0) {
+        acc.numFirst = e[0] === 'num';
+      }
+      return acc;
+    }, {});
+
+  return orders;
+}

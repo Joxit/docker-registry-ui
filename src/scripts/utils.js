@@ -245,7 +245,7 @@ export const taglistOrderVariants = (taglistOrder) => {
   }
 };
 
-export function talgistOrderParser(taglistOrder) {
+export const taglistOrderParser = (taglistOrder) => {
   const orders = taglistOrderVariants(taglistOrder)
     .split(';')
     .filter((e) => e)
@@ -261,4 +261,4 @@ export function talgistOrderParser(taglistOrder) {
     }, {});
 
   return orders;
-}
+};

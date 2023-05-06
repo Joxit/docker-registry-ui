@@ -1,4 +1,4 @@
-import { taglistOrderVariants, talgistOrderParser } from '../src/scripts/utils.js';
+import { taglistOrderVariants, taglistOrderParser } from '../src/scripts/utils.js';
 import { DockerRegistryUIError } from '../src/scripts/error.js';
 import assert from 'assert';
 
@@ -36,35 +36,35 @@ describe('utils tests', () => {
     });
   });
 
-  describe('talgistOrderParser', () => {
+  describe('taglistOrderParser', () => {
     it('should have default configuration when empty or undefined', () => {
       const expected = { numAsc: true, alphaAsc: true, numFirst: true };
-      assert.deepEqual(talgistOrderParser(), expected);
-      assert.deepEqual(talgistOrderParser(''), expected);
+      assert.deepEqual(taglistOrderParser(), expected);
+      assert.deepEqual(taglistOrderParser(''), expected);
     });
 
     it('should parse correctly `num-asc;alpha-asc` and variants', () => {
       const expected = { numAsc: true, alphaAsc: true, numFirst: true };
       ['asc', 'num-asc;alpha-asc', 'num-asc'].forEach((e) =>
-        assert.deepEqual(talgistOrderParser(e), expected, `wrong result for ${e}`)
+        assert.deepEqual(taglistOrderParser(e), expected, `wrong result for ${e}`)
       );
     });
 
     it('should parse correctly `alpha-desc;num-desc` and variants', () => {
       const expected = { numAsc: false, alphaAsc: false, numFirst: false };
       ['desc', 'alpha-desc;num-desc'].forEach((e) =>
-        assert.deepEqual(talgistOrderParser(e), expected, `wrong result for ${e}`)
+        assert.deepEqual(taglistOrderParser(e), expected, `wrong result for ${e}`)
       );
     });
 
     it('should parse correctly `alpha-asc;num-desc` and variants', () => {
       const expected = { numAsc: false, alphaAsc: true, numFirst: false };
-      assert.deepEqual(talgistOrderParser('alpha-asc;num-desc'), expected)
+      assert.deepEqual(taglistOrderParser('alpha-asc;num-desc'), expected)
     });
 
     it('should parse correctly `num-desc;alpha-desc` and variants', () => {
       const expected = { numAsc: false, alphaAsc: false, numFirst: true };
-      assert.deepEqual(talgistOrderParser('num-desc;alpha-desc'), expected)
+      assert.deepEqual(taglistOrderParser('num-desc;alpha-desc'), expected)
     });
   });
 });

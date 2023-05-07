@@ -192,6 +192,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               this.notifySnackbar(`Failed to log in: ${e.message}`, true);
             }
           });
+          req.withCredentials = true;
           req.open('GET', `${realm}?service=${service}&scope=${scope}`);
           req.send();
         } else {

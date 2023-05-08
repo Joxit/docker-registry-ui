@@ -32,8 +32,23 @@ I will highlight required configuration for Basic Access Authentication Protocol
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header Host               $host;
     proxy_set_header X-Forwarded-Host   $host;
+
+    if ($request_method = "OPTIONS") {
+      add_header Access-Control-Allow-Origin $http_origin always;
+      add_header Access-Control-Allow-Methods "OPTIONS, GET" always;
+      add_header Access-Control-Allow-Headers "Content-Type, Accept, Authorization" always;
+      add_header Access-Control-Allow-Credentials true always;
+      add_header Content-Type "text/plain charset=UTF-8";
+      add_header Content-Length 0;
+      return 204;
+    }
+
     # By default, keycloak returns 400 instead of 401, we need to change that
     if ($http_authorization = "") {
+      add_header Access-Control-Allow-Origin $http_origin always;
+      add_header Access-Control-Allow-Methods "OPTIONS, GET" always;
+      add_header Access-Control-Allow-Headers "Content-Type, Accept, Authorization" always;
+      add_header Access-Control-Allow-Credentials true always;
       add_header WWW-Authenticate 'Basic realm="Keycloak login"' always;
       return 401;
     }

@@ -1,4 +1,4 @@
-import { taglistOrderVariants, taglistOrderParser } from '../src/scripts/utils.js';
+import { taglistOrderVariants, taglistOrderParser, splitTagToArray } from '../src/scripts/taglist-order.js';
 import { DockerRegistryUIError } from '../src/scripts/error.js';
 import assert from 'assert';
 
@@ -59,12 +59,29 @@ describe('utils tests', () => {
 
     it('should parse correctly `alpha-asc;num-desc` and variants', () => {
       const expected = { numAsc: false, alphaAsc: true, numFirst: false };
-      assert.deepEqual(taglistOrderParser('alpha-asc;num-desc'), expected)
+      assert.deepEqual(taglistOrderParser('alpha-asc;num-desc'), expected);
     });
 
     it('should parse correctly `num-desc;alpha-desc` and variants', () => {
       const expected = { numAsc: false, alphaAsc: false, numFirst: true };
-      assert.deepEqual(taglistOrderParser('num-desc;alpha-desc'), expected)
+      assert.deepEqual(taglistOrderParser('num-desc;alpha-desc'), expected);
+    });
+  });
+
+  describe('splitTagToArray', () => {
+    it('should reduce tags with numbers', () => {
+      assert.deepEqual(splitTagToArray('0.2.4'), [0, '.', 2, '.', 4]);
+      assert.deepEqual(splitTagToArray('1.2.3-SNAPSHOT'), [1, '.', 2, '.', 3, '-SNAPSHOT']);
+      assert.deepEqual(splitTagToArray('alpine-3.2'), ['alpine-', 3, '.', 2]);
+      assert.deepEqual(splitTagToArray('10.30.00'), [10, '.', 30, '.', 0]);
+      assert.deepEqual(splitTagToArray('010.30.00'), [10, '.', 30, '.', 0]);
+      assert.deepEqual(splitTagToArray('z010.30.00'), ['z', 10, '.', 30, '.', 0]);
+    });
+
+    it('should reduce tags without numbers', () => {
+      assert.deepEqual(splitTagToArray('main'), ['main']);
+      assert.deepEqual(splitTagToArray('master'), ['master']);
+      assert.deepEqual(splitTagToArray('alpine-lts'), ['alpine-lts']);
     });
   });
 });

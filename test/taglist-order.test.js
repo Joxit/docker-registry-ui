@@ -1,4 +1,5 @@
 import { taglistOrderVariants, taglistOrderParser, splitTagToArray } from '../src/scripts/taglist-order.js';
+import { getTagComparator } from '../src/scripts/taglist-order.js';
 import { DockerRegistryUIError } from '../src/scripts/error.js';
 import assert from 'assert';
 
@@ -82,6 +83,40 @@ describe('utils tests', () => {
       assert.deepEqual(splitTagToArray('main'), ['main']);
       assert.deepEqual(splitTagToArray('master'), ['master']);
       assert.deepEqual(splitTagToArray('alpine-lts'), ['alpine-lts']);
+    });
+  });
+
+  describe('getTagComparator', () => {
+    it('should sort tags with `num-asc;alpha-asc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('num-asc;alpha-asc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['0.2.4', '0.2.5', '1.2.5']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['0.2.4', 'latest', 'main']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['1.0.0', '1.0.0-SNAPSHOT', 'latest']);
+    });
+
+    it('should sort tags with `num-desc;alpha-asc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('num-desc;alpha-asc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['1.2.5', '0.2.5', '0.2.4']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['0.2.4', 'latest', 'main']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['1.0.0', '1.0.0-SNAPSHOT', 'latest']);
+    });
+
+    it('should sort tags with `num-asc;alpha-desc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('num-asc;alpha-desc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['0.2.4', '0.2.5', '1.2.5']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['0.2.4', 'main', 'latest']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['1.0.0', '1.0.0-SNAPSHOT', 'latest']);
+    });
+
+    it('should sort tags with `num-desc;alpha-desc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('num-desc;alpha-desc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['1.2.5', '0.2.5', '0.2.4']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['0.2.4', 'main', 'latest']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['1.0.0', '1.0.0-SNAPSHOT', 'latest']);
     });
   });
 });

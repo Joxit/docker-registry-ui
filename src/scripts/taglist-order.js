@@ -61,16 +61,15 @@ const applyOrder = (order, e1, e2) => {
   if (e1 === e2) {
     return 0;
   }
-  if (order.numFirst) {
-    if (typeof e1 === 'number') {
-      const factor = order.numAsc ? 1 : -1;
-      return typeof e2 === 'number' ? (e1 - e2) * factor : -1;
-    } else if (typeof e2 === 'number') {
-      return 1;
-    } else {
-      const factor = order.alphaAsc ? 1 : -1;
-      return e1.localeCompare(e2) * factor
-    }
+  const numFirst = order.numFirst ? 1 : -1;
+  if (typeof e1 === 'number') {
+    const factor = order.numAsc ? 1 : -1;
+    return typeof e2 === 'number' ? (e1 - e2) * factor : -1 * numFirst;
+  } else if (typeof e2 === 'number') {
+    return 1 * numFirst;
+  } else {
+    const factor = order.alphaAsc ? 1 : -1;
+    return e1.localeCompare(e2) * factor;
   }
 };
 

@@ -118,5 +118,41 @@ describe('utils tests', () => {
       assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['0.2.4', 'main', 'latest']);
       assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['1.0.0', '1.0.0-SNAPSHOT', 'latest']);
     });
+
+    it('should sort tags with `alpha-asc;num-asc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('alpha-asc;num-asc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['0.2.4', '0.2.5', '1.2.5']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['latest', 'main', '0.2.4']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['latest', '1.0.0', '1.0.0-SNAPSHOT']);
+      assert.deepEqual(['latest', 'main', 'edge'].sort(comparator), ['edge', 'latest', 'main']);
+    });
+
+    it('should sort tags with `alpha-asc;num-desc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('alpha-asc;num-desc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['1.2.5', '0.2.5', '0.2.4']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['latest', 'main', '0.2.4']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['latest', '1.0.0', '1.0.0-SNAPSHOT']);
+      assert.deepEqual(['latest', 'main', 'edge'].sort(comparator), ['edge', 'latest', 'main']);
+    });
+
+    it('should sort tags with `alpha-desc;num-asc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('alpha-desc;num-asc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['0.2.4', '0.2.5', '1.2.5']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['main', 'latest', '0.2.4']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['latest', '1.0.0', '1.0.0-SNAPSHOT']);
+      assert.deepEqual(['latest', 'main', 'edge'].sort(comparator), ['main', 'latest', 'edge']);
+    });
+
+    it('should sort tags with `alpha-desc;num-desc`', () => {
+      const comparator = getTagComparator(taglistOrderParser('alpha-desc;num-desc'));
+
+      assert.deepEqual(['0.2.4', '1.2.5', '0.2.5'].sort(comparator), ['1.2.5', '0.2.5', '0.2.4']);
+      assert.deepEqual(['latest', '0.2.4', 'main'].sort(comparator), ['main', 'latest', '0.2.4']);
+      assert.deepEqual(['latest', '1.0.0-SNAPSHOT', '1.0.0'].sort(comparator), ['latest', '1.0.0', '1.0.0-SNAPSHOT']);
+      assert.deepEqual(['latest', 'main', 'edge'].sort(comparator), ['main', 'latest', 'edge']);
+    });
   });
 });

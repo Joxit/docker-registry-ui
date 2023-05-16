@@ -15,9 +15,14 @@ describe('utils tests', () => {
       expected.forEach((e) => assert.deepEqual(taglistOrderVariants(e), e));
     });
 
+    it('should return correct default order', () => {
+      const expected = 'alpha-asc;num-desc';
+      [undefined, ''].forEach((e) => assert.deepEqual(taglistOrderVariants(e), expected));
+    });
+
     it('should return correct variant of `num-asc;alpha-asc`', () => {
       const expected = 'num-asc;alpha-asc';
-      [undefined, '', 'asc', 'num-asc'].forEach((e) => assert.deepEqual(taglistOrderVariants(e), expected));
+      ['asc', 'num-asc'].forEach((e) => assert.deepEqual(taglistOrderVariants(e), expected));
     });
 
     it('should return correct variant of `alpha-desc;num-desc`', () => {
@@ -39,7 +44,7 @@ describe('utils tests', () => {
 
   describe('taglistOrderParser', () => {
     it('should have default configuration when empty or undefined', () => {
-      const expected = { numAsc: true, alphaAsc: true, numFirst: true };
+      const expected = { numAsc: false, alphaAsc: true, numFirst: false };
       assert.deepEqual(taglistOrderParser(), expected);
       assert.deepEqual(taglistOrderParser(''), expected);
     });

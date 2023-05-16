@@ -16,7 +16,7 @@ export const taglistOrderVariants = (taglistOrder) => {
       return `${taglistOrder};${taglistOrder.startsWith('num') ? 'alpha' : 'num'}-asc`;
     default:
       if (!taglistOrder) {
-        return 'num-asc;alpha-asc';
+        return 'alpha-asc;num-desc';
       } else if (TAGLIST_ORDER_REGEX.test(taglistOrder)) {
         return taglistOrder;
       }

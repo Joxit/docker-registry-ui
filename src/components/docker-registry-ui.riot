@@ -55,7 +55,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           filter-results="{ state.filter }"
           on-authentication="{ onAuthentication }"
           use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
-          taglist-order="{ taglistOrderParser(props.taglistOrder) }"
+          taglist-order="{ props.taglistOrder }"
         ></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
@@ -130,7 +130,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { stripHttps, getRegistryServers, setRegistryServers, truthy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
-    import { taglistOrderParser } from '../scripts/taglist-order';
 
     export default {
       components: {
@@ -243,7 +242,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       version,
       truthy,
       stringToArray,
-      taglistOrderParser,
     };
   </script>
   <style>

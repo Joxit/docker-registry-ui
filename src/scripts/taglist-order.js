@@ -20,7 +20,7 @@ export const taglistOrderVariants = (taglistOrder) => {
       } else if (TAGLIST_ORDER_REGEX.test(taglistOrder)) {
         return taglistOrder;
       }
-      throw new DockerRegistryUIError(`The order \`${taglistOrder}\` is not recognized.`);
+      throw new DockerRegistryUIError(`The taglist order \`${taglistOrder}\` is not recognized.`);
   }
 };
 

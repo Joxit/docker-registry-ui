@@ -66,7 +66,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import Pagination from './pagination.riot';
     import TagTable from './tag-table.riot';
     import router from '../../scripts/router';
-    import { getTagComparator } from '../../scripts/taglist-order';
+    import { getTagComparator, taglistOrderParser } from '../../scripts/taglist-order';
 
     export default {
       components: {
@@ -81,6 +81,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           asc: true,
           page: router.getPageQueryParam() || 1,
         };
+        try {
+          this.state.taglistOrder = taglistOrderParser(props.taglistOrder)
+        } catch(e) {
+          props.onNotify(e);
+        }
       },
       onMounted(props, state) {
         this.display(props, state);

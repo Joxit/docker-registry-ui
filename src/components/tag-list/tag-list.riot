@@ -61,11 +61,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <script>
     import { Http } from '../../scripts/http';
-    import { DockerImage, compare } from '../../scripts/docker-image';
+    import { DockerImage } from '../../scripts/docker-image';
     import { getNumPages, getPageLabels } from '../../scripts/utils';
     import Pagination from './pagination.riot';
     import TagTable from './tag-table.riot';
     import router from '../../scripts/router';
+    import { getTagComparator, taglistOrderParser } from '../../scripts/taglist-order';
+
     export default {
       components: {
         Pagination,
@@ -79,6 +81,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           asc: true,
           page: router.getPageQueryParam() || 1,
         };
+        try {
+          this.state.taglistOrder = taglistOrderParser(props.taglistOrder)
+        } catch(e) {
+          props.onNotify(e);
+        }
       },
       onMounted(props, state) {
         this.display(props, state);
@@ -86,6 +93,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         // this may be run before the final document size is available, so schedule
         //  a correction once everything is set up.
         window.requestAnimationFrame(this.onResize);
+        this.tagComparator = getTagComparator(props.taglistOrder);
       },
       display(props, state) {
         state.tags = [];
@@ -106,7 +114,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     useControlCacheHeader: props.useControlCacheHeader,
                   })
               )
-              .sort(compare);
+              .sort(self.tagComparator);
             window.requestAnimationFrame(self.onResize);
             self.update({
               page: Math.min(state.page, getNumPages(tags)),
@@ -168,7 +176,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           this.state.tags.reverse();
           this.state.asc = false;
         } else {
-          this.state.tags.sort(compare);
+          this.state.tags.sort(this.tagComparator);
           this.state.asc = true;
         }
         this.update();

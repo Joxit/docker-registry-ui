@@ -18,33 +18,6 @@ import { Http } from './http';
 import { isDigit, eventTransfer, ERROR_CAN_NOT_READ_CONTENT_DIGEST } from './utils';
 import observable from '@riotjs/observable';
 
-const tagReduce = (acc, e) => {
-  if (acc.length > 0 && isDigit(acc[acc.length - 1].charAt(0)) == isDigit(e)) {
-    acc[acc.length - 1] += e;
-  } else {
-    acc.push(e);
-  }
-  return acc;
-};
-
-export function compare(e1, e2) {
-  const tag1 = e1.tag.match(/./g).reduce(tagReduce, []);
-  const tag2 = e2.tag.match(/./g).reduce(tagReduce, []);
-
-  for (var i = 0; i < tag1.length && i < tag2.length; i++) {
-    const compare = tag1[i].localeCompare(tag2[i]);
-    if (isDigit(tag1[i].charAt(0)) && isDigit(tag2[i].charAt(0))) {
-      const diff = tag1[i] - tag2[i];
-      if (diff != 0) {
-        return diff;
-      }
-    } else if (compare != 0) {
-      return compare;
-    }
-  }
-  return e1.tag.length - e2.tag.length;
-}
-
 export class DockerImage {
   constructor(name, tag, { list, registryUrl, onNotify, onAuthentication, useControlCacheHeader }) {
     this.name = name;

@@ -9,7 +9,8 @@
     "format-riot": "find src rollup rollup.config.js -name '*.riot' -exec prettier --config .prettierrc -w --parser html {} \\;",
     "start": "rollup -c -w --environment ROLLUP_SERVE:true",
     "build": "rollup -c",
-    "build:electron": "npm run build && cd examples/electron && npm install && npm run dist"
+    "build:electron": "npm run build && cd examples/electron && npm install && npm run dist",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.2.1",
     "core-js": "^3.27.1",
+    "mocha": "^10.2.0",
     "node-sass": "^8.0.0",
     "prettier": "^2.8.1",
     "riot": "^7.1.0",

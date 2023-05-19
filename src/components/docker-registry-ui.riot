@@ -55,6 +55,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           filter-results="{ state.filter }"
           on-authentication="{ onAuthentication }"
           use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
+          taglist-order="{ props.taglistOrder }"
         ></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">

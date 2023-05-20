@@ -14,9 +14,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import { Http } from './http';
-import { isDigit, eventTransfer, ERROR_CAN_NOT_READ_CONTENT_DIGEST } from './utils';
+import { Http } from './http.js';
+import { eventTransfer, ERROR_CAN_NOT_READ_CONTENT_DIGEST } from './utils.js';
 import observable from '@riotjs/observable';
+
+export const supportListManifest = (response) => {
+  if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json') {
+    return true;
+  }
+  if (response.mediaType === 'application/vnd.oci.image.index.v1+json' && Array.isArray(response.manifests)) {
+    return !response.manifests.some(({ mediaType }) => mediaType !== 'application/vnd.oci.image.manifest.v1+json');
+  }
+  return false;
+};
+
+export const filterWrongManifests = (response) => {
+  return response.manifests.filter(
+    ({ annotations }) => !annotations || annotations['vnd.docker.reference.type'] !== 'attestation-manifest'
+  );
+};
 
 export class DockerImage {
   constructor(name, tag, { list, registryUrl, onNotify, onAuthentication, useControlCacheHeader }) {
@@ -73,8 +89,8 @@ export class DockerImage {
     oReq.addEventListener('loadend', function () {
       if (this.status === 200 || this.status === 202) {
         const response = JSON.parse(this.responseText);
-        if (response.mediaType === 'application/vnd.docker.distribution.manifest.list.v2+json' && self.opts.list) {
-          self.trigger('list', response);
+        if (supportListManifest(response) && self.opts.list) {
+          self.trigger('list', filterWrongManifests(response));
           const manifest = response.manifests[0];
           const image = new DockerImage(self.name, manifest.digest, { ...self.opts, list: false });
           eventTransfer(image, self);

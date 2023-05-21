@@ -41,6 +41,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           filter-results="{ state.filter }"
           on-authentication="{ onAuthentication }"
           show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"
+          catalog-default-expanded="{ truthy(props.catalogDefaultExpanded) }"
         ></catalog>
       </route>
       <route path="{baseRoute}taglist/(.*)">

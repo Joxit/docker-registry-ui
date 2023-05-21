@@ -82,8 +82,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           page: router.getPageQueryParam() || 1,
         };
         try {
-          this.state.taglistOrder = taglistOrderParser(props.taglistOrder)
-        } catch(e) {
+          this.state.taglistOrder = taglistOrderParser(props.taglistOrder);
+        } catch (e) {
           props.onNotify(e);
         }
       },

@@ -34,6 +34,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     on-notify="{ props.onNotify }"
     on-authentication="{ props.onAuthentication }"
     show-catalog-nb-tags="{ props.showCatalogNbTags }"
+    catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
   ></catalog-element>
   <script>
     import CatalogElement from './catalog-element.riot';

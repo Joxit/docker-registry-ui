@@ -70,6 +70,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           state.images = props.item.images;
           state.repo = props.item.repo;
           state.nImages = props.item.images.length;
+          state.expanded = props.catalogDefaultExpanded;
         }
         if (props.showCatalogNbTags && state.image) {
           this.getNbTags(props, state);

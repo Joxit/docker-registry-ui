@@ -83,10 +83,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       opened="{ state.authenticationDialogOpened }"
     ></registry-authentication>
     <error-page
-      if="{ state.pageError }"
+      if="{ state.pageError && !Array.isArray(state.pageError.errors) }"
       code="{ state.pageError.code }"
       status="{ state.pageError.status }"
       message="{ state.pageError.message }"
+      url="{ state.pageError.url }"
+    ></error-page>
+    <error-page
+      if="{ state.pageError && Array.isArray(state.pageError.errors) }"
+      each="{ error in (state.pageError && state.pageError.errors) }"
+      code="{ error.code }"
+      detail="{ error.detail }"
+      message="{ error.message }"
       url="{ state.pageError.url }"
     ></error-page>
     <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
@@ -168,7 +176,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           window.location.origin + window.location.pathname.replace(/\/+$/, '');
         this.state.registryUrl = registryUrl.replace(/\/$/, '').replace(/index(\.html?)?$/, '');
         this.state.name = props.name || stripHttps(props.registryUrl);
-        this.state.catalogElementsLimit = props.catalogElementsLimit || 100000;
+        this.state.catalogElementsLimit = props.catalogElementsLimit || 1000;
         this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
         this.state.useControlCacheHeader = props.useControlCacheHeader;
         const theme = loadTheme(props, this.root.parentNode.style);
@@ -211,12 +219,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         return stripHttps(url);
       },
       notifySnackbar(message, isError) {
+        console.log(message);
         if (typeof message === 'string') {
           this.update({
             snackbarMessage: message,
             snackbarIsError: isError || false,
           });
-        } else if (message && message.code) {
+        } else if (message && (message.code || message.errors)) {
           this.update({
             pageError: message,
           });

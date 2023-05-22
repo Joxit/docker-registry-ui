@@ -29,6 +29,38 @@
     <template if="{ props.code === 'INCORRECT_URL' }">
       <p>`{ props.url }` does not seems to be a correct URL, should starts with http:// or https://.</p>
     </template>
+    <template if="{ props.code === 'PAGINATION_NUMBER_INVALID' }">
+      <p>
+        A default limit of <code>1000</code> images in catalog has been added in docker registry server
+        <a href="https://github.com/distribution/distribution/releases/tag/v2.8.2">v2.8.2</a> (May 11, 2023) and we
+        cannot exceed this value without configuration.
+      </p>
+      <p>
+        The new default value for the UI is <code>1000</code> since
+        <a href="https://github.com/Joxit/docker-registry-ui/milestone/6">2.5.0</a> and was <code>100000</code> from
+        <a href="https://github.com/Joxit/docker-registry-ui/issues/39">0.3.6</a>.
+      </p>
+      <h3>Possible fixes</h3>
+      <p>
+        You can update the environment variable
+        <code>REGISTRY_CATALOG_MAXENTRIES={ props.detail?.n || 100000 }</code> of your
+        <span>docker registry server</span> or you can update your
+        <code>/etc/docker/registry/config.yml</code> configuration of your <span>docker registry server</span> and add
+        those lines:
+      </p>
+      <pre>
+<span class="keyword">catalog</span>:
+  <span class="keyword">maxentries</span>: <span>{props.detail?.n || 100000}</span>
+</pre>
+      <p>
+        If you don't need that many images, you can reduce the number of elements fetch by the
+        <span>docker registry UI</span> with the environment variable <code>CATALOG_ELEMENTS_LIMIT=1000</code>.
+      </p>
+      <p>
+        More about this issue:
+        <a href="https://github.com/Joxit/docker-registry-ui/issues/306">Joxit/docker-registry-ui#306</a>.
+      </p>
+    </template>
   </div>
   <script>
     export default {
@@ -37,6 +69,8 @@
         switch (props.code) {
           case 'CATALOG_NOT_FOUND':
             return '404';
+          case 'PAGINATION_NUMBER_INVALID':
+            return '400';
         }
       },
       URL: window.URL,
@@ -46,7 +80,7 @@
     :host {
       display: flex;
       flex-direction: row;
-      margin-top: 20px;
+      margin: 20px 3em;
     }
     :host .content {
       margin: auto;
@@ -64,6 +98,22 @@
     }
     :host .content h2 {
       font-weight: 700;
+    }
+    :host pre,
+    code {
+      background-color: var(--hover-background);
+      font-family: 'Roboto Mono', monospace !important;
+      text-align: left;
+      border-radius: 5px;
+    }
+    code {
+      padding: 0 0.5em;
+    }
+    :host pre {
+      padding: 0.5em;
+    }
+    :host pre .keyword {
+      color: var(--accent-text);
     }
   </style>
 </error-page>

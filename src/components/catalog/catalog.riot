@@ -96,6 +96,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             }, []);
           } else if (this.status === 404) {
             self.props.onNotify({ code: 'CATALOG_NOT_FOUND', url: catalogUrl }, true);
+          } else if (this.status === 400) {
+            let response;
+            try {
+              response = JSON.parse(this.responseText);
+            } catch (e) {}
+            if (!response || !Array.isArray(response.errors)) {
+              return self.props.onNotify(this.responseText, true);
+            }
+            self.props.onNotify({ ...response, url: catalogUrl }, true);
           } else {
             self.props.onNotify(this.responseText);
           }

@@ -219,7 +219,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         return stripHttps(url);
       },
       notifySnackbar(message, isError) {
-        console.log(message);
         if (typeof message === 'string') {
           this.update({
             snackbarMessage: message,

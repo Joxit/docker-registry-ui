@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: '*'
+    tags: ['*']
 
 jobs:
   build:
@@ -13,6 +13,8 @@ jobs:
         fetch-depth: 0
     - name: Install dependencies
       run: npm install
+    - name: Run tests
+      run: npm test
     - name: Build the interface
       run: npm run build
     - name: Major tag

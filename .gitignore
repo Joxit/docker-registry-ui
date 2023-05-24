@@ -7,3 +7,4 @@ _site
 *.orig
 .serve/
 demo/v2
+.version.json

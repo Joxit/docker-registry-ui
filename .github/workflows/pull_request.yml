@@ -16,3 +16,5 @@ jobs:
       run: npm test
     - name: Build the interface
       run: npm run build
+      env:
+        DEVELOPMENT_BUILD: ${{ github.event.pull_request.head.sha }}

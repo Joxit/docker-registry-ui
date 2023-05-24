@@ -14,9 +14,23 @@ import copyTransform from './rollup/copy-transform.js';
 import license from './rollup/license.js';
 import checkOutput from './rollup/check-output.js';
 import importSVG from './rollup/import-svg.js';
+import fs from 'fs';
+const version = JSON.parse(fs.readFileSync('./package.json', 'utf-8')).version;
 
 const useServe = process.env.ROLLUP_SERVE === 'true';
 const output = useServe ? '.serve' : 'dist';
+
+const getVersion = (version) => {
+  const parts = version.split('.').map((e) => parseInt(e));
+  if (useServe || process.env.DEVELOPMENT_BUILD) {
+    parts[1]++;
+    parts[2] = 0;
+    return parts.join('.') + (useServe ? '-dev' : `-${process.env.DEVELOPMENT_BUILD.slice(0, 10)}`);
+  }
+  return version;
+};
+
+fs.writeFileSync('.version.json', JSON.stringify({ version: getVersion(version) }));
 
 const plugins = [
   riot(),

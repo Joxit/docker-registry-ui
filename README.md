@@ -69,7 +69,7 @@ Checkout all options in [Available options](#available-options) section.
     - Yes but it is at your own risk using two regstry servers, check the comment [#155](https://github.com/Joxit/docker-registry-ui/issues/155#issuecomment-1286052124).
 -   How to fix CORS issue on s3 bucket ?
     - You should add a CORS Policy on your bucket, check the issue [#193](https://github.com/Joxit/docker-registry-ui/issues/193).
--   Why my docker regisrty server is returning an error `pagination number invalid` ?
+-   Why my docker registry server is returning an error `pagination number invalid` ?
     - Since docker registry server 2.8.2 there is default limit of 1000 images in catalog. If you need more images update the configuration `REGISTRY_CATALOG_MAXENTRIES` with your max value and check the issue [#306](https://github.com/Joxit/docker-registry-ui/issues/306).
 
 Need more informations ? Try my [examples](https://github.com/Joxit/docker-registry-ui/tree/main/examples) or open an issue.

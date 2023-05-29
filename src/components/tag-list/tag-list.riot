@@ -39,7 +39,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-spinner></material-spinner>
   </div>
 
-  <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
+  <pagination
+    pages="{ getPageLabels(state.page, getNumPages(state.tags, props.tagsPerPage)) }"
+    onPageUpdate="{onPageUpdate}"
+  ></pagination>
 
   <tag-table
     if="{ state.loadend }"
@@ -54,10 +57,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     on-notify="{ props.onNotify }"
     filter-results="{ props.filterResults }"
     on-authentication="{ props.onAuthentication }"
+    tags-per-page="{ props.tagsPerPage }"
   >
   </tag-table>
 
-  <pagination pages="{ getPageLabels(state.page, getNumPages(state.tags)) }" onPageUpdate="{onPageUpdate}"></pagination>
+  <pagination
+    pages="{ getPageLabels(state.page, getNumPages(state.tags, props.tagsPerPage)) }"
+    onPageUpdate="{onPageUpdate}"
+  ></pagination>
 
   <script>
     import { Http } from '../../scripts/http';

@@ -1,4 +1,5 @@
 import { DockerRegistryUIError } from './error.js';
+const ERROR_CODE = 'CATALOG_BRANCHING_CONFIGURATION';
 
 const getRepositoryName = (split, max) => {
   let repositoryName = '';
@@ -29,13 +30,23 @@ const getLatestRepository = (repo, repoName) => {
   }
 };
 
+const cleanInt = (n) => (n === '' ? 1 : parseInt(n));
+
 export const getBranching = (min = 1, max = 1) => {
-  if (min > max) {
-    throw new DockerRegistryUIError(`min must be inferior to max (min: ${min} <= max: ${max})`);
+  min = cleanInt(min);
+  max = cleanInt(max);
+  if (isNaN(min) || isNaN(max)) {
+    throw new DockerRegistryUIError(`min and max must be integers: (min: ${min} and max: ${max}))`, ERROR_CODE);
+  } else if (min > max) {
+    throw new DockerRegistryUIError(`min must be inferior to max (min: ${min} <= max: ${max})`, ERROR_CODE);
   } else if (max < 0 || min < 0) {
     throw new DockerRegistryUIError(
-      `min and max must be greater than equals to 0 (min: ${min} >= 0 and max: ${max} >= 0)`
+      `min and max must be greater than equals to 0 (min: ${min} >= 0 and max: ${max} >= 0)`,
+      ERROR_CODE
     );
+  }
+  if (max == 1) {
+    min = 1;
   }
   return (repositories) =>
     repositories.sort().reduce(function (acc, image) {

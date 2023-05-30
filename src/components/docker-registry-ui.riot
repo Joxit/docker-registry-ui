@@ -31,6 +31,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-navbar>
   </header>
   <main>
+    <error-page
+      if="{ state.pageError && !Array.isArray(state.pageError.errors) }"
+      code="{ state.pageError.code }"
+      status="{ state.pageError.status }"
+      message="{ state.pageError.message }"
+      url="{ state.pageError.url }"
+    ></error-page>
+    <error-page
+      if="{ state.pageError && Array.isArray(state.pageError.errors) }"
+      each="{ error in (state.pageError && state.pageError.errors) }"
+      code="{ error.code }"
+      detail="{ error.detail }"
+      message="{ error.message }"
+      url="{ state.pageError.url }"
+    ></error-page>
     <router base="#!">
       <route path="{baseRoute}">
         <catalog
@@ -42,6 +57,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           on-authentication="{ onAuthentication }"
           show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"
           catalog-default-expanded="{ truthy(props.catalogDefaultExpanded) }"
+          catalog-min-branches="{ props.catalogMinBranches }"
+          catalog-max-branches="{ props.catalogMaxBranches }"
         ></catalog>
       </route>
       <route path="{baseRoute}taglist/(.*)">
@@ -82,21 +99,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       on-authenticated="{ state.onAuthenticated }"
       opened="{ state.authenticationDialogOpened }"
     ></registry-authentication>
-    <error-page
-      if="{ state.pageError && !Array.isArray(state.pageError.errors) }"
-      code="{ state.pageError.code }"
-      status="{ state.pageError.status }"
-      message="{ state.pageError.message }"
-      url="{ state.pageError.url }"
-    ></error-page>
-    <error-page
-      if="{ state.pageError && Array.isArray(state.pageError.errors) }"
-      each="{ error in (state.pageError && state.pageError.errors) }"
-      code="{ error.code }"
-      detail="{ error.detail }"
-      message="{ error.message }"
-      url="{ state.pageError.url }"
-    ></error-page>
     <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
   </main>
   <footer>

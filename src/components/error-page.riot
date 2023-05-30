@@ -61,6 +61,10 @@
         <a href="https://github.com/Joxit/docker-registry-ui/issues/306">Joxit/docker-registry-ui#306</a>.
       </p>
     </template>
+    <template if="{ props.code === 'CATALOG_BRANCHING_CONFIGURATION' }">
+      <p>Wrong configuration for the branching feature: { props.message }</p>
+      <p>Configuration environment variables are : CATALOG_MIN_BRANCH and CATALOG_MAX_BRANCH</p>
+    </template>
   </div>
   <script>
     export default {

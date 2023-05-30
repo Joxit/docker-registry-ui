@@ -117,5 +117,6 @@ describe('repositories', () => {
     assert.throws(() => getBranching(2, 1), DockerRegistryUIError, `Did not throw on min > max`);
     assert.throws(() => getBranching(-2, 1), DockerRegistryUIError, `Did not throw on min < 0`);
     assert.throws(() => getBranching(2, -1), DockerRegistryUIError, `Did not throw on max < 0`);
+    assert.throws(() => getBranching('foo', 'bar'), DockerRegistryUIError, `Did not throw on max < 0`);
   });
 });

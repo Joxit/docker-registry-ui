@@ -35,10 +35,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     on-authentication="{ props.onAuthentication }"
     show-catalog-nb-tags="{ props.showCatalogNbTags }"
     catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
+    z-index="{ props.catalogMaxBranches - props.catalogMinBranches + 2 }"
   ></catalog-element>
   <script>
     import CatalogElement from './catalog-element.riot';
     import { Http } from '../../scripts/http';
+    import { getBranching } from '../../scripts/repositories';
     import { getRegistryServers } from '../../scripts/utils';
 
     export default {
@@ -56,6 +58,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onBeforeMount(props) {
         this.state.registryName = props.registryName;
         this.state.catalogElementsLimit = props.catalogElementsLimit;
+        try {
+          this.state.branching = getBranching(props.catalogMinBranches, props.catalogMaxBranches);
+        } catch (e) {
+          props.onNotify(e);
+        }
       },
       onMounted(props, state) {
         this.display(props, state);
@@ -69,6 +76,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         state.registryUrl = props.registryUrl;
         let repositories = [];
+        let nImages = 0;
         const self = this;
         const catalogUrl = `${props.registryUrl}/v2/_catalog?n=${state.catalogElementsLimit}`;
         const oReq = new Http({
@@ -78,22 +86,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           if (this.status === 200) {
             repositories = JSON.parse(this.responseText).repositories || [];
             repositories.sort();
-            repositories = repositories.reduce(function (acc, e) {
-              const slash = e.indexOf('/');
-              if (slash > 0) {
-                const repoName = e.substring(0, slash) + '/';
-                if (acc.length === 0 || acc[acc.length - 1].repo != repoName) {
-                  acc.push({
-                    repo: repoName,
-                    images: [],
-                  });
-                }
-                acc[acc.length - 1].images.push(e);
-                return acc;
-              }
-              acc.push(e);
-              return acc;
-            }, []);
+            nImages = repositories.length;
+            if (typeof state.branching === 'function') {
+              repositories = state.branching(repositories);
+            }
           } else if (this.status === 404) {
             self.props.onNotify({ code: 'CATALOG_NOT_FOUND', url: catalogUrl }, true);
           } else if (this.status === 400) {
@@ -116,7 +112,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           self.update({
             repositories,
             nRepositories: repositories.length,
-            nImages: repositories.reduce((acc, e) => acc + ((e.images && e.images.length) || 1), 0),
+            nImages,
             loadend: true,
           });
         });
@@ -125,4 +121,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
     };
   </script>
+  <style>
+    catalog {
+      display: block;
+      margin: auto;
+    }
+    catalog > material-card {
+      width: 100%;
+    }
+  </style>
 </catalog>

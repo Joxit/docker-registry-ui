@@ -183,31 +183,31 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           this.update({
             multiDelete: true,
             toDelete: this.state.toDelete,
-            slectedImage: undefined,
+            selectedImage: undefined,
           });
         } else {
           this.update({
             multiDelete: event.target.checked,
-            slectedImage: undefined,
+            selectedImage: undefined,
           });
         }
       },
       onRemoveImageChange(action, image, shiftKey) {
         let confirmDeleteImage = false;
         let singleDeleteAction = false;
-        let slectedImage = undefined;
+        let selectedImage = undefined;
         switch (action) {
           case ACTION_CHECK_TO_DELETE: {
             this.state.toDelete.add(image);
             if (shiftKey) {
-              slectedImage = this.supportShiftKey(image, true);
+              selectedImage = this.supportShiftKey(image, true);
             }
             break;
           }
           case ACTION_UNCHECK_TO_DELETE: {
             this.state.toDelete.delete(image);
             if (shiftKey) {
-              slectedImage = this.supportShiftKey(image, false);
+              selectedImage = this.supportShiftKey(image, false);
             }
             break;
           }
@@ -222,18 +222,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           toDelete: this.state.toDelete,
           confirmDeleteImage,
           singleDeleteAction,
-          slectedImage,
+          selectedImage,
         });
       },
       supportShiftKey(selectedImage, addOrRemove) {
-        if (!this.state.slectedImage) {
+        if (!this.state.selectedImage) {
           return selectedImage;
         } else {
           let shouldChange = false;
           const tags = getPage(this.props.tags, this.props.page);
           tags
             .filter((image) => {
-              if (image == this.state.slectedImage || image == selectedImage) {
+              if (image == this.state.selectedImage || image == selectedImage) {
                 shouldChange = !shouldChange;
                 return true;
               }

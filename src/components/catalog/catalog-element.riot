@@ -52,6 +52,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       show-catalog-nb-tags="{ props.showCatalogNbTags }"
       class="animated {!state.expanded && !props.filterResults ? 'hide' : ''} {state.expanding ? 'expanding' : ''}"
       each="{item in state.images}"
+      z-index="{ props.zIndex - 1 }"
       item="{ item }"
     ></catalog-element>
   </div>
@@ -74,6 +75,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         if (props.showCatalogNbTags && state.image) {
           this.getNbTags(props, state);
+        }
+      },
+      onMounted(props, state) {
+        const materialCard = this.$('material-card');
+        if (materialCard) {
+          materialCard.style['z-index'] = props.zIndex;
         }
       },
       onBeforeUpdate(props, state) {

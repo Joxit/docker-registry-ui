@@ -69,17 +69,18 @@ material-card {
 material-card,
 material-tabs,
 pagination .container {
-  max-width: 95%;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-/* 1515px * 0.95 = 1440px */
-@media screen and (min-width: 1515px) {
-  material-card,
-  material-tabs,
-  pagination .container {
+material-card,
+material-tabs,
+pagination .container,
+catalog {
+  max-width: 95%;
+  /* 1515px * 0.95 = 1440px */
+  @media screen and (min-width: 1515px) {
     max-width: 1440px;
   }
 }

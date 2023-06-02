@@ -13,6 +13,8 @@ sed -i "s~\${HISTORY_CUSTOM_LABELS}~${HISTORY_CUSTOM_LABELS}~" index.html
 sed -i "s~\${USE_CONTROL_CACHE_HEADER}~${USE_CONTROL_CACHE_HEADER}~" index.html
 sed -i "s~\${TAGLIST_ORDER}~${TAGLIST_ORDER}~" index.html
 sed -i "s~\${CATALOG_DEFAULT_EXPANDED}~${CATALOG_DEFAULT_EXPANDED}~" index.html
+sed -i "s~\${CATALOG_MIN_BRANCHES}~${CATALOG_MIN_BRANCHES}~" index.html
+sed -i "s~\${CATALOG_MAX_BRANCHES}~${CATALOG_MAX_BRANCHES}~" index.html
 
 grep -o 'THEME[A-Z_]*' index.html | while read e; do
   sed -i "s~\${$e}~$(printenv $e)~" index.html

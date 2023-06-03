@@ -12,7 +12,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-FROM arm32v7/nginx
+FROM arm32v7/nginx:stable-alpine
 
 LABEL maintainer="Jones MAGLOIRE @Joxit"
 

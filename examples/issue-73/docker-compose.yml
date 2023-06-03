@@ -1,7 +1,7 @@
 version: '2.0'
 services:
   registry:
-    image: registry:2.7
+    image: registry:2.8.1
     volumes:
       - ./registry-data:/var/lib/registry
     networks:
@@ -19,7 +19,7 @@ services:
       - registry-ui-net
 
   proxy:
-    image: nginx:alpine
+    image: nginx:stable-alpine
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     ports:

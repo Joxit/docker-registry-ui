@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   keycloak:
-    image: jboss/keycloak
+    image: jboss/keycloak:16.1.1
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: password
@@ -13,7 +13,7 @@ services:
     command: -Dkeycloak.profile.feature.docker=enabled -b 0.0.0.0
 
   proxy:
-    image: nginx:alpine
+    image: nginx:stable-alpine
     ports:
       - 80:80
     volumes:
@@ -22,7 +22,7 @@ services:
       - registry-ui-net
 
   ui:
-    image: joxit/docker-registry-ui
+    image: joxit/docker-registry-ui:latest
     environment:
       REGISTRY_TITLE: My Private Docker Registry
       REGISTRY_URL: http://localhost
@@ -31,7 +31,7 @@ services:
       - registry-ui-net
 
   registry:
-    image: registry:2.7
+    image: registry:2.8.1
     volumes:
       - ./conf/registry/:/etc/docker/registry/
       - ./data/registry:/var/lib/registry

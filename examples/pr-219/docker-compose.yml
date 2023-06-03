@@ -2,7 +2,7 @@ version: '2'
 
 services:
   registry_1:
-    image: registry:latest
+    image: registry:2.8.1
     restart: always
     ports:
     - 5000:5000
@@ -14,7 +14,7 @@ services:
       - ./data:/var/lib/registry
 
   registry_2:
-    image: registry:latest
+    image: registry:2.8.1
     restart: always
     ports:
     - 5001:5000

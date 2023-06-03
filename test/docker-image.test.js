@@ -1,4 +1,4 @@
-import { supportListManifest, filterWrongManifests } from '../src/scripts/docker-image.js';
+import { supportListManifest, filterWrongManifests, platformToString } from '../src/scripts/docker-image.js';
 import { dockerManifestList } from './fixtures/docker-manifest-list.js';
 import { ociImageIndexLayer } from './fixtures/oci-image-index-layer.js';
 import { ociImageIndexManifest } from './fixtures/oci-image-index-manifest.js';
@@ -36,10 +36,18 @@ describe('docker-image', () => {
       );
     });
     it('should return all manifests for `application/vnd.oci.image.index.v1+json`', () => {
-      assert.equal(
-        filterWrongManifests(ociImageIndexManifest['application/vnd.oci.image.index.v1+json']).length,
-        2
-      );
+      assert.equal(filterWrongManifests(ociImageIndexManifest['application/vnd.oci.image.index.v1+json']).length, 2);
+    });
+  });
+  describe('platformToString', () => {
+    it('should return unknown when the platform is not found', () => {
+      assert.equal(platformToString(), 'unknown');
+      assert.equal(platformToString({}), 'unknown');
+    });
+    it('should format the platform', () => {
+      assert.equal(platformToString({ os: 'linux', architecture: 'amd64' }), 'amd64');
+      assert.equal(platformToString({ os: 'linux', architecture: 'arm', variant: 'v7' }), 'armv7');
+      assert.equal(platformToString({ architecture: 'arm', variant: 'v7' }), 'armv7');
     });
   });
 });

@@ -1,0 +1,54 @@
+<architectures>
+  <div class="architecture" each="{ architecture in state.architectures }">{ architecture }</div>
+  <script>
+    import { platformToString } from '../../scripts/docker-image';
+    export default {
+      onMounted(props, state) {
+        this.onLoad(props, state);
+      },
+      onUpdated(props, state) {
+        if (props.image !== state.image) {
+          this.onLoad(props, state);
+        }
+      },
+      onLoad(props, state) {
+        if (props.image.manifests) {
+          return this.onList(props.image.manifests);
+        } else if (props.image.blobs) {
+          return this.onBlobs(props.image.blobs);
+        }
+        props.image.on('blobs', (blobs) => this.onBlobs(blobs, props, state));
+        props.image.on('list', (list) => this.onList(list, props, state));
+      },
+      onBlobs(blobs, props, state) {
+        const architectures = [platformToString(blobs)];
+        if (!props.image.manifests) {
+          this.update({ architectures, image: props.image });
+        }
+      },
+      onList(list, props, state) {
+        const architectures = list.map(({ platform }) => platformToString(platform));
+        this.update({ architectures, image: props.image });
+      },
+    };
+  </script>
+  <style>
+    :host architectures {
+      display: flex;
+      flex-direction: column;
+    }
+    architectures .architecture {
+      background-color: var(--hover-background);
+      padding: 2px 4px;
+      border-radius: 12px;
+      margin: 4px 0;
+      text-align: center;
+    }
+    architectures .architecture:first-child {
+      margin-top: 0;
+    }
+    architectures .architecture:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</architectures>

@@ -49,6 +49,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           >
             Tag
           </th>
+          <th class="architectures">Arch</th>
           <th class="show-tag-history">History</th>
           <th
             class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
@@ -103,6 +104,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               on-notify="{ props.onNotify }"
             ></copy-to-clipboard>
           </td>
+          <td class="architectures">
+            <architectures image="{ image }"></architectures>
+          </td>
           <td class="show-tag-history">
             <tag-history-button image="{ image }"></tag-history-button>
           </td>
@@ -130,6 +134,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import CopyToClipboard from './copy-to-clipboard.riot';
     import TagHistoryButton from './tag-history-button.riot';
     import RemoveImage from './remove-image.riot';
+    import Architectures from './architectures.riot';
     import { matchSearch } from '../search-bar.riot';
     import ConfirmDeleteImage from '../dialogs/confirm-delete-image.riot';
     const ACTION_CHECK_TO_DELETE = 'CHECK';
@@ -146,6 +151,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         RemoveImage,
         TagHistoryButton,
         ConfirmDeleteImage,
+        Architectures,
       },
       onBeforeMount(props) {
         this.state = {
@@ -277,4 +283,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
     export { ACTION_CHECK_TO_DELETE, ACTION_UNCHECK_TO_DELETE, ACTION_DELETE_IMAGE };
   </script>
+  <style>
+    tag-table table th.architectures {
+      text-align: center;
+    }
+  </style>
 </tag-table>

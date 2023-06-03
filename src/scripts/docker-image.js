@@ -34,6 +34,13 @@ export const filterWrongManifests = (response) => {
   );
 };
 
+export const platformToString = (platform) => {
+  if (!platform || !platform.architecture) {
+    return 'unknown';
+  }
+  return platform.architecture + (platform.variant ? platform.variant : '');
+};
+
 export class DockerImage {
   constructor(name, tag, { list, registryUrl, onNotify, onAuthentication, useControlCacheHeader }) {
     this.name = name;
@@ -90,7 +97,9 @@ export class DockerImage {
       if (this.status === 200 || this.status === 202) {
         const response = JSON.parse(this.responseText);
         if (supportListManifest(response) && self.opts.list) {
-          self.trigger('list', filterWrongManifests(response));
+          const manifests = filterWrongManifests(response);
+          self.trigger('list', manifests);
+          self.manifests = manifests;
           const manifest = response.manifests[0];
           const image = new DockerImage(self.name, manifest.digest, { ...self.opts, list: false });
           eventTransfer(image, self);

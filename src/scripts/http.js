@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { getFromCache, setCache } from './cache-request';
+
 export class Http {
   constructor(opts) {
     this.oReq = new XMLHttpRequest();
@@ -78,6 +80,7 @@ export class Http {
               req.send();
             });
           } else {
+            this.status === 200 && setCache(self._method, self._url, this.responseText);
             f.bind(this)();
           }
         });
@@ -116,6 +119,10 @@ export class Http {
   }
 
   send() {
+    const responseText = getFromCache(this._method, this._url);
+    if (responseText) {
+      return this._events['loadend'].bind({ status: 200, responseText })();
+    }
     this.oReq.send();
   }
 }

@@ -267,7 +267,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         });
       },
       getPage(tags, page) {
-        const sortedTags = getPage(tags, page);
+        const sortedTags = getPage(tags, page, this.props.tagsPerPage);
         if (this.state.orderType === 'date') {
           sortedTags.sort((e1, e2) =>
             !this.state.desc

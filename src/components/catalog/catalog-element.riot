@@ -50,6 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       on-notify="{ props.onnNotify }"
       on-authentication="{ props.onAuthentication }"
       show-catalog-nb-tags="{ props.showCatalogNbTags }"
+      is-registry-secured="{ props.isRegistrySecured }"
       class="animated {!state.expanded && !props.filterResults ? 'hide' : ''} {state.expanding ? 'expanding' : ''}"
       each="{item in state.images}"
       z-index="{ props.zIndex - 1 }"
@@ -108,6 +109,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const self = this;
         const oReq = new Http({
           onAuthentication: props.onAuthentication,
+          withCredentials: props.isRegistrySecured,
         });
         oReq.addEventListener('load', function () {
           if (this.status === 200) {

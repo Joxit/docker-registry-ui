@@ -42,7 +42,7 @@ export const platformToString = (platform) => {
 };
 
 export class DockerImage {
-  constructor(name, tag, { list, registryUrl, onNotify, onAuthentication, useControlCacheHeader }) {
+  constructor(name, tag, { list, registryUrl, onNotify, onAuthentication, useControlCacheHeader, isRegistrySecured }) {
     this.name = name;
     this.tag = tag;
     this.chars = 0;
@@ -52,6 +52,7 @@ export class DockerImage {
       onNotify,
       onAuthentication,
       useControlCacheHeader,
+      isRegistrySecured,
     };
     this.ociImage = false;
     observable(this);
@@ -91,7 +92,10 @@ export class DockerImage {
       return;
     }
     this._fillInfoWaiting = true;
-    const oReq = new Http({ onAuthentication: this.opts.onAuthentication });
+    const oReq = new Http({
+      onAuthentication: this.opts.onAuthentication,
+      withCredentials: this.opts.isRegistrySecured,
+    });
     const self = this;
     oReq.addEventListener('loadend', function () {
       if (this.status === 200 || this.status === 202) {
@@ -148,7 +152,10 @@ export class DockerImage {
     oReq.send();
   }
   getBlobs(blob) {
-    const oReq = new Http({ onAuthentication: this.opts.onAuthentication });
+    const oReq = new Http({
+      onAuthentication: this.opts.onAuthentication,
+      withCredentials: this.opts.isRegistrySecured,
+    });
     const self = this;
     oReq.addEventListener('loadend', function () {
       if (this.status === 200 || this.status === 202) {

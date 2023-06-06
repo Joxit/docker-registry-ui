@@ -36,6 +36,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     show-catalog-nb-tags="{ props.showCatalogNbTags }"
     catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
     z-index="{ props.catalogMaxBranches - props.catalogMinBranches + 2 }"
+    is-registry-secured="{ props.isRegistrySecured }"
   ></catalog-element>
   <script>
     import CatalogElement from './catalog-element.riot';
@@ -81,6 +82,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const catalogUrl = `${props.registryUrl}/v2/_catalog?n=${state.catalogElementsLimit}`;
         const oReq = new Http({
           onAuthentication: this.props.onAuthentication,
+          withCredentials: props.isRegistrySecured,
         });
         oReq.addEventListener('load', function () {
           if (this.status === 200) {

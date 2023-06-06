@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { getFromCache, setCache } from './cache-request';
+import { getFromCache, setCache } from './cache-request.js';
 
 export class Http {
   constructor(opts) {

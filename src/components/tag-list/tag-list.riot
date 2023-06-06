@@ -58,6 +58,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     filter-results="{ props.filterResults }"
     on-authentication="{ props.onAuthentication }"
     tags-per-page="{ props.tagsPerPage }"
+    is-registry-secured="{ props.isRegistrySecured }"
+    on-image-deleted="{ () => state.reload() }"
   >
   </tag-table>
 
@@ -103,10 +105,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.tagComparator = getTagComparator(props.taglistOrder);
       },
       display(props, state) {
+        state.reload = () => setTimeout(() => this.display(props, state), 1000);
         state.tags = [];
         const self = this;
         const oReq = new Http({
           onAuthentication: props.onAuthentication,
+          withCredentials: props.isRegistrySecured,
         });
         oReq.addEventListener('load', function () {
           if (this.status === 200) {
@@ -119,6 +123,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     onNotify: props.onNotify,
                     onAuthentication: props.onAuthentication,
                     useControlCacheHeader: props.useControlCacheHeader,
+                    isRegistrySecured: props.isRegistrySecured,
                   })
               )
               .sort(self.tagComparator);

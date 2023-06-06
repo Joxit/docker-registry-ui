@@ -58,10 +58,11 @@
       },
       deleteImages() {
         this.props.toDelete.forEach((image) => this.getContentDigestThenDelete(image, this.props));
+        this.props.onImageDeleted();
       },
       getContentDigestThenDelete({ name, tag }, opts) {
-        const { registryUrl, onNotify, onAuthentication } = opts;
-        const oReq = new Http({ onAuthentication });
+        const { registryUrl, onNotify, onAuthentication, isRegistrySecured } = opts;
+        const oReq = new Http({ onAuthentication, withCredentials: isRegistrySecured });
         const self = this;
         oReq.addEventListener('loadend', function () {
           if (this.status === 200 || this.status === 202) {
@@ -86,8 +87,8 @@
         oReq.send();
       },
       deleteImage({ name, tag, contentDigest }, opts) {
-        const { registryUrl, ignoreError, onNotify, onAuthentication, onClick } = opts;
-        const oReq = new Http({ onAuthentication });
+        const { registryUrl, ignoreError, onNotify, onAuthentication, onClick, isRegistrySecured } = opts;
+        const oReq = new Http({ onAuthentication, withCredentials: isRegistrySecured });
         oReq.addEventListener('loadend', function () {
           if (this.status === 200 || this.status === 202) {
             router.taglist(name);

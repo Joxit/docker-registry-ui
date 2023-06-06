@@ -59,6 +59,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           catalog-default-expanded="{ truthy(props.catalogDefaultExpanded) }"
           catalog-min-branches="{ props.catalogMinBranches }"
           catalog-max-branches="{ props.catalogMaxBranches }"
+          is-registry-secured="{ truthy(props.isRegistrySecured) }"
         ></catalog>
       </route>
       <route path="{baseRoute}taglist/(.*)">
@@ -75,6 +76,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
           taglist-order="{ props.taglistOrder }"
           tags-per-page="{ props.tagsPerPage }"
+          is-registry-secured="{ truthy(props.isRegistrySecured) }"
         ></tag-list>
       </route>
       <route path="{baseRoute}taghistory/(.*)">
@@ -89,6 +91,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           on-authentication="{ onAuthentication }"
           history-custom-labels="{ stringToArray(props.historyCustomLabels) }"
           use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
+          is-registry-secured="{ truthy(props.isRegistrySecured) }"
         ></tag-history>
       </route>
     </router>

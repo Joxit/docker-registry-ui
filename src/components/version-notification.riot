@@ -1,0 +1,109 @@
+<version-notification>
+  <span if="{ state.tag_name && !isNewestVersion(props.version, state.tag_name) }" onclick="{ onClick }"></span>
+  <material-popup opened="{ state.open }" onClick="{ onClose }">
+    <div class="material-popup-title">Check for updates</div>
+    <div class="material-popup-content">
+      <p>The version <b>{ state.tag_name }</b> of Docker Regisrty UI now available.</p>
+      <p>You can download the lastest version with docker.</p>
+      <code>joxit/docker-registry-ui:{ state.tag_name }</code>
+    </div>
+    <div class="material-popup-action">
+      <material-button
+        class="dialog-button release-note"
+        waves-color="var(--hover-background)"
+        href="{ state.latest && state.latest.html_url }"
+        color="inherit"
+        text-color="var(--accent-text)"
+        target="_blank"
+      >
+        Release Note
+      </material-button>
+      <material-button
+        class="dialog-button"
+        waves-color="var(--hover-background)"
+        onClick="{ onClose }"
+        color="inherit"
+        text-color="var(--primary-text)"
+      >
+        Close
+      </material-button>
+    </div>
+  </material-popup>
+  <script>
+    import rocketIcon from '../images/rocket.svg';
+    import { Http } from '../scripts/http';
+    import { isNewestVersion, parseJSON } from '../scripts/utils';
+    const LATEST = 'version-notification:latest';
+    const EXPIRES = 'version-notification:expiration-date';
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    export default {
+      onMounted(props, state) {
+        const latest = parseJSON(localStorage.getItem(LATEST));
+        const expires = parseInt(localStorage.getItem(EXPIRES));
+        if (latest && latest.tag_name) {
+          this.update({ tag_name: latest.tag_name, latest });
+        }
+        if (!latest || isNaN(expires) || new Date().getTime() > expires) {
+          this.checkForUpdates(props, state);
+        }
+      },
+      onUpdated(props, state) {
+        const span = this.$('span');
+        if (span) {
+          span.innerHTML = rocketIcon().firstElementChild.outerHTML;
+        }
+      },
+      onClose() {
+        this.update({ open: false });
+      },
+      onClick() {
+        this.update({ open: true });
+      },
+      checkForUpdates(props, state) {
+        const oReq = new Http();
+        const self = this;
+
+        oReq.addEventListener('load', function () {
+          if (this.status === 200) {
+            const latest = parseJSON(this.responseText);
+            if (latest && self.tag_name !== latest.tag_name && !isNewestVersion(props.version, latest.tag_name)) {
+              props.onNotify('A new version of Docker Registry UI is available!');
+            }
+            localStorage.setItem(LATEST, this.responseText);
+            localStorage.setItem(EXPIRES, new Date().getTime() + ONE_DAY);
+            self.update({ tag_name: latest.tag_name, latest });
+          } else {
+            props.onNotify('Cannot check for new updates. See the browser console.');
+            console.error(`Got status code ${this.status} from Github API with response ${this.responseText}`);
+          }
+        });
+
+        oReq.open('GET', 'https://api.github.com/repos/joxit/docker-registry-ui/releases/latest');
+        oReq.send();
+      },
+      isNewestVersion,
+    };
+  </script>
+  <style>
+    :host {
+      display: inline;
+    }
+    :host svg {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    material-popup material-button > a:first-child {
+      display: flex;
+      align-items: center;
+    }
+    material-popup .material-popup-content code {
+      background-color: var(--hover-background);
+      padding: 0 5px;
+      border-radius: 4px;
+      line-height: 1.5em;
+    }
+    material-popup .material-popup-content b {
+      color: var(--accent-text);
+    }
+  </style>
+</version-notification>

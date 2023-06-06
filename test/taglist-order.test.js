@@ -3,7 +3,7 @@ import { getTagComparator } from '../src/scripts/taglist-order.js';
 import { DockerRegistryUIError } from '../src/scripts/error.js';
 import assert from 'assert';
 
-describe('utils tests', () => {
+describe('taglist-order tests', () => {
   describe('taglistOrderVariants', () => {
     it(`should return the input when it's well formed and num first`, () => {
       const expected = ['num-asc;alpha-asc', 'num-asc;alpha-desc', 'num-desc;alpha-asc', 'num-desc;alpha-asc'];

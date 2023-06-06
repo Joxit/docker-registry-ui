@@ -220,3 +220,40 @@ export function truthy(value) {
 export function stringToArray(value) {
   return value && typeof value === 'string' ? value.split(',') : [];
 }
+
+const compareNumbers = (a, b) => {
+  const na = parseInt(a);
+  const nb = parseInt(b);
+  if (na > nb) return 1;
+  if (nb > na) return -1;
+  if (!isNaN(na) && isNaN(nb)) return 1;
+  if (isNaN(na) && !isNaN(nb)) return -1;
+  return 0;
+};
+
+export function isNewestVersion(current = '0.0.0', release = '0.0.0') {
+  if (current === release) {
+    return true;
+  }
+  current = current.split('.');
+  release = release.split('.');
+  const isDev = current[2].indexOf('-') >= 0;
+  const major = compareNumbers(current[0], release[0]);
+  const minor = compareNumbers(current[1], release[1]);
+  const patch = compareNumbers(current[2], release[2]);
+  if (!isDev && (major > 0 || (major === 0 && minor > 0) || (major === 0 && minor === 0 && patch >= 0))) {
+    return true;
+  } else if (isDev && (major > 0 || (major === 0 && minor > 0))) {
+    return true;
+  }
+  return false;
+}
+
+export function parseJSON(json) {
+  if (!json) {
+    return;
+  }
+  try {
+    return JSON.parse(json);
+  } catch (e) {}
+}

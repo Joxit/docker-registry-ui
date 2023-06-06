@@ -17,7 +17,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <docker-registry-ui>
   <header>
     <material-navbar>
-      <span class="logo">Docker Registry UI</span>
+      <span class="logo">
+        <span>Docker Registry UI</span>
+        <version-notification version="{ version }" on-notify="{ notifySnackbar }"></version-notification>
+      </span>
       <div class="menu">
         <search-bar on-search="{ onSearch }"></search-bar>
         <dialogs-menu
@@ -142,6 +145,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import DialogsMenu from './dialogs/dialogs-menu.riot';
     import SearchBar from './search-bar.riot';
     import ErrorPage from './error-page.riot';
+    import VersionNotification from './version-notification.riot';
     import { stripHttps, getRegistryServers, setRegistryServers, truthy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
@@ -156,6 +160,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Router,
         Route,
         ErrorPage,
+        VersionNotification,
       },
       onUpdated(props, state) {
         state.snackbarIsError = false;
@@ -170,7 +175,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
 
         window.onselectstart = (e) => {
-          if (e.target && e.target.className) {
+          if (e.target && e.target.className && typeof e.target.className.indexOf === 'function') {
             return !['checkbox', 'checkmark', 'remove-tag'].find((elt) => e.target.className.indexOf(elt) >= 0);
           }
         };
@@ -272,6 +277,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     material-navbar .nav-wrapper .menu {
       flex-shrink: 1;
+    }
+
+    material-navbar .nav-wrapper .logo {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
     }
 
     material-footer {

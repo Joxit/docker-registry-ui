@@ -13,9 +13,9 @@
       },
       onLoad(props, state) {
         if (props.image.manifests) {
-          return this.onList(props.image.manifests);
+          return this.onList(props.image.manifests, props, state);
         } else if (props.image.blobs) {
-          return this.onBlobs(props.image.blobs);
+          return this.onBlobs(props.image.blobs, props, state);
         }
         props.image.on('blobs', (blobs) => this.onBlobs(blobs, props, state));
         props.image.on('list', (list) => this.onList(list, props, state));

@@ -15,6 +15,7 @@
 - Murad [@muradheydarov](https://github.com/muradheydarov)
 - Giacomo Mazzamuto [@gmazzamuto](https://github.com/gmazzamuto)
 - Joe Bureau [@jabstone](https://github.com/jabstone)
+- Artur Mostowski [@Vulwsztyn](https://github.com/Vulwsztyn)
 
 ## Because committers are not the only contributors
 
@@ -44,3 +45,11 @@
 - [@JKDingwall](https://github.com/JKDingwall)
 - Martin Herren [@MartinHerren](https://github.com/MartinHerren)
 - John Daktylidis [@Greek64](https://github.com/Greek64)
+- Philipp Staiger [@lippl](https://github.com/lippl)
+- [@mexaniksmirnov](https://github.com/mexaniksmirnov)
+- [@HighOnMikey](https://github.com/HighOnMikey)
+- [@logopk](https://github.com/logopk)
+- Gustaf Järgren [@GoryMoon](https://github.com/GoryMoon)
+- [@ArwynFr](https://github.com/ArwynFr)
+- Nikita Matushkin [@yourh3ro](https://github.com/yourh3ro)
+- Michael Grote [@quotengrote](https://github.com/quotengrote)

@@ -45,7 +45,7 @@ If you like my work and want to support it, don't hesitate to [sponsor me](https
   - You can select the search bar with the shortcut `CRTL + F` or `F3`. When the search bar is already focused, the shortcut will fallback to the default behavior (see [#213](https://github.com/Joxit/docker-registry-ui/issues/213)). Since 2.1.0
 - Multi arch support in history page (see [#130](https://github.com/Joxit/docker-registry-ui/issues/130) and [#134](https://github.com/Joxit/docker-registry-ui/pull/134)). Since 1.5.0
 - Show the content of the dockerfile (see [#286](https://github.com/Joxit/docker-registry-ui/pull/286)). Since 2.4.0
-- The UI will cache requests from your registry, such as blobs and some manifets (URL with `sha256:`).
+- The UI will cache requests from your registry, such as blobs and some manifests (URL with `sha256:`).
 
 Checkout all options in [Available options](#available-options) section.
 

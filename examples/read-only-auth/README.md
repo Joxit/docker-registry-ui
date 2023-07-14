@@ -6,5 +6,5 @@ There are two htpasswd files. `read-write.htpasswd` a read and write access to t
 
 All users in `read-only.htpasswd` should be in `read-write.htpasswd`.
 
-Read only user: login: `read` password: `regisrty`.
-Read and write user: login: `write` password: `regisrty`.
+Read only user: login: `read` password: `registry`.
+Read and write user: login: `write` password: `registry`.

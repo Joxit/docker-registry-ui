@@ -12,7 +12,7 @@ bash run-swarm.sh
 
 ## Authentication
 
-The registry is protected via __Basic authentication__ but feel free to use wathever you like.
+The registry is protected via __Basic authentication__ but feel free to use whatever you like.
 In this sample, credentials are: **admin / admin**.
 
 To generate a new password for basic auth, run the command: `htpasswd -nb username password`.

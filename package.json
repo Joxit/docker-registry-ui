@@ -1,6 +1,6 @@
 {
   "name": "docker-registry-ui",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "type": "module",
   "scripts": {
     "format": "npm run format-html && npm run format-js && npm run format-riot",

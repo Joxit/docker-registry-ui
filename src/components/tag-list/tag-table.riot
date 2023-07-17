@@ -238,7 +238,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           return selectedImage;
         } else {
           let shouldChange = false;
-          const tags = getPage(this.props.tags, this.props.page);
+          const tags = this.getPage(this.props.tags, this.props.page);
           tags
             .filter((image) => {
               if (image == this.state.selectedImage || image == selectedImage) {

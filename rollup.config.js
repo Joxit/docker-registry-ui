@@ -30,7 +30,7 @@ const getVersion = (version) => {
   return version;
 };
 
-fs.writeFileSync('.version.json', JSON.stringify({ version: getVersion(version) }));
+fs.writeFileSync('.version.json', JSON.stringify({ version: getVersion(version), latest: version }));
 
 const plugins = [
   riot(),

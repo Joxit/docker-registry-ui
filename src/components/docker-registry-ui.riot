@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-navbar>
       <span class="logo">
         <span>Docker Registry UI</span>
-        <version-notification version="{ version }" on-notify="{ notifySnackbar }"></version-notification>
+        <version-notification version="{ latest }" on-notify="{ notifySnackbar }"></version-notification>
       </span>
       <div class="menu">
         <search-bar on-search="{ onSearch }"></search-bar>
@@ -137,7 +137,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </material-footer>
   </footer>
   <script>
-    import { version } from '../../.version.json';
+    import { version, latest } from '../../.version.json';
     import { Router, Route } from '@riotjs/route';
     import Catalog from './catalog/catalog.riot';
     import TagList from './tag-list/tag-list.riot';
@@ -260,6 +260,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,
       version,
+      latest,
       truthy,
       stringToArray,
     };

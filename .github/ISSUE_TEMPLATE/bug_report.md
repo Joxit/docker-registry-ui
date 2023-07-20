@@ -42,19 +42,17 @@ If applicable, add screenshots to help explain your problem.
 
 ## System information
 
-- OS: [e.g. Debian 10, Windows, Android 9...]
-<!-- Browser is only for UI bugs -->
+- OS: [e.g. Debian, Windows, Mac OS, Android 9...]
 - Browser:
-    - Name:  [e.g. Chrome, Firefox...]
-    - Version: [e.g. 22]
+    - Name: [e.g. Chrome, Firefox...]
+    - Version: [e.g. 114.0.5735.198, 102.11.0...]
 - Docker registry UI:
-    - Version: [e.g. 1.4.0]
+    - Version: [e.g. 2.5.0, 2.6.0-84b31f2cfb...]
     - Server: [docker or dist]
-<!-- Only for Docker and for where the UI is hosted -->
-    - Docker version: [e.g. 19.03]
-    - Docker registry ui tag: [latest, static, master, 1.4-static...]
+    - Docker version: [e.g. 24.0.4...]
+    - Docker registry ui tag: [latest, main, 2.5.0, 2...]
     - OS/Arch: [e.g. linux/amd64]
-    - Tools: [e.g. docker-compose, kubernets..]
+    - Tools: [e.g. docker-compose, kubernetes, electron..]
 
 ## Additional context
 

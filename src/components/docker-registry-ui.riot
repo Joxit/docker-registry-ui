@@ -266,6 +266,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
+    :host {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    :host main {
+      flex-grow: 1;
+      margin: 0.5em 0;
+    }
     material-navbar {
       height: 64px;
       color: var(--header-text);

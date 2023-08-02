@@ -111,7 +111,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           onAuthentication: props.onAuthentication,
           withCredentials: props.isRegistrySecured,
         });
-        oReq.addEventListener('load', function () {
+        oReq.addEventListener('loadend', function () {
           if (this.status === 200) {
             const nbTags = (JSON.parse(this.responseText).tags || []).length;
             self.update({ nbTags });

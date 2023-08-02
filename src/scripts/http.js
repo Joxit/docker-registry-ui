@@ -54,9 +54,9 @@ export class Http {
     switch (e) {
       case 'loadend': {
         self.oReq.addEventListener('loadend', function () {
-          if (this.status === 401 && !this.withCredentials) {
-            const tokenAuth =
-              this.hasHeader('www-authenticate') && parseAuthenticateHeader(this.getResponseHeader('www-authenticate'));
+          const tokenAuth =
+            this.hasHeader('www-authenticate') && parseAuthenticateHeader(this.getResponseHeader('www-authenticate'));
+          if (this.status === 401 && (!this.withCredentials || tokenAuth)) {
             self.onAuthentication(tokenAuth, (bearer) => {
               const req = new XMLHttpRequest();
               req._url = self._url;

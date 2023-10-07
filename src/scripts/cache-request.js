@@ -17,16 +17,20 @@ export const getFromCache = (method, url) => {
     return;
   }
   try {
-    return sessionStorage.getItem(sha256);
+    return {
+      responseText: sessionStorage.getItem(`${sha256}/responseText`),
+      dockerContentdigest: sessionStorage.getItem(`${sha256}/dockerContentdigest`),
+    };
   } catch (e) {}
 };
 
-export const setCache = (method, url, responseText) => {
+export const setCache = (method, url, { responseText, dockerContentdigest }) => {
   const sha256 = getSha256(method, url);
   if (!sha256) {
     return;
   }
   try {
-    sessionStorage.setItem(sha256, responseText);
+    sessionStorage.setItem(`${sha256}/responseText`, responseText);
+    sessionStorage.setItem(`${sha256}/dockerContentdigest`, dockerContentdigest);
   } catch (e) {}
 };

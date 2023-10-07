@@ -29,19 +29,23 @@ export class Http {
   }
 
   getContentDigest(cb) {
-    if (this.oReq.hasHeader('Docker-Content-Digest')) {
+    if (this.cache?.dockerContentdigest) {
+      cb(this.cache.dockerContentdigest);
+    } else if (this.oReq.hasHeader('Docker-Content-Digest')) {
       // Same origin or advanced CORS headers set:
       // 'Access-Control-Expose-Headers: Docker-Content-Digest'
       cb(this.oReq.getResponseHeader('Docker-Content-Digest'));
     } else if (window.crypto && window.TextEncoder) {
-      crypto.subtle.digest('SHA-256', new TextEncoder().encode(this.oReq.responseText)).then(function (buffer) {
-        cb(
-          'sha256:' +
-            Array.from(new Uint8Array(buffer))
-              .map((byte) => byte.toString(16).padStart(2, '0'))
-              .join('')
-        );
-      });
+      crypto.subtle
+        .digest('SHA-256', new TextEncoder().encode(this.oReq.responseText || this.cache?.responseText))
+        .then(function (buffer) {
+          cb(
+            'sha256:' +
+              Array.from(new Uint8Array(buffer))
+                .map((byte) => byte.toString(16).padStart(2, '0'))
+                .join('')
+          );
+        });
     } else {
       // IE and old Edge
       // simply do not call the callback and skip the setup downstream
@@ -80,7 +84,11 @@ export class Http {
               req.send();
             });
           } else {
-            this.status === 200 && setCache(self._method, self._url, this.responseText);
+            this.status === 200 &&
+              setCache(self._method, self._url, {
+                responseText: this.responseText,
+                dockerContentdigest: this.getResponseHeader('Docker-Content-Digest'),
+              });
             f.bind(this)();
           }
         });
@@ -119,9 +127,10 @@ export class Http {
   }
 
   send() {
-    const responseText = getFromCache(this._method, this._url);
-    if (responseText) {
-      return this._events['loadend'].bind({ status: 200, responseText })();
+    const cache = getFromCache(this._method, this._url);
+    if (cache && cache.responseText) {
+      this.cache = cache;
+      return this._events['loadend'].bind({ status: 200, responseText: cache.responseText })();
     }
     this.oReq.send();
   }

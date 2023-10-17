@@ -65,7 +65,13 @@ if [ -n "${NGINX_PROXY_PASS_URL}" ] ; then
   sed -i "s,\${NGINX_PROXY_PASS_URL},${NGINX_PROXY_PASS_URL}," /etc/nginx/conf.d/default.conf
   sed -i "s^\${NGINX_PROXY_HEADERS}^$(get_nginx_proxy_headers)^" /etc/nginx/conf.d/default.conf
   sed -i "s^\${NGINX_PROXY_PASS_HEADERS}^$(get_nginx_proxy_pass_headers)^" /etc/nginx/conf.d/default.conf
-  sed -i "s,#!,," /etc/nginx/conf.d/default.conf
+  sed -i "s,#! , ," /etc/nginx/conf.d/default.conf # The space is important here, to not interfer with #!r
+  if [ -n "${NGINX_RESOLVER}" ]; then
+    sed -i "s,\${NGINX_RESOLVER},${NGINX_RESOLVER}," /etc/nginx/conf.d/default.conf
+    sed -i "s,#r,," /etc/nginx/conf.d/default.conf
+  else
+    sed -i "s,#!r, ," /etc/nginx/conf.d/default.conf # The space is for cosmetic here
+  fi
 fi
 
 if [ "$(whoami)" != "root" ]; then

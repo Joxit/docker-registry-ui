@@ -43,7 +43,7 @@
         if (latest && latest.tag_name) {
           this.update({ tag_name: latest.tag_name, latest });
         }
-        if (!latest || isNaN(expires) || new Date().getTime() > expires) {
+        if (isNaN(expires) || new Date().getTime() > expires) {
           this.checkForUpdates(props, state);
         }
       },
@@ -64,16 +64,22 @@
         const self = this;
 
         oReq.addEventListener('load', function () {
+          localStorage.setItem(EXPIRES, new Date().getTime() + ONE_DAY);
           if (this.status === 200) {
             const latest = parseJSON(this.responseText);
             if (latest && self.tag_name !== latest.tag_name && !isNewestVersion(props.version, latest.tag_name)) {
               props.onNotify('A new version of Docker Registry UI is available!');
             }
             localStorage.setItem(LATEST, this.responseText);
-            localStorage.setItem(EXPIRES, new Date().getTime() + ONE_DAY);
             self.update({ tag_name: latest.tag_name, latest });
-          } else {
-            props.onNotify('Cannot check for new updates. See the browser console.');
+          } else if (this.status !== 404) {
+            // Should not notify if the project is not found.
+            props.onNotify('Cannot check for new updates. Will try again in 24 hours. See the browser console.');
+
+            console.error(
+              `Cannot check for new Docker Registry UI updates. This is most likely a GitHub issue. You don't need to worry about it.`
+            );
+
             console.error(`Got status code ${this.status} from Github API with response ${this.responseText}`);
           }
         });

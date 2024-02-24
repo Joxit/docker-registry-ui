@@ -72,6 +72,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           pull-url="{ state.pullUrl }"
           image="{ router.getTagListImage() }"
           show-content-digest="{ truthy(props.showContentDigest) }"
+          show-tag-history="{ falsy(props.showTagHistory) }"
           is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }"
           on-notify="{ notifySnackbar }"
           filter-results="{ state.filter }"
@@ -146,7 +147,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import SearchBar from './search-bar.riot';
     import ErrorPage from './error-page.riot';
     import VersionNotification from './version-notification.riot';
-    import { stripHttps, getRegistryServers, setRegistryServers, truthy, stringToArray } from '../scripts/utils';
+    import { stripHttps, getRegistryServers, setRegistryServers, truthy, falsy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
 
@@ -262,6 +263,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       version,
       latest,
       truthy,
+      falsy,
       stringToArray,
     };
   </script>

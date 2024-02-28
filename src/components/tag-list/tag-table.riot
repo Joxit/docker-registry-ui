@@ -31,10 +31,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <thead>
         <tr>
           <th
-            class="creation-date { (state.desc && state.orderType === 'date') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
-            onclick="{() => onPageReorder('date') }"
+            id="image-tag-header"
+            class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
+            onclick="{ onReverseOrder }"
           >
-            Creation date
+            Tag
           </th>
           <th
             class="image-size { (state.desc && state.orderType === 'size') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
@@ -44,13 +45,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </th>
           <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th>
 
-          <th
-            id="image-tag-header"
-            class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
-            onclick="{ onReverseOrder }"
-          >
-            Tag
-          </th>
           <th class="architectures">Arch</th>
           <th class="show-tag-history">History</th>
           <th
@@ -82,8 +76,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </thead>
       <tbody>
         <tr each="{ image in getPage(props.tags, props.page) }" if="{ matchSearch(props.filterResults, image.tag) }">
-          <td class="creation-date">
-            <image-date image="{ image }"></image-date>
+          <td>
+            <image-tag image="{ image }"></image-tag>
+            <copy-to-clipboard
+              target="tag"
+              image="{ image }"
+              pull-url="{ props.pullUrl }"
+              on-notify="{ props.onNotify }"
+            ></copy-to-clipboard>
           </td>
           <td class="image-size">
             <image-size image="{ image }"></image-size>
@@ -97,15 +97,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               on-notify="{ props.onNotify }"
             ></copy-to-clipboard>
           </td>
-          <td>
-            <image-tag image="{ image }"></image-tag>
-            <copy-to-clipboard
-              target="tag"
-              image="{ image }"
-              pull-url="{ props.pullUrl }"
-              on-notify="{ props.onNotify }"
-            ></copy-to-clipboard>
-          </td>
+          
           <td class="architectures">
             <architectures image="{ image }"></architectures>
           </td>

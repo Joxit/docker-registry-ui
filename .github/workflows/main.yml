@@ -2,7 +2,9 @@ name: Build and push master/main docker images
 
 on:
   push:
-    branches: [ master, netskope@main , pr/EP-40230/create-gha-on-push]
+    branches: [netskope@main , pr/EP-40230/create-gha-on-push]
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
 
 jobs:
   build:

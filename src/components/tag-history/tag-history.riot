@@ -49,6 +49,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     opened="{ state.showDockerfile }"
     on-close="{ onDockerfileClose }"
     elements="{ state.elements }"
+    labels="{ state.labels }"
   ></dockerfile>
 
   <material-tabs
@@ -70,12 +71,26 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       entry="{ entry }"
     ></tag-history-element>
   </material-card>
+
+  <material-card>layers</material-card>
+
+   <material-card each="{ element in state.layers }">
+    <tag-history-element
+      each="{ entry in element }"
+      if="{ entry.value && entry.value.length > 0}"
+      entry="{ entry }"
+    ></tag-history-element>
+  </material-card>
+
+
+
   <script>
     import { DockerImage } from '../../scripts/docker-image';
     import { bytesToSize } from '../../scripts/utils';
     import Dockerfile from '../dialogs/dockerfile.riot';
     import router from '../../scripts/router';
     import TagHistoryElement from './tag-history-element.riot';
+    import Labels from "./label.riot";
     export default {
       components: {
         TagHistoryElement,
@@ -83,6 +98,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onBeforeMount(props, state) {
         state.elements = [];
+        state.labels = [];
         state.image = new DockerImage(props.image, props.tag, {
           list: true,
           registryUrl: props.registryUrl,
@@ -101,6 +117,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const state = this.state;
         const { registryUrl, onNotify, useControlCacheHeader } = this.props;
         state.elements = [];
+        state.labels = [];
         state.image.variants[idx] =
           state.image.variants[idx] ||
           new DockerImage(this.props.image, arch.digest, {
@@ -118,7 +135,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       processBlobs(blobs) {
         const state = this.state;
         const { historyCustomLabels } = this.props;
+        //console.log(historyCustomLabels)
 
+        const labels = this.state.image.blobs.config.Labels;
+        const temp = Object.entries(labels)
+        const labelelements=temp.map(obj=>{
+            return {key:obj[0],value:obj[1]}
+        })
+        console.log(labelelements)
+ 
         function exec(elt) {
           const guiElements = [];
           for (var attribute in elt) {
@@ -132,9 +157,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         const elements = new Array(blobs.history.length + 1);
         elements[0] = exec(getConfig(blobs, { historyCustomLabels }));
+        
+
         blobs.history.forEach(function (elt, i) {
           elements[blobs.history.length - i] = exec(elt);
         });
+
+        elements.splice(1, 0,labelelements );
+
+
+        console.log(elements)
+        
+
         this.update({
           elements,
           loadend: true,
@@ -240,13 +274,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       const res = [
         'architecture',
         'User',
-        'created',
+        //'created',
         'docker_version',
         'os',
         'Cmd',
         'Entrypoint',
         'Env',
-        'Labels',
+        //'Labels',
         'User',
         'Volumes',
         'WorkingDir',

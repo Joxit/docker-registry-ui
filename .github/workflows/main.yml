@@ -21,29 +21,3 @@ jobs:
       run: npm run build
       env:
         DEVELOPMENT_BUILD: ${{ github.sha }}
-    # - name: Set up QEMU
-    #   uses: docker/setup-qemu-action@v1
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v1
-    
-
-    # - name: Build and push Beta Alpine Version
-    #   uses: docker/build-push-action@v2
-    #   with:
-    #     context: .
-    #     file: ./Dockerfile
-    #     platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
-    #     push: true
-    #     tags: |
-    #       joxit/docker-registry-ui:master
-    #       joxit/docker-registry-ui:main
-  
-    # - name: Build and push Beta Debian Version
-    #   uses: docker/build-push-action@v2
-    #   with:
-    #     context: .
-    #     file: ./debian.dockerfile
-    #     platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
-    #     push: true
-    #     tags: |
-    #       ep-tools-docker/service/docker-registry-ui:netskope@main

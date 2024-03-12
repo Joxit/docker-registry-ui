@@ -67,7 +67,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-card each="{ element in state.elements }">
     <tag-history-element
       each="{ entry in element }"
-      if="{ entry.value && !entry.key.includes('com') && entry.key!='Labels' && entry.value.length > 0 && entry.key!=null}"
+      if="{ entry.value && entry.key!='Labels' && entry.value.length > 0}"
       entry="{ entry }"
     ></tag-history-element>
   </material-card>
@@ -161,12 +161,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         //   elements[blobs.history.length - i] = exec(elt);
         // });
 
-        //elements.splice(1, 0,labelelements);
-        // for (let i=0; i<elements.length;i++){
-        //   if (i>1){
-        //     elements[i]=null;
-        //   }
-        // }
         this.update({
           elements,
           loadend: true,

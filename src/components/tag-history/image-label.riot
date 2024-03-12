@@ -1,0 +1,137 @@
+<!--
+Copyright (C) 2016-2023 Jones Magloire @Joxit
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<image-label class="image-labels">
+  <div class="row">
+    <div class="headline column">
+        <i if="{ state.key !== 'docker_version' }" class="material-icons">{ state.icon }</i>
+        <span if="{ state.key === 'docker_version' }" id="docker_verion"></span>
+        <span>{ state.name }</span>
+    </div>
+    <div class="content column">
+        <div class="values value " each="{ value in state.values }" if="{ state.values }"><span class="detail-type">{value[0]+' : '}</span><span class="{value[0]}">{value[1]}</span></div>
+    </div>
+  </div>
+  <script>
+    import { getHistoryIcon } from '../../scripts/utils';
+    import dockerVersionIcon from '../../images/docker-logo.svg';
+    export default {
+      onBeforeStart(props, state) {
+        state.key = props.entry.key;
+        state.icon = getHistoryIcon(props.entry.key);
+        state.name = props.entry.key;
+
+          state.values = Object.entries(JSON.parse(props.entry.value));
+          state.values=state.values.map(value=>
+                {
+                  if(value[0]=='layers'){
+                  return  [value[0],value[1].join('\n')];
+                  }
+                  return value;
+                })
+          console.log(state.values)
+        
+      },
+      onBeforeMount(props, state) {
+        this.onBeforeStart(props, state);
+      },
+      onBeforeUpdate(props, state) {
+        this.onBeforeStart(props, state);
+      },
+      onMounted(props, state) {
+        const dockerVersion = this.$('#docker_verion');
+        if (dockerVersion) {
+          dockerVersion.innerHTML = dockerVersionIcon().firstElementChild.outerHTML;
+        }
+      },
+      cleanName(name) {
+        if (name === 'id') {
+          return name;
+        } else if (name === 'os') {
+          return 'OS';
+        } else if (name.startsWith('custom-label-')) {
+          name = name.replace('custom-label-', '');
+        }
+        return name
+          .replace(/([a-z])([A-Z])/g, '$1 $2')
+          .replace(/[_-]/g, ' ')
+          .split(' ')
+          .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+          .join(' ');
+      },
+    };
+  </script>
+  <style>
+    :host.Labels .value,
+    :host.Env .value {
+      margin-bottom: 0.5em;
+    }
+
+    :host i {
+      font-size: 20px;
+      padding: 0px;
+    }
+
+    :host.docker_version .headline .material-icons,
+    :host.docker_version .headline #docker_verion {
+      height: 24px;
+    }
+
+    :host {
+      display: block;
+      padding: 20px;
+      min-width: 100px;
+      min-height: 3em;
+      width: auto;
+    }
+
+    :host .content {
+      overflow-x: auto;
+    }
+
+
+    :host .detail-type{
+      font-weight: bold;
+    }
+
+    :host .layers{
+      display: table-caption;
+    }
+
+    :host.id .content {
+      overflow-x: initial;
+      float:right;
+    }
+
+    :host .headline {
+      height: 24px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-weight: bold;
+      float: left;
+      width:40%;
+    }
+    :host .headline * {
+      margin-right: 6px;
+    }
+
+    :host.id div.value {
+      font-size: 12px;
+    }
+
+  </style>
+</image-label>

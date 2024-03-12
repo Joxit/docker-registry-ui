@@ -3,11 +3,11 @@ name: Run tests on PRs and branches
 on:
   pull_request:
   push:
-    branches-ignore: [ main, master ]
+    branches-ignore: [ main, master, netskope@main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [ ubuntu-latest ]
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies

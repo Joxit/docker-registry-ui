@@ -49,6 +49,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     opened="{ state.showDockerfile }"
     on-close="{ onDockerfileClose }"
     elements="{ state.elements }"
+    labelelements = "{ state.labelelements }"
   ></dockerfile>
 
   <material-tabs
@@ -66,23 +67,36 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-card each="{ element in state.elements }">
     <tag-history-element
       each="{ entry in element }"
-      if="{ entry.value && entry.value.length > 0}"
+      if="{ entry.value && entry.key!='Labels' && entry.value.length > 0}"
       entry="{ entry }"
     ></tag-history-element>
   </material-card>
+
+  <material-card each="{element in state.labelelements}">
+   <image-label
+    each="{ entry in element }"
+    if="{ entry.value && entry.value.length > 0}"
+    entry="{ entry }"
+   ></image-label>
+  </material-card>
+
+
   <script>
     import { DockerImage } from '../../scripts/docker-image';
     import { bytesToSize } from '../../scripts/utils';
     import Dockerfile from '../dialogs/dockerfile.riot';
     import router from '../../scripts/router';
     import TagHistoryElement from './tag-history-element.riot';
+    import ImageLabel from './image-label.riot';
     export default {
       components: {
         TagHistoryElement,
         Dockerfile,
+        ImageLabel,
       },
       onBeforeMount(props, state) {
         state.elements = [];
+        state.labelelements = [];
         state.image = new DockerImage(props.image, props.tag, {
           list: true,
           registryUrl: props.registryUrl,
@@ -101,6 +115,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const state = this.state;
         const { registryUrl, onNotify, useControlCacheHeader } = this.props;
         state.elements = [];
+        state.labelelements = [];
         state.image.variants[idx] =
           state.image.variants[idx] ||
           new DockerImage(this.props.image, arch.digest, {
@@ -112,13 +127,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         if (state.image.variants[idx].blobs) {
           return this.processBlobs(state.image.variants[idx].blobs);
         }
-        state.image.variants[idx].fillInfo();
+        
+        state.image.variants[idx].fillInfo();;
         state.image.variants[idx].on('blobs', this.processBlobs);
       },
       processBlobs(blobs) {
         const state = this.state;
         const { historyCustomLabels } = this.props;
 
+        const labels = this.state.image.blobs.config.Labels;
+        const temp = Object.entries(labels)
+        const labelelements = temp.map(obj=>{
+            return {key:obj[0],value:obj[1]}
+        })
+        
+ 
         function exec(elt) {
           const guiElements = [];
           for (var attribute in elt) {
@@ -130,16 +153,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           }
           return guiElements.sort(eltSort);
         }
-        const elements = new Array(blobs.history.length + 1);
+        const elements = new Array(1);
         elements[0] = exec(getConfig(blobs, { historyCustomLabels }));
-        blobs.history.forEach(function (elt, i) {
-          elements[blobs.history.length - i] = exec(elt);
-        });
+        
+
+        // blobs.history.forEach(function (elt, i) {
+        //   elements[blobs.history.length - i] = exec(elt);
+        // });
+
         this.update({
           elements,
           loadend: true,
         });
+        this.state.labelelements.push(labelelements);
+        this.update();
       },
+
       multiArchList(manifests) {
         manifests = manifests.manifests || manifests;
         const archs = manifests.map(function (manifest) {
@@ -240,7 +269,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       const res = [
         'architecture',
         'User',
-        'created',
+        //'created',
         'docker_version',
         'os',
         'Cmd',

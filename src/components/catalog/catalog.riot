@@ -86,7 +86,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         });
         oReq.addEventListener('load', function () {
           if (this.status === 200) {
-            repositories = JSON.parse(this.responseText).repositories || [];
+            let repositories_1 = JSON.parse(this.responseText).repositories || [];
+            for (let i = 0; i < repositories_1.length; i++){
+              if (!repositories_1[i].includes("unlabeled")){
+                repositories.push(repositories_1[i])
+              }
+            }
             repositories.sort();
             nImages = repositories.length;
             if (typeof state.branching === 'function') {

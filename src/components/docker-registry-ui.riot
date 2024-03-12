@@ -17,10 +17,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <docker-registry-ui>
   <header>
     <material-navbar>
-      <span class="logo">
+      <span id="custom_logo" class='custom_logo' >
+      </span>
         <span>Docker Registry UI</span>
         <version-notification version="{ latest }" on-notify="{ notifySnackbar }"></version-notification>
-      </span>
       <div class="menu">
         <search-bar on-search="{ onSearch }"></search-bar>
         <dialogs-menu
@@ -114,12 +114,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Docker Registry UI { version }
       </a>
       <ul>
-        <li>
-          <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
-        </li>
-        <li>
-          <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">License AGPL-3.0</a>
-        </li>
         <li if="{ props.theme === 'auto' || props.theme === '' }">
           <material-switch
             on-change="{ onThemeChange }"
@@ -141,6 +135,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { Router, Route } from '@riotjs/route';
     import Catalog from './catalog/catalog.riot';
     import TagList from './tag-list/tag-list.riot';
+    import Labels from './tag-history/image-label.riot';
     import TagHistory from './tag-history/tag-history.riot';
     import DialogsMenu from './dialogs/dialogs-menu.riot';
     import SearchBar from './search-bar.riot';
@@ -149,7 +144,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { stripHttps, getRegistryServers, setRegistryServers, truthy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
-
+    import netskopeIcon from '../images/netskope-logo.svg';
     export default {
       components: {
         Catalog,
@@ -192,6 +187,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.useControlCacheHeader = props.useControlCacheHeader;
         const theme = loadTheme(props, this.root.parentNode.style);
         this.state.themeSwitch = theme === 'dark';
+      },
+      onMounted(props, state) {
+        const netskopeVersion = this.$('#custom_logo');
+        if (netskopeVersion) {
+          netskopeVersion.innerHTML = netskopeIcon().firstElementChild.outerHTML;
+        }
       },
       onServerChange(registryUrl) {
         this.update({
@@ -283,6 +284,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     material-navbar .menu {
       display: flex;
+      right: 20px;
+      position: absolute;
+    }
+
+    .custom_logo{
+      width: 150px;
+      padding-right: 10px;
+      padding-top: 4px;
     }
 
     material-navbar .nav-wrapper .menu {

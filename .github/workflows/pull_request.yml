@@ -3,7 +3,7 @@ name: Run tests on PRs and branches
 on:
   pull_request:
   push:
-    branches-ignore: [ main, master ]
+    branches-ignore: [ main, master, netskope@main ]
 
 jobs:
   build:

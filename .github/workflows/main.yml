@@ -8,8 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: 
-      - self-hosted
+    runs-on: [self-hosted, linux, x64, sz-L]
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies

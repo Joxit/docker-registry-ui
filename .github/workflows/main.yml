@@ -10,7 +10,6 @@ jobs:
   build:
     runs-on: 
       - ubuntu-latest
-      - jf
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies

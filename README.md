@@ -128,16 +128,17 @@ This featureswas added to version 2.4.0. See more about this in [#283](https://g
 
 | Environment variable | light theme value | dark theme value |
 | --- | --- | --- |
-| `THEME_PRIMARY_TEXT` | `#25313b` | `#8A9EBA` |
-| `THEME_NEUTRAL_TEXT` | `#777777` | `#36527A` |
+| `THEME_PRIMARY_TEXT` | `#25313b` | `#98a8bd` |
+| `THEME_NEUTRAL_TEXT` | `#777777` | `#6d7fab` |
 | `THEME_BACKGROUND` | `#ffffff` | `#22272e` |
-| `THEME_HOVER_BACKGROUND` | `#eeeeee` | `#30404D` |
-| `THEME_ACCENT_TEXT` | `#6680a1` | `#5684FF` |
+| `THEME_HOVER_BACKGROUND` | `#eeeeee` | `#343a4b` |
+| `THEME_ACCENT_TEXT` | `#5f7796` | `#5c88ff` |
 | `THEME_HEADER_TEXT` | `#ffffff` | `#ffffff` |
-| `THEME_HEADER_BACKGROUND` | `#25313b` | `#333A45` |
+| `THEME_HEADER_ACCENT_TEXT` | `#7b9ac2` | `#7ea1ff` |
+| `THEME_HEADER_BACKGROUND` | `#25313b` | `#333a45` |
 | `THEME_FOOTER_TEXT` | `#ffffff` | `#ffffff` |
-| `THEME_FOOTER_NEUTRAL_TEXT` | `#999999` | `#999999` |
-| `THEME_FOOTER_BACKGROUND` | `#555555` | `#555555` |
+| `THEME_FOOTER_NEUTRAL_TEXT` | `#adbacd` | `#98afcf` |
+| `THEME_FOOTER_BACKGROUND` | `#344251` | `#344251` |
 
 ## Recommended Docker Registry Usage
 

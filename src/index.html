@@ -31,7 +31,7 @@
 
   <body>
     <!-- build:keep production -->
-    <!-- <docker-registry-ui
+    <docker-registry-ui
       registry-url="${REGISTRY_URL}"
       name="${REGISTRY_TITLE}"
       pull-url="${PULL_URL}"
@@ -62,11 +62,11 @@
       theme-footer-background="${THEME_FOOTER_BACKGROUND}"
       tags-per-page="${TAGLIST_PAGE_SIZE}"
     >
-    </docker-registry-ui> -->
+    </docker-registry-ui> 
     <!-- endbuild -->
     <!-- build:keep developement -->
     <docker-registry-ui
-      registry-url="http://localhost:5000"
+      registry-url=""
       name="Developement Registry"
       pull-url=""
       show-content-digest="true"
@@ -75,7 +75,7 @@
       single-registry="false"
       show-catalog-nb-tags="true"
       history-custom-labels="first_custom_labels,second_custom_labels"
-      use-control-cache-header="true"
+      use-control-cache-header="false"
       taglist-order=""
       catalog-default-expanded=""
       catalog-min-branches="1"

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+sed -i "s~\${UI_TITLE}~${UI_TITLE}~" index.html
 sed -i "s~\${REGISTRY_URL}~${REGISTRY_URL}~" index.html
 sed -i "s~\${REGISTRY_TITLE}~${REGISTRY_TITLE}~" index.html
 sed -i "s~\${PULL_URL}~${PULL_URL}~" index.html

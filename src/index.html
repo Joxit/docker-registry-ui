@@ -35,6 +35,7 @@
   <body>
     <!-- build:keep production -->
     <docker-registry-ui
+      title="${UI_TITLE}"
       registry-url="${REGISTRY_URL}"
       name="${REGISTRY_TITLE}"
       pull-url="${PULL_URL}"
@@ -71,6 +72,7 @@
     <!-- endbuild -->
     <!-- build:keep developement -->
     <docker-registry-ui
+      title=""
       registry-url=""
       name="Development Registry"
       pull-url=""

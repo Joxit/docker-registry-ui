@@ -122,6 +122,7 @@ Some env options are available for use this interface for **only one server** (w
 - `SHOW_TAG_HISTORY`: Whether to show the tag history feature or not. Allows to simplify the user interface by hiding it form the tag list if set to `false`. (default: `true`).
 There are some examples with [docker-compose](https://docs.docker.com/compose/) and docker-registry-ui as proxy [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-proxy/) or docker-registry-ui as standalone [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/ui-as-standalone/).
 - `UI_TITLE`: Set a custom title displayed in the header bar. (default: `Docker Registry UI`).
+- `DISABLE_VERSION_CHECK`: Do not inform about new versions of Docker Registry UI. (default: `false`).
 
 ### Theme options
 

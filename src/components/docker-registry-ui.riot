@@ -19,7 +19,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-navbar>
       <span class="logo">
         <span><a href="">{ props.title || "Docker Registry UI"}</a></span>
-        <version-notification version="{ latest }" on-notify="{ notifySnackbar }"></version-notification>
+        <version-notification
+          if="{!truthy(props.disableVersionCheck)}"
+          version="{ latest }"
+          on-notify="{ notifySnackbar }"
+        ></version-notification>
       </span>
       <div class="menu">
         <search-bar on-search="{ onSearch }"></search-bar>

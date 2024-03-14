@@ -52,7 +52,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             Tag
           </th>
           <th class="architectures">Arch</th>
-          <th class="show-tag-history">History</th>
+          <th class="show-tag-history" if="{ props.showTagHistory }">History</th>
           <th
             class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
             if="{ props.isImageRemoveActivated }"
@@ -109,7 +109,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <td class="architectures">
             <architectures image="{ image }"></architectures>
           </td>
-          <td class="show-tag-history">
+          <td class="show-tag-history" if="{ props.showTagHistory }">
             <tag-history-button image="{ image }"></tag-history-button>
           </td>
           <td if="{ props.isImageRemoveActivated }" class="remove-tag">

@@ -6,6 +6,7 @@ sed -i "s~\${PULL_URL}~${PULL_URL}~" index.html
 sed -i "s~\${SINGLE_REGISTRY}~${SINGLE_REGISTRY}~" index.html
 sed -i "s~\${CATALOG_ELEMENTS_LIMIT}~${CATALOG_ELEMENTS_LIMIT}~" index.html
 sed -i "s~\${SHOW_CONTENT_DIGEST}~${SHOW_CONTENT_DIGEST}~" index.html
+sed -i "s~\${SHOW_TAG_HISTORY}~${SHOW_TAG_HISTORY}~" index.html
 sed -i "s~\${DEFAULT_REGISTRIES}~${DEFAULT_REGISTRIES}~" index.html
 sed -i "s~\${READ_ONLY_REGISTRIES}~${READ_ONLY_REGISTRIES}~" index.html
 sed -i "s~\${SHOW_CATALOG_NB_TAGS}~${SHOW_CATALOG_NB_TAGS}~" index.html

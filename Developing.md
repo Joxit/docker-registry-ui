@@ -25,11 +25,17 @@ Run the following command
 docker run -d -p 5000:5000 -e \
 REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin="[http://localhost:8000]" \
 -e REGISTRY_HTTP_HEADERS_Access-Control-Allow-Credentials="[true]" \
--e REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods=
-"[HEAD,GET,OPTIONS,DELETE]"\
--e REGISTRY_HTTP_HEADERS_Access-Control-Expose-Headers="[Docker-Content-Digest]"\
+-e REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods="[HEAD,GET,OPTIONS,DELETE]" \
+-e REGISTRY_HTTP_HEADERS_Access-Control-Expose-Headers="[Docker-Content-Digest]" \
 -- restart=always --name registry-srv registry:2
 ```
 It will run the local docker registry in port 5000.
+
+Commands for pushing the images to local registry. This just an example of busybox image. Like wise you can choose the images you want for testing.
+```
+docker pull busybox
+docker tag busybox localhost:5000/busybox
+docker push localhost:5000/busybox
+```
  
 Happy Developing. 

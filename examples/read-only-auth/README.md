@@ -2,9 +2,12 @@
 
 This example will override the original nginx conf with read only access to the registry. You will need to rewrite all the project configuration (replaces `proxy_pass` with your own value, in this example `http://registry:5000` is fine).
 
-There are two htpasswd files. `read-write.htpasswd` a read and write access to the registry and `read-only.htpasswd` for a read only access.
+There are two htpasswd files:
 
-All users in `read-only.htpasswd` should be in `read-write.htpasswd`.
+- `write.htpasswd` for write access
+- `read.htpasswd` for read access
+
+All users in `write.htpasswd` should also be in `read.htpasswd` so that they can read and write.
 
 Read only user: login: `read` password: `registry`.
 Read and write user: login: `write` password: `registry`.

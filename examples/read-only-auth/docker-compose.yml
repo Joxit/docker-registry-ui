@@ -17,8 +17,8 @@ services:
       - SINGLE_REGISTRY=true
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./read-write.htpasswd:/etc/nginx/auth/read-write.htpasswd:ro
-      - ./read-only.htpasswd:/etc/nginx/auth/read-only.htpasswd
+      - ./read-write.htpasswd:/etc/nginx/auth/write.htpasswd:ro
+      - ./read-only.htpasswd:/etc/nginx/auth/read.htpasswd:ro
     depends_on:
       - registry
     networks:

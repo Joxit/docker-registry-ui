@@ -22,6 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <span>{ state.name }</span>
     </div>
     <div class="content column">
+        <div class="value" if="{ state.value }">{ state.value }</div> 
         <div class="values value " each="{ value in state.values }" if="{ state.values }"><span class="detail-type">{value[0]+' : '}</span><span class="{value[0]}">{value[1]}</span></div>
     </div>
   </div>
@@ -32,17 +33,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onBeforeStart(props, state) {
         state.key = props.entry.key;
         state.icon = getHistoryIcon(props.entry.key);
-        state.name = props.entry.key;
-
-          state.values = Object.entries(JSON.parse(props.entry.value));
-          state.values=state.values.map(value=>
-                {
+        state.name = props.entry.key;  
+        try {
+            state.values = Object.entries(JSON.parse(props.entry.value));
+            if (state.values.length==0){
+              throw new Error();
+            }
+            state.values=state.values.map(value=>
+                { 
                   if(value[0]=='layers'){
                   return  [value[0],value[1].join('\n')];
                   }
                   return value;
                 })
-          console.log(state.values)
+        }
+        catch(e){
+            state.value = String(props.entry.value) 
+        }
         
       },
       onBeforeMount(props, state) {

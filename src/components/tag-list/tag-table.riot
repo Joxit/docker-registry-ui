@@ -32,14 +32,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <tr>
           <th
             id="image-tag-header"
-            class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
-            onclick="{ onReverseOrder }"
+            class="{ state.clicked ? (props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending'):'' }"
+            onclick="{ () => onColumnClick('asc') }"       
           >
             Tag
           </th>
 
           <th
-            class="image-size { (state.desc && state.orderType === 'size') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
+            class="image-size { state.sizeClicked ?((state.desc && state.orderType === 'size') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending'):'' }"
             onclick="{() => onPageReorder('size') }"
           >
             Size
@@ -151,6 +151,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state = {
           toDelete: new Set(),
           multiDelete: false,
+          clicked: false,
+          sizeClicked: false,
           page: props.page,
         };
       },
@@ -249,16 +251,42 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           return undefined;
         }
       },
+      onColumnClick(order) {
+    // Check if it's the first click on the column
+    if (!this.state.clicked) {
+      this.state.clicked = true;
+      // Set the sorting order based on the click
+      this.props.asc = order === 'material-card-th-sorted-ascending';
+      // Here you can perform the sorting based on the new order.
+      // Call a sorting function or update your data accordingly.
+      // For example:
+      // this.sortData(this.props.asc);
+    } else {
+      // If it's not the first click, toggle the sorting order
+      this.props.asc = !this.props.onReverseOrder();
+      // Here you can perform the sorting based on the new order.
+      // Call a sorting function or update your data accordingly.
+      // For example:
+      // this.sortData(this.props.asc);
+    }
+  },
       onReverseOrder() {
         this.state.orderType = null;
         this.state.desc = false;
         this.props.onReverseOrder();
       },
       onPageReorder(type) {
-        this.update({
+      if (!this.state.sizeClicked){
+         this.state.sizeClicked = true;
+     
+    } else {
+      this.update({
           orderType: type,
           desc: (this.state.orderType && this.state.orderType !== type) || !this.state.desc,
         });
+      
+    }
+        
       },
       getPage(tags, page) {
         const sortedTags = getPage(tags, page, this.props.tagsPerPage);

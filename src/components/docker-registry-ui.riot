@@ -111,9 +111,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <footer>
     <material-footer mini="true">
       <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">
-        Docker Registry UI 
+        Docker Registry UI { version } 
       </a>
       <ul>
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
+        </li>
+        <li>
+          <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">License AGPL-3.0</a>
+        </li>
         <li if="{ props.theme === 'auto' || props.theme === '' }">
           <material-switch
             on-change="{ onThemeChange }"

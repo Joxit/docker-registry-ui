@@ -88,7 +88,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           if (this.status === 200) {
             let repositories_1 = JSON.parse(this.responseText).repositories || [];
             for (let i = 0; i < repositories_1.length; i++){
-              if (!repositories_1[i].includes("unlabeled")){
+              if (!repositories_1[i].includes("unlabeled") && !repositories_1[i].includes("action-push")){
                 repositories.push(repositories_1[i])
               }
             }

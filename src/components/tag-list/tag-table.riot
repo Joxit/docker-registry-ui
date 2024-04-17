@@ -27,7 +27,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     on-image-deleted="{ props.onImageDeleted }"
   ></confirm-delete-image>
   <material-card class="taglist">
-    <table style="border: none">
+    <table style="border: none; table-layout: fixed; width: 100%;"">
+      <col style="width: 25%" />
+    <col style="width: 25%" />
+    <col style="width: 25%" />
+    <col style="width: 25%" /> 
       <thead>
         <tr>
           <th
@@ -38,14 +42,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             Tag
           </th>
 
-          <th
-            class="image-size { state.sizeClicked ?((state.desc && state.orderType === 'size') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending'):'' }"
-            onclick="{() => onPageReorder('size') }"
-          >
+          <th>
             Size
           </th>
 
-          <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th>
+         <!-- <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th> -->
           <th class="architectures">Arch</th>
           <th class="show-tag-history">History</th>
           <th
@@ -89,7 +90,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <td class="image-size">
             <image-size image="{ image }"></image-size>
           </td>
-          <td if="{ props.showContentDigest }">
+         <!--<td if="{ props.showContentDigest }">
             <image-content-digest image="{ image }"></image-content-digest>
             <copy-to-clipboard
               target="digest"
@@ -97,7 +98,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               pull-url="{ props.pullUrl }"
               on-notify="{ props.onNotify }"
             ></copy-to-clipboard>
-          </td>
+          </td> -->
           <td class="architectures">
             <architectures image="{ image }"></architectures>
           </td>

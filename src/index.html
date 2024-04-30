@@ -17,6 +17,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV85JGSGVH"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-KV85JGSGVH');
+    </script>
     <meta charset="UTF-8" />
     <!-- build:css docker-registry-ui.css -->
     <link href="../node_modules/riot-mui/build/styles/riot-mui.min.css" rel="stylesheet" type="text/css" />
@@ -62,7 +71,7 @@
       theme-footer-background="${THEME_FOOTER_BACKGROUND}"
       tags-per-page="${TAGLIST_PAGE_SIZE}"
     >
-    </docker-registry-ui> 
+    </docker-registry-ui>
     <!-- endbuild -->
     <!-- build:keep developement -->
     <docker-registry-ui

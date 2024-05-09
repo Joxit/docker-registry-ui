@@ -32,7 +32,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <material-waves if="{ state.images }" center="true" color="#ddd"></material-waves>
       <span>
         <i class="material-icons">send</i>
-        { state.image || state.repo }
+        { state.image || state.repo } <span if="{ checkImage(state.image) }" class="github-label label-red">deprecated</span>
         <div if="{state.images}" class="item-count right">
           { state.nImages } images
           <i class="material-icons animated {state.expanded ? 'expanded' : ''}">expand_more</i>
@@ -57,12 +57,32 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       item="{ item }"
     ></catalog-element>
   </div>
+  <style>
+  .github-label {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-left: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  }
+  .label-red {
+  color: #fff;
+  background-color: #d73a49; /* Red color used by GitHub */
+  }
+  .label-green {
+  color: #fff;
+  background-color: #28a745; /* Green color used by GitHub */
+  }
+  </style>
   <script>
     import router from '../../scripts/router';
     import { Http } from '../../scripts/http';
     import { matchSearch } from '../search-bar.riot';
+    import * as data from './renovate-replacements-v2.json';
 
-    export default {
+    let keys = new Set();
+    export default {      
       onBeforeMount(props, state) {
         if (props.item.images && props.item.images.length === 1) {
           state.image = props.item.images[0];
@@ -79,6 +99,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       onMounted(props, state) {
+        this.fetchData();
         const materialCard = this.$('material-card');
         if (materialCard) {
           materialCard.style['z-index'] = props.zIndex;
@@ -104,6 +125,28 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             });
           }, 50);
         }
+      },
+      fetchData() {
+        for (const key in data.default) {
+          if (key.includes("ns-ep") || key.includes("ns-builder")) {
+            keys.add(key);
+          }
+        }
+        console.log(keys);
+      },
+      checkImage(image) {
+        console.log("checking image :- ", image);
+        if (image) {
+          if (image.includes("-recent")){
+            return true;
+          }
+        }
+        for (const key of keys) {
+          if (key.includes(image)) {
+            return true;
+          }
+        }
+        return false;
       },
       getNbTags(props, state) {
         const self = this;

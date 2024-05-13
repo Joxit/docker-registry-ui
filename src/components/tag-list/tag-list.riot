@@ -29,7 +29,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
-        Tags of { props.image } <span if="{ checkImage(props.image) }" class="github-label label-red">deprecated</span>
+        Tags of { props.image } <span if="{ checkImage(props.image) }" class="github-label label-red">Deprecated</span>
+        <div class="deprecated-loc-hint" if="{ checkImage(props.image) }"><br>This stream of images moved to - <span>{ getImageLocation(props.image) }</span></div>
+        
         <div class="source-hint">Sourced from { state.registryName + '/' + props.image }</div>
         <div class="item-count">{ state.tags.length } tags</div>
       </h2>
@@ -171,19 +173,29 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.asc = true;
       },
       checkImage(image) {
-        console.log("checking image :- ", image);
+        console.log("Checking image :- ", image);
+        console.log("Cached data :- ", cache["renovate-replacements-data"]);
         if (image) {
           if (image.includes("-recent")){
             return true;
           }
         }
-        console.log(cache);
-        for (const idx in cache["renovate-replacements-data"]) {
-          if (cache["renovate-replacements-data"][idx].includes(image)) {
+        for (var key in cache["renovate-replacements-data"]) {
+          if (key.includes(image)) {
             return true;
           }
         }
         return false;
+      },
+      getImageLocation(image) {
+        console.log("Getting location of :- ", image);
+        console.log("Cached data :- ", cache["renovate-replacements-data"]);
+        for (var key in cache["renovate-replacements-data"]) {
+          if (key.includes(image)) {
+            return cache["renovate-replacements-data"][key];
+          }
+        }
+        return "";
       },
       onPageUpdate(idx) {
         const labels = getPageLabels(this.state.page, getNumPages(this.state.tags, this.props.tagsPerPage));

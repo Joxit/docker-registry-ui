@@ -32,7 +32,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <material-waves if="{ state.images }" center="true" color="#ddd"></material-waves>
       <span>
         <i class="material-icons">send</i>
-        { state.image || state.repo } <span if="{ checkImage(state.image) }" class="github-label label-red">deprecated</span>
+        { state.image || state.repo } <span if="{ checkImage(state.image) }" class="github-label label-red">Deprecated</span>
         <div if="{state.images}" class="item-count right">
           { state.nImages } images
           <i class="material-icons animated {state.expanded ? 'expanded' : ''}">expand_more</i>
@@ -128,25 +128,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       fetchData() {
-        const keys = [];
+        const keys = {};
         for (const key in data.default) {
           if (key.includes("ns-ep") || key.includes("ns-builder")) {
-            keys.push(key);
+            keys[key] = data.default[key];
           }
         }
         console.log(keys);
         return keys;
       },
       checkImage(image) {
-        console.log("checking image :- ", image);
+        console.log("Checking image :- ", image);
+        console.log("Cached data :- ", cache["renovate-replacements-data"]);
         if (image) {
           if (image.includes("-recent")){
             return true;
           }
         }
-        for (const idx in cache["renovate-replacements-data"]) {
-          console.log(cache["renovate-replacements-data"][idx]);
-          if (cache["renovate-replacements-data"][idx].includes(image)) {
+        for (var key in cache["renovate-replacements-data"]) {
+          if (key.includes(image)) {
             return true;
           }
         }

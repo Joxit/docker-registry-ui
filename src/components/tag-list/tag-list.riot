@@ -14,6 +14,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
+
 <tag-list>
   <material-card class="header">
     <div class="material-card-title-action">
@@ -28,7 +29,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
-        Tags of { props.image }
+        Tags of { props.image } <span if="{ checkImage(props.image) }" class="github-label label-red">deprecated</span>
         <div class="source-hint">Sourced from { state.registryName + '/' + props.image }</div>
         <div class="item-count">{ state.tags.length } tags</div>
       </h2>
@@ -67,7 +68,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     pages="{ getPageLabels(state.page, getNumPages(state.tags, props.tagsPerPage)) }"
     onPageUpdate="{onPageUpdate}"
   ></pagination>
-
+  <style>
+  .github-label {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-left: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  }
+  .label-red {
+  color: #fff;
+  background-color: #d73a49; /* Red color used by GitHub */
+  }
+  .label-green {
+  color: #fff;
+  background-color: #28a745; /* Green color used by GitHub */
+  }
+  </style>
   <script>
     import { Http } from '../../scripts/http';
     import { DockerImage } from '../../scripts/docker-image';
@@ -76,6 +94,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagTable from './tag-table.riot';
     import router from '../../scripts/router';
     import { getTagComparator, taglistOrderParser } from '../../scripts/taglist-order';
+    import { cache } from '../catalog/catalog-element.riot';
 
     export default {
       components: {
@@ -151,7 +170,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.send();
         state.asc = true;
       },
-
+      checkImage(image) {
+        console.log("checking image :- ", image);
+        if (image) {
+          if (image.includes("-recent")){
+            return true;
+          }
+        }
+        console.log(cache);
+        for (const idx in cache["renovate-replacements-data"]) {
+          if (cache["renovate-replacements-data"][idx].includes(image)) {
+            return true;
+          }
+        }
+        return false;
+      },
       onPageUpdate(idx) {
         const labels = getPageLabels(this.state.page, getNumPages(this.state.tags, this.props.tagsPerPage));
         const page = labels[idx].page;

@@ -81,8 +81,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { matchSearch } from '../search-bar.riot';
     import * as data from './renovate-replacements-v2.json';
 
-    let keys = new Set();
-    export default {      
+    const cache = {};
+
+    export default {
       onBeforeMount(props, state) {
         if (props.item.images && props.item.images.length === 1) {
           state.image = props.item.images[0];
@@ -99,7 +100,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       onMounted(props, state) {
-        this.fetchData();
+        cache["renovate-replacements-data"] = this.fetchData();
         const materialCard = this.$('material-card');
         if (materialCard) {
           materialCard.style['z-index'] = props.zIndex;
@@ -127,12 +128,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       fetchData() {
+        const keys = [];
         for (const key in data.default) {
           if (key.includes("ns-ep") || key.includes("ns-builder")) {
-            keys.add(key);
+            keys.push(key);
           }
         }
         console.log(keys);
+        return keys;
       },
       checkImage(image) {
         console.log("checking image :- ", image);
@@ -141,8 +144,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             return true;
           }
         }
-        for (const key of keys) {
-          if (key.includes(image)) {
+        for (const idx in cache["renovate-replacements-data"]) {
+          console.log(cache["renovate-replacements-data"][idx]);
+          if (cache["renovate-replacements-data"][idx].includes(image)) {
             return true;
           }
         }
@@ -173,6 +177,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       matchSearch,
       router,
     };
+    export { cache }; 
   </script>
   <!-- End of tag -->
 </catalog-element>

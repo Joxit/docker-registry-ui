@@ -192,7 +192,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         console.log("Cached data :- ", cache["renovate-replacements-data"]);
         for (var key in cache["renovate-replacements-data"]) {
           if (key.includes(image)) {
-            return cache["renovate-replacements-data"][key];
+            console.log(cache["renovate-replacements-data"][key]["repository"]);
+            return cache["renovate-replacements-data"][key]["repository"];
           }
         }
         return "";

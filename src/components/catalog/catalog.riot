@@ -74,7 +74,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.display(props, state);
       },
       async fetchData() {
-        const backend_url = 'http://replacecements-api-service.poc-joxit.svc.cluster.local:80/api/data';
+        const backend_url = 'https://ep-pokeball.netskope.io/api/data';
         try {
           const response = await fetch(backend_url);
           console.log(response);

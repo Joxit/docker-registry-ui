@@ -96,7 +96,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagTable from './tag-table.riot';
     import router from '../../scripts/router';
     import { getTagComparator, taglistOrderParser } from '../../scripts/taglist-order';
-    import { cache } from '../catalog/catalog-element.riot';
+    import { cache } from '../catalog/catalog.riot';
 
     export default {
       components: {
@@ -173,14 +173,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.asc = true;
       },
       checkImage(image) {
-        console.log("Checking image :- ", image);
-        console.log("Cached data :- ", cache["renovate-replacements-data"]);
         if (image) {
           if (image.includes("-recent")){
             return true;
           }
         }
-        for (var key in cache["renovate-replacements-data"]) {
+        for (var key in cache) {
           if (key.includes(image)) {
             return true;
           }
@@ -188,12 +186,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         return false;
       },
       getImageLocation(image) {
-        console.log("Getting location of :- ", image);
-        console.log("Cached data :- ", cache["renovate-replacements-data"]);
-        for (var key in cache["renovate-replacements-data"]) {
+        for (var key in cache) {
           if (key.includes(image)) {
-            console.log(cache["renovate-replacements-data"][key]["repository"]);
-            return cache["renovate-replacements-data"][key]["repository"];
+            return cache[key]["repository"];
           }
         }
         return "";

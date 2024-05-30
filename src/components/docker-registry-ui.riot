@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-navbar>
       <span id="custom_logo" class='custom_logo' >
       </span>
-        <span>Docker Registry UI</span>
+        <a href="/" id="homeLink"><span>Docker Registry UI</span></a>
         <version-notification version="{ latest }" on-notify="{ notifySnackbar }"></version-notification>
       <div class="menu">
         <search-bar on-search="{ onSearch }"></search-bar>
@@ -273,6 +273,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
+    a {
+        text-decoration: none;
+    }
     :host {
       display: flex;
       flex-direction: column;

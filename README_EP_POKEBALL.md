@@ -22,7 +22,7 @@
 
 **6. how to request for more images?**
 
-**A**. *Please raise the ticket in EP dashboard and add component as 'base_images'.*
+**A**. *Please raise the ticket in EP dashboard and add component as 'base_images'. Also, reachout in slack #ep-base-images-support*
 
 **7. how frequently the images are built ?**
 

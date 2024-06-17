@@ -19,7 +19,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="material-card-title-action">
       <h2>
         Repositories of { state.registryName }
-        <div class="item-count">{ state.nImages } images in { state.nRepositories } repositories</div>
+        <div class="item-count">
+          { this.state.checkboxChecked ? `${state.nImages - this.state.numberOfDeprecatedImages} images in ${state.nRepositories} repositories` : `${state.nImages} images in ${state.nRepositories} repositories` }
+          <br>
+          <label for="reloadCheckbox">Exclude deprecated images</label>
+          <input type="checkbox" id="reloadCheckbox" onclick={ () => this.onClick() } checked={ this.state.checkboxChecked }>
+        </div>
       </h2>
     </div>
   </material-card>
@@ -45,6 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { getRegistryServers } from '../../scripts/utils';
 
     const cache = {};
+    let repo = [];
 
     export default {
       components: {
@@ -56,6 +62,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         loadend: false,
         repositories: [],
         registryUrl: '',
+        checkboxChecked: false,
+        numberOfDeprecatedImages: 0,
       },
       onBeforeMount(props) {
         this.fetchData();
@@ -69,6 +77,35 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onMounted(props, state) {
         this.display(props, state);
+        this.fetchRepositories(repo).then(repo => {
+            console.log("Populated array:", repo);
+            console.log("Length of array:", repo.length); // This should print the correct length
+            let deprecatedImagesCount = 0
+            for (let i = 0; i < repo.length; i++){
+              if (repo[i]) {
+                if (repo[i].includes("-recent")){
+                  deprecatedImagesCount = deprecatedImagesCount + 1;
+                }
+              }
+              for (var key in cache) {
+                if (key.includes(repo[i])) {
+                  deprecatedImagesCount = deprecatedImagesCount + 1;
+                }
+              }
+            }
+            this.state.numberOfDeprecatedImages = deprecatedImagesCount;
+            console.log("Number of deprecated images: ", this.state.numberOfDeprecatedImages);
+            this.update();
+        }).catch(error => {
+            console.error("Error:", error);
+        });
+        var storedState = localStorage.getItem('checkboxChecked');
+        console.log("Stored State: ", storedState);        
+        if (storedState !== null) {
+          this.state.checkboxChecked = storedState === 'true';
+          // Update checkbox's checked attribute based on stored state
+          document.getElementById('reloadCheckbox').checked = this.state.checkboxChecked;
+        }        
       },
       onUpdated(props, state) {
         this.display(props, state);
@@ -88,6 +125,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         } catch (error) {
           console.error('Error fetching data:', error);
         }
+      },
+      fetchRepositories(repo) {
+        return new Promise((resolve, reject) => {
+            // Simulating an asynchronous operation (e.g., fetching data from an API)
+            setTimeout(() => {
+                resolve(repo); // Resolve the promise with the populated array
+            }, 1000); // Simulate a delay of 1 second
+        });
+      },
+      onClick() {
+        this.state.checkboxChecked = document.getElementById('reloadCheckbox');
+        localStorage.setItem('checkboxChecked', this.state.checkboxChecked.checked);
+        window.location.reload();
       },
       display(props, state) {
         if (props.registryUrl === state.registryUrl) {
@@ -133,6 +183,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.addEventListener('error', function () {
           self.props.onNotify(this.getErrorMessage(), true);
         });
+        repo = repositories;
         oReq.addEventListener('loadend', function () {
           self.update({
             repositories,

@@ -1,0 +1,26 @@
+<help>
+  <div>
+    <material-card each={item in state.faqData}>
+      <material-waves center="true" color="#ddd"></material-waves>
+      <div class="content"><b>{item.question}</b></div><br>
+      <div class="content"><b>Ans:</b>&nbsp<i>{item.answer}</i></div>
+    </material-card>
+  </div>
+  <script>
+    export default {
+      state: {
+        faqData: [
+          { question: "1. How to search for images?", answer: " At present we are providing only text based image name search not on labels." },
+          { question: "2. What information can user find?", answer: " EP-Pokeball provides labels with which user can find out the how the image is been built and what are it's base layer images" },
+          { question: "3. What are the different sections present when they click on an image?", answer: " EP-Pokeball provides information on latest version produced and labels attached. with those labelling information we can track what are base image layers and application layers."},
+          { question: "4. Why are the versions different than the actual one?", answer: " EP Pokeball advocates immutable images. we have seen images where digest get updated but not tag. In such case we are using netskope versioning mechanism to differentiate with each updated digest."},
+          { question: "5. Which link points to the actual dockerhub information etc?", answer: " We are planning to provide link to dockerhub for external images.It's not ready yet."},
+          { question: "6. How to request for more images?", answer: " Please raise the ticket in EP dashboard and add component as 'base-images'. Also, reachout in slack #ep-base-images-support"},
+          { question: "7. How frequently the images are built?", answer: " Images are automatically built by renovator. Usually renovator triggers for every 8 hours."},
+          { question: "8. Do we have description for each image?", answer: " Yes are planning to have it in coming versions of ep-pokeball."},
+          // Add more questions and answers here
+          ]
+      },
+    }
+  </script>
+</help>

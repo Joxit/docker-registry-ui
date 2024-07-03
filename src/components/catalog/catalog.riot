@@ -20,10 +20,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <h2>
         Repositories of { state.registryName }
         <div class="item-count">
-          { this.state.checkboxChecked ? `${state.nImages - this.state.numberOfDeprecatedImages} images in ${state.nRepositories} repositories` : `${state.nImages} images in ${state.nRepositories} repositories` }
-          <br>
-          <label for="reloadCheckbox">Exclude deprecated images</label>
+          { this.state.checkboxChecked ? `${state.nImages - this.state.numberOfDeprecatedImages} Images in ${state.nRepositories} Repositories (` : `${state.nImages} Images in ${state.nRepositories} Repositories (` }
           <input type="checkbox" id="reloadCheckbox" onclick={ () => this.onClick() } checked={ this.state.checkboxChecked }>
+          <label for="reloadCheckbox">Exclude Deprecated )</label>
         </div>
       </h2>
     </div>
@@ -51,6 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     const cache = {};
     let repo = [];
+    let excludeImages = false;
 
     export default {
       components: {
@@ -103,6 +103,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         console.log("Stored State: ", storedState);        
         if (storedState !== null) {
           this.state.checkboxChecked = storedState === 'true';
+          excludeImages = this.state.checkboxChecked;
           // Update checkbox's checked attribute based on stored state
           document.getElementById('reloadCheckbox').checked = this.state.checkboxChecked;
         }        
@@ -152,48 +153,77 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           onAuthentication: this.props.onAuthentication,
           withCredentials: props.isRegistrySecured,
         });
-        oReq.addEventListener('load', function () {
-          if (this.status === 200) {
-            let repositories_1 = JSON.parse(this.responseText).repositories || [];
-            for (let i = 0; i < repositories_1.length; i++){
-              if (!repositories_1[i].includes("unlabeled") && !repositories_1[i].includes("action-push")){
-                repositories.push(repositories_1[i])
+        this.fetchRepositories(cache).then(cache => {
+          console.log("Populated cache:", cache);
+          oReq.addEventListener('load', function () {
+            if (this.status === 200) {
+              let repositories_1 = JSON.parse(this.responseText).repositories || [];
+              if (excludeImages === true) {
+                for (let i = 0; i < repositories_1.length; i++){
+                    console.log(repositories_1[i]);
+                    if (!repositories_1[i].includes("unlabeled") && !repositories_1[i].includes("action-push")) {
+                      if (!repositories_1[i].includes("-recent")) {
+                        let tflg = false;
+                        for (var key in cache) {
+                          if (key.includes(repositories_1[i])) {
+                            tflg = true;
+                          }
+                        }
+                        if (tflg === false) {
+                          repositories.push(repositories_1[i]);
+                        }
+                      }
+                    }
+                  }
+                  console.log(excludeImages);
+                  console.log("repositories", repositories);
+              } else {
+                  for (let i = 0; i < repositories_1.length; i++){
+                    console.log(repositories_1[i]);
+                    if (!repositories_1[i].includes("unlabeled") && !repositories_1[i].includes("action-push")) {
+                      repositories.push(repositories_1[i]);
+                    }
+                  }
+                  console.log(excludeImages);
+                  console.log("repositories", repositories);
+                }
+              repositories.sort();
+              nImages = repositories.length;
+              if (typeof state.branching === 'function') {
+                repositories = state.branching(repositories);
               }
+            } else if (this.status === 404) {
+              self.props.onNotify({ code: 'CATALOG_NOT_FOUND', url: catalogUrl }, true);
+            } else if (this.status === 400) {
+              let response;
+              try {
+                response = JSON.parse(this.responseText);
+              } catch (e) {}
+              if (!response || !Array.isArray(response.errors)) {
+                return self.props.onNotify(this.responseText, true);
+              }
+              self.props.onNotify({ ...response, url: catalogUrl }, true);
+            } else {
+              self.props.onNotify(this.responseText);
             }
-            repositories.sort();
-            nImages = repositories.length;
-            if (typeof state.branching === 'function') {
-              repositories = state.branching(repositories);
-            }
-          } else if (this.status === 404) {
-            self.props.onNotify({ code: 'CATALOG_NOT_FOUND', url: catalogUrl }, true);
-          } else if (this.status === 400) {
-            let response;
-            try {
-              response = JSON.parse(this.responseText);
-            } catch (e) {}
-            if (!response || !Array.isArray(response.errors)) {
-              return self.props.onNotify(this.responseText, true);
-            }
-            self.props.onNotify({ ...response, url: catalogUrl }, true);
-          } else {
-            self.props.onNotify(this.responseText);
-          }
-        });
-        oReq.addEventListener('error', function () {
-          self.props.onNotify(this.getErrorMessage(), true);
-        });
-        repo = repositories;
-        oReq.addEventListener('loadend', function () {
-          self.update({
-            repositories,
-            nRepositories: repositories.length,
-            nImages,
-            loadend: true,
           });
+          oReq.addEventListener('error', function () {
+            self.props.onNotify(this.getErrorMessage(), true);
+          });
+          repo = repositories;
+          oReq.addEventListener('loadend', function () {
+            self.update({
+              repositories,
+              nRepositories: repositories.length,
+              nImages,
+              loadend: true,
+            });
+          });
+          oReq.open('GET', catalogUrl);
+          oReq.send();
+        }).catch(error => {
+            console.error("Error:", error);
         });
-        oReq.open('GET', catalogUrl);
-        oReq.send();
       },
     };
     export { cache }; 

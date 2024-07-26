@@ -74,7 +74,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
   
   <material-card each="{element in state.envelements}">
-    <h3>&nbsp;&nbsp;ENV </h3>
+    <h2>&nbsp;&nbsp;<i class="material-icons">notes</i>&nbsp; ENV </h2>
     <image-label
       each="{ entry in element }"
       if="{ entry.value && entry.value.length > 0}"
@@ -83,7 +83,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
 
   <material-card each="{element in state.labelelements}">
-   <h3>&nbsp;&nbsp;Labels </h3>
+   <h2>&nbsp;&nbsp;<i class="material-icons">label</i>&nbsp; Labels </h2> 
    <image-label
     each="{ entry in element }"
     if="{ entry.value && entry.value.length > 0}"

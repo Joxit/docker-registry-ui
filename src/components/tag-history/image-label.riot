@@ -35,7 +35,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.icon = getHistoryIcon(props.entry.key);
         state.name = props.entry.key;  
         try {
-            state.values = Object.entries(JSON.parse(props.entry.value));
+            state.values = Object.entries(JSON.parse(props.entry.value.replace(/^"|"$/g, '')));
             if (state.values.length==0){
               throw new Error();
             }
@@ -48,7 +48,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 })
         }
         catch(e){
-            state.value = String(props.entry.value) 
+            let result = String(props.entry.value);
+            state.value = result.replace(/^"|"$/g, '');
         }
         
       },

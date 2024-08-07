@@ -1,10 +1,18 @@
 <help>
   <div>
+    <material-card>
+      <a href="https://netskope.atlassian.net/wiki/spaces/PE/pages/4610556807/Guidelines+for+creating+ep-pokeball+images" style="text-decoration: none; color: inherit;">
+        <material-waves center="true" color="#ddd"></material-waves>
+        <div class="content"><b>0.For more exhaustive list of FAQS, where can I refer?</b></div><br>
+        <div class="content"><b>Ans:</b>&nbsp<span>WIKI PAGE</span></div>
+      </a>
+    </material-card>
     <material-card each={item in state.faqData}>
       <material-waves center="true" color="#ddd"></material-waves>
       <div class="content"><b>{item.question}</b></div><br>
       <div class="content"><b>Ans:</b>&nbsp<i>{item.answer}</i></div>
     </material-card>
+    
   </div>
   <script>
     export default {

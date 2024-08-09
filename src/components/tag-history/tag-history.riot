@@ -204,8 +204,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         console.log("reportData", reportData);
         if ('error' in reportData) {
           console.log("Error in downloading report. Please check existence of the report in artifactory");
-        } else if (reportData[0].hasOwnProperty("Vulnerabilities")) {
-          for (const vulnerability of reportData[0]["Vulnerabilities"]) {
+        } else if (reportData.Results[0].hasOwnProperty("Vulnerabilities")) {
+          for (const vulnerability of reportData.Results[0]["Vulnerabilities"]) {
             let tempArray = [];
             for (const [key, value] of Object.entries(vulnerability)) {
               let tempMap = {};

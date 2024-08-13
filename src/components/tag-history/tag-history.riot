@@ -50,7 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     on-close="{ onDockerfileClose }"
     elements="{ state.elements }"
     labelelements = "{ state.labelelements }"
-    reportelements = "{ state.reportelements }"
+    lastRefreshedTS = "{ state.lastRefreshedTS }"
     envelements = "{ state.envelements }"
   ></dockerfile>
 
@@ -75,13 +75,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </material-card>
   
   <material-card>
-    <h2>&nbsp;&nbsp;<i class="material-icons">notes</i>&nbsp; Vulnerability Report </h2>
+    <h2>&nbsp;&nbsp;<i class="material-icons">notes</i>&nbsp; Vulnerability Report <span id="last-updated" class="last-updated hidden">Last updated date: {state.lastRefreshedTS} </span></h2>
     <table id="dataTable">
       <thead>
           <tr>
-              <th></th>
-              <th>Package</th>
-              <th>Vulnerabilities</th>
+            <th></th>
+            <th>Package</th>
+            <th>Vulnerabilities</th>
           </tr>
       </thead>
       <tbody>
@@ -121,7 +121,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       sevMap["MEDIUM"] = 2;
       sevMap["HIGH"] = 3;
       sevMap["CRITICAL"] = 4;
-      
+    let shouldShowLastUpdated = false;
     export default {
       components: {
         TagHistoryElement,
@@ -131,8 +131,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onBeforeMount(props, state) {
         state.elements = [];
         state.labelelements = [];
-        state.reportelements = [];
         state.envelements = [];
+        const now = new Date();
+        state.lastRefreshedTS = now.toISOString().split("T")[0];
         state.image = new DockerImage(props.image, props.tag, {
           list: true,
           registryUrl: props.registryUrl,
@@ -152,8 +153,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const { registryUrl, onNotify, useControlCacheHeader } = this.props;
         state.elements = [];
         state.labelelements = [];
-        state.reportelements = [];
         state.envelements = [];
+        const now = new Date();
+        state.lastRefreshedTS = now.toISOString().split("T")[0];
         state.image.variants[idx] =
           state.image.variants[idx] ||
           new DockerImage(this.props.image, arch.digest, {
@@ -183,7 +185,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       async processBlobs(blobs) {
-        let reportelements = [];
         const state = this.state;
         const { historyCustomLabels } = this.props;
         const labels = this.state.image.blobs.config.Labels;
@@ -206,6 +207,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             }
           }
           return guiElements.sort(eltSort);
+        }
+        function formatDateWithMonthName(date) {
+          const months = [
+              'January', 'February', 'March', 'April', 'May', 'June',
+              'July', 'August', 'September', 'October', 'November', 'December'
+          ];
+          const year = date.getFullYear();
+          const month = months[date.getMonth()];
+          const day = date.getDate();
+          return `${month} ${day}, ${year}`;
         }
         // Function to populate the table with vulnerability report data
         function populateTable(reportData) {
@@ -274,7 +285,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           console.log("Error in downloading report. Please check existence of the report in artifactory");
         } else if (reportData.Results[0].hasOwnProperty("Vulnerabilities")) {
           populateTable(reportData);
+          const date1 = new Date(reportData.Image["CreatedAt"]);
+          const date2 = new Date(reportData.TrivyDB["UpdatedAt"]);
+          // Compare the dates and pick the latest one
+          const latestDate = date1 > date2 ? date1 : date2;
+          // Format the latest date as a string if needed
+          const latestTimestamp = formatDateWithMonthName(latestDate);
+          //const latestTimestamp = latestDate.toISOString().split("T")[0];
+          state.lastRefreshedTS = latestTimestamp;
+          shouldShowLastUpdated = true;
         }
+        // Get the element
+        const lastUpdatedElement = document.getElementById('last-updated');
+        // Apply the 'hidden' class based on the condition
+        if (shouldShowLastUpdated) {
+            lastUpdatedElement.classList.remove('hidden');
+        } else {
+            lastUpdatedElement.classList.add('hidden');
+        }
+        shouldShowLastUpdated = false;
         this.update({
           elements,
           loadend: true,
@@ -423,6 +452,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
+    .hidden {
+      display: none;
+    }
+    .last-updated {
+      font-size: 1rem; /* Adjust size as needed */
+      color: #666; /* Optional: Change to a color that fits your design */
+      margin-left: auto; /* Pushes the last updated date to the right */
+    }
     h2 {
       flex-grow: 1;
       display: flex;

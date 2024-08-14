@@ -267,7 +267,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               expandableRow.classList.add('expandable-row');
               expandableRow.innerHTML = `
                   <td></td> <!-- Empty cell for alignment -->
-                  <td>${vulnerabilities[idx]}</td>
+                  <td><a href="https://scout.docker.com/vulnerabilities/id/${vulnerabilities[idx]}" target="_blank">${vulnerabilities[idx]}</a></td>
                   <td>${cveDict[vulnerabilities[idx]]}</td>
               `;
               tbody.appendChild(expandableRow);

@@ -115,12 +115,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import router from '../../scripts/router';
     import TagHistoryElement from './tag-history-element.riot';
     import ImageLabel from './image-label.riot';
+    const colors = ['#8B1924', '#D52536', '#FBB552', '#FCE1A9', '#FFFFFF'];
+    const tooltips = ['Critical severity', 'High severity', 'Medium severity', 'Low severity', 'Unspecified severity']; // Define tooltips
     const sevMap = {};
-      sevMap["UNSPECIFIED"] = 0;
-      sevMap["LOW"] = 1;
+      sevMap["UNSPECIFIED"] = 4;
+      sevMap["LOW"] = 3;
       sevMap["MEDIUM"] = 2;
-      sevMap["HIGH"] = 3;
-      sevMap["CRITICAL"] = 4;
+      sevMap["HIGH"] = 1;
+      sevMap["CRITICAL"] = 0;
     let shouldShowLastUpdated = false;
     export default {
       components: {
@@ -241,11 +243,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             // Create rectangles container
             const rectContainer = document.createElement('div');
             rectContainer.classList.add('rect-container');
+            let index = 0;
             sevArray.forEach(val => {
                 const rect = document.createElement('div');
                 rect.classList.add('rectangle');
                 rect.textContent = val;
+                rect.style.backgroundColor = colors[index];
+                rect.setAttribute('data-tooltip', tooltips[index] || 'No tooltip'); 
                 rectContainer.appendChild(rect);
+                index += 1;
             });
             const mainRow = document.createElement('tr');
             mainRow.innerHTML = `
@@ -412,7 +418,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       const res = [
         'architecture',
         'User',
-        //'created',
         'docker_version',
         'os',
         'Cmd',
@@ -503,24 +508,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     }
     .expandable-row {
       display: none; /* Hide expandable rows initially */
+      background-color: #F0F3F4;
     }
     .expandable-row td:first-child {
       padding-left: 20px; /* Indent expandable rows for visual hierarchy */
     }
     .rect-container {
       display: flex; /* Align rectangles in a row */
-      gap: 4px; /* Space between rectangles */
       justify-content: center; /* Horizontally centers the rectangles */
       align-items: center; /* Vertically centers the rectangles */
     }
     .rectangle {
-      width: 20px; /* Width of each rectangle */
-      height: 20px; /* Height of each rectangle */
+      width: 40px; /* Width of each rectangle */
+      height: 25px; /* Height of each rectangle */
       background-color: #FFFFFF;
       color: black; /* Text color */
       text-align: center; /* Center text */
       line-height: 20px; /* Center text vertically */
-      border-radius: 3px; /* Rounded corners */
       border: 1px solid #333; /* Border color */
       box-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* Shadow for 3D effect */
     }
@@ -528,6 +532,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     #dataTable th:nth-child(1),
     #dataTable td:nth-child(1) {
       width: 10%;
+    }
+    .rectangle:hover::after {
+      content: attr(data-tooltip); /* Use the value of the data-tooltip attribute */
+      position: absolute;
+      bottom: 100%; /* Position above the rectangle */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333; /* Tooltip background color */
+      color: #FFF; /* Tooltip text color */
+      padding: 5px;
+      border-radius: 3px;
+      white-space: nowrap;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      visibility: hidden; /* Hide initially */
+    }
+
+    .rectangle:hover::after {
+      opacity: 1;
+      visibility: visible;
     }
   </style>
 </tag-history>

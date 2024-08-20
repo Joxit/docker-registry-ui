@@ -88,6 +88,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <!-- Data rows will be inserted here -->
       </tbody>
     </table>
+    <div id="no-vulnerability-container" class="hidden">
+      <img id="no-vulnerability-image" src="../images/no-vulnerability.svg" alt="The image is vulnerabilty free" />
+      <p> The image is vulnerabilty free </p>
+    </div>
+    <div id="no-report-container" class="hidden">
+      <img id="no-report-image" src="../images/no-report.svg" alt="Vulnerabilty report is not available" />
+      <p> Vulnerabilty report is not available </p>
+    </div>
   </material-card>
 
   <material-card each="{element in state.envelements}">
@@ -222,6 +230,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         // Function to populate the table with vulnerability report data
         function populateTable(reportData) {
+          const table = document.getElementById('dataTable');
+          const noVulnerabilityContainer = document.getElementById('no-vulnerability-container');
+          const noReportContainer = document.getElementById('no-report-container');
+          if (reportData === null) {
+            table.classList.add('hidden');
+            noVulnerabilityContainer.classList.add('hidden');
+            noReportContainer.classList.remove('hidden');
+            return
+          } else if (reportData.Results[0]["Vulnerabilities"].length === 0) {
+            table.classList.add('hidden');
+            noVulnerabilityContainer.classList.remove('hidden');
+            noReportContainer.classList.add('hidden');
+            return
+          } else {
+            table.classList.remove('hidden');
+            noReportContainer.classList.add('hidden');
+            noVulnerabilityContainer.classList.add('hidden');
+          }
+
           const data = reportData.Results[0]["Vulnerabilities"];
           const pkgDict = {};
           const cveDict = {};
@@ -289,6 +316,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         console.log("reportData", reportData);
         if ('error' in reportData) {
           console.log("Error in downloading report. Please check existence of the report in artifactory");
+          populateTable(null);
         } else if (reportData.Results[0].hasOwnProperty("Vulnerabilities")) {
           populateTable(reportData);
           const date1 = new Date(reportData.Image["CreatedAt"]);
@@ -457,6 +485,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
+    #no-vulnerability-container {
+      text-align: center;
+      padding: 20px;
+    }
+    #no-vulnerability-image {
+      max-width: 100px;
+      height: auto;
+    }
+    #no-report-container {
+      text-align: center;
+      padding: 20px;
+    }
+    #no-report-image {
+      max-width: 100px;
+      height: auto;
+    }
     .hidden {
       display: none;
     }

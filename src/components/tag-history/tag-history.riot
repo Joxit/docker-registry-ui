@@ -238,17 +238,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             noVulnerabilityContainer.classList.add('hidden');
             noReportContainer.classList.remove('hidden');
             return
-          } else if (reportData.Results[0]["Vulnerabilities"].length === 0) {
+          } else if (reportData.Results[0].hasOwnProperty("Vulnerabilities")) {
+            table.classList.remove('hidden');
+            noReportContainer.classList.add('hidden');
+            noVulnerabilityContainer.classList.add('hidden');
+          } else {
             table.classList.add('hidden');
             noVulnerabilityContainer.classList.remove('hidden');
             noReportContainer.classList.add('hidden');
             return
-          } else {
-            table.classList.remove('hidden');
-            noReportContainer.classList.add('hidden');
-            noVulnerabilityContainer.classList.add('hidden');
           }
-
           const data = reportData.Results[0]["Vulnerabilities"];
           const pkgDict = {};
           const cveDict = {};
@@ -317,7 +316,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         if ('error' in reportData) {
           console.log("Error in downloading report. Please check existence of the report in artifactory");
           populateTable(null);
-        } else if (reportData.Results[0].hasOwnProperty("Vulnerabilities")) {
+        } else {
           populateTable(reportData);
           const date1 = new Date(reportData.Image["CreatedAt"]);
           const date2 = new Date(reportData.TrivyDB["UpdatedAt"]);

@@ -273,7 +273,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             sevArray.forEach(val => {
                 const rect = document.createElement('div');
                 rect.classList.add('rectangle');
-                rect.textContent = val;
+                if (val === 0) {
+                  rect.textContent = null;
+                } else {
+                  rect.textContent = val;
+                }
                 rect.style.backgroundColor = colors[index];
                 rect.setAttribute('data-tooltip', tooltips[index] || 'No tooltip'); 
                 rectContainer.appendChild(rect);

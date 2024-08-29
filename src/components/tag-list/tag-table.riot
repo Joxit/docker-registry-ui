@@ -28,10 +28,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   ></confirm-delete-image>
   <material-card class="taglist">
     <table style="border: none; table-layout: fixed; width: 100%;"">
-      <col style="width: 25%" />
-    <col style="width: 25%" />
-    <col style="width: 25%" />
-    <col style="width: 25%" /> 
+    <col style="width: 20%" />
+    <col style="width: 20%" />
+    <col style="width: 20%" />
+    <col style="width: 20%" />
+    <col style="width: 20%" /> 
       <thead>
         <tr>
           <th
@@ -41,13 +42,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           >
             Tag
           </th>
-
           <th>
             Size
           </th>
-
-         <!-- <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th> -->
+          <!-- <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th> -->
           <th class="architectures">Arch</th>
+          <th class="vulnerabilities">Vulnerabilities</th>
           <th class="show-tag-history">History</th>
           <th
             class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
@@ -102,6 +102,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <td class="architectures">
             <architectures image="{ image }"></architectures>
           </td>
+          <td class="dynamic-data">
+            <!-- Placeholder or default content -->
+          </td>
           <td class="show-tag-history">
             <tag-history-button image="{ image }"></tag-history-button>
           </td>
@@ -132,10 +135,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import Architectures from './architectures.riot';
     import { matchSearch } from '../search-bar.riot';
     import ConfirmDeleteImage from '../dialogs/confirm-delete-image.riot';
+    import { fetchReport, createRectanglesContainer, SEVERITY_MAP } from '../utility/utility';
     const ACTION_CHECK_TO_DELETE = 'CHECK';
     const ACTION_UNCHECK_TO_DELETE = 'UNCHECK';
     const ACTION_DELETE_IMAGE = 'DELETE';
-
     export default {
       components: {
         ImageDate,
@@ -228,6 +231,33 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           selectedImage,
         });
       },
+      async onMounted(props, state) {
+        console.log("Total tags : ", props.tags.length);
+        const reports = {};
+        for (let i = 0, len = props.tags.length; i < len; i++) {
+          var reportData = await fetchReport(props.tags[i]["name"].split("/")[0], props.tags[i]["name"].split("/")[1], props.tags[i]["tag"]);
+          reports[i] = reportData;
+        }
+        console.log(reports);
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((row, reportIdx) => {
+          if ('error' in reports[reportIdx]) {
+            console.log("Error in downloading report. Please check existence of the report in artifactory");
+            row.querySelector('td.dynamic-data').textContent = "Vulnerabilty report is not available";
+          } else {
+            let sevArray = [0, 0, 0, 0, 0];
+            if (reports[reportIdx].Results[0].hasOwnProperty("Vulnerabilities")) {
+              const data = reports[reportIdx].Results[0]["Vulnerabilities"];
+              data.forEach(item => {
+                sevArray[Number(SEVERITY_MAP[item.Severity])] += 1;
+              });
+            }
+            console.log("sevArray : ", sevArray);
+            const rectContainer = createRectanglesContainer(sevArray);
+            row.querySelector('td.dynamic-data').appendChild(rectContainer);
+          }
+        });
+      },
       supportShiftKey(selectedImage, addOrRemove) {
         if (!this.state.selectedImage) {
           return selectedImage;
@@ -253,41 +283,38 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       onColumnClick(order) {
-    // Check if it's the first click on the column
-    if (!this.state.clicked) {
-      this.state.clicked = true;
-      // Set the sorting order based on the click
-      this.props.asc = order === 'material-card-th-sorted-ascending';
-      // Here you can perform the sorting based on the new order.
-      // Call a sorting function or update your data accordingly.
-      // For example:
-      // this.sortData(this.props.asc);
-    } else {
-      // If it's not the first click, toggle the sorting order
-      this.props.asc = !this.props.onReverseOrder();
-      // Here you can perform the sorting based on the new order.
-      // Call a sorting function or update your data accordingly.
-      // For example:
-      // this.sortData(this.props.asc);
-    }
-  },
+        // Check if it's the first click on the column
+        if (!this.state.clicked) {
+          this.state.clicked = true;
+          // Set the sorting order based on the click
+          this.props.asc = order === 'material-card-th-sorted-ascending';
+          // Here you can perform the sorting based on the new order.
+          // Call a sorting function or update your data accordingly.
+          // For example:
+          // this.sortData(this.props.asc);
+        } else {
+          // If it's not the first click, toggle the sorting order
+          this.props.asc = !this.props.onReverseOrder();
+          // Here you can perform the sorting based on the new order.
+          // Call a sorting function or update your data accordingly.
+          // For example:
+          // this.sortData(this.props.asc);
+        }
+      },
       onReverseOrder() {
         this.state.orderType = null;
         this.state.desc = false;
         this.props.onReverseOrder();
       },
       onPageReorder(type) {
-      if (!this.state.sizeClicked){
-         this.state.sizeClicked = true;
-     
-    } else {
-      this.update({
-          orderType: type,
-          desc: (this.state.orderType && this.state.orderType !== type) || !this.state.desc,
-        });
-      
-    }
-        
+        if (!this.state.sizeClicked){
+          this.state.sizeClicked = true;
+        } else {
+          this.update({
+            orderType: type,
+            desc: (this.state.orderType && this.state.orderType !== type) || !this.state.desc,
+          });
+        }
       },
       getPage(tags, page) {
         const sortedTags = getPage(tags, page, this.props.tagsPerPage);
@@ -305,9 +332,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       matchSearch,
     };
     export { ACTION_CHECK_TO_DELETE, ACTION_UNCHECK_TO_DELETE, ACTION_DELETE_IMAGE };
+
   </script>
   <style>
     tag-table table th.architectures {
+      text-align: center;
+    }
+    tag-table table th.vulnerabilities {
       text-align: center;
     }
   </style>

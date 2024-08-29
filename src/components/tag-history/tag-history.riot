@@ -112,14 +112,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import router from '../../scripts/router';
     import TagHistoryElement from './tag-history-element.riot';
     import ImageLabel from './image-label.riot';
-    const colors = ['#E65C00', '#FF751A', '#FF944D', '#FFB380', '#FFD1B3'];
-    const tooltips = ['Critical severity', 'High severity', 'Medium severity', 'Low severity', 'Unspecified severity']; // Define tooltips
-    const sevMap = {};
-      sevMap["UNSPECIFIED"] = 4;
-      sevMap["LOW"] = 3;
-      sevMap["MEDIUM"] = 2;
-      sevMap["HIGH"] = 1;
-      sevMap["CRITICAL"] = 0;
+    import { fetchReport, createRectanglesContainer, SEVERITY_MAP } from '../utility/utility';
     let shouldShowLastUpdated = false;
     export default {
       components: {
@@ -170,19 +163,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.image.variants[idx].fillInfo();;
         state.image.variants[idx].on('blobs', this.processBlobs);
       },
-      async fetchReport(family, image, tag) {
-        const queryParams = new URLSearchParams({ family, image, tag }).toString();
-        const backend_url = `https://ep-pokeball.netskope.io/api/report?${queryParams}`;
-        console.log(backend_url);
-        try {
-          const response = await fetch(backend_url);
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          return [];
-        }
-      },
+      
       async processBlobs(blobs) {
         const state = this.state;
         const { historyCustomLabels } = this.props;
@@ -252,26 +233,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           for (const [pkg, vulnerabilities] of Object.entries(pkgDict)) {
             let sevArray = [0, 0, 0, 0, 0];
             for (let vul of vulnerabilities) {
-              sevArray[Number(sevMap[cveDict[vul]])] += 1;
+              sevArray[Number(SEVERITY_MAP[cveDict[vul]])] += 1;
             }
             console.log("sevArray : ", sevArray);
-            // Create rectangles container
-            const rectContainer = document.createElement('div');
-            rectContainer.classList.add('rect-container');
-            let index = 0;
-            sevArray.forEach(val => {
-                const rect = document.createElement('div');
-                rect.classList.add('rectangle');
-                if (val === 0) {
-                  rect.textContent = null;
-                } else {
-                  rect.textContent = val;
-                }
-                rect.style.backgroundColor = colors[index];
-                rect.setAttribute('data-tooltip', tooltips[index] || 'No tooltip'); 
-                rectContainer.appendChild(rect);
-                index += 1;
-            });
+
+            const rectContainer = createRectanglesContainer(sevArray);
             const mainRow = document.createElement('tr');
             mainRow.innerHTML = `
                 <td class="expand-icon" >+</td>
@@ -304,7 +270,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         const elements = new Array(1);
         elements[0] = exec(getConfig(blobs, { historyCustomLabels }));
-        const reportData = await this.fetchReport(state.image.name.split("/")[0], state.image.name.split("/")[1], state.image.tag);
+        const reportData = await fetchReport(state.image.name.split("/")[0], state.image.name.split("/")[1], state.image.tag);
         console.log("reportData", reportData);
         if ('error' in reportData) {
           console.log("Error in downloading report. Please check existence of the report in artifactory");
@@ -549,46 +515,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     .expandable-row td:first-child {
       padding-left: 20px; /* Indent expandable rows for visual hierarchy */
     }
-    .rect-container {
-      display: flex; /* Align rectangles in a row */
-      justify-content: center; /* Horizontally centers the rectangles */
-      align-items: center; /* Vertically centers the rectangles */
-    }
-    .rectangle {
-      width: 40px; /* Width of each rectangle */
-      height: 25px; /* Height of each rectangle */
-      background-color: #FFFFFF;
-      color: black; /* Text color */
-      text-align: center; /* Center text */
-      line-height: 25px; /* Center text vertically */
-      border: 1px solid #333; /* Border color */
-      box-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* Shadow for 3D effect */
-    }
     /* Set width for the first column */
     #dataTable th:nth-child(1),
     #dataTable td:nth-child(1) {
       width: 10%;
-    }
-    .rectangle:hover::after {
-      content: attr(data-tooltip); /* Use the value of the data-tooltip attribute */
-      position: absolute;
-      bottom: 100%; /* Position above the rectangle */
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #333; /* Tooltip background color */
-      color: #FFF; /* Tooltip text color */
-      padding: 5px;
-      border-radius: 3px;
-      white-space: nowrap;
-      font-size: 12px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      visibility: hidden; /* Hide initially */
-    }
-
-    .rectangle:hover::after {
-      opacity: 1;
-      visibility: visible;
     }
   </style>
 </tag-history>

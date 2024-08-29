@@ -29,8 +29,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <i class="material-icons">arrow_back</i>
       </material-button>
       <h2>
-        Tags of { props.image } <span if="{ checkImage(props.image) }" class="github-label label-red">Deprecated</span>
-        <div class="deprecated-loc-hint" if="{ checkImage(props.image) }"><br>This stream of images moved to - <span>{ getImageLocation(props.image) }</span></div>
+        Tags of { props.image } <span if="{ checkImage(props.pullUrl,props.image) }" class="github-label label-red">Deprecated</span>
+        <div class="deprecated-loc-hint" if="{ checkImage(props.pullUrl,props.image) }"><br>This stream of images moved to - <span>{ getImageLocation(props.image) }</span></div>
         
         <div class="source-hint">Sourced from { state.registryName + '/' + props.image }</div>
         <div class="item-count">{ state.tags.length } tags</div>
@@ -172,14 +172,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         oReq.send();
         state.asc = true;
       },
-      checkImage(image) {
-        if (image) {
+      checkImage(pullUrl,image) {
+        let repoName = pullUrl.split("/")[1];
+        let imageNameWithRepo = repoName +"/"+image;
+        if (imageNameWithRepo) {
           if (image.includes("-recent")){
             return true;
           }
         }
         for (var key in cache) {
-          if (key.includes(image)) {
+          if (key.includes(imageNameWithRepo)) {
             return true;
           }
         }

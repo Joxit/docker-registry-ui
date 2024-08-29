@@ -49,6 +49,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { getRegistryServers } from '../../scripts/utils';
 
     const cache = {};
+    let repoName = "";
     let repo = [];
     let excludeImages = false;
 
@@ -78,8 +79,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onMounted(props, state) {
         this.display(props, state);
         this.fetchRepositories(repo).then(repo => {
-            console.log("Populated array:", repo);
-            console.log("Length of array:", repo.length); // This should print the correct length
             let deprecatedImagesCount = 0
             for (let i = 0; i < repo.length; i++){
               if (repo[i]) {
@@ -94,13 +93,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               }
             }
             this.state.numberOfDeprecatedImages = deprecatedImagesCount;
-            console.log("Number of deprecated images: ", this.state.numberOfDeprecatedImages);
             this.update();
         }).catch(error => {
             console.error("Error:", error);
         });
-        var storedState = localStorage.getItem('checkboxChecked');
-        console.log("Stored State: ", storedState);        
+        var storedState = localStorage.getItem('checkboxChecked');      
         if (storedState !== null) {
           this.state.checkboxChecked = storedState === 'true';
           excludeImages = this.state.checkboxChecked;
@@ -115,13 +112,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const backend_url = 'https://ep-pokeball.netskope.io/api/data';
         try {
           const response = await fetch(backend_url);
-          console.log(response);
           const data = await response.json();
-          console.log(data);
           for (const key in data) {
-            if (key.includes("ns-ep") || key.includes("ns-builder")) {
               cache[key] = data[key]; 
-            }
           }
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -154,13 +147,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           withCredentials: props.isRegistrySecured,
         });
         this.fetchRepositories(cache).then(cache => {
-          console.log("Populated cache:", cache);
           oReq.addEventListener('load', function () {
             if (this.status === 200) {
               let repositories_1 = JSON.parse(this.responseText).repositories || [];
+              let pullUrl = props.pullUrl;
+              repoName = pullUrl.split("/")[1];
               if (excludeImages === true) {
                 for (let i = 0; i < repositories_1.length; i++){
-                    console.log(repositories_1[i]);
                     if (!repositories_1[i].includes("unlabeled") && !repositories_1[i].includes("action-push")) {
                       if (!repositories_1[i].includes("-recent")) {
                         let tflg = false;
@@ -226,7 +219,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         });
       },
     };
-    export { cache }; 
+    export { cache };
+    export { repoName }; 
   </script>
   <style>
     catalog {

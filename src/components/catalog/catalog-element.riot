@@ -80,6 +80,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { Http } from '../../scripts/http';
     import { matchSearch } from '../search-bar.riot';
     import { cache } from '../catalog/catalog.riot';
+    import { repoName } from '../catalog/catalog.riot';
     
     export default {
       onBeforeMount(props, state) {
@@ -126,13 +127,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       checkImage(image) {
+        let imageNameWithRepo = repoName+"/"+image ;
         if (image) {
           if (image.includes("-recent")){
             return true;
           }
         }
         for (var key in cache) {
-          if (key.includes(image)) {
+          if (key.includes(imageNameWithRepo)) {
             return true;
           }
         }

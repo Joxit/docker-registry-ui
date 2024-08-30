@@ -20,8 +20,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       <span id="custom_logo" class='custom_logo' ></span>
         <a href="/" id="homeLink"><span>Docker Registry UI</span></a>
         <version-notification version="{ latest }" on-notify="{ notifySnackbar }"></version-notification>
+        <a href="https://netskope.slack.com/archives/C03G4TJ6N4C" target="_blank" rel="noopener noreferrer">
+        <img src="src/images/slack-new-logo.svg" alt="Logo" id="slack_logo" class='slack_logo'>
+        <span class='slack_span'>Slack Channel</span>
+        </a> 
         <div class="help">
-          <a href="#!/help">Help</a>
+          <a href="https://netskope.atlassian.net/wiki/spaces/PE/pages/4715446464/Pokeball" target="_blank" rel="noopener noreferrer">Help</a>
         </div>
       <div class="menu">
         <search-bar on-search="{ onSearch }"></search-bar>
@@ -313,6 +317,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       width: 150px;
       padding-right: 10px;
       padding-top: 4px;
+    }
+    .slack_logo{
+      margin-top: -10px;
+      width: 25px;
+      height: 22px;
+      display: flex;
+      position: absolute;
+      right: 270px;
+    }
+    .slack_span{
+      visibility: hidden;
+      width: 120px; /* Adjust the width as needed */
+      background-color: #555; /* Background color of the tooltip */
+      color: #fff; /* Text color */
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; /* Position the tooltip above the icon */
+      left: 50%;
+      margin-left: -60px; /* Center the tooltip */
+      opacity: 0;
+      transition: opacity 0.3s;
     }
 
     material-navbar .nav-wrapper .menu {

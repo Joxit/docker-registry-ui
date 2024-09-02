@@ -15,6 +15,7 @@
 import './rectangle-styles.css';
 
 export const COLORS = ['#E65C00', '#FF751A', '#FF944D', '#FFB380', '#FFD1B3'];
+export const BACKGROUND_COLORS = ['#7a7a7a', '#929292', '#a9a9a9', '#c1c1c1', '#dadada'];
 export const TOOLTIPS = ['Critical severity', 'High severity', 'Medium severity', 'Low severity', 'Unspecified severity']; // Define tooltips
 export const SEVERITY_MAP = {};
       SEVERITY_MAP["UNSPECIFIED"] = 4;
@@ -44,8 +45,13 @@ export function createRectanglesContainer(sevArray) {
     sevArray.forEach((val, index) => {
       const rect = document.createElement('div');
       rect.classList.add('rectangle');
-      rect.textContent = val === 0 ? null : val;
-      rect.style.backgroundColor = COLORS[index];
+      if (val === 0) {
+        rect.textContent = null;
+        rect.style.backgroundColor = BACKGROUND_COLORS[index];
+      } else {
+        rect.textContent = val;
+        rect.style.backgroundColor = COLORS[index];
+      }
       rect.setAttribute('data-tooltip', TOOLTIPS[index] || 'No tooltip');
       rectContainer.appendChild(rect);  
     });

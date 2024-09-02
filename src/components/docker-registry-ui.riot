@@ -21,8 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <a href="/" id="homeLink"><span>Docker Registry UI</span></a>
         <version-notification version="{ latest }" on-notify="{ notifySnackbar }"></version-notification>
         <a href="https://netskope.slack.com/archives/C03G4TJ6N4C" target="_blank" rel="noopener noreferrer">
-        <img src="src/images/slack-new-logo.svg" alt="Logo" id="slack_logo" class='slack_logo'>
-        <span class='slack_span'>Slack Channel</span>
+        <span class='slack_logo' id='slack_logo'></span>
         </a> 
         <div class="help">
           <a href="https://netskope.atlassian.net/wiki/spaces/PE/pages/4715446464/Pokeball" target="_blank" rel="noopener noreferrer">Help</a>
@@ -162,6 +161,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
     import netskopeIcon from '../images/netskope-logo.svg';
+    import slackIcon from '../images/slack-new-logo.svg';
     export default {
       components: {
         Catalog,
@@ -208,8 +208,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onMounted(props, state) {
         const netskopeVersion = this.$('#custom_logo');
+        const slackVersion = this.$('#slack_logo');
         if (netskopeVersion) {
           netskopeVersion.innerHTML = netskopeIcon().firstElementChild.outerHTML;
+        }
+        if (slackVersion){
+          slackVersion.innerHTML = slackIcon().firstElementChild.outerHTML;
         }
       },
       onServerChange(registryUrl) {

@@ -172,11 +172,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const labelelements = temp.map(obj=>{
             return {key:obj[0],value:obj[1]}
         })
-        const env = this.state.image.blobs.config.Env;
-        const tmp = Object.values(env)
-        const envelements = tmp.map(obj=>{
+        const imageConfig = this.state.image.blobs.config;
+        console.log("Image Config : ", imageConfig);
+        var envelements = null;
+        if (imageConfig.hasOwnProperty("Env")) {
+          const env = this.state.image.blobs.config.Env;
+          const tmp = Object.values(env)
+          envelements = tmp.map(obj=>{
             return {key:obj.split("=")[0],value:obj.split("=")[1]}
-        })
+          })
+        }
         function exec(elt) {
           const guiElements = [];
           for (var attribute in elt) {
@@ -236,7 +241,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               sevArray[Number(SEVERITY_MAP[cveDict[vul]])] += 1;
             }
             console.log("sevArray : ", sevArray);
-
             const rectContainer = createRectanglesContainer(sevArray);
             const mainRow = document.createElement('tr');
             mainRow.innerHTML = `

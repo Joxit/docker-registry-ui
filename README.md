@@ -145,8 +145,6 @@ This featureswas added to version 2.4.0. See more about this in [#283](https://g
 Here is a simple usage of Docker Registry UI with Docker Registry Server using docker-compose. This example should work for most of your use case and your UI will be on the same domain as you registry.
 
 ```yml
-version: '3.8'
-
 services:
   registry-ui:
     image: joxit/docker-registry-ui:main
@@ -165,7 +163,6 @@ services:
       - TAGLIST_PAGE_SIZE=100
       - REGISTRY_SECURED=false
       - CATALOG_ELEMENTS_LIMIT=1000
-    container_name: registry-ui
 
   registry-server:
     image: registry:2.8.2
@@ -179,7 +176,6 @@ services:
       REGISTRY_STORAGE_DELETE_ENABLED: 'true'
     volumes:
       - ./registry/data:/var/lib/registry
-    container_name: registry-server
 ```
 
 ## Using CORS

@@ -1,20 +1,18 @@
 
 @font-face {
-  font-family: 'Material Icons';
+  font-family: 'Material Symbols Rounded';
   font-style: normal;
   font-weight: 400;
-  src: url(fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
-  src: local('Material Icons'),
-       local('MaterialIcons-Regular'),
-       url(fonts/MaterialIcons-Regular.woff2) format('woff2'),
-       url(fonts/MaterialIcons-Regular.woff) format('woff'),
-       url(fonts/MaterialIcons-Regular.ttf) format('truetype');
+  src: local('Material Symbols Rounded'),
+       url(fonts/material-symbols-rounded.woff2) format('woff2'),
+       url(fonts/material-symbols-rounded.woff) format('woff'),
+       url(fonts/material-symbols-rounded.ttf) format('truetype');
 }
 
 material-button .content i.material-icons,
 material-button[rounded=true] .content i.material-icons,
 i.material-icons {
-  font-family: 'Material Icons';
+  font-family: 'Material Symbols Rounded';
   font-weight: normal;
   font-style: normal;
   font-size: 24px;  /* Preferred icon size */
@@ -38,6 +36,12 @@ i.material-icons {
 
   /* Support for IE. */
   font-feature-settings: 'liga';
+
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
 }
 
 material-button .content i.material-icons,

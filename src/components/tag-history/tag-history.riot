@@ -253,8 +253,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         'author',
         'id',
         'ExposedPorts',
+        'name',
+        'appVersion',
+        'kubeVersion',
+        'keywords',
+        'home',
+        'sources'
       ].reduce(function (acc, e) {
-        const value = blobs[e] || blobs.config[e];
+        const value = blobs[e] || (blobs.config && blobs.config[e]);
         if (value && e === 'architecture' && blobs.variant) {
           acc[e] = value + blobs.variant;
         } else if (value) {

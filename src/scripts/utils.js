@@ -82,6 +82,17 @@ export function getHistoryIcon(attribute) {
       return 'router';
     case 'comment':
       return 'chat';
+    case 'home':
+      return 'home';
+    case 'sources':
+      return 'link';
+    case 'keywords':
+      return 'receipt';
+    case 'name':
+      return 'abc';
+    case 'kubeVersion':
+    case 'appVersion':
+      return '123';
     default:
       if (attribute.startsWith('custom-label-')) {
         return 'label';

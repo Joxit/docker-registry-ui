@@ -113,6 +113,7 @@ export class DockerImage {
         }
         self.ociImage = response.mediaType === 'application/vnd.oci.image.index.v1+json';
         self.layers = response.layers || response.manifests;
+        self.annotations = response.annotations;
         self.size = self.layers.reduce(function (acc, e) {
           return acc + e.size;
         }, 0);
@@ -160,8 +161,9 @@ export class DockerImage {
     oReq.addEventListener('loadend', function () {
       if (this.status === 200 || this.status === 202) {
         const response = JSON.parse(this.responseText);
-        self.creationDate = new Date(response.created);
+        self.creationDate = new Date(response.created || self.annotations?.['org.opencontainers.image.created']);
         self.blobs = response;
+        self.blobs.history = self.blobs.history || [];
         self.blobs.history
           .filter(function (e) {
             return !e.empty_layer;

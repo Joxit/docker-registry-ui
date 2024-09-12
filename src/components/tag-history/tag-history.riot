@@ -63,7 +63,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     ></tag-history-element>
   </material-card>
   
-  <material-card>
+  <material-card id="materialCard" style="display: none;" >
     <h2>&nbsp;&nbsp;<i class="material-icons">notes</i>&nbsp; Vulnerability Report <span id="last-updated" class="last-updated hidden">Last updated date: {state.lastRefreshedTS} </span></h2>
     <table id="dataTable">
       <thead>
@@ -113,6 +113,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagHistoryElement from './tag-history-element.riot';
     import ImageLabel from './image-label.riot';
     import { fetchReport, createRectanglesContainer, SEVERITY_MAP } from '../utility/utility';
+    import { repoName } from '../catalog/catalog.riot';
     let shouldShowLastUpdated = false;
     export default {
       components: {
@@ -139,6 +140,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onMounted(props, state) {
         state.image.on('blobs', this.processBlobs);
         state.image.on('list', this.multiArchList);
+        const materialCard = document.getElementById('materialCard');
+        console.log("tag:",props.pullUrl);
+
+        // Check if repoName is present and not empty
+        if (!props.pullUrl.includes('tool')) {
+            materialCard.style.display = 'block'; // Show material card if repoName is present
+        } else {
+            materialCard.style.display = 'none'; // Keep it hidden if repoName is absent
+        }
       },
       onTabChanged(arch, idx) {
         const state = this.state;

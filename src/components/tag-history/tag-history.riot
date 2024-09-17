@@ -63,7 +63,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     ></tag-history-element>
   </material-card>
   
-  <material-card>
+  <material-card id="materialCard" style="display: none;" >
     <h2>&nbsp;&nbsp;<i class="material-icons">notes</i>&nbsp; Vulnerability Report <span id="last-updated" class="last-updated hidden">Last updated date: {state.lastRefreshedTS} </span></h2>
     <table id="dataTable">
       <thead>
@@ -113,6 +113,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import TagHistoryElement from './tag-history-element.riot';
     import ImageLabel from './image-label.riot';
     import { fetchReport, createRectanglesContainer, SEVERITY_MAP } from '../utility/utility';
+    import { repoName } from '../catalog/catalog.riot';
     let shouldShowLastUpdated = false;
     export default {
       components: {
@@ -124,6 +125,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         state.elements = [];
         state.labelelements = [];
         state.envelements = [];
+        state.pullUrl = ""
         const now = new Date();
         state.lastRefreshedTS = now.toISOString().split("T")[0];
         state.image = new DockerImage(props.image, props.tag, {
@@ -139,6 +141,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onMounted(props, state) {
         state.image.on('blobs', this.processBlobs);
         state.image.on('list', this.multiArchList);
+        const materialCard = document.getElementById('materialCard');
+        console.log("tag:",props.pullUrl);
+        state.pullUrl = props.pullUrl;
+
+        // Check if repoName is present and not empty
+        if (!props.pullUrl.includes('tool')) {
+            materialCard.style.display = 'block'; // Show material card if repoName is present
+        } else {
+            materialCard.style.display = 'none'; // Keep it hidden if repoName is absent
+        }
       },
       onTabChanged(arch, idx) {
         const state = this.state;
@@ -276,20 +288,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         elements[0] = exec(getConfig(blobs, { historyCustomLabels }));
         const reportData = await fetchReport(state.image.name.split("/")[0], state.image.name.split("/")[1], state.image.tag);
         console.log("reportData", reportData);
-        if ('error' in reportData) {
-          console.log("Error in downloading report. Please check existence of the report in artifactory");
-          populateTable(null);
-        } else {
-          populateTable(reportData);
-          const date1 = new Date(reportData.Image["CreatedAt"]);
-          const date2 = new Date(reportData.TrivyDB["UpdatedAt"]);
-          // Compare the dates and pick the latest one
-          const latestDate = date1 > date2 ? date1 : date2;
-          // Format the latest date as a string if needed
-          const latestTimestamp = formatDateWithMonthName(latestDate);
-          //const latestTimestamp = latestDate.toISOString().split("T")[0];
-          state.lastRefreshedTS = latestTimestamp;
-          shouldShowLastUpdated = true;
+        if (!state.pullUrl.includes("tool")){
+          if ('error' in reportData) {
+            console.log("Error in downloading report. Please check existence of the report in artifactory");
+            populateTable(null);
+          } else {
+            populateTable(reportData);
+            const date1 = new Date(reportData.Image["CreatedAt"]);
+            const date2 = new Date(reportData.TrivyDB["UpdatedAt"]);
+            // Compare the dates and pick the latest one
+            const latestDate = date1 > date2 ? date1 : date2;
+            // Format the latest date as a string if needed
+            const latestTimestamp = formatDateWithMonthName(latestDate);
+            //const latestTimestamp = latestDate.toISOString().split("T")[0];
+            state.lastRefreshedTS = latestTimestamp;
+            shouldShowLastUpdated = true;
+          }
         }
         // Get the element
         const lastUpdatedElement = document.getElementById('last-updated');

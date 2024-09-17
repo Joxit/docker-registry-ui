@@ -27,12 +27,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     on-image-deleted="{ props.onImageDeleted }"
   ></confirm-delete-image>
   <material-card class="taglist">
-    <table style="border: none; table-layout: fixed; width: 100%;"">
-    <col style="width: 20%" />
-    <col style="width: 20%" />
-    <col style="width: 20%" />
-    <col style="width: 20%" />
-    <col style="width: 20%" /> 
+    <table style="border: none; table-layout: fixed; width: 100%;">
+    <col id="col1" style="width: 25%;" />
+    <col id="col2" style="width: 25%;" />
+    <col id="col3" style="width: 25%;" />
+    <col id="vulnerabilitiesColumn" style="width: 20%; display: none;" />
+    <col id="col4" style="width: 25%;" />
       <thead>
         <tr>
           <th
@@ -47,7 +47,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </th>
           <!-- <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th> -->
           <th class="architectures">Arch</th>
-          <th class="vulnerabilities">Vulnerabilities</th>
+          <th class="vulnerabilities" id="vulnerabilitiesHeader">Vulnerabilities</th>
           <th class="show-tag-history">History</th>
           <th
             class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
@@ -102,7 +102,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <td class="architectures">
             <architectures image="{ image }"></architectures>
           </td>
-          <td class="dynamic-data">
+          <td class="dynamic-data vulnerabilitiesColumn" id="vulnerabilitiesHeader" >
             <!-- Placeholder or default content -->
           </td>
           <td class="show-tag-history">
@@ -232,6 +232,34 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         });
       },
       async onMounted(props, state) {
+        const vulnerabilitiesColumn = document.querySelectorAll('.vulnerabilitiesColumn');
+        const vulnerabilitiesHeader = document.getElementById('vulnerabilitiesHeader');
+        const cols = ['col1', 'col2', 'col3', 'col4'].map(id => document.getElementById(id));
+        const isToolIncluded = props.pullUrl.includes('tool');
+        console.log("isToolIncluded:",isToolIncluded);
+        
+        if (isToolIncluded) {
+            // Hide vulnerabilities column header
+            vulnerabilitiesHeader.style.display = 'none';
+         
+
+            // Hide vulnerabilities data cells
+            vulnerabilitiesColumn.forEach(cell => cell.style.display = 'none');
+
+            // Adjust column widths
+            cols.forEach(col => col.style.width = '25%');
+          } else {
+              // Show vulnerabilities column header
+              vulnerabilitiesHeader.style.display = '';
+             
+
+              // Show vulnerabilities data cells
+              vulnerabilitiesColumn.forEach(cell => cell.style.display = '');
+
+              // Adjust column widths
+              cols.forEach(col => col.style.width = '20%');
+          }
+       
         console.log("Total tags : ", props.tags.length);
         const reports = {};
         for (let i = 0, len = props.tags.length; i < len; i++) {

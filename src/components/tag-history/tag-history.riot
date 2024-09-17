@@ -285,26 +285,31 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           }
         }
         const elements = new Array(1);
+        let reportData = null;
         elements[0] = exec(getConfig(blobs, { historyCustomLabels }));
-        const reportData = await fetchReport(state.image.name.split("/")[0], state.image.name.split("/")[1], state.image.tag);
-        console.log("reportData", reportData);
         if (!state.pullUrl.includes("tool")){
-          if ('error' in reportData) {
-            console.log("Error in downloading report. Please check existence of the report in artifactory");
-            populateTable(null);
-          } else {
-            populateTable(reportData);
-            const date1 = new Date(reportData.Image["CreatedAt"]);
-            const date2 = new Date(reportData.TrivyDB["UpdatedAt"]);
-            // Compare the dates and pick the latest one
-            const latestDate = date1 > date2 ? date1 : date2;
-            // Format the latest date as a string if needed
-            const latestTimestamp = formatDateWithMonthName(latestDate);
-            //const latestTimestamp = latestDate.toISOString().split("T")[0];
-            state.lastRefreshedTS = latestTimestamp;
-            shouldShowLastUpdated = true;
-          }
+           reportData = await fetchReport(state.image.name.split("/")[0], state.image.name.split("/")[1], state.image.tag);
         }
+        console.log("reportData", reportData);
+        if (reportData == null){
+          populateTable(null);
+        }
+        else if ( 'error' in reportData) {
+          console.log("Error in downloading report. Please check existence of the report in artifactory");
+          populateTable(null);
+        } else {
+          populateTable(reportData);
+          const date1 = new Date(reportData.Image["CreatedAt"]);
+          const date2 = new Date(reportData.TrivyDB["UpdatedAt"]);
+          // Compare the dates and pick the latest one
+          const latestDate = date1 > date2 ? date1 : date2;
+          // Format the latest date as a string if needed
+          const latestTimestamp = formatDateWithMonthName(latestDate);
+          //const latestTimestamp = latestDate.toISOString().split("T")[0];
+          state.lastRefreshedTS = latestTimestamp;
+          shouldShowLastUpdated = true;
+        }
+        
         // Get the element
         const lastUpdatedElement = document.getElementById('last-updated');
         // Apply the 'hidden' class based on the condition

@@ -35,8 +35,8 @@ services:
   registry:
     image: registry:2.8.3
     volumes:
-      - /DATA/docker-registry/images:/var/lib/registry
-      - /DATA/docker-registry/htpasswd:/auth
+      - /images:/var/lib/registry
+      - /htpasswd:/auth
     environment:
       - REGISTRY_AUTH=htpasswd
       - REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm

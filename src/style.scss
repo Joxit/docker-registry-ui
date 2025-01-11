@@ -300,13 +300,13 @@ material-card table th.material-card-th-sorted-descending:before {
   font-style: normal;
   line-height: 1;
   font-size: 16px;
-  content: '\e5d8';
+  content: 'arrow_upward';
   margin-right: 5px;
   vertical-align: sub;
 }
 
 material-card table th.material-card-th-sorted-descending:before {
-  content: '\e5db';
+  content: 'arrow_downward';
 }
 
 material-button .content i.material-icons,

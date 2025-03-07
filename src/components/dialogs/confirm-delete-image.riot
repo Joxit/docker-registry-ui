@@ -16,7 +16,18 @@
 -->
 <confirm-delete-image>
   <material-popup opened="{ props.opened }" onClick="{ props.onClick }">
-    <div class="material-popup-title">These images will be deleted</div>
+    <div class="material-popup-title">
+      These images will be deleted
+      <material-button
+        color="inherit"
+        text-color="var(--accent-text)"
+        target="_blank"
+        waves-color="var(--hover-background)"
+        href="https://joxit.dev/docker-registry-ui/#:~:text=Why%20when%20I%20delete%20one%20tag,%20all%20tags%20with%20the%20same%20SHA%20are%20deleted%20"
+        icon
+        ><i class="material-icons">help</i>
+      </material-button>
+    </div>
     <div class="material-popup-content">
       <ul>
         <li each="{ image in displayImagesToDelete(props.toDelete, props.tags) }">{ image.name }:{ image.tag }</li>

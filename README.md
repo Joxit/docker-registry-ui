@@ -67,7 +67,7 @@ Checkout all options in [Available options](#available-options) section.
     -   This means you are using a UI with HTTPS and your registry is using HTTP (unsecured). When you are on a HTTPS site, you can't get HTTP content. Upgrade you registry with a HTTPS connection.
 -   Why the default nginx `Host` is set to `$http_host` ?
     -   This fixes the issue [#88](https://github.com/Joxit/docker-registry-ui/issues/88). More about this in [#113](https://github.com/Joxit/docker-registry-ui/issues/113).
--   Why OPTIONS (aka preflight requests) and DELETE fails with 401 status code (using Basic Auth) ?
+-   Why OPTIONS (aka preflight requests) and DELETE fails with 401 status code (using Basic Auth) or why the UI says to check my `Access-Control-Allow-Origin` ?
     -   This is caused by a bug in docker registry, it returns 401 status requests on preflight requests, this breaks [W3C preflight-request specification](https://www.w3.org/TR/cors/#preflight-request). I contacted docker registry maintainers and this will never be fixed ([distribution/distribution#4458](https://github.com/distribution/distribution/issues/4458)). I suggest to have your UI on the same domain than your registry e.g. registry.example.com/ui/ **or** use `NGINX_PROXY_PASS_URL` **or** configure a nginx/apache/haproxy in front of your registry that returns 200 on each OPTIONS requests. (see [#104](https://github.com/Joxit/docker-registry-ui/issues/104), [#204](https://github.com/Joxit/docker-registry-ui/issues/204), [#207](https://github.com/Joxit/docker-registry-ui/issues/207), [#214](https://github.com/Joxit/docker-registry-ui/issues/214), [#266](https://github.com/Joxit/docker-registry-ui/issues/266), [#278](https://github.com/Joxit/docker-registry-ui/issues/278)).
 -   Can I use the docker registry ui as a standalone application (with Electron) ?
     -   Yes, check out the example [here](https://github.com/Joxit/docker-registry-ui/tree/main/examples/electron). (see [#129](https://github.com/Joxit/docker-registry-ui/pull/129))
@@ -184,11 +184,19 @@ services:
 
 ## Using CORS
 
-Your server should be configured to accept CORS.
+:warning: Before posting issues about CORS, please read the and all created issues.
 
-If your docker registry does not need credentials, you will need to send this HEADER:
+:warning: If you **are using credentials** and your registry is on a different host than your UI, please read the [FAQ about OPTIONS](https://github.com/Joxit/docker-registry-ui#:~:text=Why%20OPTIONS%20(aka%20preflight%20requests)), all the linked issues and [distribution/distribution#4458](https://github.com/distribution/distribution/issues/4458) first. The best way for the UI to work is using `NGINX_PROXY_PASS_URL` or configure your own proxy (nginx, haproxy...) that will be on top of your **docker registry** (and not the UI!) to override OPTIONS requests.
 
+If your docker registry **does not need credentials**, you will need to send this HEADER:
+
+```yml
+http:
+  headers:
     Access-Control-Allow-Origin: ['*']
+    Access-Control-Allow-Headers: ['Accept', 'Cache-Control']
+    Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS'] # Optional
+```
 
 If your docker registry need credentials, you will need to send these HEADERS (you must add the protocol `http`/`https` and the port when not default `80`/`443`):
 
@@ -202,8 +210,6 @@ http:
 ```
 
 An alternative for CORS issues is a plugin on your browser, more info [here](https://github.com/Joxit/docker-registry-ui/issues/25#issuecomment-621104846) (thank you [xmontero](https://github.com/xmontero)).
-
-:warning: If you are using credential and still having issues, please read the the line about preflight requests and the bug in docker registry server in the [FAQ](#faq) before posting any issues.
 
 ## Using delete
 

@@ -71,8 +71,6 @@ services:
       - --entrypoints.http.address=:80
       # Create an entrypoint "https" listening on port 443
       - --entrypoints.https.address=:443
-      # Create an entrypoint "https" listening on port 222
-      - --entrypoints.gitssh.address=:222
       # Create the certificate resolver "le" for Let's Encrypt, uses the environment variable EMAIL
       - --certificatesresolvers.le.acme.email=my-le-email.example.com # !!!!CHANGEME!!!! (REQUIRED)
       # Store the Let's Encrypt certificates in the mounted volume

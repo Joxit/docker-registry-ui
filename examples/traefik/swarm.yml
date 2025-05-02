@@ -1,0 +1,301 @@
+services:
+  traefik:
+    image: traefik:3
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+      - target: 443
+        published: 443
+        protocol: tcp
+      - target: 8443
+        published: 8443
+        protocol: tcp
+    command:
+      ### Provider - Docker Swarm
+      # Enable Swarm mode in traefik
+      - --providers.swarm
+      # Do not expose all Docker services, only the ones explicitly exposed
+      - --providers.swarm.exposedbydefault=false
+      # Connect to the socket, so that traefik can read labels from Docker services
+      - --providers.swarm.endpoint=unix:///var/run/docker.sock
+
+      ### Entrypoints
+      # Create an entrypoint "http" listening on port 80
+      - --entrypoints.http.address=:80
+      # Create an entrypoint "https" listening on port 443
+      - --entrypoints.https.address=:443
+      # Create an entrypoint "dashboard" listening on port 8443
+      - --entrypoints.dashboard.address=:8443
+
+      ### TLS Certificates, Stores, and Options REQUIRE on-disk configuration (OPTIONAL Configuration)
+      # Enable the File Provider (this is the path INSIDE the container)
+      # - --providers.file.directory=/opt/traefik/
+      # Tell traefik to watch for changes
+      # - --providers.file.watch=true
+
+      ### Let's Encrypt Resolver (Dynamic Certificate Option)
+      # Create the certificate resolver "letsencrypt" for Let's Encrypt, uses the environment variable EMAIL
+      - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
+      # Store the Let's Encrypt certificates in the mounted volume
+      - --certificatesresolvers.letsencrypt.acme.storage=/certificates/acme.json
+      # Use the TLS Challenge for Let's Encrypt
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      # Let's Encrypt will refuse to issue certs if you make an unreasonably large amount of requests
+      # ** ENABLE this during testing, REMOVE during production **
+      # - --certificatesresolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+
+      ### Operations
+      # Enable the access log, with HTTP requests
+      - --accesslog
+      # Turn on anonymous usage to help developers
+      - --global.sendAnonymousUsage
+      # Enable the Traefik log, for configurations and errors
+      - --log
+      - --log.level=INFO
+      # Enable the Dashboard and API
+      - --api
+      - --api.insecure=true
+      - --api.dashboard=true
+
+    deploy:
+      replicas: 1
+      resources:
+        reservations:
+          cpus: '0.05'
+          memory: 32M
+        limits:
+          cpus: '0.5'
+          memory: 128M
+      placement:
+        constraints:
+          # Always run it on a manager
+          - node.role == manager
+          # Set to always run on the node with the certificates volume (must add label to node)
+          # - node.labels.traefik == true
+      labels:
+        ### Initial Setup
+        # Use the traefik network (declared below)
+        - "traefik.swarm.network=${STACK}_frontend"
+        # Enable Traefik for this service, to make it available in the public network
+        - "traefik.enable=true"
+        # Define the port inside of the Docker service to use
+        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+        ### catch-all https-redirect middleware to redirect all HTTP to HTTPS
+        # Redirect to the https:// scheme (note this is NOT the 'https' entrypoint name)
+        - "traefik.http.middlewares.redirect-to-https.redirectScheme.scheme=https"
+        # Permanent redirect, status code 308 (preserves the method, e.g GET/POST)
+        - "traefik.http.middlewares.redirect-to-https.redirectScheme.permanent=true"
+        # Match any host (including none)
+        - "traefik.http.routers.http-catchall.rule=HostRegexp(`.+`)"
+        # Listen on the http entrypoint
+        - "traefik.http.routers.http-catchall.entryPoints=http"
+        # Set this rule to have a very high priority (default when unset = 25)
+        - "traefik.http.routers.http-catchall.priority=1000"
+        # Send to the middleware 'redirect-to-https'
+        - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+
+        ### Dashboard configuration
+        # traefik-https router matches the domain...
+        - "traefik.http.routers.traefik-https.rule=Host(`registry.${DOMAIN}`)"
+        # ... but only the 'dashboard' entrypoint!
+        - "traefik.http.routers.traefik-https.entrypoints=dashboard"
+        # Enable HTTP Basic auth, using the middleware created below
+        - "traefik.http.routers.traefik-https.middlewares=dashboard-basic-auth"
+        # Use the special Traefik service api@internal with the web UI/Dashboard
+        - "traefik.http.routers.traefik-https.service=api@internal"
+        # Enable TLS
+        - "traefik.http.routers.traefik-https.tls=true"
+        # Set the certificate resolver, set value to nothing if using a static certificate
+        - "traefik.http.routers.traefik-https.tls.certresolver=${RESOLVER}"
+
+        ### Middlewares
+        ## 'compress' middleware - https://doc.traefik.io/traefik/middlewares/http/compress/
+        # enable compression
+        - "traefik.http.middlewares.compress.compress=true"
+        ## 'ratelimit' middleware - https://doc.traefik.io/traefik/middlewares/http/ratelimit/
+        # set average requests to 20/second
+        - "traefik.http.middlewares.ratelimit.ratelimit.average=20"
+        # allow bursting to 50/second when average is not met
+        - "traefik.http.middlewares.ratelimit.ratelimit.burst=50"
+        ## 'buffering' middleware - https://doc.traefik.io/traefik/middlewares/http/buffering/
+        # permit body sizes up to 10GB (for handling registry blob data layers)
+        - "traefik.http.middlewares.buffering.buffering.maxRequestBodyBytes=10240000000" # 10GB
+
+        ### BasicAuth middleware
+        # BasicAuth credentials (interpolation warning, $ must be $$) password = hunter2
+        - "traefik.http.middlewares.dashboard-basic-auth.basicauth.users=admin:$$2y$$05$$8S4d0UTrSxlq5wlQPJzUoeSlat5N5U2zRcFQ7sGu10Tzw21p1TfUu"
+
+    volumes:
+      # Add Docker as a mounted volume, so that Traefik can read the labels of other services
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Mount the volume to store the certificates for lets encrypt
+      - certficates:/certificates
+      # OPTIONAL: Dynamic configuration for TLS (certificates, stores and options) defaults (limitation: cannot be loaded at runtime)
+      # - /opt/traefik/:/opt/traefik
+
+    networks:
+      - frontend
+
+  ### Redis Container
+  redis:
+    image: redis:alpine
+    networks:
+      - frontend
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    deploy:
+      replicas: 1
+      resources:
+        reservations:
+          memory: 32M
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  ### Docker's Distribution / Registry Container
+  registry:
+    image: registry:latest
+    networks:
+      - frontend
+    volumes:
+      - /opt/registry:/var/lib/registry
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "yes"
+      REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR: redis
+      REGISTRY_REDIS_OPTIONS_ADDRS: "[redis:6379]"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 1024M
+      labels:
+        ### Initial Setup
+        # Use the traefik network (declared below)
+        - "traefik.swarm.network=${STACK}_frontend"
+        # Enable Traefik for this service, to make it available in the public network
+        - "traefik.enable=true"
+        # Define the port inside of the Docker service to use
+        - "traefik.http.services.registry.loadbalancer.server.port=5000"
+
+        ### Router for GET requests without authentication
+        # 'registry' accepts GET requests on the URL beginning with /v2, allows public `docker pull`
+        - "traefik.http.routers.registry.rule=Host(`registry.${DOMAIN}`) && PathPrefix(`/v2`) && Method(`GET`)"
+        # Runs on the 'https' endpoint
+        - "traefik.http.routers.registry.entryPoints=https"
+        # Enable TLS
+        - "traefik.http.routers.registry.tls=true"
+        # Set the certificate resolver, set value to nothing if using a static certificate
+        - "traefik.http.routers.registry.tls.certresolver=${RESOLVER}"
+        # Use the 'compress' and 'ratelimit' middlewares
+        - "traefik.http.routers.registry.middlewares=compress@swarm,ratelimit@swarm,error-pages-middleware"
+
+        ### Router for POST/PUT/DELETE requests with BasicAuth
+        # 'registry-authd' accepts POST/PUT/DELETE requests on the URL beginning with /v2, allows only authenticated `docker push`
+        - "traefik.http.routers.registry-authd.rule=(Host(`registry.${DOMAIN}`) && PathPrefix(`/v2`)) && (Method(`POST`) || Method(`PUT`) || Method(`DELETE`))"
+        # Runs on the 'https' entrypoint
+        - "traefik.http.routers.registry-authd.entryPoints=https"
+        # Enable TLS
+        - "traefik.http.routers.registry-authd.tls=true"
+        # Set the certificate resolver, set value to nothing if using a static certificate
+        - "traefik.http.routers.registry-authd.tls.certresolver=${RESOLVER}"
+        # Use the 'compress', 'ratelimit' and 'registry-basic-auth', defined below
+        - "traefik.http.routers.registry-authd.middlewares=compress@swarm,ratelimit@swarm,registry-basic-auth,error-pages-middleware"
+
+        # CORS for UI when on different domain (NOTE: You do NOT need CORS for this setup where everything is the same domain)
+        # - "traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=https://registry.${DOMAIN}"
+        # - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=HEAD,GET,OPTIONS,DELETE"
+        # - "traefik.http.middlewares.cors.headers.accesscontrolallowcredentials=true"
+        # - "traefik.http.middlewares.cors.headers.accesscontrolallowheaders=Authorization,Accept,Cache-Control"
+        # - "traefik.http.middlewares.cors.headers.accesscontrolexposeheaders=Docker-Content-Digest"
+
+        ### BasicAuth middleware
+        # BasicAuth credentials (interpolation warning, $ must be $$) password = hunter2
+        - "traefik.http.middlewares.registry-basic-auth.basicauth.users=user:$$2y$$05$$8S4d0UTrSxlq5wlQPJzUoeSlat5N5U2zRcFQ7sGu10Tzw21p1TfUu"
+
+  ### Joxit's Docker Registry UI
+  ui:
+    image: joxit/docker-registry-ui:latest
+    environment:
+      - DELETE_IMAGES=true
+      - REGISTRY_URL=https://registry.${DOMAIN}
+      - NGINX_PROXY_PASS_URL=http://registry:5000
+      - SINGLE_REGISTRY=true
+    networks:
+      - frontend
+    deploy:
+      replicas: 1  # You can adjust the replica count as needed for scaling
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1024M
+      labels:
+        ### Initial Setup
+        # Use the traefik network (declared below)
+        - "traefik.swarm.network=${STACK}_frontend"
+        # Enable Traefik for this service, to make it available in the public network
+        - "traefik.enable=true"
+        # Define the port inside of the Docker service to use
+        - "traefik.http.services.ui.loadbalancer.server.port=80"
+
+        ### Router for all requests
+        # 'ui' accepts all requests for the domain
+        - "traefik.http.routers.ui.rule=Host(`registry.${DOMAIN}`)"
+        # Runs on the 'https' endpoint
+        - "traefik.http.routers.ui.entrypoints=https"
+        # Uses the error-pages-middleware (will use itself if it encouters an error)
+        - "traefik.http.routers.ui.middlewares=error-pages-middleware"
+        # Enable TLS
+        - "traefik.http.routers.ui.tls=true"
+        # Set the certificate resolver, set value to nothing if using a static certificate
+        - "traefik.http.routers.ui.tls.certresolver=${RESOLVER}"
+
+  # Custom error pages (COMPLETELY Optional)
+  error-pages:
+    image: ghcr.io/tarampampam/error-pages:3 # using the latest tag is highly discouraged
+    networks:
+      - frontend
+    environment:
+      TEMPLATE_NAME: connection # set the error pages template
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 32M
+      labels:
+        ### Initial Setup
+        # Use the traefik network (declared below)
+        - "traefik.swarm.network=${STACK}_frontend"
+        # Enable Traefik for this service, to make it available in the public network
+        - "traefik.enable=true"
+        # Define the port inside of the Docker service to use
+        - "traefik.http.services.error-pages-service.loadbalancer.server.port=8080"
+
+        ### Configure the Router for all requests
+        # use as "fallback" for any NON-registered services
+        - "traefik.http.routers.error-pages-router.rule=HostRegexp(`.+`)"
+        # set priority to the lowest priority
+        - "traefik.http.routers.error-pages-router.priority=1"
+        # Runs on the 'https' endpoint
+        - "traefik.http.routers.error-pages-router.entrypoints=https"
+        # Uses the error-pages-middleware (will use itself if it encouters an error)
+        - "traefik.http.routers.error-pages-router.middlewares=error-pages-middleware"
+
+        ### Configure the middleware
+        # Use only on HTTP status codes 400-599
+        - "traefik.http.middlewares.error-pages-middleware.errors.status=400-599"
+        # Set the service to send to
+        - "traefik.http.middlewares.error-pages-middleware.errors.service=error-pages-service"
+        # Set the url to forward the error to
+        - "traefik.http.middlewares.error-pages-middleware.errors.query=/{status}.html"
+
+volumes:
+  # Create a volume to store the certificates
+  certficates:
+
+networks:
+  # Optionally use an externally-managed already-created overlay network "traefik"
+  frontend:
+    driver: overlay

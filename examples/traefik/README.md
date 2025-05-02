@@ -30,8 +30,8 @@ port 8443 because [traefik hardcodes](https://doc.traefik.io/traefik/operations/
 As committed, this uses Let's Encrypt for certificates, so port `:443` must be forwarded to your swarm to
 use the TLS challenge.
 
-[!WARNING]
-By default, you are set to use Let's Encrypt production certificate environment.  During testing, you are
+> [!WARNING]
+> By default, you are set to use Let's Encrypt production certificate environment.  During testing, you are
 advised to use the staging environment so you are not locked out from generating certificates due to a
 misconfiguration.
 
@@ -39,8 +39,8 @@ misconfiguration.
 
 The `.env` file makes it easy to perform all the replacements necessary.
 
-[!TIP]
-You may opt to find and replace the variables in the yaml file rather than relying on environment variables.
+> [!TIP]
+> You may opt to find and replace the variables in the yaml file rather than relying on environment variables.
 
 ```shell
 # Name of the stack within docker swarm
@@ -55,11 +55,13 @@ EMAIL=postmaster@contoso.com
 
 ## Uppies
 
-[!WARNING]
-Ensure that you have loaded the variables (e.g. `source .env` ) before bringing up the stack.
+> [!WARNING]
+> If using environment variables, ensure that you have loaded them
+> (e.g. `source .env` ) before bringing up the stack.  Alternatively
+> you can use `envsubst` to interpolate them at runtime.
 
 ```shell
-❯ docker stack deploy -c <(cat swarm.yml) $STACK
+❯ docker stack deploy -c swarm.yml $STACK
 Creating network registry_frontend
 Creating service registry_traefik
 Creating service registry_redis
@@ -83,6 +85,35 @@ The registry account is:
 
 * Username: `user`
 * Password: `hunter2`
+
+## Mermaid Diagram
+
+```mermaid
+flowchart LR
+    subgraph containers["containers"]
+        registry_ui["registry_ui"]
+        registry["registry"]
+    end
+    subgraph traefik_proxy["traefik_proxy"]
+        traefik["traefik"]
+        basic_auth["basic_auth"]
+    end
+    web1>"registry.contoso.com"] --> traefik
+    web2>"registry.contoso.com/v2"] -- GET --> traefik
+    web2 -- POST --> traefik
+    traefik --> registry_ui & basic_auth & registry
+    basic_auth --> registry
+    basic_auth@{ shape: delay}
+    style basic_auth stroke-width:2px,stroke-dasharray: 2
+    linkStyle 0 stroke:#2962FF
+    linkStyle 1 stroke:#00C853
+    linkStyle 2 stroke:#FF6D00
+    linkStyle 3 stroke:#2962FF
+    linkStyle 4 stroke:#FF6D00
+    linkStyle 5 stroke:#00C853
+    linkStyle 6 stroke:#FF6D00
+
+```
 
 ## Contributors
 

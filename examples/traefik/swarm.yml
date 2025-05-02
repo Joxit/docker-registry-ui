@@ -48,6 +48,8 @@ services:
       ### Operations
       # Enable the access log, with HTTP requests
       - --accesslog
+      # Turn on anonymous usage to help developers
+      - --global.sendAnonymousUsage
       # Enable the Traefik log, for configurations and errors
       - --log
       - --log.level=INFO

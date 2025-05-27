@@ -192,8 +192,8 @@ services:
         - "traefik.http.routers.registry.middlewares=compress@swarm,ratelimit@swarm,error-pages-middleware"
 
         ### Router for POST/PUT/DELETE requests with BasicAuth
-        # 'registry-authd' accepts POST/PUT/DELETE requests on the URL beginning with /v2, allows only authenticated `docker push`
-        - "traefik.http.routers.registry-authd.rule=(Host(`registry.${DOMAIN}`) && PathPrefix(`/v2`)) && (Method(`POST`) || Method(`PUT`) || Method(`DELETE`))"
+        # 'registry-authd' accepts POST/PUT/DELETE requests on the URL beginning with /v2, allows only authenticated `docker push`; additionally make sure you 401 the /v2/ request for `docker login`
+        - "traefik.http.routers.registry-authd.rule=(Host(`registry.${DOMAIN}`) && PathPrefix(`/v2`)) && (Method(`POST`) || Method(`PUT`) || Method(`DELETE`)) || (Host(`registry.${DOMAIN}`) && Path(`/v2/`) && Method(`GET`))"
         # Runs on the 'https' entrypoint
         - "traefik.http.routers.registry-authd.entryPoints=https"
         # Enable TLS

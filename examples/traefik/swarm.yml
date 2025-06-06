@@ -28,12 +28,6 @@ services:
       # Create an entrypoint "dashboard" listening on port 8443
       - --entrypoints.dashboard.address=:8443
 
-      ### TLS Certificates, Stores, and Options REQUIRE on-disk configuration (OPTIONAL Configuration)
-      # Enable the File Provider (this is the path INSIDE the container)
-      # - --providers.file.directory=/opt/traefik/
-      # Tell traefik to watch for changes
-      # - --providers.file.watch=true
-
       ### Let's Encrypt Resolver (Dynamic Certificate Option)
       # Create the certificate resolver "letsencrypt" for Let's Encrypt, uses the environment variable EMAIL
       - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
@@ -132,8 +126,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Mount the volume to store the certificates for lets encrypt
       - certficates:/certificates
-      # OPTIONAL: Dynamic configuration for TLS (certificates, stores and options) defaults (limitation: cannot be loaded at runtime)
-      # - /opt/traefik/:/opt/traefik
 
     networks:
       - frontend
@@ -189,7 +181,7 @@ services:
         # Set the certificate resolver, set value to nothing if using a static certificate
         - "traefik.http.routers.registry.tls.certresolver=${RESOLVER}"
         # Use the 'compress' and 'ratelimit' middlewares
-        - "traefik.http.routers.registry.middlewares=compress@swarm,ratelimit@swarm,error-pages-middleware"
+        - "traefik.http.routers.registry.middlewares=compress@swarm,ratelimit@swarm"
 
         ### Router for POST/PUT/DELETE requests with BasicAuth
         # 'registry-authd' accepts POST/PUT/DELETE requests on the URL beginning with /v2, allows only authenticated `docker push`; additionally make sure you 401 the /v2/ request for `docker login`
@@ -201,7 +193,7 @@ services:
         # Set the certificate resolver, set value to nothing if using a static certificate
         - "traefik.http.routers.registry-authd.tls.certresolver=${RESOLVER}"
         # Use the 'compress', 'ratelimit' and 'registry-basic-auth', defined below
-        - "traefik.http.routers.registry-authd.middlewares=compress@swarm,ratelimit@swarm,registry-basic-auth,error-pages-middleware"
+        - "traefik.http.routers.registry-authd.middlewares=compress@swarm,ratelimit@swarm,registry-basic-auth"
 
         # CORS for UI when on different domain (NOTE: You do NOT need CORS for this setup where everything is the same domain)
         # - "traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=https://registry.${DOMAIN}"
@@ -220,7 +212,6 @@ services:
     environment:
       - DELETE_IMAGES=true
       - REGISTRY_URL=https://registry.${DOMAIN}
-      - NGINX_PROXY_PASS_URL=http://registry:5000
       - SINGLE_REGISTRY=true
     networks:
       - frontend
@@ -244,52 +235,10 @@ services:
         - "traefik.http.routers.ui.rule=Host(`registry.${DOMAIN}`)"
         # Runs on the 'https' endpoint
         - "traefik.http.routers.ui.entrypoints=https"
-        # Uses the error-pages-middleware (will use itself if it encouters an error)
-        - "traefik.http.routers.ui.middlewares=error-pages-middleware"
         # Enable TLS
         - "traefik.http.routers.ui.tls=true"
         # Set the certificate resolver, set value to nothing if using a static certificate
         - "traefik.http.routers.ui.tls.certresolver=${RESOLVER}"
-
-  # Custom error pages (COMPLETELY Optional)
-  error-pages:
-    image: ghcr.io/tarampampam/error-pages:3 # using the latest tag is highly discouraged
-    networks:
-      - frontend
-    environment:
-      TEMPLATE_NAME: connection # set the error pages template
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 32M
-      labels:
-        ### Initial Setup
-        # Use the traefik network (declared below)
-        - "traefik.swarm.network=${STACK}_frontend"
-        # Enable Traefik for this service, to make it available in the public network
-        - "traefik.enable=true"
-        # Define the port inside of the Docker service to use
-        - "traefik.http.services.error-pages-service.loadbalancer.server.port=8080"
-
-        ### Configure the Router for all requests
-        # use as "fallback" for any NON-registered services
-        - "traefik.http.routers.error-pages-router.rule=HostRegexp(`.+`)"
-        # set priority to the lowest priority
-        - "traefik.http.routers.error-pages-router.priority=1"
-        # Runs on the 'https' endpoint
-        - "traefik.http.routers.error-pages-router.entrypoints=https"
-        # Uses the error-pages-middleware (will use itself if it encouters an error)
-        - "traefik.http.routers.error-pages-router.middlewares=error-pages-middleware"
-
-        ### Configure the middleware
-        # Use only on HTTP status codes 400-599
-        - "traefik.http.middlewares.error-pages-middleware.errors.status=400-599"
-        # Set the service to send to
-        - "traefik.http.middlewares.error-pages-middleware.errors.service=error-pages-service"
-        # Set the url to forward the error to
-        - "traefik.http.middlewares.error-pages-middleware.errors.query=/{status}.html"
 
 volumes:
   # Create a volume to store the certificates

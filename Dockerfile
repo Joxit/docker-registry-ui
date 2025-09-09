@@ -27,4 +27,4 @@ COPY bin/90-docker-registry-ui.sh /docker-entrypoint.d/90-docker-registry-ui.sh
 COPY dist/ /usr/share/nginx/html/
 COPY favicon.ico /usr/share/nginx/html/
 
-RUN chown -R nginx:nginx /etc/nginx/ /usr/share/nginx/html/ /var/cache/nginx
+RUN chown -R nginx:nginx /etc/nginx/ /usr/share/nginx/html/ /var/cache/nginx /var/log/nginx

@@ -80,7 +80,6 @@ if [ "$(whoami)" != "root" ]; then
     NGINX_LISTEN_PORT="8080"
   fi
   sed -i "/user  nginx;/d" /etc/nginx/nginx.conf
-  sed -i "s,/var/run/nginx.pid,/tmp/nginx.pid," /etc/nginx/nginx.conf
   sed -i "s,/run/nginx.pid,/tmp/nginx.pid," /etc/nginx/nginx.conf
 fi
 

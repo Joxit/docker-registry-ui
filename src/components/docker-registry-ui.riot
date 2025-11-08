@@ -18,9 +18,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <header>
     <material-navbar>
       <span class="logo">
-        <span><a href="">{ props.title || "Docker Registry UI"}</a></span>
+        <span><a href="{ router.home() }">{ props.dockerRegistryUiTitle.trim() || "Docker Registry UI" }</a></span>
         <version-notification
-          if="{!truthy(props.disableVersionCheck)}"
+          if="{ falsy(props.enableVersionNotification) }"
           version="{ latest }"
           on-notify="{ notifySnackbar }"
         ></version-notification>

@@ -64,7 +64,7 @@
         const self = this;
 
         oReq.addEventListener('load', function () {
-          localStorage.setItem(EXPIRES, new Date().getTime() + ONE_DAY);
+          localStorage.setItem(EXPIRES, new Date().getTime() + ONE_DAY * 7);
           if (this.status === 200) {
             const latest = parseJSON(this.responseText);
             if (latest && self.tag_name !== latest.tag_name && !isNewestVersion(props.version, latest.tag_name)) {

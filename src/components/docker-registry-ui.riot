@@ -18,8 +18,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <header>
     <material-navbar>
       <span class="logo">
-        <span>Docker Registry UI</span>
-        <version-notification version="{ latest }" on-notify="{ notifySnackbar }"></version-notification>
+        <span><a href="{ router.home() }">{ props.dockerRegistryUiTitle.trim() || "Docker Registry UI" }</a></span>
+        <version-notification
+          if="{ falsy(props.enableVersionNotification) }"
+          version="{ latest }"
+          on-notify="{ notifySnackbar }"
+        ></version-notification>
       </span>
       <div class="menu">
         <search-bar on-search="{ onSearch }"></search-bar>
@@ -295,6 +299,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       display: flex;
       align-items: center;
       flex-direction: row;
+    }
+
+    material-navbar .nav-wrapper .logo a {
+      text-decoration: none;
+    }
+    material-navbar .nav-wrapper .logo a:hover {
+      text-decoration: underline;
     }
 
     material-footer {

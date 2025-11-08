@@ -35,6 +35,7 @@
   <body>
     <!-- build:keep production -->
     <docker-registry-ui
+      docker-registry-ui-title="${DOCKER_REGISTRY_UI_TITLE}"
       registry-url="${REGISTRY_URL}"
       name="${REGISTRY_TITLE}"
       pull-url="${PULL_URL}"
@@ -66,11 +67,13 @@
       theme-footer-neutral-text="${THEME_FOOTER_NEUTRAL_TEXT}"
       theme-footer-background="${THEME_FOOTER_BACKGROUND}"
       tags-per-page="${TAGLIST_PAGE_SIZE}"
+      enable-version-notification="${ENABLE_VERSION_NOTIFICATION}"
     >
     </docker-registry-ui>
     <!-- endbuild -->
     <!-- build:keep developement -->
     <docker-registry-ui
+      docker-registry-ui-title=""
       registry-url=""
       name="Development Registry"
       pull-url=""
@@ -100,6 +103,7 @@
       theme-footer-neutral-text=""
       theme-footer-background=""
       tags-per-page=""
+      enable-version-notification="true"
     >
     </docker-registry-ui>
     <!-- endbuild -->

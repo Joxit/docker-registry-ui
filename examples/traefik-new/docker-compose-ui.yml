@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  # Docker Registry UI
+  registry_ui:
+    image: joxit/docker-registry-ui:latest
+    environment:
+      - REGISTRY_URL=https://my-registry.example.com # !!!!CHANGEME!!!! (REQUIRED)
+      - SINGLE_REGISTRY=true
+      - DELETE_IMAGES=false  # Disable delete functionality, you may enable
+      - NGINX_PROXY_PASS_URL=http://registry:5000 # The URL that the UI will proxy to the Docker registry
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1  # You can adjust the replica count as needed for scaling
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.registry-ui.rule=Host(`my-registry-ui.example.com`) # # !!!!CHANGEME!!!! (REQUIRED) make sure that docker-compose-regitry.yml has the same
+        - traefik.http.routers.registry-ui.entrypoints=https
+        - traefik.http.routers.registry-ui.tls=true
+        - traefik.http.routers.registry-ui.tls.certresolver=le
+        - traefik.http.services.registry-ui.loadbalancer.server.port=80
+        - traefik.http.services.registry-ui.loadbalancer.passhostheader=true
+
+networks:
+  traefik-public:
+    external: true

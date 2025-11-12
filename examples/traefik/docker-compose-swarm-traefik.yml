@@ -1,0 +1,54 @@
+services:
+  traefik:
+    image: traefik:v2.11.8
+    ports:
+      - "80:80"
+    command:
+      - --api.insecure=false # set to 'false' on production
+      - --api.dashboard=true # see https://docs.traefik.io/v2.11/operations/dashboard/#secure-mode for how to secure the dashboard
+      - --api.debug=false # enable additional endpoints for debugging and profiling
+      - --log.level=INFO # debug while we get it working, for more levels/info see https://docs.traefik.io/observability/logs/
+      - --log.format=common
+      - --accesslog=true
+      - --accesslog.fields.names.StartUTC=drop
+      - --providers.docker=true
+      - --providers.docker.swarmMode=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=public
+      - --entryPoints.web.address=:80
+      - --entryPoints.web.transport.respondingTimeouts.readTimeout=0 # https://doc.traefik.io/traefik/v2.11/routing/entrypoints/#respondingtimeouts
+      - --entryPoints.web.transport.respondingTimeouts.idleTimeout=0
+      - --entryPoints.web.forwardedHeaders.insecure
+        # - --entryPoints.websecure.address=:443
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik-net
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8g
+        reservations:
+          cpus: '1'
+          memory: 2g
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dashboard.rule=Host(`mytraefik.com`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+        - "traefik.http.routers.dashboard.service=api@internal" # Let the dashboard access the traefik api
+        - "traefik.http.routers.dashboard.entrypoints=web" # Let the dashboard access the traefik api
+        - "traefik.http.services.traefik.loadbalancer.server.port=9090"
+        - "traefik.http.middlewares.auth.basicauth.users=admin:$apr1$XXrpwZre$ItZSXpoeB6bdPLCGT7eXG0"
+        - "traefik.http.routers.dashboard.middlewares=auth"
+
+networks:
+  traefik-net:
+    external: true

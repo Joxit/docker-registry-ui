@@ -14,10 +14,12 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --><!DOCTYPE html><html><head><meta charset="UTF-8" /><link href="docker-registry-ui.css" rel="stylesheet" type="text/css"><meta name="viewport" content="width=device-width, initial-scale=1" /><meta property="og:site_name" content="Docker Registry UI" /><meta name="twitter:card" content="summary" /><meta name="twitter:site" content="@Joxit" /><meta name="twitter:creator" content="@Jones Magloire" /><title>Docker Registry UI</title></head><body><docker-registry-ui
+      docker-registry-ui-title="${DOCKER_REGISTRY_UI_TITLE}"
       registry-url="${REGISTRY_URL}"
       name="${REGISTRY_TITLE}"
       pull-url="${PULL_URL}"
       show-content-digest="${SHOW_CONTENT_DIGEST}"
+      show-tag-history="${SHOW_TAG_HISTORY}"
       is-image-remove-activated="${DELETE_IMAGES}"
       catalog-elements-limit="${CATALOG_ELEMENTS_LIMIT}"
       single-registry="${SINGLE_REGISTRY}"
@@ -37,10 +39,12 @@
       theme-background="${THEME_BACKGROUND}"
       theme-hover-background="${THEME_HOVER_BACKGROUND}"
       theme-accent-text="${THEME_ACCENT_TEXT}"
+      theme-header-accent-text="${THEME_HEADER_ACCENT_TEXT}"
       theme-header-text="${THEME_HEADER_TEXT}"
       theme-header-background="${THEME_HEADER_BACKGROUND}"
       theme-footer-text="${THEME_FOOTER_TEXT}"
-      theme-footer-neutra-text="${THEME_FOOTER_NEUTRAL_TEXT}"
+      theme-footer-neutral-text="${THEME_FOOTER_NEUTRAL_TEXT}"
       theme-footer-background="${THEME_FOOTER_BACKGROUND}"
       tags-per-page="${TAGLIST_PAGE_SIZE}"
+      enable-version-notification="${ENABLE_VERSION_NOTIFICATION}"
     ></docker-registry-ui><script src="docker-registry-ui.js"></script></body></html>

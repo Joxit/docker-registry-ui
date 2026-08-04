@@ -16,7 +16,7 @@
 -->
 <change-registry-url>
   <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
-    <div class="material-popup-title">Change your Server ?</div>
+    <div class="material-popup-title">Change registry</div>
     <div class="material-popup-content">
       <select>
         <option each="{ url in getRegistryServers() }" value="{ url }">{ url }</option>
@@ -25,19 +25,19 @@
     <div class="material-popup-action">
       <material-button
         class="dialog-button"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-on-primary)"
         onClick="{ change }"
-        color="inherit"
-        text-color="var(--primary-text)"
+        color="var(--m3-primary)"
+        text-color="var(--m3-on-primary)"
       >
         Change
       </material-button>
       <material-button
         class="dialog-button"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-state-hover)"
         onClick="{ props.onClose }"
         color="inherit"
-        text-color="var(--primary-text)"
+        text-color="var(--m3-primary)"
       >
         Cancel
       </material-button>
@@ -77,15 +77,15 @@
       font-size: 1em;
       line-height: 24px;
       height: 24px;
-      border-bottom: 1px solid var(--accent-text);
+      border-bottom: 1px solid var(--m3-primary);
       appearance: none;
       -moz-appearance: none;
       -webkit-appearance: none;
       margin: 1.5em 0;
-      color: var(--primary-text);
+      color: var(--m3-on-surface);
     }
     :host select option {
-      background-color: var(--background);
+      background-color: var(--m3-surface-container);
     }
   </style>
 </change-registry-url>

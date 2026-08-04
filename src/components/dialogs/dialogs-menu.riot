@@ -5,14 +5,6 @@
  it under the terms of the GNU Affero General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <dialogs-menu>
   <add-registry-url
@@ -35,20 +27,23 @@
     on-notify="{ props.onNotify }"
     on-server-change="{ props.onServerChange }"
   ></remove-registry-url>
-  <div class="material-dropdown-wrapper">
+  <div class="registry-menu">
     <material-button
       onClick="{ onClick }"
       waves-center="true"
       waves-opacity="0.6"
       waves-duration="600"
-      color="var(--header-background)"
-      text-color="var(--header-text)"
-      icon
+      color="var(--m3-header-background)"
+      text-color="var(--m3-header-text)"
+      title="{ props.registryUrl || 'Select a registry' }"
+      aria-label="Switch registry"
     >
-      <i class="material-icons">more_vert</i>
+      <span class="registry-label">{ stripHttps(props.registryUrl) || 'Registry' }</span>
+      <i class="material-icons">{ state.isDropdownOpened ? 'expand_less' : 'expand_more' }</i>
     </material-button>
     <material-dropdown
-      items="{ dropdownItems.filter(item => item.ro || !props.readOnlyRegistries) }"
+      items="{ dropdownItems }"
+      selected="{ state.selectedRegistry }"
       on-click="{ onDropdownSelect }"
       opened="{ state.isDropdownOpened }"
     ></material-dropdown>
@@ -58,6 +53,10 @@
     import AddRegistryUrl from './add-registry-url.riot';
     import ChangeRegistryUrl from './change-registry-url.riot';
     import RemoveRegistryUrl from './remove-registry-url.riot';
+    import { getRegistryServers, stripHttps } from '../../scripts/utils';
+    import router from '../../scripts/router';
+
+    const REGISTRY_PREFIX = 'registry:';
 
     export default {
       components: {
@@ -65,28 +64,50 @@
         ChangeRegistryUrl,
         RemoveRegistryUrl,
       },
-      dropdownItems: [
-        {
-          title: 'Add URL',
-          name: 'add-registry-url',
-          ro: false,
-        },
-        {
-          title: 'Change URL',
-          name: 'change-registry-url',
-          ro: true,
-        },
-        {
-          title: 'Remove URL',
-          name: 'remove-registry-url',
-          ro: false,
-        },
-      ],
+      onBeforeMount(props, state) {
+        this.rebuildItems(props, state);
+      },
+      onUpdated(props, state) {
+        this.rebuildItems(props, state);
+      },
+      rebuildItems(props, state) {
+        const registries = getRegistryServers().map((url) => ({
+          title: stripHttps(url),
+          name: REGISTRY_PREFIX + url,
+        }));
+        const actions = [
+          {
+            title: 'Add registry',
+            name: 'add-registry-url',
+            ro: false,
+          },
+          {
+            title: 'Change registry',
+            name: 'change-registry-url',
+            ro: true,
+          },
+          {
+            title: 'Remove registry',
+            name: 'remove-registry-url',
+            ro: false,
+          },
+        ].filter((item) => item.ro || !props.readOnlyRegistries);
+        state.selectedRegistry = registries.findIndex((item) => item.name === REGISTRY_PREFIX + props.registryUrl);
+        state.dropdownItems = registries.concat(actions);
+      },
       onDropdownSelect(event) {
-        this.update({
-          [event.target.item]: true,
-          isDropdownOpened: false,
-        });
+        const name = event.target.item;
+        if (name && name.startsWith(REGISTRY_PREFIX)) {
+          const url = name.slice(REGISTRY_PREFIX.length);
+          router.home();
+          this.props.onServerChange(url);
+          setTimeout(() => router.updateUrlQueryParam(url), 100);
+        } else if (name) {
+          this.update({
+            [name]: true,
+          });
+        }
+        this.update({ isDropdownOpened: false });
       },
       onClose(name) {
         return () => {
@@ -101,29 +122,53 @@
           isDropdownOpened: !this.state.isDropdownOpened,
         });
       },
+      getRegistryServers,
+      stripHttps,
     };
   </script>
   <style>
-    :host > .material-dropdown-wrapper {
+    :host > .registry-menu {
       color: var(--primary-text);
-      list-style-type: disc;
+      position: relative;
       margin-block-start: 0.7em;
+    }
+    :host material-button > :first-child {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: 0 var(--space-2);
+      max-width: 260px;
+    }
+    :host .registry-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: var(--type-label-large-size);
+      font-weight: var(--type-label-large-weight);
+    }
+    :host material-button .content i.material-icons {
+      font-size: 20px;
+      flex-shrink: 0;
     }
     material-dropdown .material-dropdown-container,
     material-dropdown .material-dropdown-container .material-dropdown-item {
-      background-color: var(--background);
-      color: var(--primary-text);
+      background-color: var(--m3-surface-container);
+      color: var(--m3-on-surface);
     }
-
     material-dropdown .material-dropdown-container .material-dropdown-item:hover {
-      background-color: rgba(0, 0, 0, 0.12);
+      background-color: var(--m3-state-hover);
     }
-
-    :host .material-dropdown-wrapper material-dropdown .material-dropdown-container {
+    material-dropdown .material-dropdown-container .material-dropdown-item.selected {
+      background-color: var(--m3-secondary-container);
+      color: var(--m3-on-secondary-container);
+    }
+    :host .registry-menu material-dropdown .material-dropdown-container {
       right: 0;
-      top: 2em;
+      top: 2.5em;
+      width: max-content;
+      min-width: 240px;
+      max-width: 340px;
     }
-
     :host .overlay {
       position: fixed;
       height: 100%;
@@ -132,22 +177,12 @@
       right: 0;
       z-index: 10;
     }
-
     :host material-button button {
       float: right;
       z-index: 2;
     }
-
-    :host material-button .content i.material-icons {
-      font-size: 24px;
-    }
-
-    :host material-popup * {
-      line-height: 1em;
-    }
-
-    :host material-popup material-button .content {
-      line-height: 36px;
+    :host material-button .content {
+      justify-content: flex-end;
     }
   </style>
 </dialogs-menu>

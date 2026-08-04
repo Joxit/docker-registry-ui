@@ -16,14 +16,14 @@
 -->
 <add-registry-url>
   <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
-    <div class="material-popup-title">Add your Server ?</div>
+    <div class="material-popup-title">Add a registry</div>
     <div class="material-popup-content">
       <material-input
         onkeyup="{ onKeyUp }"
         label="Server URL"
-        text-color="var(--primary-text)"
-        label-color="var(--neutral-text)"
-        color="var(--accent-text)"
+        text-color="var(--m3-on-surface)"
+        label-color="var(--m3-on-surface-variant)"
+        color="var(--m3-primary)"
         valid="{ registryUrlValidator }"
       ></material-input>
       <span>Write your URL without /v2</span>
@@ -31,19 +31,19 @@
     <div class="material-popup-action">
       <material-button
         class="dialog-button"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-on-primary)"
         onClick="{ add }"
-        color="inherit"
-        text-color="var(--primary-text)"
+        color="var(--m3-primary)"
+        text-color="var(--m3-on-primary)"
       >
         Add
       </material-button>
       <material-button
         class="dialog-button"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-state-hover)"
         onClick="{ props.onClose }"
         color="inherit"
-        text-color="var(--primary-text)"
+        text-color="var(--m3-primary)"
       >
         Cancel
       </material-button>

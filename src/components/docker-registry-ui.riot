@@ -33,6 +33,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           on-server-change="{ onServerChange }"
           default-registries="{ props.defaultRegistries }"
           read-only-registries="{ truthy(props.readOnlyRegistries) }"
+          registry-url="{ state.registryUrl }"
         ></dialogs-menu>
       </div>
     </material-navbar>
@@ -53,6 +54,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       message="{ error.message }"
       url="{ state.pageError.url }"
     ></error-page>
+    <breadcrumbs></breadcrumbs>
     <router>
       <route path="{baseRoute}">
         <catalog
@@ -151,6 +153,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import SearchBar from './search-bar.riot';
     import ErrorPage from './error-page.riot';
     import VersionNotification from './version-notification.riot';
+    import Breadcrumbs from './breadcrumbs.riot';
     import { stripHttps, getRegistryServers, setRegistryServers, truthy, falsy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
@@ -166,6 +169,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Route,
         ErrorPage,
         VersionNotification,
+        Breadcrumbs,
       },
       onUpdated(props, state) {
         state.snackbarIsError = false;

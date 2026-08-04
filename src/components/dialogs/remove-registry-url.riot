@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-registry-url>
   <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
-    <div class="material-popup-title">Remove your Registry Server ?</div>
+    <div class="material-popup-title">Remove a registry</div>
     <div class="material-popup-content">
       <ul class="list">
         <li each="{ url in getRegistryServers() }">
@@ -24,11 +24,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <material-button
               onClick="{ remove(url) }"
               url="{ url }"
-              text-color="var(--neutral-text)"
+              text-color="var(--m3-on-surface-variant)"
               color="inherit"
-              waves-color="var(--hover-background)"
+              waves-color="var(--m3-state-hover)"
               waves-center="true"
               icon
+              aria-label="Remove { url }"
             >
               <i class="material-icons">delete</i>
             </material-button>
@@ -40,10 +41,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="material-popup-action">
       <material-button
         class="dialog-button"
-        waves-color="rgba(158,158,158,.4)"
+        waves-color="var(--m3-state-hover)"
         onClick="{ props.onClose }"
         color="inherit"
-        text-color="var(--primary-text)"
+        text-color="var(--m3-primary)"
       >
         Close
       </material-button>

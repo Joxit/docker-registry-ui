@@ -1,10 +1,37 @@
 <search-bar>
-  <material-input
-    label="Search in page"
-    text-color="var(--header-text)"
-    label-color="var(--header-accent-text)"
-    color="var(--header-accent-text)"
-  ></material-input>
+  <div class="search-bar { state.expanded ? 'expanded' : '' }">
+    <material-input
+      label="Search in page"
+      text-color="var(--m3-header-text)"
+      label-color="var(--m3-header-accent-text)"
+      color="var(--m3-header-accent-text)"
+    ></material-input>
+    <material-button
+      if="{ state.value }"
+      class="clear-button"
+      onClick="{ clear }"
+      waves-center="true"
+      color="inherit"
+      text-color="var(--m3-header-text)"
+      waves-color="var(--m3-state-hover)"
+      icon
+      aria-label="Clear search"
+    >
+      <i class="material-icons">close</i>
+    </material-button>
+    <material-button
+      class="search-toggle"
+      onClick="{ toggle }"
+      waves-center="true"
+      color="inherit"
+      text-color="var(--m3-header-text)"
+      waves-color="var(--m3-state-hover)"
+      icon
+      aria-label="Search"
+    >
+      <i class="material-icons">search</i>
+    </material-button>
+  </div>
   <script>
     import { router } from '@riotjs/route';
 
@@ -13,10 +40,12 @@
         const input = this.$('input');
         let value = '';
         const notify = () => {
-          if (value !== input.value) {
-            props.onSearch(input.value.toLowerCase());
+          const newValue = input.value;
+          this.update({ value: newValue });
+          if (value !== newValue) {
+            props.onSearch(newValue.toLowerCase());
           }
-          value = input.value;
+          value = newValue;
         };
         input.addEventListener('keyup', notify);
         router.on.value(() => {
@@ -31,10 +60,28 @@
               return true;
             } else {
               e.preventDefault();
+              this.update({ expanded: true });
               input.focus();
             }
           }
         });
+      },
+      clear() {
+        const input = this.$('input');
+        if (input) {
+          input.value = '';
+          this.update({ value: '' });
+          this.props.onSearch('');
+        }
+      },
+      toggle() {
+        this.update({ expanded: !this.state.expanded });
+        if (!this.state.expanded) {
+          const input = this.$('input');
+          if (input) {
+            input.focus();
+          }
+        }
       },
     };
 
@@ -43,14 +90,47 @@
     }
   </script>
   <style>
+    :host .search-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
     :host material-input {
       line-height: initial;
       min-width: 5em;
+      width: 200px;
+      transition: width var(--motion-duration-medium) var(--motion-easing-standard);
     }
 
-    @media screen and (max-width: 400px) {
+    :host material-button > :first-child {
+      background-color: transparent;
+    }
+
+    :host .search-toggle {
+      display: none;
+    }
+
+    @media screen and (max-width: 600px) {
       :host material-input {
         display: none;
+      }
+
+      :host .search-toggle {
+        display: inline-flex;
+      }
+
+      :host .search-bar.expanded {
+        position: absolute;
+        right: var(--space-2);
+        top: 0;
+        bottom: 0;
+        z-index: 5;
+      }
+
+      :host .search-bar.expanded material-input {
+        display: block;
+        width: 70vw;
       }
     }
   </style>

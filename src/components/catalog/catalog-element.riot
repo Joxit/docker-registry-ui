@@ -15,47 +15,57 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog-element>
-  <!-- Begin of tag -->
   <div
     class="content"
     if="{!props.filterResults || state.nImages > 0 || matchSearch(props.filterResults, state.image)}"
   >
-    <material-card
-      class="list highlight"
-      expanded="{state.expanded}"
-      onclick="{ onClick }"
-      if="{ !props.showCatalogNbTags || state.nbTags !== 0 }"
-    >
-      <a if="{ state.image }" href="{ router.taglist(state.image) }">
-        <material-waves center="true" color="#ddd"></material-waves>
-      </a>
-      <material-waves if="{ state.images }" center="true" color="#ddd"></material-waves>
-      <span>
-        <i class="material-icons">send</i>
-        { state.image || state.repo }
-        <div if="{state.images}" class="item-count right">
-          { state.nImages } images
-          <i class="material-icons animated {state.expanded ? 'expanded' : ''}">expand_more</i>
+    <div class="tree-node { state.expanded ? 'expanded' : '' }">
+      <div
+        class="row { state.images ? 'group' : 'leaf' }"
+        if="{ !props.showCatalogNbTags || state.nbTags !== 0 }"
+        onclick="{ state.images ? onClick : null }"
+      >
+        <a if="{ state.image }" class="row-main" href="{ router.taglist(state.image) }">
+          <span class="row-icon"><i class="material-icons">send</i></span>
+          <span class="row-label">{ state.image }</span>
+        </a>
+        <div
+          if="{ state.images }"
+          class="row-main"
+          role="button"
+          tabindex="0"
+          aria-expanded="{ state.expanded }"
+          onkeyup="{ onKeyUp }"
+        >
+          <span class="row-icon"><i class="material-icons">folder</i></span>
+          <span class="row-label">{ state.repo }</span>
         </div>
-        <div if="{props.showCatalogNbTags && state.image}" class="item-count right">
-          { state.nbTags } tags
-          <i class="material-icons animated"></i>
-        </div>
-      </span>
-    </material-card>
-    <catalog-element
-      if="{ state.images }"
-      filter-results="{ props.filterResults }"
-      registry-url="{ props.registryUrl }"
-      on-notify="{ props.onnNotify }"
-      on-authentication="{ props.onAuthentication }"
-      show-catalog-nb-tags="{ props.showCatalogNbTags }"
-      is-registry-secured="{ props.isRegistrySecured }"
-      class="animated {!state.expanded && !props.filterResults ? 'hide' : ''} {state.expanding ? 'expanding' : ''}"
-      each="{item in state.images}"
-      z-index="{ props.zIndex - 1 }"
-      item="{ item }"
-    ></catalog-element>
+        <span class="row-meta">
+          <span if="{ state.images }" class="count-badge" title="{ state.nImages } images">
+            { state.nImages }
+          </span>
+          <span if="{ props.showCatalogNbTags && state.image }" class="count-badge" title="{ state.nbTags } tags">
+            { state.nbTags }
+          </span>
+          <i if="{ state.images }" class="material-icons row-chevron { state.expanded ? 'expanded' : '' }">
+            expand_more
+          </i>
+        </span>
+      </div>
+      <div class="children { !state.expanded && !props.filterResults ? 'collapsed' : '' }">
+        <catalog-element
+          filter-results="{ props.filterResults }"
+          registry-url="{ props.registryUrl }"
+          on-notify="{ props.onNotify }"
+          on-authentication="{ props.onAuthentication }"
+          show-catalog-nb-tags="{ props.showCatalogNbTags }"
+          catalog-default-expanded="{ props.catalogDefaultExpanded }"
+          is-registry-secured="{ props.isRegistrySecured }"
+          each="{ item in state.images }"
+          item="{ item }"
+        ></catalog-element>
+      </div>
+    </div>
   </div>
   <script>
     import router from '../../scripts/router';
@@ -78,12 +88,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           this.getNbTags(props, state);
         }
       },
-      onMounted(props, state) {
-        const materialCard = this.$('material-card');
-        if (materialCard) {
-          materialCard.style['z-index'] = props.zIndex;
-        }
-      },
       onBeforeUpdate(props, state) {
         if (props.filterResults && state.images) {
           state.nImages = state.images.filter((image) => matchSearch(props.filterResults, image)).length;
@@ -95,14 +99,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         const state = this.state;
         if (state.repo) {
           this.update({
-            expanded: !this.state.expanded,
-            expanding: true,
+            expanded: !state.expanded,
           });
-          setTimeout(() => {
-            this.update({
-              expanding: false,
-            });
-          }, 50);
+        }
+      },
+      onKeyUp(event) {
+        if (event.keyCode === 13 || event.keyCode === 32) {
+          event.preventDefault();
+          this.onClick();
         }
       },
       getNbTags(props, state) {
@@ -131,5 +135,101 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       router,
     };
   </script>
-  <!-- End of tag -->
+  <style>
+    :host {
+      display: block;
+    }
+
+    :host .tree-node {
+      position: relative;
+    }
+
+    :host .row {
+      display: flex;
+      align-items: center;
+      min-height: 56px;
+      padding: 0 var(--space-4);
+      gap: var(--space-4);
+      border-radius: var(--shape-sm);
+      transition: background-color var(--motion-duration-short) var(--motion-easing-standard);
+    }
+
+    :host .row:hover {
+      background-color: var(--m3-state-hover);
+    }
+
+    :host .row.leaf .row-main:hover {
+      color: var(--m3-primary);
+    }
+
+    :host .row-main {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      flex-grow: 1;
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      border-radius: var(--shape-sm);
+    }
+
+    :host .row-icon i {
+      font-size: 20px;
+      color: var(--m3-on-surface-variant);
+    }
+
+    :host .row-label {
+      font-size: var(--type-body-large-size);
+      line-height: var(--type-body-large-height);
+      color: var(--m3-on-surface);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    :host .row-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+
+    :host .count-badge {
+      background-color: var(--m3-secondary-container);
+      color: var(--m3-on-secondary-container);
+      border-radius: var(--shape-full);
+      font-size: var(--type-label-medium-size);
+      font-weight: var(--type-label-medium-weight);
+      line-height: 1;
+      padding: var(--space-1) var(--space-2);
+      min-width: var(--space-6);
+      text-align: center;
+    }
+
+    :host .row-chevron {
+      color: var(--m3-on-surface-variant);
+      transition: transform var(--motion-duration-medium) var(--motion-easing-standard);
+    }
+
+    :host .row-chevron.expanded {
+      transform: rotate(180deg);
+    }
+
+    :host .children {
+      margin-left: var(--space-8);
+      padding-left: var(--space-4);
+      border-left: 1px solid var(--m3-outline-variant);
+    }
+
+    :host .children.collapsed {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :host .row-chevron {
+        transition: none;
+      }
+    }
+  </style>
 </catalog-element>

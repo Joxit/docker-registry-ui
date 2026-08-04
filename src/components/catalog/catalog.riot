@@ -19,12 +19,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="material-card-title-action">
       <h2>
         Repositories of { state.registryName }
-        <div class="item-count">{ state.nImages } images in { state.nRepositories } repositories</div>
       </h2>
+      <div class="catalog-stats">
+        <span class="count-badge" title="Images">{ state.nImages } images</span>
+        <span class="count-badge" title="Repositories">{ state.nRepositories } repositories</span>
+      </div>
     </div>
   </material-card>
   <div if="{ !state.loadend }" class="spinner-wrapper">
     <material-spinner></material-spinner>
+  </div>
+  <div if="{ state.loadend && state.repositories.length === 0 }" class="empty-state">
+    <i class="material-icons">inbox</i>
+    <h3>No repositories</h3>
+    <p>This registry has no repositories yet. Push your first image to get started.</p>
   </div>
   <catalog-element
     each="{ item in state.repositories }"
@@ -130,6 +138,53 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     }
     catalog > material-card {
       width: 100%;
+    }
+    .catalog-stats {
+      display: flex;
+      gap: var(--space-2);
+      margin-left: var(--space-4);
+      flex-shrink: 0;
+    }
+    .count-badge {
+      background-color: var(--m3-secondary-container);
+      color: var(--m3-on-secondary-container);
+      border-radius: var(--shape-full);
+      font-size: var(--type-label-medium-size);
+      font-weight: var(--type-label-medium-weight);
+      line-height: 1;
+      padding: var(--space-1) var(--space-2);
+      white-space: nowrap;
+    }
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      margin: var(--space-12) auto;
+      padding: var(--space-8);
+      text-align: center;
+      color: var(--m3-on-surface-variant);
+    }
+    .empty-state .material-icons {
+      font-size: 48px;
+      color: var(--m3-outline);
+    }
+    .empty-state h3 {
+      margin: 0;
+      font-size: var(--type-title-large-size);
+      font-weight: var(--type-title-large-weight);
+      color: var(--m3-on-surface);
+    }
+    .empty-state p {
+      margin: 0;
+      font-size: var(--type-body-medium-size);
+      max-width: 32em;
+    }
+    @media screen and (max-width: 600px) {
+      .catalog-stats {
+        flex-direction: column;
+        align-items: flex-end;
+      }
     }
   </style>
 </catalog>

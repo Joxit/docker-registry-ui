@@ -420,33 +420,6 @@ material-card material-button {
   background-color: inherit;
 }
 
-catalog-element material-card {
-  z-index: 2;
-  position: relative;
-}
-
-catalog-element catalog-element material-card {
-  transition: all var(--motion-duration-medium) var(--motion-easing-standard);
-  z-index: 1;
-  position: relative;
-}
-
-catalog-element catalog-element.showing material-card,
-catalog-element catalog-element.hide material-card {
-  margin-top: -50px;
-  opacity: 0;
-}
-
-catalog-element catalog-element > .content {
-  margin-left: 3em;
-}
-
-@media screen and (min-width: 1515px) {
-  catalog-element catalog-element > .content material-card {
-    max-width: calc(1440px - 3em);
-  }
-}
-
 remove-image {
   width: 30px;
 }

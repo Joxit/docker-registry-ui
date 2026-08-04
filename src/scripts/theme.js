@@ -1,33 +1,35 @@
-const LIGHT_THEME = {
-  'primary-text': '#25313b',
-  'neutral-text': '#777777',
-  'background': '#ffffff',
-  'hover-background': '#eeeeee',
-  'accent-text': '#5f7796',
-  'header-text': '#ffffff',
-  'header-accent-text': '#7b9ac2',
-  'header-background': '#25313b',
-  'footer-text': '#ffffff',
-  'footer-neutral-text': '#adbacd',
-  'footer-background': '#344251',
-};
-const DARK_THEME = {
-  'primary-text': '#98a8bd',
-  'neutral-text': '#6d7fab',
-  'background': '#22272e',
-  'hover-background': '#343a4b',
-  'accent-text': '#5c88ff',
-  'header-text': '#ffffff',
-  'header-accent-text': '#7ea1ff',
-  'header-background': '#333a45',
-  'footer-text': '#ffffff',
-  'footer-neutral-text': '#98afcf',
-  'footer-background': '#344251',
-};
+/*
+ * Copyright (C) 2016-2023 Jones Magloire @Joxit
+ *
+ * Material 3 theme handling.
+ *
+ * The light and dark palettes live in `src/styles/tokens.scss` and are
+ * selected by setting `data-theme` on the root element. This module decides
+ * which theme to use (auto / light / dark) and applies `THEME_*` environment
+ * overrides on top, keeping the legacy variables (`--primary-text`, ...)
+ * and the Material 3 roles they alias in sync.
+ */
 
 const LOCAL_STORAGE_THEME = 'registryUiTheme';
 
-let THEME;
+/**
+ * Mapping from legacy theme variable (as exposed by `THEME_*` env vars) to
+ * the Material 3 role it aliases. Overrides are written to both so existing
+ * configuration keeps working and M3-styled components see the value.
+ */
+const LEGACY_TO_M3 = {
+  'primary-text': 'm3-on-surface',
+  'neutral-text': 'm3-on-surface-variant',
+  'background': 'm3-surface',
+  'hover-background': 'm3-surface-container-highest',
+  'accent-text': 'm3-primary',
+  'header-text': 'm3-header-text',
+  'header-accent-text': 'm3-header-accent-text',
+  'header-background': 'm3-header-background',
+  'footer-text': 'm3-footer-text',
+  'footer-neutral-text': 'm3-footer-neutral-text',
+  'footer-background': 'm3-footer-background',
+};
 
 const normalizeKey = (k) =>
   k
@@ -54,13 +56,20 @@ const preferDarkMode = ({ theme }) => {
 
 export const loadTheme = (props, style) => {
   const isDarkMode = preferDarkMode(props);
-  THEME = isDarkMode ? { ...DARK_THEME } : { ...LIGHT_THEME };
+  const theme = isDarkMode ? 'dark' : 'light';
+  document.documentElement.dataset.theme = theme;
+  // Apply THEME_* environment overrides to both the legacy variable and the
+  // Material 3 role it maps to. Defaults come from tokens.scss.
   Object.entries(props)
     .filter(([k, v]) => v && /^theme[A-Z]/.test(k))
-    .map(([k, v]) => [normalizeKey(k), v])
-    .forEach(([k, v]) => (THEME[k] = v));
-  Object.entries(THEME).forEach(([k, v]) => style.setProperty(`--${k}`, v));
-  const theme = isDarkMode ? 'dark' : 'light';
+    .forEach(([k, v]) => {
+      const key = normalizeKey(k);
+      style.setProperty(`--${key}`, v);
+      const m3 = LEGACY_TO_M3[key];
+      if (m3) {
+        style.setProperty(`--${m3}`, v);
+      }
+    });
   localStorage.setItem(LOCAL_STORAGE_THEME, theme);
   return theme;
 };

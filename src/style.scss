@@ -30,10 +30,11 @@
 
 @use './roboto.scss';
 @use './material-symbols.scss';
+@use './m3-overrides.scss';
 
 html > body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
-  font-size: 16px;
+  font-size: var(--type-body-large-size);
   background-color: var(--background);
   color: var(--primary-text);
 }
@@ -42,6 +43,23 @@ html,
 body {
   margin: 0;
   height: 100%;
+}
+
+/* Visible focus ring (Material 3) */
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+  border-radius: var(--shape-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .section-centerd {
@@ -54,7 +72,7 @@ body {
 }
 
 .url {
-  font-size: 14px;
+  font-size: var(--type-body-medium-size);
   word-break: break-all;
 }
 
@@ -65,6 +83,8 @@ body {
 }
 material-card {
   background-color: var(--background);
+  border-radius: var(--shape-md);
+  box-shadow: var(--elevation-1);
 }
 material-card,
 material-tabs,
@@ -87,11 +107,8 @@ catalog {
 
 material-tabs {
   display: block;
-  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  -ms-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  -o-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: var(--elevation-1);
+  border-radius: var(--shape-md);
 }
 
 material-tabs material-button,
@@ -112,7 +129,7 @@ material-spinner {
 .logo {
   padding: 0 16px 0 72px;
   text-decoration: none;
-  font-size: 20px;
+  font-size: var(--type-title-large-size);
   line-height: 1;
   letter-spacing: 0.02em;
   font-weight: 400;
@@ -127,15 +144,17 @@ material-spinner {
 h2 {
   padding: 16px;
   margin: auto;
-  font-size: 24px;
-  font-weight: 300;
-  line-height: normal;
+  font-size: var(--type-headline-small-size);
+  font-weight: var(--type-headline-small-weight);
+  line-height: var(--type-headline-small-height);
   overflow: hidden;
 }
 
 .material-card-title-action h2 .source-hint,
 .material-card-title-action h2 .item-count {
-  font-size: 0.7em;
+  font-size: var(--type-body-medium-size);
+  font-weight: var(--type-body-medium-weight);
+  color: var(--neutral-text);
   margin-left: 1em;
 }
 
@@ -146,7 +165,7 @@ h2 {
 }
 
 .list.highlight:hover {
-  background-color: rgba(0, 0, 0, 0.12);
+  background-color: var(--m3-state-hover);
   cursor: pointer;
 }
 
@@ -174,7 +193,7 @@ docker-registry-ui material-button > :first-child .content i.material-icons.mate
 }
 
 .list > span .right i.material-icons.animated {
-  transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--motion-duration-medium) var(--motion-easing-standard);
   margin-right: 10px;
 }
 
@@ -231,22 +250,22 @@ material-card table {
   width: 100%;
   border: none;
   position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.12);
   border-collapse: collapse;
   white-space: nowrap;
-  font-size: 13px;
-  border: none;
+  font-size: var(--type-body-medium-size);
+  border: 1px solid var(--m3-outline-variant);
 }
 
 material-card table th {
-  font-size: 18px;
+  font-size: var(--type-title-medium-size);
+  font-weight: var(--type-title-medium-weight);
   vertical-align: bottom;
-  line-height: 24px;
+  line-height: var(--type-title-medium-height);
   height: 48px;
-  color: var(--accent-text);
+  color: var(--neutral-text);
   box-sizing: border-box;
   padding: 0 18px 12px 18px;
-  text-align: right;
+  text-align: left;
 }
 
 .material-card-th-left {
@@ -255,13 +274,13 @@ material-card table th {
 
 material-card .material-card-title-action material-button:hover button,
 material-card table tbody tr:hover {
-  background-color: rgba(0, 0, 0, 0.12) !important;
+  background-color: var(--m3-state-hover) !important;
 }
 
 material-button > :first-child[inverted='true'],
 material-card table tbody tr {
-  transition-duration: 0.28s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: var(--motion-duration-short);
+  transition-timing-function: var(--motion-easing-standard);
   transition-property: background-color;
 }
 
@@ -271,15 +290,15 @@ material-card table tbody tr {
 }
 
 material-card table td {
-  font-size: 16px;
+  font-size: var(--type-body-medium-size);
   position: relative;
   height: 48px;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid var(--m3-outline-variant);
+  border-bottom: 1px solid var(--m3-outline-variant);
   padding: 12px 18px;
   box-sizing: border-box;
   vertical-align: middle;
-  text-align: right;
+  text-align: left;
 }
 
 tag-history-button button:hover,
@@ -316,7 +335,7 @@ material-button .content i.material-icons,
 
 material-button[disabled] .content i.material-icons,
 material-checkbox[disabled] .content i.material-icons {
-  color: #bbb;
+  color: var(--m3-outline);
 }
 
 material-snackbar .toast {
@@ -407,7 +426,7 @@ catalog-element material-card {
 }
 
 catalog-element catalog-element material-card {
-  transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--motion-duration-medium) var(--motion-easing-standard);
   z-index: 1;
   position: relative;
 }

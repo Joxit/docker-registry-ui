@@ -18,6 +18,7 @@ import {
 
 import DockerRegistryUI from './components/docker-registry-ui.riot';
 
+import './styles/tokens.scss';
 import './style.scss';
 
 register('material-card', MaterialCard);

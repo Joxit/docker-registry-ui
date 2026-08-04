@@ -1,0 +1,238 @@
+/*
+ * Copyright (C) 2016-2023 Jones Magloire @Joxit
+ *
+ * Material 3 restyle of the riot-mui components. This layer only changes the
+ * skin (shape, elevation, typography, state layers) of the riot-mui widgets;
+ * colors passed as component props (`color`, `text-color`, ...) still win via
+ * inline styles and are set to M3 tokens by the components themselves.
+ */
+
+/* ------------------------------------------------------------------ *
+ * App bar (material-navbar)                                           *
+ * ------------------------------------------------------------------ */
+material-navbar {
+  height: 64px;
+  box-shadow: var(--elevation-2);
+}
+
+material-navbar .nav-wrapper .logo {
+  font-size: var(--type-title-large-size);
+  font-weight: var(--type-title-large-weight);
+  letter-spacing: 0.02em;
+}
+
+/* ------------------------------------------------------------------ *
+ * Buttons                                                             *
+ * ------------------------------------------------------------------ */
+material-button > :first-child {
+  border-radius: var(--shape-full);
+  min-height: 40px;
+  font-size: var(--type-label-large-size);
+  font-weight: var(--type-label-large-weight);
+  letter-spacing: 0.5px;
+  text-transform: none;
+  padding: 0 var(--space-4);
+  transition:
+    box-shadow var(--motion-duration-short) var(--motion-easing-standard),
+    background-color var(--motion-duration-short) var(--motion-easing-standard);
+}
+
+material-button > :first-child[outlined='true'] {
+  border-width: 1px;
+  border-style: solid;
+}
+
+material-button > :first-child .content {
+  line-height: normal;
+}
+
+material-button .content .text {
+  text-transform: none;
+  font-size: var(--type-label-large-size);
+  font-weight: var(--type-label-large-weight);
+}
+
+material-button .content i.material-icons {
+  font-size: var(--type-title-medium-size);
+}
+
+material-button > :first-child material-waves {
+  border-radius: var(--shape-full);
+}
+
+/* ------------------------------------------------------------------ *
+ * Card                                                                *
+ * ------------------------------------------------------------------ */
+material-card {
+  border-radius: var(--shape-md);
+  box-shadow: var(--elevation-1);
+}
+
+material-card .material-card-title,
+material-card .material-card-title-action h2 {
+  font-size: var(--type-headline-small-size);
+  font-weight: var(--type-headline-small-weight);
+  line-height: var(--type-headline-small-height);
+}
+
+/* ------------------------------------------------------------------ *
+ * Dialog (material-popup)                                             *
+ * ------------------------------------------------------------------ */
+material-popup .popup > .content {
+  border-radius: var(--shape-xl);
+  box-shadow: var(--elevation-3);
+  color: var(--m3-on-surface);
+}
+
+material-popup .popup > .content .material-popup-title {
+  font-size: var(--type-headline-small-size);
+  font-weight: var(--type-headline-small-weight);
+  line-height: var(--type-headline-small-height);
+  padding: var(--space-6) var(--space-6) 0;
+}
+
+material-popup .popup > .content .material-popup-content {
+  padding: var(--space-4) var(--space-6) var(--space-6);
+}
+
+material-popup .popup > .content .material-popup-action {
+  padding: var(--space-2) var(--space-4) var(--space-4) var(--space-6);
+}
+
+material-popup .popup > .content .material-popup-action material-button > :first-child {
+  min-height: 40px;
+  padding: 0 var(--space-6);
+}
+
+/* ------------------------------------------------------------------ *
+ * Menu (material-dropdown)                                            *
+ * ------------------------------------------------------------------ */
+material-dropdown .material-dropdown-container {
+  border-radius: var(--shape-sm);
+  box-shadow: var(--elevation-3);
+  background-color: var(--m3-surface-container);
+  color: var(--m3-on-surface);
+  padding: var(--space-2) 0;
+  min-width: 200px;
+}
+
+material-dropdown .material-dropdown-container .material-dropdown-item {
+  background-color: transparent;
+  color: var(--m3-on-surface);
+  font-size: var(--type-body-medium-size);
+  padding: var(--space-3) var(--space-4);
+  transition: background-color var(--motion-duration-short) var(--motion-easing-standard);
+}
+
+material-dropdown .material-dropdown-container .material-dropdown-item:hover {
+  background-color: var(--m3-state-hover);
+}
+
+material-dropdown .material-dropdown-container .material-dropdown-item.selected {
+  background-color: var(--m3-secondary-container);
+  color: var(--m3-on-secondary-container);
+}
+
+material-dropdown .material-dropdown-container a.material-dropdown-item {
+  color: var(--m3-on-surface);
+}
+
+material-dropdown .material-dropdown-container a.material-dropdown-item.selected {
+  color: var(--m3-on-secondary-container);
+}
+
+/* ------------------------------------------------------------------ *
+ * Snackbar                                                           *
+ * ------------------------------------------------------------------ */
+material-snackbar .toast {
+  border-radius: var(--shape-sm);
+  box-shadow: var(--elevation-3);
+  background-color: var(--m3-inverse-surface);
+  color: var(--m3-inverse-on-surface);
+  font-size: var(--type-body-medium-size);
+  font-weight: var(--type-body-medium-weight);
+  line-height: normal;
+}
+
+material-snackbar .toast.error {
+  background-color: var(--m3-error);
+  color: var(--m3-on-error);
+}
+
+/* ------------------------------------------------------------------ *
+ * Checkbox                                                            *
+ * ------------------------------------------------------------------ */
+material-checkbox .checkbox {
+  border-color: var(--m3-on-surface-variant);
+  border-radius: var(--shape-xs);
+}
+
+material-checkbox .checkbox.checked {
+  background-color: var(--m3-primary);
+  border-color: var(--m3-primary);
+}
+
+material-checkbox .checkbox.checked .checkmark {
+  border-color: var(--m3-on-primary);
+}
+
+/* ------------------------------------------------------------------ *
+ * Switch                                                              *
+ * ------------------------------------------------------------------ */
+material-switch .material-switch-container .material-switch-track {
+  border-color: var(--m3-outline);
+  background-color: var(--m3-surface-container-highest);
+}
+
+material-switch .material-switch-container .material-switch-thumb {
+  background-color: var(--m3-outline);
+}
+
+material-switch .material-switch-container[checked] .material-switch-track {
+  background-color: var(--m3-primary);
+  border-color: var(--m3-primary);
+}
+
+material-switch .material-switch-container[checked] .material-switch-thumb {
+  background-color: var(--m3-on-primary);
+}
+
+/* ------------------------------------------------------------------ *
+ * Tabs                                                                *
+ * ------------------------------------------------------------------ */
+material-tabs material-button > :first-child {
+  border-radius: 0;
+  background-color: transparent;
+  min-height: 48px;
+}
+
+material-tabs material-button > :first-child .content .text {
+  font-size: var(--type-title-small-size);
+  font-weight: var(--type-title-small-weight);
+}
+
+/* ------------------------------------------------------------------ *
+ * Input                                                               *
+ * ------------------------------------------------------------------ */
+material-input {
+  font-size: var(--type-body-medium-size);
+}
+
+material-input .input-content input {
+  font-size: var(--type-body-medium-size);
+}
+
+material-input .input-content label {
+  font-size: var(--type-body-medium-size);
+}
+
+/* ------------------------------------------------------------------ *
+ * Footer                                                              *
+ * ------------------------------------------------------------------ */
+material-footer {
+  font-size: var(--type-body-medium-size);
+}
+
+material-footer a {
+  color: inherit;
+}

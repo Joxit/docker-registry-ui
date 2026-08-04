@@ -1,0 +1,194 @@
+/*
+ * Copyright (C) 2016-2023 Jones Magloire @Joxit
+ *
+ * Material 3 design tokens for Docker Registry UI.
+ *
+ * The light palette is the default (`:root`). The dark palette is applied by
+ * setting `data-theme="dark"` on the root element (see `src/scripts/theme.js`).
+ *
+ * Legacy tokens (`--primary-text`, `--background`, `--accent-text`, ...) are
+ * kept as aliases of the Material 3 roles they map to so existing components
+ * and `THEME_*` environment variables keep working unchanged.
+ */
+:root {
+  /* ------------------------------------------------------------------ *
+   * Color roles (Material 3)                                            *
+   * ------------------------------------------------------------------ */
+  --m3-primary: #0b57d0;
+  --m3-on-primary: #ffffff;
+  --m3-primary-container: #d8e2ff;
+  --m3-on-primary-container: #001a41;
+  --m3-secondary: #575e71;
+  --m3-on-secondary: #ffffff;
+  --m3-secondary-container: #dbe1f9;
+  --m3-on-secondary-container: #141b2c;
+  --m3-surface: #faf9fd;
+  --m3-surface-dim: #dad9de;
+  --m3-surface-bright: #faf9fd;
+  --m3-on-surface: #1a1c20;
+  --m3-on-surface-variant: #44464f;
+  --m3-surface-variant: #e1e2ec;
+  --m3-outline: #74777f;
+  --m3-outline-variant: #c4c6d0;
+  --m3-error: #ba1a1a;
+  --m3-on-error: #ffffff;
+  --m3-error-container: #ffdad6;
+  --m3-on-error-container: #410002;
+  --m3-inverse-surface: #2f3036;
+  --m3-inverse-on-surface: #f0eff4;
+  --m3-inverse-primary: #acccff;
+
+  /* State layers (Material 3) */
+  --m3-state-hover: rgba(29, 27, 32, 0.08);
+  --m3-state-focus: rgba(29, 27, 32, 0.12);
+  --m3-state-pressed: rgba(29, 27, 32, 0.12);
+
+  /* Surface container hierarchy (Material 3) */
+  --m3-surface-container-lowest: #ffffff;
+  --m3-surface-container-low: #f4f3f7;
+  --m3-surface-container: #eef0f4;
+  --m3-surface-container-high: #e8e9ee;
+  --m3-surface-container-highest: #e2e3e9;
+
+  /* App chrome (header / footer) */
+  --m3-header-background: #25313b;
+  --m3-header-text: #ffffff;
+  --m3-header-accent-text: #7b9ac2;
+  --m3-footer-background: #344251;
+  --m3-footer-text: #ffffff;
+  --m3-footer-neutral-text: #adbacd;
+
+  /* ------------------------------------------------------------------ *
+   * Legacy aliases (backward compatible with `THEME_*` overrides)       *
+   * ------------------------------------------------------------------ */
+  --primary-text: var(--m3-on-surface);
+  --neutral-text: var(--m3-on-surface-variant);
+  --background: var(--m3-surface);
+  --hover-background: var(--m3-surface-container-highest);
+  --accent-text: var(--m3-primary);
+  --header-text: var(--m3-header-text);
+  --header-accent-text: var(--m3-header-accent-text);
+  --header-background: var(--m3-header-background);
+  --footer-text: var(--m3-footer-text);
+  --footer-neutral-text: var(--m3-footer-neutral-text);
+  --footer-background: var(--m3-footer-background);
+
+  /* ------------------------------------------------------------------ *
+   * Shape scale (Material 3)                                            *
+   * ------------------------------------------------------------------ */
+  --shape-xs: 4px;
+  --shape-sm: 8px;
+  --shape-md: 12px;
+  --shape-lg: 16px;
+  --shape-xl: 28px;
+  --shape-full: 9999px;
+
+  /* ------------------------------------------------------------------ *
+   * Elevation (Material 3 tonal shadows)                                *
+   * ------------------------------------------------------------------ */
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --elevation-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --elevation-4: 0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3);
+  --elevation-5: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.3);
+
+  /* ------------------------------------------------------------------ *
+   * Type scale (Material 3)                                             *
+   * ------------------------------------------------------------------ */
+  --type-headline-small-size: 24px;
+  --type-headline-small-height: 32px;
+  --type-headline-small-weight: 400;
+  --type-title-large-size: 22px;
+  --type-title-large-height: 28px;
+  --type-title-large-weight: 400;
+  --type-title-medium-size: 16px;
+  --type-title-medium-height: 24px;
+  --type-title-medium-weight: 500;
+  --type-title-small-size: 14px;
+  --type-title-small-height: 20px;
+  --type-title-small-weight: 500;
+  --type-body-large-size: 16px;
+  --type-body-large-height: 24px;
+  --type-body-large-weight: 400;
+  --type-body-medium-size: 14px;
+  --type-body-medium-height: 20px;
+  --type-body-medium-weight: 400;
+  --type-body-small-size: 12px;
+  --type-body-small-height: 16px;
+  --type-body-small-weight: 400;
+  --type-label-large-size: 14px;
+  --type-label-large-height: 20px;
+  --type-label-large-weight: 500;
+  --type-label-medium-size: 12px;
+  --type-label-medium-height: 16px;
+  --type-label-medium-weight: 500;
+  --type-label-small-size: 11px;
+  --type-label-small-height: 16px;
+  --type-label-small-weight: 500;
+
+  /* ------------------------------------------------------------------ *
+   * Spacing (4px grid)                                                  *
+   * ------------------------------------------------------------------ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ------------------------------------------------------------------ *
+   * Motion                                                              *
+   * ------------------------------------------------------------------ */
+  --motion-duration-short: 200ms;
+  --motion-duration-medium: 400ms;
+  --motion-duration-long: 500ms;
+  --motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-easing-decelerate: cubic-bezier(0, 0, 0, 1);
+  --motion-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+}
+
+[data-theme='dark'] {
+  --m3-primary: #acccff;
+  --m3-on-primary: #003061;
+  --m3-primary-container: #00458f;
+  --m3-on-primary-container: #d8e2ff;
+  --m3-secondary: #bfc6dc;
+  --m3-on-secondary: #293041;
+  --m3-secondary-container: #3f4759;
+  --m3-on-secondary-container: #dbe1f9;
+  --m3-surface: #121317;
+  --m3-surface-dim: #121317;
+  --m3-surface-bright: #38393f;
+  --m3-on-surface: #e2e2e9;
+  --m3-on-surface-variant: #c4c6d0;
+  --m3-surface-variant: #44464f;
+  --m3-outline: #8e9099;
+  --m3-outline-variant: #44464f;
+  --m3-error: #ffb4ab;
+  --m3-on-error: #690005;
+  --m3-error-container: #93000a;
+  --m3-on-error-container: #ffdad6;
+  --m3-inverse-surface: #e2e2e9;
+  --m3-inverse-on-surface: #2f3036;
+  --m3-inverse-primary: #0b57d0;
+
+  --m3-state-hover: rgba(226, 226, 233, 0.08);
+  --m3-state-focus: rgba(226, 226, 233, 0.12);
+  --m3-state-pressed: rgba(226, 226, 233, 0.12);
+
+  --m3-surface-container-lowest: #0c0e13;
+  --m3-surface-container-low: #1a1b1f;
+  --m3-surface-container: #1e1f23;
+  --m3-surface-container-high: #292a2e;
+  --m3-surface-container-highest: #333438;
+
+  --m3-header-background: #333a45;
+  --m3-header-text: #ffffff;
+  --m3-header-accent-text: #7ea1ff;
+  --m3-footer-background: #344251;
+  --m3-footer-text: #ffffff;
+  --m3-footer-neutral-text: #98afcf;
+}

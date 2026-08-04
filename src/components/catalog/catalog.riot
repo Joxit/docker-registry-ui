@@ -26,9 +26,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       </div>
     </div>
   </material-card>
-  <div if="{ !state.loadend }" class="spinner-wrapper">
-    <material-spinner></material-spinner>
-  </div>
+  <material-card class="skeleton-list" if="{ !state.loadend }">
+    <div class="skeleton-row" each="{ i in skeletonRows }">
+      <span class="skeleton skeleton-icon"></span>
+      <span class="skeleton skeleton-line { i % 3 === 0 ? 'wide' : '' }"></span>
+      <span class="skeleton skeleton-badge"></span>
+    </div>
+  </material-card>
   <div if="{ state.loadend && state.repositories.length === 0 }" class="empty-state">
     <i class="material-icons">inbox</i>
     <h3>No repositories</h3>
@@ -56,6 +60,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       components: {
         CatalogElement,
       },
+      skeletonRows: [0, 1, 2, 3, 4, 5],
       state: {
         registryName: '',
         length: 0,

@@ -226,6 +226,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       display: none;
     }
 
+    @media screen and (max-width: 700px) {
+      :host .row {
+        min-height: 48px;
+        padding: 0 var(--space-2);
+        gap: var(--space-3);
+      }
+      :host .children {
+        margin-left: var(--space-4);
+        padding-left: var(--space-2);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       :host .row-chevron {
         transition: none;

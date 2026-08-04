@@ -89,15 +89,26 @@
     :host .content {
       margin: auto;
       text-align: center;
+      background-color: var(--m3-surface-container-low);
+      border-radius: var(--shape-lg);
+      box-shadow: var(--elevation-1);
+      padding: var(--space-8);
+      max-width: 52em;
+    }
+    :host .content h1 {
+      margin: 0;
+      font-size: 56px;
+      font-weight: var(--type-headline-small-weight);
+      color: var(--m3-primary);
     }
     :host .content a {
-      color: var(--accent-text);
+      color: var(--m3-primary);
     }
     :host .content a:visited {
-      color: var(--accent-text);
+      color: var(--m3-primary);
     }
     :host .content p span {
-      color: var(--accent-text);
+      color: var(--m3-primary);
       font-weight: 700;
     }
     :host .content h2 {
@@ -105,10 +116,11 @@
     }
     :host pre,
     code {
-      background-color: var(--hover-background);
+      background-color: var(--m3-surface-variant);
+      color: var(--m3-on-surface);
       font-family: 'Roboto Mono', monospace !important;
       text-align: left;
-      border-radius: 5px;
+      border-radius: var(--shape-sm);
     }
     code {
       padding: 0 0.5em;
@@ -117,7 +129,7 @@
       padding: 0.5em;
     }
     :host pre .keyword {
-      color: var(--accent-text);
+      color: var(--m3-primary);
     }
   </style>
 </error-page>

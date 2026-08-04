@@ -19,13 +19,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="pagination-centered">
       <material-button
         aria-label="page-{ p.page }"
-        color="{ p.current ? 'var(--accent-text)' : 'rgba(0, 0, 0, 0 )' }"
-        text-color="{ p.current ? 'var(--accent-text)' : 'var(--primary-text)' }"
+        color="{ p.current ? 'var(--m3-primary-container)' : 'rgba(0, 0, 0, 0 )' }"
+        text-color="{ p.current ? 'var(--m3-on-primary-container)' : 'var(--m3-on-surface)' }"
         waves-color="rgba(158,158,158,.4)"
         each="{ (p, idx) in props.pages}"
         class="{ p.current ? 'current' : ''} { p['space-left'] ? 'space-left' : '' } { p['space-right'] ? 'space-right' : ''}"
         onClick="{(e) => props.onPageUpdate(idx)}"
-        outlined
       >
         <i if="{ p.icon }" class="material-icons">{ p.icon }</i>
         <template if="{ !p.icon }">{ p.page }</template>

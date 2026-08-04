@@ -17,9 +17,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-history-button>
   <material-button
     title="{ buttonTittle() }"
-    text-color="var(--neutral-text)"
+    aria-label="Show history of { props.image.name }:{ props.image.tag }"
+    text-color="var(--m3-on-surface-variant)"
     color="inherit"
-    waves-color="var(--hover-background)"
+    waves-color="var(--m3-state-hover)"
     waves-center="true"
     href="{ routeToHistory() }"
     disabled="{ props.image.ociImage }"

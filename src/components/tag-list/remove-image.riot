@@ -16,11 +16,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <remove-image>
   <material-button
-    text-color="var(--neutral-text)"
+    text-color="var(--m3-on-surface-variant)"
     color="inherit"
-    waves-color="var(--hover-background)"
+    waves-color="var(--m3-state-hover)"
     waves-center="true"
     title="This will delete the image."
+    aria-label="Delete { props.image.name }:{ props.image.tag }"
     if="{ !props.multiDelete }"
     disabled="{ !state.contentDigest }"
     onClick="{ deleteImage }"
@@ -31,6 +32,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <material-checkbox
     if="{ props.multiDelete }"
     title="Select this tag to delete it."
+    aria-label="Select tag { props.image.tag } for deletion"
     disabled="{ !state.contentDigest }"
     onChange="{ handleCheckboxChange }"
     checked="{ state.checked }"

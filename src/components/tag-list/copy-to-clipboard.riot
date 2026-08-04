@@ -18,12 +18,13 @@
   <div class="copy-to-clipboard">
     <input style="display: none; width: 1px; height: 1px" value="{ getDockerCmd(props) }" />
     <material-button
-      text-color="var(--neutral-text)"
+      text-color="var(--m3-on-surface-variant)"
       color="inherit"
-      waves-color="var(--hover-background)"
+      waves-color="var(--m3-state-hover)"
       waves-center="true"
       onClick="{ copy }"
       title="Copy pull command."
+      aria-label="Copy pull command for { props.image.name }:{ props.image.tag }"
       icon
     >
       <i class="material-icons">content_copy</i>

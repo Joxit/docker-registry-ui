@@ -20,11 +20,12 @@
       These images will be deleted
       <material-button
         color="inherit"
-        text-color="var(--accent-text)"
+        text-color="var(--m3-primary)"
         target="_blank"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-state-hover)"
         href="https://joxit.dev/docker-registry-ui/#:~:text=Why%20when%20I%20delete%20one%20tag,%20all%20tags%20with%20the%20same%20SHA%20are%20deleted%20"
         icon
+        aria-label="Why do all tags with the same SHA get deleted?"
         ><i class="material-icons">help</i>
       </material-button>
     </div>
@@ -32,23 +33,27 @@
       <ul>
         <li each="{ image in displayImagesToDelete(props.toDelete, props.tags) }">{ image.name }:{ image.tag }</li>
       </ul>
+      <p class="warning">
+        Deleting one tag removes every tag sharing the same manifest (SHA). Run
+        <code>registry garbage-collect config.yml</code> on your registry to free the storage.
+      </p>
     </div>
     <div class="material-popup-action">
       <material-button
         class="dialog-button"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-on-error)"
         onClick="{ deleteImages }"
-        color="inherit"
-        text-color="var(--primary-text)"
+        color="var(--m3-error)"
+        text-color="var(--m3-on-error)"
       >
         Delete
       </material-button>
       <material-button
         class="dialog-button"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-state-hover)"
         onClick="{ props.onClick }"
         color="inherit"
-        text-color="var(--primary-text)"
+        text-color="var(--m3-primary)"
       >
         Cancel
       </material-button>
@@ -145,6 +150,20 @@
     :host material-popup .content .material-popup-content {
       overflow-y: auto;
       max-height: 250px;
+    }
+
+    :host .warning {
+      color: var(--m3-on-surface-variant);
+      font-size: var(--type-body-medium-size);
+      line-height: var(--type-body-medium-height);
+      margin-top: var(--space-4);
+    }
+
+    :host .warning code {
+      background-color: var(--m3-surface-variant);
+      padding: 0 var(--space-1);
+      border-radius: var(--shape-xs);
+      font-family: 'Roboto Mono', monospace;
     }
   </style>
 </confirm-delete-image>

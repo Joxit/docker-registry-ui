@@ -17,21 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <tag-list>
   <material-card class="header">
     <div class="material-card-title-action">
-      <material-button
-        text-color="var(--neutral-text)"
-        color="inherit"
-        waves-color="var(--hover-background)"
-        waves-center="true"
-        href="{ router.home() }"
-        icon
-      >
-        <i class="material-icons">arrow_back</i>
-      </material-button>
       <h2>
         Tags of { props.image }
         <div class="source-hint">Sourced from { state.registryName + '/' + props.image }</div>
-        <div class="item-count">{ state.tags.length } tags</div>
       </h2>
+      <span class="item-count">{ state.tags.length } tags</span>
     </div>
   </material-card>
 
@@ -39,10 +29,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <material-spinner></material-spinner>
   </div>
 
-  <pagination
-    pages="{ getPageLabels(state.page, getNumPages(state.tags, props.tagsPerPage)) }"
-    onPageUpdate="{onPageUpdate}"
-  ></pagination>
+  <div if="{ state.loadend && !hasVisibleTags() }" class="empty-state">
+    <i class="material-icons">search_off</i>
+    <h3>No tags found</h3>
+    <p>This repository has no tags, or no tag matches the current search.</p>
+  </div>
 
   <tag-table
     if="{ state.loadend }"
@@ -72,7 +63,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <script>
     import { Http } from '../../scripts/http';
     import { DockerImage } from '../../scripts/docker-image';
-    import { getNumPages, getPageLabels } from '../../scripts/utils';
+    import { getNumPages, getPageLabels, getPage } from '../../scripts/utils';
+    import { matchSearch } from '../search-bar.riot';
     import Pagination from './pagination.riot';
     import TagTable from './tag-table.riot';
     import router from '../../scripts/router';
@@ -194,9 +186,61 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         this.update();
       },
+      hasVisibleTags() {
+        const page = getPage(this.state.tags, this.state.page, this.props.tagsPerPage);
+        return page.some((image) => matchSearch(this.props.filterResults, image.tag));
+      },
       getPageLabels,
       getNumPages,
       router,
     };
   </script>
+  <style>
+    :host .item-count {
+      background-color: var(--m3-secondary-container);
+      color: var(--m3-on-secondary-container);
+      border-radius: var(--shape-full);
+      font-size: var(--type-label-medium-size);
+      font-weight: var(--type-label-medium-weight);
+      line-height: 1;
+      padding: var(--space-1) var(--space-2);
+      white-space: nowrap;
+      margin-left: var(--space-4);
+      flex-shrink: 0;
+    }
+
+    :host .source-hint {
+      font-size: var(--type-body-medium-size);
+      color: var(--m3-on-surface-variant);
+    }
+
+    :host .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      margin: var(--space-12) auto;
+      padding: var(--space-8);
+      text-align: center;
+      color: var(--m3-on-surface-variant);
+    }
+
+    :host .empty-state .material-icons {
+      font-size: 48px;
+      color: var(--m3-outline);
+    }
+
+    :host .empty-state h3 {
+      margin: 0;
+      font-size: var(--type-title-large-size);
+      font-weight: var(--type-title-large-weight);
+      color: var(--m3-on-surface);
+    }
+
+    :host .empty-state p {
+      margin: 0;
+      font-size: var(--type-body-medium-size);
+      max-width: 32em;
+    }
+  </style>
 </tag-list>

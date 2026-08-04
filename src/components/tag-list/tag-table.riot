@@ -66,7 +66,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </th>
           <th
             id="image-tag-header"
-            class="{ !state.orderType ? (props.asc ? 'sorted-asc' : 'sorted-desc') : '' }"
+            class="sortable { !state.orderType ? (props.asc ? 'sorted-asc' : 'sorted-desc') : '' }"
             onclick="{ onReverseOrder }"
             aria-sort="{ !state.orderType ? (props.asc ? 'ascending' : 'descending') : 'none' }"
           >
@@ -74,7 +74,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <i if="{ getSortIcon('tag') }" class="material-icons sort-icon">{ getSortIcon('tag') }</i>
           </th>
           <th
-            class="creation-date { state.orderType === 'date' ? (state.desc ? 'sorted-desc' : 'sorted-asc') : '' }"
+            class="creation-date sortable { state.orderType === 'date' ? (state.desc ? 'sorted-desc' : 'sorted-asc') : '' }"
             onclick="{ () => onPageReorder('date') }"
             aria-sort="{ state.orderType === 'date' ? (state.desc ? 'descending' : 'ascending') : 'none' }"
           >
@@ -82,7 +82,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <i if="{ getSortIcon('date') }" class="material-icons sort-icon">{ getSortIcon('date') }</i>
           </th>
           <th
-            class="image-size { state.orderType === 'size' ? (state.desc ? 'sorted-desc' : 'sorted-asc') : '' }"
+            class="image-size sortable { state.orderType === 'size' ? (state.desc ? 'sorted-desc' : 'sorted-asc') : '' }"
             onclick="{ () => onPageReorder('size') }"
             aria-sort="{ state.orderType === 'size' ? (state.desc ? 'descending' : 'ascending') : 'none' }"
           >

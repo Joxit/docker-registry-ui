@@ -1,7 +1,7 @@
 # Docker Registry UI — UI/UX Revamp Plan
 
 Branch: `feat/ui-ux-revamp`
-Status: draft — validate with maintainers before implementation
+Status: **implemented** (see [Implementation status](#12-implementation-status))
 Decisions locked in with the author:
 - **Design direction:** Material 3 modernization (color roles, tonal surfaces, rounded shape system)
 - **Component library:** keep `riot-mui`, restyle via an override layer (do **not** rebuild components or migrate the framework)
@@ -233,3 +233,15 @@ Ordered by dependency (each step ends green: `npm run build`, `npm test`, `npm r
 - Server-side features, garbage collection integration, push/pull of images.
 - i18n (app is English-only) — a future item, noted.
 - Migrating off Riot.js / riot-mui — explicitly out of scope for this effort.
+
+## 12. Implementation status
+
+All phases were implemented on this branch with `git` commits per phase (`npm run build` and `npm test` green throughout).
+
+- Phases 1–7 (tokens, riot-mui overrides, chrome/IA, catalog, tag table, history/dialogs, states/motion/a11y/responsive) — **done**.
+- Phase 8 (docs) — README theme table updated to the new Material 3 defaults. 
+- **Remaining / known gaps:**
+  - `screenshot.png` and `docker-registry-ui.gif` in the repo root still show the old design — regenerate with a browser once the UI is visually reviewed.
+  - Visual QA in a real browser (light/dark, catalog expand, multi-delete, history tabs, registry switcher, mobile) not yet performed by a human.
+  - Prettier (`npm run format`) is **not** clean on the riot files: prettier's HTML parser mangles riot attribute expressions (e.g. `onclick="{ onClick }"`), so riot files are intentionally left hand-formatted. This is a pre-existing repo condition.
+  - The default top app bar keeps the existing dark brand header (`--m3-header-background`), matching the prior look.

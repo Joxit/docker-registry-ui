@@ -126,15 +126,15 @@ There are some examples with [docker-compose](https://docs.docker.com/compose/) 
 
 ### Theme options
 
-This featureswas added to version 2.4.0. See more about this in [#283](https://github.com/Joxit/docker-registry-ui/pull/283).
+This featureswas added to version 2.4.0. See more about this in [#283](https://github.com/Joxit/docker-registry-ui/pull/283). The default palettes follow [Material 3](https://m3.material.io/) color roles since 2.7.0.
 
 | Environment variable | light theme value | dark theme value |
 | --- | --- | --- |
-| `THEME_PRIMARY_TEXT` | `#25313b` | `#98a8bd` |
-| `THEME_NEUTRAL_TEXT` | `#777777` | `#6d7fab` |
-| `THEME_BACKGROUND` | `#ffffff` | `#22272e` |
-| `THEME_HOVER_BACKGROUND` | `#eeeeee` | `#343a4b` |
-| `THEME_ACCENT_TEXT` | `#5f7796` | `#5c88ff` |
+| `THEME_PRIMARY_TEXT` | `#1a1c20` | `#e2e2e9` |
+| `THEME_NEUTRAL_TEXT` | `#44464f` | `#c4c6d0` |
+| `THEME_BACKGROUND` | `#faf9fd` | `#121317` |
+| `THEME_HOVER_BACKGROUND` | `#e2e3e9` | `#333438` |
+| `THEME_ACCENT_TEXT` | `#0b57d0` | `#acccff` |
 | `THEME_HEADER_TEXT` | `#ffffff` | `#ffffff` |
 | `THEME_HEADER_ACCENT_TEXT` | `#7b9ac2` | `#7ea1ff` |
 | `THEME_HEADER_BACKGROUND` | `#25313b` | `#333a45` |

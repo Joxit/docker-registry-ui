@@ -68,14 +68,49 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    :host.Labels .value,
-    :host.Env .value {
-      margin-bottom: 0.5em;
+    :host {
+      display: block;
+      padding: var(--space-3) 0;
+      min-width: 0;
+      border-bottom: 1px solid var(--m3-outline-variant);
+    }
+
+    :host:last-child {
+      border-bottom: none;
+    }
+
+    :host .headline {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-weight: var(--type-label-large-weight);
+      font-size: var(--type-label-large-size);
+      line-height: var(--type-label-large-height);
+      color: var(--m3-on-surface-variant);
+      margin-bottom: var(--space-1);
+    }
+
+    :host .headline * {
+      margin-right: 6px;
     }
 
     :host i {
       font-size: 20px;
       padding: 0px;
+      color: var(--m3-on-surface-variant);
+    }
+
+    :host .content {
+      overflow-x: auto;
+      color: var(--m3-on-surface);
+      font-size: var(--type-body-medium-size);
+      line-height: var(--type-body-medium-height);
+      font-family: 'Roboto Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+      word-break: break-all;
+    }
+
+    :host .content .value {
+      padding: var(--space-1) 0;
     }
 
     :host.docker_version .headline .material-icons,
@@ -83,36 +118,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       height: 24px;
     }
 
-    :host {
-      display: block;
-      padding: 20px;
-      min-width: 100px;
-      min-height: 3em;
-      width: 420px;
-      float: left;
-    }
-
-    :host .content {
-      overflow-x: auto;
-    }
-
-    :host.id .content {
-      overflow-x: initial;
-    }
-
-    :host .headline {
-      height: 24px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      font-weight: bold;
-    }
-    :host .headline * {
-      margin-right: 6px;
-    }
-
     :host.id div.value {
-      font-size: 12px;
+      font-size: var(--type-body-small-size);
     }
   </style>
 </tag-history-element>

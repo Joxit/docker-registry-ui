@@ -10,20 +10,20 @@
     <div class="material-popup-action">
       <material-button
         class="dialog-button release-note"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-on-primary)"
         href="{ state.latest && state.latest.html_url }"
-        color="inherit"
-        text-color="var(--accent-text)"
+        color="var(--m3-primary)"
+        text-color="var(--m3-on-primary)"
         target="_blank"
       >
         Release Note
       </material-button>
       <material-button
         class="dialog-button"
-        waves-color="var(--hover-background)"
+        waves-color="var(--m3-state-hover)"
         onClick="{ onClose }"
         color="inherit"
-        text-color="var(--primary-text)"
+        text-color="var(--m3-primary)"
       >
         Close
       </material-button>
@@ -103,13 +103,13 @@
       align-items: center;
     }
     material-popup .material-popup-content code {
-      background-color: var(--hover-background);
+      background-color: var(--m3-surface-variant);
       padding: 0 5px;
-      border-radius: 4px;
+      border-radius: var(--shape-xs);
       line-height: 1.5em;
     }
     material-popup .material-popup-content b {
-      color: var(--accent-text);
+      color: var(--m3-primary);
     }
   </style>
 </version-notification>

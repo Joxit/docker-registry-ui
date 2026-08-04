@@ -32,10 +32,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="material-popup-action">
       <material-button
         class="dialog-button"
-        waves-color="rgba(158,158,158,.4)"
+        waves-color="var(--m3-state-hover)"
         onClick="{ props.onClose }"
         color="inherit"
-        text-color="var(--primary-text)"
+        text-color="var(--m3-primary)"
       >
         Close
       </material-button>
@@ -50,7 +50,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       width: 80%;
     }
     :host .material-popup-content {
-      background-color: var(--hover-background);
+      background-color: var(--m3-surface-container-low);
+      color: var(--m3-on-surface);
+      border-radius: var(--shape-sm);
     }
     @media screen and (max-width: 800px) {
       :host material-popup .popup > .content {
@@ -60,9 +62,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     :host .instruction {
       font-family: 'Roboto Mono', monospace !important;
       margin: 0.75em 0;
+      line-height: var(--type-body-large-height);
     }
     :host .instruction .keyword {
-      color: var(--accent-text);
+      color: var(--m3-primary);
+      font-weight: var(--type-label-medium-weight);
     }
   </style>
 </dockerfile>

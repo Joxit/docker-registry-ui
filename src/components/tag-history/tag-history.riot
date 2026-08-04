@@ -15,27 +15,17 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history>
-  <material-card>
+  <material-card class="header">
     <div class="material-card-title-action">
+      <h2>
+        History of { props.image }:{ props.tag } <i class="material-icons">history</i>
+      </h2>
       <material-button
-        text-color="var(--neutral-text)"
-        color="inherit"
-        waves-color="var(--hover-background)"
+        text-color="var(--m3-on-primary)"
+        color="var(--m3-primary)"
+        waves-color="var(--m3-on-primary)"
         waves-center="true"
         rounded="true"
-        href="{ toTaglist() }"
-        icon
-      >
-        <i class="material-icons">arrow_back</i>
-      </material-button>
-      <h2>History of { props.image }:{ props.tag } <i class="material-icons">history</i></h2>
-      <material-button
-        text-color="var(--accent-text)"
-        color="inherit"
-        waves-color="var(--hover-background)"
-        waves-center="true"
-        rounded="true"
-        outlined
         onClick="{ showDockerfile }"
       >
         Dockerfile
@@ -53,28 +43,44 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
   <material-tabs
     if="{ state.archs && state.loadend }"
-    color="var(--background)"
-    text-color="var(--primary-text)"
-    text-selected-color="var(--accent-text)"
-    line-color="var(--background)"
-    line-selected-color="var(--accent-text)"
+    color="var(--m3-surface)"
+    text-color="var(--m3-on-surface-variant)"
+    text-selected-color="var(--m3-primary)"
+    line-color="var(--m3-surface-container-high)"
+    line-selected-color="var(--m3-primary)"
     useLine="{ true }"
     tabs="{ state.archs }"
     onTabChanged="{ onTabChanged }"
   ></material-tabs>
 
-  <material-card each="{ element in state.elements }">
-    <tag-history-element
-      each="{ entry in element }"
-      if="{ entry.value && entry.value.length > 0}"
-      entry="{ entry }"
-    ></tag-history-element>
+  <material-card class="history-section config" if="{ state.loadend }">
+    <h3 class="section-title">Image configuration</h3>
+    <div class="section-grid">
+      <tag-history-element
+        each="{ entry in state.elements[0] }"
+        if="{ entry.value && entry.value.length > 0}"
+        entry="{ entry }"
+      ></tag-history-element>
+    </div>
+  </material-card>
+  <material-card
+    class="history-section layer"
+    each="{ (element, idx) in state.elements }"
+    if="{ idx > 0 }"
+  >
+    <h3 class="section-title">Layer { idx }</h3>
+    <div class="section-grid">
+      <tag-history-element
+        each="{ entry in element }"
+        if="{ entry.value && entry.value.length > 0}"
+        entry="{ entry }"
+      ></tag-history-element>
+    </div>
   </material-card>
   <script>
     import { DockerImage } from '../../scripts/docker-image';
     import { bytesToSize } from '../../scripts/utils';
     import Dockerfile from '../dialogs/dockerfile.riot';
-    import router from '../../scripts/router';
     import TagHistoryElement from './tag-history-element.riot';
     export default {
       components: {
@@ -155,9 +161,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.update({
           archs,
         });
-      },
-      toTaglist() {
-        return router.taglist(this.props.image);
       },
       showDockerfile() {
         this.update({ showDockerfile: true });
@@ -287,6 +290,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
+    :host {
+      display: block;
+    }
     h2 {
       flex-grow: 1;
       display: flex;
@@ -295,6 +301,26 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     }
     h2 .material-icons {
       margin-left: .25em;
+    }
+    :host material-tabs {
+      margin-top: var(--space-4);
+    }
+    :host .history-section {
+      padding: var(--space-4);
+    }
+    :host .section-title {
+      margin: 0 0 var(--space-2);
+      font-size: var(--type-title-small-size);
+      font-weight: var(--type-title-small-weight);
+      line-height: var(--type-title-small-height);
+      color: var(--m3-on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    :host .section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-1) var(--space-6);
     }
   </style>
 </tag-history>

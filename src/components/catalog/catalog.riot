@@ -180,29 +180,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           self.props.onNotify(this.getErrorMessage(), true);
         });
         oReq.addEventListener('loadend', function () {
-          const render = (counts) =>
-            self.update({
-              repositories,
-              nRepositories: repositories.length,
-              nImages,
-              counts: counts || {},
-              loadend: true,
-            });
-          // Prefetch tag counts before the first paint so tagless images can be
-          // filtered out without rows appearing and then disappearing (flicker).
-          // Note: counts must be passed through `update`, not mutated on the
-          // stale closure state (Riot replaces the state object on update).
+          // Render the list immediately; tag counts are fetched in the
+          // background and the badges fill in as each count arrives.
+          self.update({
+            repositories,
+            nRepositories: repositories.length,
+            nImages,
+            counts: {},
+            loadend: true,
+          });
           if (props.showCatalogNbTags && repositories.length > 0) {
-            const images = collectImages(repositories);
-            Promise.all(images.map((image) => self.fetchNbTags(image, props))).then((counts) => {
-              const countsMap = {};
-              images.forEach((image, i) => {
-                countsMap[image] = counts[i];
+            collectImages(repositories).forEach((image) => {
+              self.fetchNbTags(image, props).then((count) => {
+                if (count !== undefined) {
+                  self.update({ counts: { ...self.state.counts, [image]: count } });
+                }
               });
-              render(countsMap);
             });
-          } else {
-            render();
           }
         });
         oReq.open('GET', catalogUrl);

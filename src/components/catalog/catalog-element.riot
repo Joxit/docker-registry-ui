@@ -44,10 +44,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <span if="{ state.images }" class="badge" title="{ state.nImages } images">{ state.nImages }</span>
           <span
             if="{ props.showCatalogNbTags && state.image }"
-            class="badge badge--accent"
-            title="{ state.nbTags } tags"
+            class="badge badge--accent { state.nbTags === undefined ? 'is-pending' : '' }"
+            title="{ state.nbTags === undefined ? 'Loading tag count…' : state.nbTags + ' tags' }"
           >
-            { state.nbTags }
+            <i class="material-icons badge-icon">sell</i>
+            { state.nbTags === undefined ? '…' : state.nbTags }
           </span>
           <i if="{ state.images }" class="material-icons row-chevron { state.expanded ? 'expanded' : '' }">
             expand_more
@@ -92,6 +93,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
       },
       onBeforeUpdate(props, state) {
+        if (props.showCatalogNbTags && state.image) {
+          state.nbTags = props.counts && props.counts[state.image];
+        }
         if (props.filterResults && state.images) {
           state.nImages = state.images.filter((image) => matchSearch(props.filterResults, image)).length;
         } else {
@@ -170,6 +174,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     :host .row-chevron {
       color: var(--text-muted);
       transition: transform var(--dur-normal) var(--ease-out);
+    }
+
+    :host .badge-icon {
+      font-size: 14px;
+    }
+
+    :host .badge.is-pending {
+      opacity: 0.7;
+      min-width: 34px;
+    }
+
+    :host .badge.is-pending .badge-icon {
+      opacity: 0.6;
     }
 
     :host .row-chevron.expanded {

@@ -74,7 +74,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               on-notify="{ notifySnackbar }"
               filter-results="{ state.filter }"
               on-authentication="{ onAuthentication }"
-              show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"
+              show-catalog-nb-tags="{ falsy(props.showCatalogNbTags) }"
               catalog-default-expanded="{ truthy(props.catalogDefaultExpanded) }"
               catalog-min-branches="{ props.catalogMinBranches }"
               catalog-max-branches="{ props.catalogMaxBranches }"

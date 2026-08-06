@@ -1,131 +1,75 @@
 /*
  * Copyright (C) 2016-2023 Jones Magloire @Joxit
  *
- * Material 3 design tokens for Docker Registry UI.
+ * Design tokens for Docker Registry UI — modern SaaS aesthetic.
  *
- * The light palette is the default (`:root`). The dark palette is applied by
+ * The light theme is the default (`:root`); the dark theme is applied by
  * setting `data-theme="dark"` on the root element (see `src/scripts/theme.js`).
  *
  * Legacy tokens (`--primary-text`, `--background`, `--accent-text`, ...) are
- * kept as aliases of the Material 3 roles they map to so existing components
- * and `THEME_*` environment variables keep working unchanged.
+ * kept as aliases so existing `THEME_*` environment variables keep working.
  */
 :root {
   /* ------------------------------------------------------------------ *
-   * Color roles (Material 3)                                            *
+   * Color                                                                *
    * ------------------------------------------------------------------ */
-  --m3-primary: #0b57d0;
-  --m3-on-primary: #ffffff;
-  --m3-primary-container: #d8e2ff;
-  --m3-on-primary-container: #001a41;
-  --m3-secondary: #575e71;
-  --m3-on-secondary: #ffffff;
-  --m3-secondary-container: #dbe1f9;
-  --m3-on-secondary-container: #141b2c;
-  --m3-surface: #faf9fd;
-  --m3-surface-dim: #dad9de;
-  --m3-surface-bright: #faf9fd;
-  --m3-on-surface: #1a1c20;
-  --m3-on-surface-variant: #44464f;
-  --m3-surface-variant: #e1e2ec;
-  --m3-outline: #74777f;
-  --m3-outline-variant: #c4c6d0;
-  --m3-error: #ba1a1a;
-  --m3-on-error: #ffffff;
-  --m3-error-container: #ffdad6;
-  --m3-on-error-container: #410002;
-  --m3-inverse-surface: #2f3036;
-  --m3-inverse-on-surface: #f0eff4;
-  --m3-inverse-primary: #acccff;
-
-  /* State layers (Material 3) */
-  --m3-state-hover: rgba(29, 27, 32, 0.08);
-  --m3-state-focus: rgba(29, 27, 32, 0.12);
-  --m3-state-pressed: rgba(29, 27, 32, 0.12);
-
-  /* Surface container hierarchy (Material 3) */
-  --m3-surface-container-lowest: #ffffff;
-  --m3-surface-container-low: #f4f3f7;
-  --m3-surface-container: #eef0f4;
-  --m3-surface-container-high: #e8e9ee;
-  --m3-surface-container-highest: #e2e3e9;
-
-  /* App chrome (header / footer) */
-  --m3-header-background: #25313b;
-  --m3-header-text: #ffffff;
-  --m3-header-accent-text: #7b9ac2;
-  --m3-footer-background: #344251;
-  --m3-footer-text: #ffffff;
-  --m3-footer-neutral-text: #adbacd;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-muted: #f0f1f3;
+  --surface-hover: #f3f4f6;
+  --border: #e2e4e8;
+  --border-strong: #c9cdd3;
+  --text-primary: #1f2328;
+  --text-secondary: #59636e;
+  --text-muted: #8a919a;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #eff4ff;
+  --accent-soft-hover: #dbe7fe;
+  --on-accent: #ffffff;
+  --danger: #cf222e;
+  --danger-hover: #b62324;
+  --danger-soft: #ffebe9;
+  --on-danger: #ffffff;
+  --success: #1a7f37;
+  --warning: #9a6700;
+  --info: #0969da;
+  --focus-ring: rgba(37, 99, 235, 0.35);
 
   /* ------------------------------------------------------------------ *
-   * Legacy aliases (backward compatible with `THEME_*` overrides)       *
+   * Elevation (soft SaaS shadows)                                       *
    * ------------------------------------------------------------------ */
-  --primary-text: var(--m3-on-surface);
-  --neutral-text: var(--m3-on-surface-variant);
-  --background: var(--m3-surface);
-  --hover-background: var(--m3-surface-container-highest);
-  --accent-text: var(--m3-primary);
-  --header-text: var(--m3-header-text);
-  --header-accent-text: var(--m3-header-accent-text);
-  --header-background: var(--m3-header-background);
-  --footer-text: var(--m3-footer-text);
-  --footer-neutral-text: var(--m3-footer-neutral-text);
-  --footer-background: var(--m3-footer-background);
+  --shadow-xs: 0 1px 2px rgba(31, 35, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(31, 35, 40, 0.06), 0 1px 2px rgba(31, 35, 40, 0.04);
+  --shadow-md: 0 4px 12px rgba(31, 35, 40, 0.08), 0 2px 4px rgba(31, 35, 40, 0.04);
+  --shadow-lg: 0 12px 32px rgba(31, 35, 40, 0.12), 0 4px 8px rgba(31, 35, 40, 0.06);
 
   /* ------------------------------------------------------------------ *
-   * Shape scale (Material 3)                                            *
+   * Shape                                                                *
    * ------------------------------------------------------------------ */
-  --shape-xs: 4px;
-  --shape-sm: 8px;
-  --shape-md: 12px;
-  --shape-lg: 16px;
-  --shape-xl: 28px;
-  --shape-full: 9999px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
 
   /* ------------------------------------------------------------------ *
-   * Elevation (Material 3 tonal shadows)                                *
+   * Typography                                                          *
    * ------------------------------------------------------------------ */
-  --elevation-0: none;
-  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
-  --elevation-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
-  --elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
-  --elevation-4: 0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3);
-  --elevation-5: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px rgba(0, 0, 0, 0.3);
-
-  /* ------------------------------------------------------------------ *
-   * Type scale (Material 3)                                             *
-   * ------------------------------------------------------------------ */
-  --type-headline-small-size: 24px;
-  --type-headline-small-height: 32px;
-  --type-headline-small-weight: 400;
-  --type-title-large-size: 22px;
-  --type-title-large-height: 28px;
-  --type-title-large-weight: 400;
-  --type-title-medium-size: 16px;
-  --type-title-medium-height: 24px;
-  --type-title-medium-weight: 500;
-  --type-title-small-size: 14px;
-  --type-title-small-height: 20px;
-  --type-title-small-weight: 500;
-  --type-body-large-size: 16px;
-  --type-body-large-height: 24px;
-  --type-body-large-weight: 400;
-  --type-body-medium-size: 14px;
-  --type-body-medium-height: 20px;
-  --type-body-medium-weight: 400;
-  --type-body-small-size: 12px;
-  --type-body-small-height: 16px;
-  --type-body-small-weight: 400;
-  --type-label-large-size: 14px;
-  --type-label-large-height: 20px;
-  --type-label-large-weight: 500;
-  --type-label-medium-size: 12px;
-  --type-label-medium-height: 16px;
-  --type-label-medium-weight: 500;
-  --type-label-small-size: 11px;
-  --type-label-small-height: 16px;
-  --type-label-small-weight: 500;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji',
+    'Segoe UI Emoji', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-lg: 14px;
+  --fs-xl: 16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+  --fs-4xl: 28px;
+  --lh-tight: 1.25;
+  --lh-normal: 1.5;
 
   /* ------------------------------------------------------------------ *
    * Spacing (4px grid)                                                  *
@@ -134,61 +78,71 @@
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
+  --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
+  --space-10: 40px;
   --space-12: 48px;
   --space-16: 64px;
 
   /* ------------------------------------------------------------------ *
    * Motion                                                              *
    * ------------------------------------------------------------------ */
-  --motion-duration-short: 200ms;
-  --motion-duration-medium: 400ms;
-  --motion-duration-long: 500ms;
-  --motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-  --motion-easing-decelerate: cubic-bezier(0, 0, 0, 1);
-  --motion-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --dur-fast: 120ms;
+  --dur-normal: 200ms;
+  --dur-slow: 300ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ------------------------------------------------------------------ *
+   * Layout                                                              *
+   * ------------------------------------------------------------------ */
+  --sidebar-width: 260px;
+  --topbar-height: 56px;
+  --content-max-width: 1280px;
+
+  /* ------------------------------------------------------------------ *
+   * Legacy aliases (backward compatible with `THEME_*` overrides)       *
+   * ------------------------------------------------------------------ */
+  --primary-text: var(--text-primary);
+  --neutral-text: var(--text-secondary);
+  --background: var(--surface);
+  --hover-background: var(--surface-hover);
+  --accent-text: var(--accent);
+  --header-text: #ffffff;
+  --header-accent-text: var(--text-secondary);
+  --header-background: var(--surface);
+  --footer-text: var(--text-secondary);
+  --footer-neutral-text: var(--text-muted);
+  --footer-background: var(--surface);
 }
 
 [data-theme='dark'] {
-  --m3-primary: #acccff;
-  --m3-on-primary: #003061;
-  --m3-primary-container: #00458f;
-  --m3-on-primary-container: #d8e2ff;
-  --m3-secondary: #bfc6dc;
-  --m3-on-secondary: #293041;
-  --m3-secondary-container: #3f4759;
-  --m3-on-secondary-container: #dbe1f9;
-  --m3-surface: #121317;
-  --m3-surface-dim: #121317;
-  --m3-surface-bright: #38393f;
-  --m3-on-surface: #e2e2e9;
-  --m3-on-surface-variant: #c4c6d0;
-  --m3-surface-variant: #44464f;
-  --m3-outline: #8e9099;
-  --m3-outline-variant: #44464f;
-  --m3-error: #ffb4ab;
-  --m3-on-error: #690005;
-  --m3-error-container: #93000a;
-  --m3-on-error-container: #ffdad6;
-  --m3-inverse-surface: #e2e2e9;
-  --m3-inverse-on-surface: #2f3036;
-  --m3-inverse-primary: #0b57d0;
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-muted: #1c2128;
+  --surface-hover: #21262d;
+  --border: #30363d;
+  --border-strong: #424c58;
+  --text-primary: #e6edf3;
+  --text-secondary: #9198a1;
+  --text-muted: #6e7681;
+  --accent: #4493f8;
+  --accent-hover: #5aa3f9;
+  --accent-soft: rgba(68, 147, 248, 0.15);
+  --accent-soft-hover: rgba(68, 147, 248, 0.22);
+  --on-accent: #0d1117;
+  --danger: #f85149;
+  --danger-hover: #ff6a61;
+  --danger-soft: rgba(248, 81, 73, 0.15);
+  --on-danger: #ffffff;
+  --success: #3fb950;
+  --warning: #d29922;
+  --info: #58a6ff;
+  --focus-ring: rgba(68, 147, 248, 0.4);
 
-  --m3-state-hover: rgba(226, 226, 233, 0.08);
-  --m3-state-focus: rgba(226, 226, 233, 0.12);
-  --m3-state-pressed: rgba(226, 226, 233, 0.12);
-
-  --m3-surface-container-lowest: #0c0e13;
-  --m3-surface-container-low: #1a1b1f;
-  --m3-surface-container: #1e1f23;
-  --m3-surface-container-high: #292a2e;
-  --m3-surface-container-highest: #333438;
-
-  --m3-header-background: #333a45;
-  --m3-header-text: #ffffff;
-  --m3-header-accent-text: #7ea1ff;
-  --m3-footer-background: #344251;
-  --m3-footer-text: #ffffff;
-  --m3-footer-neutral-text: #98afcf;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
 }

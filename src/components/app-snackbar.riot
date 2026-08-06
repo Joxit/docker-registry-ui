@@ -1,0 +1,26 @@
+<app-snackbar>
+  <div if="{ props.message }" class="snackbar { props.isError ? 'is-error' : '' }" role="status">
+    <span class="snackbar-message">{ props.message }</span>
+    <button class="snackbar-close" onclick="{ dismiss }" aria-label="Dismiss notification" type="button">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <script>
+    export default {
+      onUpdated(props, state) {
+        if (props.message) {
+          clearTimeout(this._timeout);
+          this._timeout = setTimeout(() => this.dismiss(), 4000);
+        }
+      },
+      onUnmounted() {
+        clearTimeout(this._timeout);
+      },
+      dismiss() {
+        if (this.props.onDismiss) {
+          this.props.onDismiss();
+        }
+      },
+    };
+  </script>
+</app-snackbar>

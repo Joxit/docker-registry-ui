@@ -1,0 +1,389 @@
+/*
+ * Copyright (C) 2016-2023 Jones Magloire @Joxit
+ *
+ * Application shell layout: sidebar, topbar, content area, breadcrumbs.
+ */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ------------------------------------------------------------------ *
+ * Sidebar                                                             *
+ * ------------------------------------------------------------------ */
+.sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 40;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-brand .brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-lg);
+  background-color: var(--accent);
+  color: var(--on-accent);
+  flex-shrink: 0;
+}
+
+.sidebar-brand .brand-icon .material-icons {
+  font-size: 20px;
+}
+
+.sidebar-brand .brand-name {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-section {
+  padding: var(--space-4) var(--space-4) var(--space-2);
+}
+
+.sidebar-section-title {
+  padding: 0 var(--space-2) var(--space-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.nav-item:hover {
+  background-color: var(--surface-muted);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nav-item.is-active {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+
+.nav-item .material-icons {
+  font-size: 18px;
+}
+
+.sidebar-footer {
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sidebar-footer .footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.sidebar-footer a {
+  color: var(--text-secondary);
+}
+
+/* Registry panel inside the sidebar */
+.registry-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.registry-current {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  font-size: var(--fs-md);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+.registry-current .material-icons {
+  font-size: 16px;
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.registry-current .registry-url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.registry-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.registry-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.registry-list li.is-active {
+  background-color: var(--accent-soft);
+}
+
+.registry-list .registry-switch {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: var(--fs-md);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.registry-list li.is-active .registry-switch {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.registry-list .registry-switch:hover {
+  color: var(--text-primary);
+  background-color: var(--surface-hover);
+}
+
+.registry-list .registry-remove {
+  flex-shrink: 0;
+}
+
+.registry-add {
+  margin-top: var(--space-2);
+  justify-content: flex-start;
+}
+
+/* ------------------------------------------------------------------ *
+ * Main area                                                           *
+ * ------------------------------------------------------------------ */
+.app-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--topbar-height);
+  padding: 0 var(--space-5);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.topbar .menu-toggle {
+  display: none;
+}
+
+.topbar .topbar-spacer {
+  flex: 1;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-5);
+}
+
+/* ------------------------------------------------------------------ *
+ * Breadcrumbs                                                         *
+ * ------------------------------------------------------------------ */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.breadcrumbs ol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.breadcrumbs li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-lg);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.breadcrumbs li a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 2px 4px;
+}
+
+.breadcrumbs li a:hover {
+  color: var(--accent);
+  background-color: var(--surface-muted);
+  text-decoration: none;
+}
+
+.breadcrumbs li.separator {
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.breadcrumbs li[aria-current='page'] span {
+  color: var(--text-primary);
+  font-weight: 600;
+  max-width: 16em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.breadcrumbs li .material-icons {
+  font-size: 16px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Search in the topbar                                                *
+ * ------------------------------------------------------------------ */
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.search-field .text-field {
+  width: 220px;
+  transition: width var(--dur-normal) var(--ease-out);
+}
+
+.search-field .search-toggle {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive                                                          *
+ * ------------------------------------------------------------------ */
+.sidebar-overlay {
+  display: none;
+}
+
+@media screen and (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform var(--dur-normal) var(--ease-out);
+    box-shadow: var(--shadow-lg);
+    height: 100vh;
+  }
+
+  .app-shell.is-sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(13, 17, 23, 0.5);
+    z-index: 39;
+  }
+
+  .app-shell.is-sidebar-open .sidebar-overlay {
+    display: block;
+  }
+
+  .topbar .menu-toggle {
+    display: inline-flex;
+  }
+
+  .search-field .search-toggle {
+    display: inline-flex;
+  }
+
+  .search-field .text-field {
+    display: none;
+  }
+
+  .search-field.is-expanded .text-field {
+    display: flex;
+    width: 60vw;
+  }
+
+  .main-content {
+    padding: var(--space-4);
+  }
+}

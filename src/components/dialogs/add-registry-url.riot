@@ -5,50 +5,23 @@
  it under the terms of the GNU Affero General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <add-registry-url>
-  <material-popup opened="{ props.opened }" onClick="{ props.onClose }">
-    <div class="material-popup-title">Add a registry</div>
-    <div class="material-popup-content">
-      <material-input
-        onkeyup="{ onKeyUp }"
+  <app-dialog title="Add a registry" opened="{ props.opened }" on-close="{ props.onClose }">
+    <div class="add-registry-form">
+      <text-field
         label="Server URL"
-        text-color="var(--m3-on-surface)"
-        label-color="var(--m3-on-surface-variant)"
-        color="var(--m3-primary)"
-        valid="{ registryUrlValidator }"
-      ></material-input>
-      <span>Write your URL without /v2</span>
+        placeholder="https://registry.example.com"
+        icon="link"
+        on-key-up="{ onKeyUp }"
+      ></text-field>
+      <p class="field-hint">Write your URL without /v2</p>
     </div>
-    <div class="material-popup-action">
-      <material-button
-        class="dialog-button"
-        waves-color="var(--m3-on-primary)"
-        onClick="{ add }"
-        color="var(--m3-primary)"
-        text-color="var(--m3-on-primary)"
-      >
-        Add
-      </material-button>
-      <material-button
-        class="dialog-button"
-        waves-color="var(--m3-state-hover)"
-        onClick="{ props.onClose }"
-        color="inherit"
-        text-color="var(--m3-primary)"
-      >
-        Cancel
-      </material-button>
+    <div slot="footer">
+      <button class="btn" onclick="{ props.onClose }" type="button">Cancel</button>
+      <button class="btn btn--primary" onclick="{ add }" type="button">Add</button>
     </div>
-  </material-popup>
+  </app-dialog>
   <script>
     import { addRegistryServers } from '../../scripts/utils';
     import router from '../../scripts/router';
@@ -74,9 +47,18 @@
         this.props.onClose();
         setTimeout(() => router.updateUrlQueryParam(url), 100);
       },
-      registryUrlValidator(input) {
-        return /^https?:\/\//.test(input) && !/\/v2\/?$/.test(input);
-      },
     };
   </script>
+  <style>
+    :host .add-registry-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    :host .field-hint {
+      font-size: var(--fs-md);
+      color: var(--text-muted);
+      margin: 0;
+    }
+  </style>
 </add-registry-url>

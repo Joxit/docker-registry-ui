@@ -1,0 +1,19 @@
+<app-dialog>
+  <div if="{ props.opened }" class="dialog-overlay" onclick="{ props.onClose }"></div>
+  <div
+    if="{ props.opened }"
+    class="dialog { props.wide ? 'dialog--wide' : '' }"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{ props.title }"
+  >
+    <div class="dialog-header">
+      <h3>{ props.title }</h3>
+      <button class="btn btn--icon" onclick="{ props.onClose }" aria-label="Close dialog" type="button">
+        <i class="material-icons">close</i>
+      </button>
+    </div>
+    <div class="dialog-body"><slot /></div>
+    <div class="dialog-footer"><slot name="footer" /></div>
+  </div>
+</app-dialog>

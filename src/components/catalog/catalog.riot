@@ -15,40 +15,46 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog>
-  <material-card ref="catalog-tag" class="catalog header">
-    <div class="material-card-title-action">
-      <h2>
-        Repositories of { state.registryName }
+  <div class="panel catalog-header">
+    <div class="panel-header">
+      <h2 class="panel-title">
+        Repositories
+        <span class="panel-subtitle">of { state.registryName }</span>
       </h2>
       <div class="catalog-stats">
-        <span class="count-badge" title="Images">{ state.nImages } images</span>
-        <span class="count-badge" title="Repositories">{ state.nRepositories } repositories</span>
+        <span class="badge badge--accent">{ state.nImages } images</span>
+        <span class="badge badge--neutral">{ state.nRepositories } repositories</span>
       </div>
     </div>
-  </material-card>
-  <material-card class="skeleton-list" if="{ !state.loadend }">
+  </div>
+
+  <div class="panel" if="{ !state.loadend }">
     <div class="skeleton-row" each="{ i in skeletonRows }">
       <span class="skeleton skeleton-icon"></span>
       <span class="skeleton skeleton-line { i % 3 === 0 ? 'wide' : '' }"></span>
-      <span class="skeleton skeleton-badge"></span>
     </div>
-  </material-card>
+  </div>
+
   <div if="{ state.loadend && state.repositories.length === 0 }" class="empty-state">
-    <i class="material-icons">inbox</i>
+    <span class="empty-icon"><i class="material-icons">inbox</i></span>
     <h3>No repositories</h3>
     <p>This registry has no repositories yet. Push your first image to get started.</p>
   </div>
-  <catalog-element
-    each="{ item in state.repositories }"
-    item="{ item }"
-    filter-results="{ props.filterResults }"
-    registry-url="{ props.registryUrl }"
-    on-notify="{ props.onNotify }"
-    on-authentication="{ props.onAuthentication }"
-    show-catalog-nb-tags="{ props.showCatalogNbTags }"
-    catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
-    is-registry-secured="{ props.isRegistrySecured }"
-  ></catalog-element>
+
+  <div class="list-group" if="{ state.loadend && state.repositories.length > 0 }">
+    <catalog-element
+      each="{ item in state.repositories }"
+      item="{ item }"
+      filter-results="{ props.filterResults }"
+      registry-url="{ props.registryUrl }"
+      on-notify="{ props.onNotify }"
+      on-authentication="{ props.onAuthentication }"
+      show-catalog-nb-tags="{ props.showCatalogNbTags }"
+      catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
+      is-registry-secured="{ props.isRegistrySecured }"
+    ></catalog-element>
+  </div>
+
   <script>
     import CatalogElement from './catalog-element.riot';
     import { Http } from '../../scripts/http';
@@ -136,59 +142,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    catalog {
+    :host {
       display: block;
-      margin: auto;
     }
-    catalog > material-card {
-      width: 100%;
+
+    :host .catalog-header {
+      margin-bottom: var(--space-4);
     }
-    .catalog-stats {
+
+    :host .catalog-stats {
       display: flex;
       gap: var(--space-2);
-      margin-left: var(--space-4);
-      flex-shrink: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
-    .count-badge {
-      background-color: var(--m3-secondary-container);
-      color: var(--m3-on-secondary-container);
-      border-radius: var(--shape-full);
-      font-size: var(--type-label-medium-size);
-      font-weight: var(--type-label-medium-weight);
-      line-height: 1;
-      padding: var(--space-1) var(--space-2);
-      white-space: nowrap;
-    }
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-2);
-      margin: var(--space-12) auto;
-      padding: var(--space-8);
-      text-align: center;
-      color: var(--m3-on-surface-variant);
-    }
-    .empty-state .material-icons {
-      font-size: 48px;
-      color: var(--m3-outline);
-    }
-    .empty-state h3 {
-      margin: 0;
-      font-size: var(--type-title-large-size);
-      font-weight: var(--type-title-large-weight);
-      color: var(--m3-on-surface);
-    }
-    .empty-state p {
-      margin: 0;
-      font-size: var(--type-body-medium-size);
-      max-width: 32em;
-    }
-    @media screen and (max-width: 600px) {
-      .catalog-stats {
-        flex-direction: column;
-        align-items: flex-end;
-      }
+
+    :host .list-group {
+      animation: fade-in-up var(--dur-normal) var(--ease-out);
     }
   </style>
 </catalog>

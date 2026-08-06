@@ -35,7 +35,6 @@
     "mocha": "^11.2.0",
     "prettier": "^3.4.2",
     "riot": "^9.4.4",
-    "riot-mui": "github:joxit/riot-5-mui#a477acc",
     "rollup": "^4.30.1",
     "rollup-plugin-app-utils": "^1.0.6",
     "rollup-plugin-copy": "^3.4.0",

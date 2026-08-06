@@ -1,0 +1,33 @@
+<app-tabs>
+  <div class="tabs" role="tablist" aria-label="{ props.ariaLabel || 'Tabs' }">
+    <button
+      each="{ (tab, idx) in props.tabs }"
+      class="tab { idx === state.selected ? 'is-active' : '' }"
+      role="tab"
+      aria-selected="{ idx === state.selected }"
+      onclick="{ () => select(idx) }"
+      title="{ tab.title || tab }"
+      type="button"
+    >
+      { tab.title || tab }
+    </button>
+  </div>
+  <script>
+    export default {
+      onBeforeMount(props, state) {
+        state.selected = props.selected || 0;
+      },
+      onUpdated(props, state) {
+        if (state.selected >= props.tabs.length) {
+          state.selected = 0;
+        }
+      },
+      select(idx) {
+        this.update({ selected: idx });
+        if (this.props.onTabChanged) {
+          this.props.onTabChanged(this.props.tabs[idx], idx);
+        }
+      },
+    };
+  </script>
+</app-tabs>

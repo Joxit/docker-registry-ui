@@ -15,49 +15,51 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-list>
-  <material-card class="header">
-    <div class="material-card-title-action">
-      <h2>
-        Tags of { props.image }
-        <div class="source-hint">Sourced from { state.registryName + '/' + props.image }</div>
-      </h2>
-      <span class="item-count">{ state.tags.length } tags</span>
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">
+          Tags
+          <span class="panel-subtitle">of { props.image }</span>
+        </h2>
+        <p class="source-hint">Sourced from { state.registryName + '/' + props.image }</p>
+      </div>
+      <span class="badge badge--accent">{ state.tags.length } tags</span>
     </div>
-  </material-card>
+  </div>
 
-  <material-card class="skeleton-list" if="{ !state.loadend }">
+  <div class="panel" if="{ !state.loadend }">
     <div class="skeleton-row" each="{ i in skeletonRows }">
       <span class="skeleton skeleton-line { i % 3 === 0 ? 'wide' : '' }"></span>
       <span class="skeleton skeleton-line short"></span>
-      <span class="skeleton skeleton-badge"></span>
     </div>
-  </material-card>
+  </div>
 
   <div if="{ state.loadend && !hasVisibleTags() }" class="empty-state">
-    <i class="material-icons">search_off</i>
+    <span class="empty-icon"><i class="material-icons">search_off</i></span>
     <h3>No tags found</h3>
     <p>This repository has no tags, or no tag matches the current search.</p>
   </div>
 
-  <tag-table
-    if="{ state.loadend }"
-    tags="{state.tags}"
-    asc="{state.asc}"
-    page="{ state.page }"
-    show-content-digest="{props.showContentDigest}"
-    show-tag-history="{props.showTagHistory}"
-    is-image-remove-activated="{props.isImageRemoveActivated}"
-    onReverseOrder="{ onReverseOrder }"
-    registry-url="{ props.registryUrl }"
-    pull-url="{ props.pullUrl }"
-    on-notify="{ props.onNotify }"
-    filter-results="{ props.filterResults }"
-    on-authentication="{ props.onAuthentication }"
-    tags-per-page="{ props.tagsPerPage }"
-    is-registry-secured="{ props.isRegistrySecured }"
-    on-image-deleted="{ () => state.reload() }"
-  >
-  </tag-table>
+  <div class="table-wrap" if="{ state.loadend }">
+    <tag-table
+      tags="{state.tags}"
+      asc="{state.asc}"
+      page="{ state.page }"
+      show-content-digest="{props.showContentDigest}"
+      show-tag-history="{props.showTagHistory}"
+      is-image-remove-activated="{props.isImageRemoveActivated}"
+      onReverseOrder="{ onReverseOrder }"
+      registry-url="{ props.registryUrl }"
+      pull-url="{ props.pullUrl }"
+      on-notify="{ props.onNotify }"
+      filter-results="{ props.filterResults }"
+      on-authentication="{ props.onAuthentication }"
+      tags-per-page="{ props.tagsPerPage }"
+      is-registry-secured="{ props.isRegistrySecured }"
+      on-image-deleted="{ () => state.reload() }"
+    ></tag-table>
+  </div>
 
   <pagination
     pages="{ getPageLabels(state.page, getNumPages(state.tags, props.tagsPerPage)) }"
@@ -201,51 +203,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    :host .item-count {
-      background-color: var(--m3-secondary-container);
-      color: var(--m3-on-secondary-container);
-      border-radius: var(--shape-full);
-      font-size: var(--type-label-medium-size);
-      font-weight: var(--type-label-medium-weight);
-      line-height: 1;
-      padding: var(--space-1) var(--space-2);
-      white-space: nowrap;
-      margin-left: var(--space-4);
-      flex-shrink: 0;
-    }
-
     :host .source-hint {
-      font-size: var(--type-body-medium-size);
-      color: var(--m3-on-surface-variant);
+      margin: var(--space-1) 0 0;
+      font-size: var(--fs-md);
+      color: var(--text-muted);
     }
 
-    :host .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-2);
-      margin: var(--space-12) auto;
-      padding: var(--space-8);
-      text-align: center;
-      color: var(--m3-on-surface-variant);
-    }
-
-    :host .empty-state .material-icons {
-      font-size: 48px;
-      color: var(--m3-outline);
-    }
-
-    :host .empty-state h3 {
-      margin: 0;
-      font-size: var(--type-title-large-size);
-      font-weight: var(--type-title-large-weight);
-      color: var(--m3-on-surface);
-    }
-
-    :host .empty-state p {
-      margin: 0;
-      font-size: var(--type-body-medium-size);
-      max-width: 32em;
+    :host .table-wrap {
+      margin-top: var(--space-4);
     }
   </style>
 </tag-list>

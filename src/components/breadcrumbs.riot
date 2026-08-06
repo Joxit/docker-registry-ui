@@ -1,11 +1,3 @@
-<!--
- Copyright (C) 2016-2023 Jones Magloire @Joxit
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
--->
 <breadcrumbs>
   <nav aria-label="Breadcrumb" class="breadcrumbs" if="{ state.show }">
     <ol>
@@ -66,77 +58,4 @@
       router,
     };
   </script>
-  <style>
-    :host .breadcrumbs {
-      margin: 0 auto;
-      max-width: 95%;
-      padding: var(--space-2) var(--space-2) 0;
-      @media screen and (min-width: 1515px) {
-        max-width: 1440px;
-      }
-    }
-
-    :host ol {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      gap: var(--space-1);
-    }
-
-    :host li {
-      display: inline-flex;
-      align-items: center;
-      font-size: var(--type-body-medium-size);
-      line-height: var(--type-body-medium-height);
-      color: var(--m3-on-surface-variant);
-      white-space: nowrap;
-    }
-
-    :host li a {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-1);
-      color: var(--m3-on-surface-variant);
-      text-decoration: none;
-      border-radius: var(--shape-sm);
-      padding: var(--space-1) var(--space-1);
-      transition: background-color var(--motion-duration-short) var(--motion-easing-standard);
-    }
-
-    :host li a:hover {
-      background-color: var(--m3-state-hover);
-      color: var(--m3-on-surface);
-    }
-
-    :host li a:focus-visible {
-      outline: 2px solid var(--m3-primary);
-      outline-offset: 2px;
-    }
-
-    :host li .material-icons {
-      font-size: 18px;
-    }
-
-    :host li.separator {
-      color: var(--m3-outline);
-      user-select: none;
-    }
-
-    :host li[aria-current='page'] span {
-      color: var(--m3-on-surface);
-      font-weight: var(--type-label-large-weight);
-      max-width: 16em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    :host li > span:not([class]) {
-      max-width: 16em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  </style>
 </breadcrumbs>

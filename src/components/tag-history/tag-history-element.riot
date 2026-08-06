@@ -70,9 +70,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <style>
     :host {
       display: block;
-      padding: var(--space-3) 0;
+      padding: var(--space-2) 0;
       min-width: 0;
-      border-bottom: 1px solid var(--m3-outline-variant);
+      border-bottom: 1px solid var(--border);
     }
 
     :host:last-child {
@@ -81,31 +81,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     :host .headline {
       display: flex;
-      flex-direction: row;
       align-items: center;
-      font-weight: var(--type-label-large-weight);
-      font-size: var(--type-label-large-size);
-      line-height: var(--type-label-large-height);
-      color: var(--m3-on-surface-variant);
+      gap: var(--space-2);
+      font-size: var(--fs-md);
+      font-weight: 600;
+      color: var(--text-secondary);
       margin-bottom: var(--space-1);
     }
 
-    :host .headline * {
-      margin-right: 6px;
-    }
-
-    :host i {
-      font-size: 20px;
-      padding: 0px;
-      color: var(--m3-on-surface-variant);
+    :host .headline i {
+      font-size: 18px;
+      color: var(--text-muted);
     }
 
     :host .content {
       overflow-x: auto;
-      color: var(--m3-on-surface);
-      font-size: var(--type-body-medium-size);
-      line-height: var(--type-body-medium-height);
-      font-family: 'Roboto Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+      line-height: var(--lh-normal);
+      font-family: var(--font-mono);
       word-break: break-all;
     }
 
@@ -115,11 +109,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     :host.docker_version .headline .material-icons,
     :host.docker_version .headline #docker_verion {
-      height: 24px;
+      height: 18px;
+    }
+
+    :host.docker_version .headline #docker_verion svg {
+      width: 18px;
+      height: 18px;
     }
 
     :host.id div.value {
-      font-size: var(--type-body-small-size);
+      font-size: var(--fs-sm);
     }
   </style>
 </tag-history-element>

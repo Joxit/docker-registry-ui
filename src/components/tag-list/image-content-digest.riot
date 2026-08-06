@@ -16,6 +16,16 @@ Copyright (C) 2016-2023 Jones Magloire @Joxit
 -->
 <image-content-digest>
   <div title="{ getTitle(props.image, state.chars) }">{ getContentDigest(props.image, state.chars) }</div>
+  <style>
+    :host {
+      display: inline-block;
+    }
+    :host div {
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+      white-space: nowrap;
+    }
+  </style>
   <script>
     export default {
       onMounted(props, state) {

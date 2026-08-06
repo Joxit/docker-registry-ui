@@ -1,0 +1,32 @@
+<app-checkbox>
+  <label class="checkbox { state.indeterminate ? 'is-indeterminate' : '' }">
+    <input
+      type="checkbox"
+      checked="{ props.checked }"
+      disabled="{ props.disabled }"
+      onchange="{ onChange }"
+      aria-label="{ props.ariaLabel }"
+    />
+    <span class="checkbox-box">
+      <i class="material-icons">{ state.indeterminate ? 'remove' : 'check' }</i>
+    </span>
+  </label>
+  <script>
+    export default {
+      onBeforeMount(props, state) {
+        this.sync(props, state);
+      },
+      onUpdated(props, state) {
+        this.sync(props, state);
+      },
+      sync(props, state) {
+        state.indeterminate = Boolean(props.indeterminate);
+      },
+      onChange(event) {
+        if (this.props.onChange) {
+          this.props.onChange(event);
+        }
+      },
+    };
+  </script>
+</app-checkbox>

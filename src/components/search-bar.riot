@@ -1,36 +1,21 @@
 <search-bar>
-  <div class="search-bar { state.expanded ? 'expanded' : '' }">
-    <material-input
-      label="Search in page"
-      text-color="var(--m3-header-text)"
-      label-color="var(--m3-header-accent-text)"
-      color="var(--m3-header-accent-text)"
-    ></material-input>
-    <material-button
-      if="{ state.value }"
-      class="clear-button"
-      onClick="{ clear }"
-      waves-center="true"
-      color="inherit"
-      text-color="var(--m3-header-text)"
-      waves-color="var(--m3-state-hover)"
-      icon
-      aria-label="Clear search"
-    >
-      <i class="material-icons">close</i>
-    </material-button>
-    <material-button
-      class="search-toggle"
-      onClick="{ toggle }"
-      waves-center="true"
-      color="inherit"
-      text-color="var(--m3-header-text)"
-      waves-color="var(--m3-state-hover)"
-      icon
-      aria-label="Search"
-    >
+  <div class="search-field { state.expanded ? 'is-expanded' : '' }">
+    <div class="text-field">
+      <span class="field-icon"><i class="material-icons">search</i></span>
+      <input type="text" placeholder="Search in page" aria-label="Search in page" />
+      <button
+        if="{ state.value }"
+        class="btn btn--icon btn--sm"
+        onclick="{ clear }"
+        aria-label="Clear search"
+        type="button"
+      >
+        <i class="material-icons">close</i>
+      </button>
+    </div>
+    <button class="btn btn--icon search-toggle" onclick="{ toggle }" aria-label="Search" type="button">
       <i class="material-icons">search</i>
-    </material-button>
+    </button>
   </div>
   <script>
     import { router } from '@riotjs/route';
@@ -90,47 +75,50 @@
     }
   </script>
   <style>
-    :host .search-bar {
+    :host .search-field {
       display: flex;
       align-items: center;
       gap: var(--space-1);
     }
 
-    :host material-input {
-      line-height: initial;
-      min-width: 5em;
-      width: 200px;
-      transition: width var(--motion-duration-medium) var(--motion-easing-standard);
+    :host .search-field .text-field {
+      width: 220px;
+      transition: width var(--dur-normal) var(--ease-out);
     }
 
-    :host material-button > :first-child {
-      background-color: transparent;
+    :host .text-field .btn--icon {
+      margin-right: 2px;
+      width: 26px;
+      min-width: 26px;
+      min-height: 26px;
+      padding: 0;
     }
 
     :host .search-toggle {
       display: none;
     }
 
-    @media screen and (max-width: 600px) {
-      :host material-input {
-        display: none;
-      }
-
+    @media screen and (max-width: 900px) {
       :host .search-toggle {
         display: inline-flex;
       }
 
-      :host .search-bar.expanded {
-        position: absolute;
-        right: var(--space-2);
-        top: 0;
-        bottom: 0;
-        z-index: 5;
+      :host .search-field .text-field {
+        display: none;
       }
 
-      :host .search-bar.expanded material-input {
-        display: block;
-        width: 70vw;
+      :host .search-field.is-expanded {
+        position: absolute;
+        right: var(--space-3);
+        top: 0;
+        bottom: 0;
+        align-items: center;
+        z-index: 35;
+      }
+
+      :host .search-field.is-expanded .text-field {
+        display: flex;
+        width: 60vw;
       }
     }
   </style>

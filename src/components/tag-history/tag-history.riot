@@ -15,68 +15,57 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history>
-  <material-card class="header">
-    <div class="material-card-title-action">
-      <h2>
-        History of { props.image }:{ props.tag } <i class="material-icons">history</i>
+  <div class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">
+        History
+        <span class="panel-subtitle">of { props.image }:{ props.tag }</span>
       </h2>
-      <material-button
-        text-color="var(--m3-on-primary)"
-        color="var(--m3-primary)"
-        waves-color="var(--m3-on-primary)"
-        waves-center="true"
-        rounded="true"
-        onClick="{ showDockerfile }"
-      >
-        Dockerfile
-      </material-button>
+      <button class="btn" onclick="{ showDockerfile }" type="button">Dockerfile</button>
     </div>
-  </material-card>
-  <div if="{ !state.loadend }" class="spinner-wrapper">
-    <material-spinner></material-spinner>
   </div>
+
+  <div if="{ !state.loadend }" class="spinner-wrap">
+    <div class="spinner"></div>
+  </div>
+
+  <app-tabs
+    if="{ state.archs && state.loadend }"
+    tabs="{ state.archs }"
+    on-tab-changed="{ onTabChanged }"
+    aria-label="Architectures"
+  ></app-tabs>
+
   <dockerfile
     opened="{ state.showDockerfile }"
     on-close="{ onDockerfileClose }"
     elements="{ state.elements }"
   ></dockerfile>
 
-  <material-tabs
-    if="{ state.archs && state.loadend }"
-    color="var(--m3-surface)"
-    text-color="var(--m3-on-surface-variant)"
-    text-selected-color="var(--m3-primary)"
-    line-color="var(--m3-surface-container-high)"
-    line-selected-color="var(--m3-primary)"
-    useLine="{ true }"
-    tabs="{ state.archs }"
-    onTabChanged="{ onTabChanged }"
-  ></material-tabs>
-
-  <material-card class="history-section config" if="{ state.loadend }">
-    <h3 class="section-title">Image configuration</h3>
-    <div class="section-grid">
+  <div class="panel history-section" if="{ state.loadend }">
+    <div class="panel-header">
+      <h3 class="section-title">Image configuration</h3>
+    </div>
+    <div class="panel-body section-grid">
       <tag-history-element
         each="{ entry in state.elements[0] }"
         if="{ entry.value && entry.value.length > 0}"
         entry="{ entry }"
       ></tag-history-element>
     </div>
-  </material-card>
-  <material-card
-    class="history-section layer"
-    each="{ (element, idx) in state.elements }"
-    if="{ idx > 0 }"
-  >
-    <h3 class="section-title">Layer { idx }</h3>
-    <div class="section-grid">
+  </div>
+  <div class="panel history-section" each="{ (element, idx) in state.elements }" if="{ idx > 0 }">
+    <div class="panel-header">
+      <h3 class="section-title">Layer { idx }</h3>
+    </div>
+    <div class="panel-body section-grid">
       <tag-history-element
         each="{ entry in element }"
         if="{ entry.value && entry.value.length > 0}"
         entry="{ entry }"
       ></tag-history-element>
     </div>
-  </material-card>
+  </div>
   <script>
     import { DockerImage } from '../../scripts/docker-image';
     import { bytesToSize } from '../../scripts/utils';
@@ -290,33 +279,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    :host {
-      display: block;
+    :host app-tabs {
+      margin: var(--space-4) 0;
     }
-    h2 {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-    }
-    h2 .material-icons {
-      margin-left: .25em;
-    }
-    :host material-tabs {
-      margin-top: var(--space-4);
-    }
+
     :host .history-section {
-      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+      animation: fade-in-up var(--dur-normal) var(--ease-out);
     }
+
     :host .section-title {
-      margin: 0 0 var(--space-2);
-      font-size: var(--type-title-small-size);
-      font-weight: var(--type-title-small-weight);
-      line-height: var(--type-title-small-height);
-      color: var(--m3-on-surface-variant);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-size: var(--fs-lg);
+      font-weight: 600;
+      color: var(--text-secondary);
     }
+
     :host .section-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

@@ -12,7 +12,7 @@ This project aims to provide a simple and complete user interface for your priva
 
 You may need the [migration guide from 1.x to 2.x](https://github.com/Joxit/docker-registry-ui/wiki/Migrating-from-1.x-to-2.x) or [the 1.x readme](https://github.com/Joxit/docker-registry-ui/blob/8fe3adf12540d1316cb57628ebe86a392a703d90/README.md). The project support both [docker registry v2](https://github.com/distribution/distribution/releases/tag/v2.0.0) and [docker registry v3](https://github.com/distribution/distribution/releases/tag/v3.0.0).
 
-This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
+This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library with a custom, dependency-free design system (modern SaaS look: sidebar shell, data tables, light/dark themes).
 
 If you like my work and want to support it, don't hesitate to [sponsor me](https://github.com/sponsors/Joxit).
 
@@ -126,21 +126,21 @@ There are some examples with [docker-compose](https://docs.docker.com/compose/) 
 
 ### Theme options
 
-This featureswas added to version 2.4.0. See more about this in [#283](https://github.com/Joxit/docker-registry-ui/pull/283). The default palettes follow [Material 3](https://m3.material.io/) color roles since 2.7.0.
+The default palettes follow a modern SaaS look (neutral surfaces + blue accent). The `THEME_*` variables override the corresponding design token.
 
 | Environment variable | light theme value | dark theme value |
 | --- | --- | --- |
-| `THEME_PRIMARY_TEXT` | `#1a1c20` | `#e2e2e9` |
-| `THEME_NEUTRAL_TEXT` | `#44464f` | `#c4c6d0` |
-| `THEME_BACKGROUND` | `#faf9fd` | `#121317` |
-| `THEME_HOVER_BACKGROUND` | `#e2e3e9` | `#333438` |
-| `THEME_ACCENT_TEXT` | `#0b57d0` | `#acccff` |
+| `THEME_PRIMARY_TEXT` | `#1f2328` | `#e6edf3` |
+| `THEME_NEUTRAL_TEXT` | `#59636e` | `#9198a1` |
+| `THEME_BACKGROUND` | `#ffffff` | `#161b22` |
+| `THEME_HOVER_BACKGROUND` | `#f3f4f6` | `#21262d` |
+| `THEME_ACCENT_TEXT` | `#2563eb` | `#4493f8` |
 | `THEME_HEADER_TEXT` | `#ffffff` | `#ffffff` |
-| `THEME_HEADER_ACCENT_TEXT` | `#7b9ac2` | `#7ea1ff` |
-| `THEME_HEADER_BACKGROUND` | `#25313b` | `#333a45` |
-| `THEME_FOOTER_TEXT` | `#ffffff` | `#ffffff` |
-| `THEME_FOOTER_NEUTRAL_TEXT` | `#adbacd` | `#98afcf` |
-| `THEME_FOOTER_BACKGROUND` | `#344251` | `#344251` |
+| `THEME_HEADER_ACCENT_TEXT` | `#59636e` | `#9198a1` |
+| `THEME_HEADER_BACKGROUND` | `#ffffff` | `#161b22` |
+| `THEME_FOOTER_TEXT` | `#59636e` | `#9198a1` |
+| `THEME_FOOTER_NEUTRAL_TEXT` | `#8a919a` | `#6e7681` |
+| `THEME_FOOTER_BACKGROUND` | `#ffffff` | `#161b22` |
 
 ## Recommended Docker Registry Usage
 

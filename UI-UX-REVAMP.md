@@ -3,8 +3,8 @@
 Branch: `feat/ui-ux-revamp`
 Status: **implemented** (see [Implementation status](#12-implementation-status))
 Decisions locked in with the author:
-- **Design direction:** Material 3 modernization (color roles, tonal surfaces, rounded shape system)
-- **Component library:** keep `riot-mui`, restyle via an override layer (do **not** rebuild components or migrate the framework)
+- **Design direction (revised):** modern SaaS shell (sidebar + topbar, clean surfaces, data tables, system font stack) — supersedes the earlier Material 3 direction
+- **Component library (revised):** replace `riot-mui` entirely with a custom, dependency-free component system
 - **UX depth:** rethink information architecture and workflows, not just visuals
 
 ## 1. Goals
@@ -236,12 +236,18 @@ Ordered by dependency (each step ends green: `npm run build`, `npm test`, `npm r
 
 ## 12. Implementation status
 
-All phases were implemented on this branch with `git` commits per phase (`npm run build` and `npm test` green throughout).
+### Revision history
+- **Iteration 1 (Material 3):** tokens + riot-mui override layer + chrome/IA + screen restyles. Committed, then **rejected** by the author because the overall layout (Material navbar/cards/tables) still looked unchanged.
+- **Iteration 2 (modern SaaS, current):** full rewrite. `riot-mui` removed; custom design system; sidebar + topbar shell; data-table pages; new widget components. See commits after `79c794a`.
 
-- Phases 1–7 (tokens, riot-mui overrides, chrome/IA, catalog, tag table, history/dialogs, states/motion/a11y/responsive) — **done**.
-- Phase 8 (docs) — README theme table updated to the new Material 3 defaults. 
-- **Remaining / known gaps:**
-  - `screenshot.png` and `docker-registry-ui.gif` in the repo root still show the old design — regenerate with a browser once the UI is visually reviewed.
-  - Visual QA in a real browser (light/dark, catalog expand, multi-delete, history tabs, registry switcher, mobile) not yet performed by a human.
-  - Prettier (`npm run format`) is **not** clean on the riot files: prettier's HTML parser mangles riot attribute expressions (e.g. `onclick="{ onClick }"`), so riot files are intentionally left hand-formatted. This is a pre-existing repo condition.
-  - The default top app bar keeps the existing dark brand header (`--m3-header-background`), matching the prior look.
+### Current state
+- Design tokens (`src/styles/tokens.scss`), base/components/layout SCSS, custom widgets (`app-dialog`, `app-snackbar`, `app-tabs`, `app-checkbox`, `text-field`), shell (`docker-registry-ui.riot`), registry panel, catalog, tag list, history, error page, search, version notification — **done**.
+- `riot-mui` dependency removed from `package.json`, `index.js`, `style.scss`, and `index.html`.
+- Theme overrides (`THEME_*`) still supported via `src/scripts/theme.js` (mapped onto the new tokens).
+
+### Remaining / known gaps
+- `screenshot.png` and `docker-registry-ui.gif` in the repo root still show the old design — regenerate with a browser once the UI is visually reviewed.
+- Visual QA in a real browser (light/dark, sidebar behavior on mobile, catalog expand, multi-delete, history tabs, registry switch/add/remove) not yet performed by a human.
+- Prettier is intentionally not clean on `.riot` files (its HTML parser mangles riot attribute expressions) — pre-existing repo condition.
+- `dist/` rebuilds drift slightly (riot compiler `expr` counters) — pre-existing toolchain quirk; Docker copies the committed `dist/`.
+- The `THEME_HEADER_*` / `THEME_FOOTER_*` env vars are now legacy aliases (kept for compatibility, no longer affect the layout).

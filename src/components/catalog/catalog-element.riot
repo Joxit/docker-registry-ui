@@ -44,11 +44,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           <span if="{ state.images }" class="badge" title="{ state.nImages } images">{ state.nImages }</span>
           <span
             if="{ props.showCatalogNbTags && state.image }"
-            class="badge badge--accent { state.nbTags === undefined ? 'is-pending' : '' }"
-            title="{ state.nbTags === undefined ? 'Loading tag count…' : state.nbTags + ' tags' }"
+            class="badge badge--accent { typeof state.nbTags === 'number' ? '' : 'is-pending' }"
+            title="{ nbTagsTitle(state.nbTags) }"
           >
             <i class="material-icons badge-icon">sell</i>
-            { state.nbTags === undefined ? '…' : state.nbTags }
+            { nbTagsLabel(state.nbTags) }
           </span>
           <i if="{ state.images }" class="material-icons row-chevron { state.expanded ? 'expanded' : '' }">
             expand_more
@@ -101,6 +101,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         } else {
           state.nImages = state.images && state.images.length;
         }
+      },
+      // `undefined` is still loading, `null` means the fetch failed.
+      nbTagsLabel(nbTags) {
+        if (nbTags === undefined) {
+          return '…';
+        }
+        return nbTags === null ? '—' : nbTags;
+      },
+      nbTagsTitle(nbTags) {
+        if (nbTags === undefined) {
+          return 'Loading tag count…';
+        }
+        return nbTags === null ? 'Tag count unavailable' : nbTags + ' tags';
       },
       onClick() {
         const state = this.state;

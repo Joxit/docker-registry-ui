@@ -75,6 +75,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     const SHOW_TAGLESS_KEY = 'registryUiShowTagless';
 
+    // Tag counts arrive one response at a time. Flushing them on a short
+    // interval bounds the number of full-catalog re-renders instead of doing
+    // one per repository, which is O(N^2) work on a large registry.
+    const COUNTS_FLUSH_MS = 100;
+
     // Collect every leaf image name from the branched repository tree.
     const collectImages = (items, out = []) => {
       items.forEach((item) => {
@@ -123,6 +128,36 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         localStorage.setItem(SHOW_TAGLESS_KEY, String(showTagless));
         this.update({ showTagless });
       },
+      onBeforeUnmount() {
+        this.cancelPendingCounts();
+      },
+      cancelPendingCounts() {
+        if (this.countsTimer) {
+          clearTimeout(this.countsTimer);
+          this.countsTimer = null;
+        }
+        this.pendingCounts = null;
+      },
+      // Accumulate counts and render them in batches. `null` means the count
+      // could not be fetched, `undefined` means it is still in flight.
+      queueCount(image, count, registryUrl) {
+        if (registryUrl !== this.state.registryUrl) {
+          return;
+        }
+        this.pendingCounts = this.pendingCounts || {};
+        this.pendingCounts[image] = count;
+        if (this.countsTimer) {
+          return;
+        }
+        this.countsTimer = setTimeout(() => {
+          this.countsTimer = null;
+          const pending = this.pendingCounts;
+          this.pendingCounts = null;
+          if (pending && registryUrl === this.state.registryUrl) {
+            this.update({ counts: { ...this.state.counts, ...pending } });
+          }
+        }, COUNTS_FLUSH_MS);
+      },
       fetchNbTags(image, props) {
         return new Promise((resolve) => {
           const oReq = new Http({
@@ -131,10 +166,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           });
           oReq.addEventListener('loadend', function () {
             if (this.status === 200) {
-              resolve((JSON.parse(this.responseText).tags || []).length);
+              resolve({ count: (JSON.parse(this.responseText).tags || []).length });
+            } else if (this.status === 404) {
+              resolve({ error: 'Server not found' });
             } else {
-              resolve(undefined);
+              resolve({ error: this.responseText });
             }
+          });
+          oReq.addEventListener('error', function () {
+            resolve({ error: this.getErrorMessage() });
           });
           oReq.open('GET', props.registryUrl + '/v2/' + image + '/tags/list');
           oReq.send();
@@ -145,6 +185,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           return;
         }
         state.registryUrl = props.registryUrl;
+        this.cancelPendingCounts();
         let repositories = [];
         let nImages = 0;
         const self = this;
@@ -190,11 +231,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             loadend: true,
           });
           if (props.showCatalogNbTags && repositories.length > 0) {
+            const registryUrl = props.registryUrl;
+            // A registry that rejects `/tags/list` rejects it for every
+            // repository; report the reason once instead of N times.
+            let notified = false;
             collectImages(repositories).forEach((image) => {
-              self.fetchNbTags(image, props).then((count) => {
-                if (count !== undefined) {
-                  self.update({ counts: { ...self.state.counts, [image]: count } });
+              self.fetchNbTags(image, props).then(({ count, error }) => {
+                if (error !== undefined) {
+                  if (!notified) {
+                    notified = true;
+                    self.props.onNotify(error, true);
+                  }
+                  return self.queueCount(image, null, registryUrl);
                 }
+                self.queueCount(image, count, registryUrl);
               });
             });
           }

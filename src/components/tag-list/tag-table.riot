@@ -326,14 +326,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     :host .tag-col {
       max-width: 40vw;
+      font-family: var(--font-mono);
+      font-size: var(--fs-md);
     }
 
     :host .creation-date {
       width: 12em;
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
     }
 
     :host .image-size {
       width: 7em;
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
     }
 
     :host .architectures {
@@ -342,6 +349,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     :host .digest-col {
       max-width: 24em;
+      overflow: hidden;
+      font-family: var(--font-mono);
     }
 
     :host .history-col {

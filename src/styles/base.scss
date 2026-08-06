@@ -26,8 +26,14 @@ body {
   line-height: var(--lh-normal);
   color: var(--text-primary);
   background-color: var(--bg);
+  background-image: radial-gradient(1100px 520px at 85% -10%, var(--bg-glow), transparent 70%);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--selection);
 }
 
 h1,

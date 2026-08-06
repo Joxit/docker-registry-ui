@@ -16,7 +16,7 @@
 
   <div class="registry-panel">
     <div class="registry-current" title="{ props.registryUrl }">
-      <i class="material-icons">link</i>
+      <span class="status-dot" aria-hidden="true"></span>
       <span class="registry-url">{ stripHttps(props.registryUrl) || 'No registry selected' }</span>
     </div>
     <ul class="registry-list" if="{ state.registries.length > 0 }">

@@ -281,7 +281,9 @@
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(13, 17, 23, 0.55);
+  background-color: rgba(7, 12, 22, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   z-index: 100;
   animation: fade-in var(--dur-normal) var(--ease-out);
 }
@@ -446,12 +448,34 @@
 }
 
 .badge--success {
-  background-color: rgba(26, 127, 55, 0.12);
-  color: var(--success);
+  background-color: var(--accent-soft);
+  color: var(--accent);
 }
 
-[data-theme='dark'] .badge--success {
-  background-color: rgba(63, 185, 80, 0.15);
+/* ------------------------------------------------------------------ *
+ * Status dot (pulsing "online" indicator)                             *
+ * ------------------------------------------------------------------ */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent-soft);
+  animation: status-pulse 2s var(--ease-out) infinite;
+  flex-shrink: 0;
+}
+
+@keyframes status-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-soft);
+  }
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 
 /* ------------------------------------------------------------------ *

@@ -9,19 +9,31 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Sidebar                                                             *
+ * Sidebar — persistent dark "console" rail                            *
  * ------------------------------------------------------------------ */
 .sidebar {
   width: var(--sidebar-width);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  background-color: var(--surface);
-  border-right: 1px solid var(--border);
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 40;
+}
+
+/* Terminal-style accent line on top of the rail */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sidebar-accent), transparent 70%);
+  pointer-events: none;
 }
 
 .sidebar-brand {
@@ -29,29 +41,30 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--sidebar-border);
 }
 
 .sidebar-brand .brand-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-lg);
-  background-color: var(--accent);
-  color: var(--on-accent);
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background-color: var(--sidebar-accent);
+  color: #052e16;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.35);
   flex-shrink: 0;
 }
 
 .sidebar-brand .brand-icon .material-icons {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .sidebar-brand .brand-name {
   font-size: var(--fs-xl);
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--sidebar-text-strong);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -66,8 +79,9 @@
   font-size: var(--fs-xs);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  color: var(--sidebar-text);
+  opacity: 0.7;
 }
 
 .sidebar-nav {
@@ -82,24 +96,36 @@
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
-  color: var(--text-secondary);
+  color: var(--sidebar-text);
   font-size: var(--fs-lg);
   font-weight: 500;
   text-decoration: none;
+  position: relative;
   transition:
     background-color var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
 }
 
 .nav-item:hover {
-  background-color: var(--surface-muted);
-  color: var(--text-primary);
+  background-color: var(--sidebar-hover);
+  color: var(--sidebar-text-strong);
   text-decoration: none;
 }
 
 .nav-item.is-active {
-  background-color: var(--accent-soft);
-  color: var(--accent);
+  background-color: rgba(34, 197, 94, 0.14);
+  color: var(--sidebar-accent);
+}
+
+.nav-item.is-active::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  border-radius: var(--radius-full);
+  background-color: var(--sidebar-accent);
 }
 
 .nav-item .material-icons {
@@ -108,9 +134,9 @@
 
 .sidebar-footer {
   padding: var(--space-3) var(--space-5);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--sidebar-border);
   font-size: var(--fs-sm);
-  color: var(--text-muted);
+  color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -124,7 +150,11 @@
 }
 
 .sidebar-footer a {
-  color: var(--text-secondary);
+  color: var(--sidebar-text);
+}
+
+.sidebar-footer a:hover {
+  color: var(--sidebar-text-strong);
 }
 
 /* Registry panel inside the sidebar */
@@ -140,16 +170,16 @@
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
-  background-color: var(--surface-muted);
-  border: 1px solid var(--border);
+  background-color: var(--sidebar-surface);
+  border: 1px solid var(--sidebar-border);
   font-size: var(--fs-md);
-  color: var(--text-primary);
+  color: var(--sidebar-text-strong);
   overflow: hidden;
 }
 
-.registry-current .material-icons {
-  font-size: 16px;
-  color: var(--success);
+.registry-current .status-dot {
+  width: 7px;
+  height: 7px;
   flex-shrink: 0;
 }
 
@@ -157,25 +187,27 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
 }
 
 .registry-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 2px;
   margin-top: var(--space-1);
 }
 
 .registry-list li {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-1);
   border-radius: var(--radius-md);
 }
 
 .registry-list li.is-active {
-  background-color: var(--accent-soft);
+  background-color: rgba(34, 197, 94, 0.14);
 }
 
 .registry-list .registry-switch {
@@ -187,7 +219,7 @@
   border: none;
   background: transparent;
   border-radius: var(--radius-md);
-  color: var(--text-secondary);
+  color: var(--sidebar-text);
   font-size: var(--fs-md);
   text-align: left;
   cursor: pointer;
@@ -198,22 +230,39 @@
 }
 
 .registry-list li.is-active .registry-switch {
-  color: var(--accent);
+  color: var(--sidebar-accent);
   font-weight: 500;
 }
 
 .registry-list .registry-switch:hover {
-  color: var(--text-primary);
-  background-color: var(--surface-hover);
+  color: var(--sidebar-text-strong);
+  background-color: var(--sidebar-hover);
+}
+
+.registry-list .registry-switch .material-icons {
+  font-size: 16px;
+  flex-shrink: 0;
 }
 
 .registry-list .registry-remove {
   flex-shrink: 0;
+  color: var(--sidebar-text);
+}
+
+.registry-list .registry-remove:hover {
+  color: var(--danger);
+  background-color: var(--danger-soft);
 }
 
 .registry-add {
   margin-top: var(--space-2);
   justify-content: flex-start;
+  color: var(--sidebar-accent);
+}
+
+.registry-add:hover {
+  color: var(--sidebar-text-strong);
+  background-color: var(--sidebar-hover);
 }
 
 /* ------------------------------------------------------------------ *
@@ -245,6 +294,16 @@
 
 .topbar .topbar-spacer {
   flex: 1;
+}
+
+.topbar .search-field .text-field {
+  background-color: var(--surface-muted);
+  border-color: transparent;
+}
+
+.topbar .search-field .text-field:focus-within {
+  background-color: var(--surface);
+  border-color: var(--accent);
 }
 
 .main-content {
@@ -358,7 +417,9 @@
   .sidebar-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(13, 17, 23, 0.5);
+    background-color: rgba(7, 12, 22, 0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
     z-index: 39;
   }
 

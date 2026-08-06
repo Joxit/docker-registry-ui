@@ -41,6 +41,9 @@
         if (!input.value.startsWith('http')) {
           return this.props.onNotify('The input field should start with http:// or https://.', true);
         }
+        if (/\/v2\/?$/.test(input.value)) {
+          return this.props.onNotify('The input field should not end with /v2, the UI appends it itself.', true);
+        }
         const url = addRegistryServers(input.value);
         router.home();
         this.props.onServerChange(url);

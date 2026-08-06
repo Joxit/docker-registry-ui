@@ -17,9 +17,22 @@
       onBeforeMount(props, state) {
         state.selected = props.selected || 0;
       },
-      onUpdated(props, state) {
-        if (state.selected >= props.tabs.length) {
+      // Clamp before the render so the highlighted tab is correct in this
+      // pass, then tell the parent once the DOM is settled so its own state
+      // stops describing the tab that went away.
+      onBeforeUpdate(props, state) {
+        const nTabs = (props.tabs && props.tabs.length) || 0;
+        if (state.selected >= nTabs) {
           state.selected = 0;
+          state.notifyReset = nTabs > 0;
+        }
+      },
+      onUpdated(props, state) {
+        if (state.notifyReset) {
+          state.notifyReset = false;
+          if (props.onTabChanged) {
+            props.onTabChanged(props.tabs[state.selected], state.selected);
+          }
         }
       },
       select(idx) {

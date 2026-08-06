@@ -60,8 +60,10 @@
         }
       },
       toggle() {
+        // `update` merges into `this.state` synchronously, so `state.expanded`
+        // already holds the new value here.
         this.update({ expanded: !this.state.expanded });
-        if (!this.state.expanded) {
+        if (this.state.expanded) {
           const input = this.$('input');
           if (input) {
             input.focus();

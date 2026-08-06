@@ -28,6 +28,7 @@
     import { getCurrentRoute, router as routeRouter } from '@riotjs/route';
 
     const parseRoute = (route) => {
+      route = route || '';
       const tagList = route.match(/taglist\/(.*)$/);
       if (tagList) {
         return { image: tagList[1] };

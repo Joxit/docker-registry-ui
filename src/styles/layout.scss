@@ -1,284 +1,28 @@
 /*
  * Copyright (C) 2016-2023 Jones Magloire @Joxit
  *
- * Application shell layout: sidebar, topbar, content area, breadcrumbs.
+ * Application shell layout: topbar, content area, breadcrumbs, footer.
  */
 .app-shell {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
-/* ------------------------------------------------------------------ *
- * Sidebar — persistent dark "console" rail                            *
- * ------------------------------------------------------------------ */
-.sidebar {
-  width: var(--sidebar-width);
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  z-index: 40;
-}
-
-/* Terminal-style accent line on top of the rail */
-.sidebar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--sidebar-accent), transparent 70%);
-  pointer-events: none;
-}
-
-.sidebar-brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--sidebar-border);
-}
-
-.sidebar-brand .brand-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-md);
-  background-color: var(--sidebar-accent);
-  color: #052e16;
-  box-shadow: 0 0 14px rgba(34, 197, 94, 0.35);
-  flex-shrink: 0;
-}
-
-.sidebar-brand .brand-icon .material-icons {
-  font-size: 18px;
-}
-
-.sidebar-brand .brand-name {
-  font-size: var(--fs-xl);
-  font-weight: 600;
-  color: var(--sidebar-text-strong);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sidebar-section {
-  padding: var(--space-4) var(--space-4) var(--space-2);
-}
-
-.sidebar-section-title {
-  padding: 0 var(--space-2) var(--space-2);
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--sidebar-text);
-  opacity: 0.7;
-}
-
-.sidebar-nav {
-  flex: 1;
-  padding: var(--space-2) var(--space-3);
-  overflow-y: auto;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  color: var(--sidebar-text);
-  font-size: var(--fs-lg);
-  font-weight: 500;
-  text-decoration: none;
-  position: relative;
-  transition:
-    background-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
-}
-
-.nav-item:hover {
-  background-color: var(--sidebar-hover);
-  color: var(--sidebar-text-strong);
-  text-decoration: none;
-}
-
-.nav-item.is-active {
-  background-color: rgba(34, 197, 94, 0.14);
-  color: var(--sidebar-accent);
-}
-
-.nav-item.is-active::before {
-  content: '';
-  position: absolute;
-  left: -6px;
-  top: 20%;
-  bottom: 20%;
-  width: 3px;
-  border-radius: var(--radius-full);
-  background-color: var(--sidebar-accent);
-}
-
-.nav-item .material-icons {
-  font-size: 18px;
-}
-
-.sidebar-footer {
-  padding: var(--space-3) var(--space-5);
-  border-top: 1px solid var(--sidebar-border);
-  font-size: var(--fs-sm);
-  color: var(--sidebar-text);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.sidebar-footer .footer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-}
-
-.sidebar-footer a {
-  color: var(--sidebar-text);
-}
-
-.sidebar-footer a:hover {
-  color: var(--sidebar-text-strong);
-}
-
-/* Registry panel inside the sidebar */
-.registry-panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.registry-current {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  background-color: var(--sidebar-surface);
-  border: 1px solid var(--sidebar-border);
-  font-size: var(--fs-md);
-  color: var(--sidebar-text-strong);
-  overflow: hidden;
-}
-
-.registry-current .status-dot {
-  width: 7px;
-  height: 7px;
-  flex-shrink: 0;
-}
-
-.registry-current .registry-url {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
-}
-
-.registry-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: var(--space-1);
-}
-
-.registry-list li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  border-radius: var(--radius-md);
-}
-
-.registry-list li.is-active {
-  background-color: rgba(34, 197, 94, 0.14);
-}
-
-.registry-list .registry-switch {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
-  border: none;
-  background: transparent;
-  border-radius: var(--radius-md);
-  color: var(--sidebar-text);
-  font-size: var(--fs-md);
-  text-align: left;
-  cursor: pointer;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  min-width: 0;
-}
-
-.registry-list li.is-active .registry-switch {
-  color: var(--sidebar-accent);
-  font-weight: 500;
-}
-
-.registry-list .registry-switch:hover {
-  color: var(--sidebar-text-strong);
-  background-color: var(--sidebar-hover);
-}
-
-.registry-list .registry-switch .material-icons {
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.registry-list .registry-remove {
-  flex-shrink: 0;
-  color: var(--sidebar-text);
-}
-
-.registry-list .registry-remove:hover {
-  color: var(--danger);
-  background-color: var(--danger-soft);
-}
-
-.registry-add {
-  margin-top: var(--space-2);
-  justify-content: flex-start;
-  color: var(--sidebar-accent);
-}
-
-.registry-add:hover {
-  color: var(--sidebar-text-strong);
-  background-color: var(--sidebar-hover);
-}
-
-/* ------------------------------------------------------------------ *
- * Main area                                                           *
- * ------------------------------------------------------------------ */
 .app-main {
-  flex: 1;
-  min-width: 0;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  flex: 1;
 }
 
+/* ------------------------------------------------------------------ *
+ * Topbar                                                              *
+ * ------------------------------------------------------------------ */
 .topbar {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   min-height: var(--topbar-height);
   padding: 0 var(--space-5);
   background-color: var(--surface);
@@ -288,30 +32,86 @@
   z-index: 30;
 }
 
-.topbar .menu-toggle {
-  display: none;
-}
-
 .topbar .topbar-spacer {
   flex: 1;
 }
 
-.topbar .search-field .text-field {
-  background-color: var(--surface-muted);
-  border-color: transparent;
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
-.topbar .search-field .text-field:focus-within {
-  background-color: var(--surface);
-  border-color: var(--accent);
+.brand:hover {
+  text-decoration: none;
 }
 
+.brand .brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background-color: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 0 14px var(--accent-soft);
+  flex-shrink: 0;
+}
+
+.brand .brand-icon .material-icons {
+  font-size: 18px;
+}
+
+.brand .brand-name {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ *
+ * Content                                                             *
+ * ------------------------------------------------------------------ */
 .main-content {
   flex: 1;
   width: 100%;
   max-width: var(--content-max-width);
   margin: 0 auto;
   padding: var(--space-5);
+}
+
+/* ------------------------------------------------------------------ *
+ * Footer                                                              *
+ * ------------------------------------------------------------------ */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.app-footer a {
+  color: var(--text-secondary);
+}
+
+.app-footer a:hover {
+  color: var(--accent);
+}
+
+.app-footer-links {
+  display: inline-flex;
+  gap: var(--space-4);
 }
 
 /* ------------------------------------------------------------------ *
@@ -384,8 +184,17 @@
 }
 
 .search-field .text-field {
-  width: 220px;
-  transition: width var(--dur-normal) var(--ease-out);
+  width: 200px;
+  background-color: var(--surface-muted);
+  border-color: transparent;
+  transition:
+    width var(--dur-normal) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.search-field .text-field:focus-within {
+  background-color: var(--surface);
+  border-color: var(--accent);
 }
 
 .search-field .search-toggle {
@@ -395,40 +204,13 @@
 /* ------------------------------------------------------------------ *
  * Responsive                                                          *
  * ------------------------------------------------------------------ */
-.sidebar-overlay {
-  display: none;
-}
-
 @media screen and (max-width: 900px) {
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    transform: translateX(-100%);
-    transition: transform var(--dur-normal) var(--ease-out);
-    box-shadow: var(--shadow-lg);
-    height: 100vh;
+  .brand .brand-name {
+    display: none;
   }
 
-  .app-shell.is-sidebar-open .sidebar {
-    transform: translateX(0);
-  }
-
-  .sidebar-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(7, 12, 22, 0.55);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    z-index: 39;
-  }
-
-  .app-shell.is-sidebar-open .sidebar-overlay {
-    display: block;
-  }
-
-  .topbar .menu-toggle {
-    display: inline-flex;
+  .breadcrumbs li:not([aria-current='page']):not(:first-child) {
+    display: none;
   }
 
   .search-field .search-toggle {
@@ -437,6 +219,15 @@
 
   .search-field .text-field {
     display: none;
+  }
+
+  .search-field.is-expanded {
+    position: absolute;
+    right: var(--space-3);
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    z-index: 35;
   }
 
   .search-field.is-expanded .text-field {

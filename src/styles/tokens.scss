@@ -8,8 +8,6 @@
  * The light theme is the default (`:root`); the dark theme is applied by
  * setting `data-theme="dark"` on the root element (see `src/scripts/theme.js`).
  *
- * The sidebar keeps a constant dark "console" palette in both themes.
- *
  * Legacy tokens (`--primary-text`, `--background`, `--accent-text`, ...) are
  * kept as aliases so existing `THEME_*` environment variables keep working.
  */
@@ -101,20 +99,8 @@
   /* ------------------------------------------------------------------ *
    * Layout                                                              *
    * ------------------------------------------------------------------ */
-  --sidebar-width: 260px;
   --topbar-height: 56px;
   --content-max-width: 1280px;
-
-  /* ------------------------------------------------------------------ *
-   * Sidebar ("console" — constant across themes)                        *
-   * ------------------------------------------------------------------ */
-  --sidebar-bg: #0e1626;
-  --sidebar-surface: #121c30;
-  --sidebar-hover: rgba(255, 255, 255, 0.06);
-  --sidebar-border: #1c2940;
-  --sidebar-text: #8fa3bf;
-  --sidebar-text-strong: #e2eaf5;
-  --sidebar-accent: #22c55e;
 
   /* ------------------------------------------------------------------ *
    * Legacy aliases (backward compatible with `THEME_*` overrides)       *
@@ -124,12 +110,12 @@
   --background: var(--surface);
   --hover-background: var(--surface-hover);
   --accent-text: var(--accent);
-  --header-text: var(--sidebar-text-strong);
-  --header-accent-text: var(--sidebar-text);
-  --header-background: var(--sidebar-bg);
-  --footer-text: var(--sidebar-text);
-  --footer-neutral-text: var(--sidebar-text);
-  --footer-background: var(--sidebar-bg);
+  --header-text: var(--text-primary);
+  --header-accent-text: var(--text-secondary);
+  --header-background: var(--surface);
+  --footer-text: var(--text-secondary);
+  --footer-neutral-text: var(--text-muted);
+  --footer-background: var(--surface);
 }
 
 [data-theme='dark'] {

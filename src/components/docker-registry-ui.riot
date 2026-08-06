@@ -15,65 +15,38 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <docker-registry-ui>
-  <div class="app-shell { state.sidebarOpen ? 'is-sidebar-open' : '' }">
-    <div class="sidebar-overlay" onclick="{ toggleSidebar }"></div>
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <span class="brand-icon"><i class="material-icons">view_in_ar</i></span>
-        <span class="brand-name" title="{ state.title }">{ state.title }</span>
-      </div>
-
-      <div class="sidebar-section" if="{ props.singleRegistry !== 'true' }">
-        <div class="sidebar-section-title">Registries</div>
-        <registry-panel
+  <div class="app-shell">
+    <div class="app-main">
+      <header class="topbar">
+        <a class="brand" href="{ router.home() }" title="{ state.title }">
+          <span class="brand-icon"><i class="material-icons">view_in_ar</i></span>
+          <span class="brand-name">{ state.title }</span>
+        </a>
+        <breadcrumbs></breadcrumbs>
+        <div class="topbar-spacer"></div>
+        <search-bar on-search="{ onSearch }"></search-bar>
+        <registry-menu
+          if="{ props.singleRegistry !== 'true' }"
           registry-url="{ state.registryUrl }"
           read-only-registries="{ truthy(props.readOnlyRegistries) }"
           on-notify="{ notifySnackbar }"
           on-server-change="{ onServerChange }"
-        ></registry-panel>
-      </div>
-
-      <nav class="sidebar-nav">
-        <a class="nav-item { state.isHome ? 'is-active' : '' }" href="{ router.home() }">
-          <i class="material-icons">view_list</i>
-          Repositories
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="footer-row">
-          <span>Docker Registry UI { version }</span>
-          <version-notification
-            if="{ falsy(props.enableVersionNotification) }"
-            version="{ latest }"
-            on-notify="{ notifySnackbar }"
-          ></version-notification>
-        </div>
-        <div class="footer-row" if="{ props.theme === 'auto' || props.theme === '' }">
-          <label class="switch" title="Toggle light/dark theme">
-            <input type="checkbox" checked="{ state.themeSwitch }" onchange="{ onThemeChange }" aria-label="Toggle light/dark theme" />
-            <span class="switch-track">
-              <span class="switch-thumb">
-                <i class="material-icons">{ state.themeSwitch ? 'dark_mode' : 'light_mode' }</i>
-              </span>
-            </span>
-          </label>
-          <a href="https://github.com/Joxit/docker-registry-ui" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </div>
-        <div class="footer-row" if="{ props.theme !== 'auto' && props.theme !== '' }">
-          <a href="https://github.com/Joxit/docker-registry-ui" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </div>
-      </div>
-    </aside>
-
-    <div class="app-main">
-      <header class="topbar">
-        <button class="btn btn--icon menu-toggle" onclick="{ toggleSidebar }" aria-label="Toggle navigation" type="button">
-          <i class="material-icons">menu</i>
+        ></registry-menu>
+        <version-notification
+          if="{ falsy(props.enableVersionNotification) }"
+          version="{ latest }"
+          on-notify="{ notifySnackbar }"
+        ></version-notification>
+        <button
+          if="{ props.theme === 'auto' || props.theme === '' }"
+          class="btn btn--icon"
+          onclick="{ onThemeChange }"
+          aria-label="Toggle light/dark theme"
+          title="Toggle light/dark theme"
+          type="button"
+        >
+          <i class="material-icons">{ state.themeSwitch ? 'light_mode' : 'dark_mode' }</i>
         </button>
-        <breadcrumbs></breadcrumbs>
-        <div class="topbar-spacer"></div>
-        <search-bar on-search="{ onSearch }"></search-bar>
       </header>
 
       <main class="main-content">
@@ -143,16 +116,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           </route>
         </router>
       </main>
+
+      <footer class="app-footer">
+        <span>Docker Registry UI { version }</span>
+        <span class="app-footer-links">
+          <a href="https://github.com/Joxit/docker-registry-ui" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
+        </span>
+      </footer>
     </div>
     <app-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }" on-dismiss="{ dismissSnackbar }"></app-snackbar>
   </div>
   <script>
     import { version, latest } from '../../.version.json';
-    import { Router, Route, getCurrentRoute, router as routeRouter } from '@riotjs/route';
+    import { Router, Route } from '@riotjs/route';
     import Catalog from './catalog/catalog.riot';
     import TagList from './tag-list/tag-list.riot';
     import TagHistory from './tag-history/tag-history.riot';
-    import RegistryPanel from './dialogs/registry-panel.riot';
+    import RegistryMenu from './dialogs/registry-menu.riot';
     import SearchBar from './search-bar.riot';
     import ErrorPage from './error-page.riot';
     import VersionNotification from './version-notification.riot';
@@ -166,7 +147,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Catalog,
         TagList,
         TagHistory,
-        RegistryPanel,
+        RegistryMenu,
         SearchBar,
         Router,
         Route,
@@ -201,16 +182,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.state.useControlCacheHeader = props.useControlCacheHeader;
         const theme = loadTheme(props, this.root.parentNode.style);
         this.state.themeSwitch = theme === 'dark';
-      },
-      onMounted(props, state) {
-        const updateRoute = () => {
-          const route = getCurrentRoute() || '';
-          this.update({
-            isHome: !/taglist|taghistory/.test(route),
-          });
-        };
-        routeRouter.on.value(updateRoute);
-        updateRoute();
       },
       onServerChange(registryUrl) {
         this.update({
@@ -271,13 +242,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           filter: value,
         });
       },
-      onThemeChange(e) {
-        const theme = e.target.checked ? 'dark' : 'light';
+      onThemeChange() {
+        const theme = this.state.themeSwitch ? 'light' : 'dark';
         loadTheme({ ...this.props, theme }, this.root.parentNode.style);
-        this.update({ themeSwitch: e.target.checked });
-      },
-      toggleSidebar() {
-        this.update({ sidebarOpen: !this.state.sidebarOpen });
+        this.update({ themeSwitch: theme === 'dark' });
       },
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,

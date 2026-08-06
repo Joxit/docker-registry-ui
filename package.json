@@ -3,10 +3,9 @@
   "version": "2.6.0",
   "type": "module",
   "scripts": {
-    "format": "npm run format-html && npm run format-js && npm run format-riot",
+    "format": "npm run format-html && npm run format-js",
     "format-html": "find src rollup rollup.config.js -name '*.html' -exec prettier --config .prettierrc -w --parser html {} \\;",
     "format-js": "find src rollup rollup.config.js -name '*.js' -exec prettier --config .prettierrc -w {} \\;",
-    "format-riot": "find src rollup rollup.config.js -name '*.riot' -exec prettier --config .prettierrc -w --parser html {} \\;",
     "start": "rollup -c -w --environment ROLLUP_SERVE:true",
     "build": "rollup -c",
     "build:electron": "npm run build && cd examples/electron && npm install && npm run dist",

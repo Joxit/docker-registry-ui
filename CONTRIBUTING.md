@@ -40,6 +40,12 @@ Changes that are cosmetic in nature and do not add anything substantial to the s
 
 * I use prettier with custom preset, use `npm format` before any PR
 
+* `.riot` files are **not** run through prettier, and must be formatted by hand.
+  Prettier's `html` parser treats every `on*` attribute as JavaScript, but in a
+  riot template `onclick="{ toggle }"` is a riot expression, not JS. Prettier
+  rewrites it into a multi-line block statement that the riot compiler cannot
+  parse, and the build fails.
+
 * I use [semver](https://semver.org/) for package versioning
 
 * I use Github Actions for publishing docker images and releases

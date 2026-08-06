@@ -22,7 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="tree-node { state.expanded ? 'expanded' : '' }">
       <div
         class="list-row { state.images ? 'is-group' : 'is-leaf' }"
-        if="{ !props.showCatalogNbTags || props.showTagless || state.nbTags !== 0 }"
+        if="{ isRowVisible(props, state) }"
         onclick="{ state.images ? onClick : null }"
       >
         <a if="{ state.image }" class="row-main" href="{ router.taglist(state.image) }">
@@ -101,6 +101,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         } else {
           state.nImages = state.images && state.images.length;
         }
+      },
+      // With "show images without tags" off, only reveal a leaf once its count
+      // is known to be non-zero. Treating a pending count as visible made every
+      // tagless image render and then vanish as the counts landed. Growing the
+      // list is fine; removing rows after paint shifts the layout under the
+      // user. A failed count (`null`) stays visible: we could not verify it is
+      // tagless, so hiding it would be a guess.
+      isRowVisible(props, state) {
+        if (!props.showCatalogNbTags || props.showTagless || state.images) {
+          return true;
+        }
+        return state.nbTags === null || state.nbTags > 0;
       },
       // `undefined` is still loading, `null` means the fetch failed.
       nbTagsLabel(nbTags) {

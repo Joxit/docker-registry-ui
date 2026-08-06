@@ -20,6 +20,11 @@
   <script>
     import router from '../../scripts/router';
     export default {
+      onMounted(props) {
+        // `ociImage` is only known once `fillInfo()` has read the manifest,
+        // which happens after the first render.
+        props.image.one('oci-image', () => this.update());
+      },
       routeToHistory() {
         return router.history(this.props.image.name, this.props.image.tag);
       },

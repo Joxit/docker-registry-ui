@@ -22,7 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <div class="tree-node { state.expanded ? 'expanded' : '' }">
       <div
         class="list-row { state.images ? 'is-group' : 'is-leaf' }"
-        if="{ !props.showCatalogNbTags || state.nbTags !== 0 }"
+        if="{ !props.showCatalogNbTags || props.showTagless || state.nbTags !== 0 }"
         onclick="{ state.images ? onClick : null }"
       >
         <a if="{ state.image }" class="row-main" href="{ router.taglist(state.image) }">
@@ -61,6 +61,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           on-notify="{ props.onNotify }"
           on-authentication="{ props.onAuthentication }"
           show-catalog-nb-tags="{ props.showCatalogNbTags }"
+          show-tagless="{ props.showTagless }"
+          counts="{ props.counts }"
           catalog-default-expanded="{ props.catalogDefaultExpanded }"
           is-registry-secured="{ props.isRegistrySecured }"
           each="{ item in state.images }"
@@ -71,7 +73,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   </div>
   <script>
     import router from '../../scripts/router';
-    import { Http } from '../../scripts/http';
     import { matchSearch } from '../search-bar.riot';
 
     export default {
@@ -87,7 +88,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           state.expanded = props.catalogDefaultExpanded;
         }
         if (props.showCatalogNbTags && state.image) {
-          this.getNbTags(props, state);
+          state.nbTags = props.counts && props.counts[state.image];
         }
       },
       onBeforeUpdate(props, state) {
@@ -110,28 +111,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           event.preventDefault();
           this.onClick();
         }
-      },
-      getNbTags(props, state) {
-        const self = this;
-        const oReq = new Http({
-          onAuthentication: props.onAuthentication,
-          withCredentials: props.isRegistrySecured,
-        });
-        oReq.addEventListener('loadend', function () {
-          if (this.status === 200) {
-            const nbTags = (JSON.parse(this.responseText).tags || []).length;
-            self.update({ nbTags });
-          } else if (this.status === 404) {
-            props.onNotify('Server not found', true);
-          } else {
-            props.onNotify(this.responseText, true);
-          }
-        });
-        oReq.addEventListener('error', function () {
-          props.onNotify(this.getErrorMessage(), true);
-        });
-        oReq.open('GET', props.registryUrl + '/v2/' + state.image + '/tags/list');
-        oReq.send();
       },
       matchSearch,
       router,

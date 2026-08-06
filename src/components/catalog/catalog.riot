@@ -17,10 +17,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 <catalog>
   <div class="panel catalog-header">
     <div class="panel-header">
-      <h2 class="panel-title">
-        Repositories
-        <span class="panel-subtitle">of { state.registryName }</span>
-      </h2>
+      <div class="catalog-title">
+        <h2 class="panel-title">
+          Repositories
+          <span class="panel-subtitle">of { state.registryName }</span>
+        </h2>
+        <label class="tagless-toggle" if="{ props.showCatalogNbTags }">
+          <app-checkbox
+            checked="{ state.showTagless }"
+            on-change="{ onToggleTagless }"
+            aria-label="Show images without tags"
+          ></app-checkbox>
+          <span>Show images without tags</span>
+        </label>
+      </div>
       <div class="catalog-stats">
         <span class="badge badge--accent">{ state.nImages } images</span>
         <span class="badge badge--neutral">{ state.nRepositories } repositories</span>
@@ -50,6 +60,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       on-notify="{ props.onNotify }"
       on-authentication="{ props.onAuthentication }"
       show-catalog-nb-tags="{ props.showCatalogNbTags }"
+      show-tagless="{ state.showTagless }"
+      counts="{ state.counts }"
       catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
       is-registry-secured="{ props.isRegistrySecured }"
     ></catalog-element>
@@ -60,6 +72,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     import { Http } from '../../scripts/http';
     import { getBranching } from '../../scripts/repositories';
     import { getRegistryServers } from '../../scripts/utils';
+
+    const SHOW_TAGLESS_KEY = 'registryUiShowTagless';
+
+    // Collect every leaf image name from the branched repository tree.
+    const collectImages = (items, out = []) => {
+      items.forEach((item) => {
+        if (typeof item === 'string') {
+          out.push(item);
+        } else if (item.images) {
+          collectImages(item.images, out);
+        }
+      });
+      return out;
+    };
 
     export default {
       components: {
@@ -72,11 +98,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         loadend: false,
         repositories: [],
         registryUrl: '',
+        counts: {},
+        showTagless: true,
       },
 
       onBeforeMount(props) {
         this.state.registryName = props.registryName;
         this.state.catalogElementsLimit = props.catalogElementsLimit;
+        this.state.showTagless = localStorage.getItem(SHOW_TAGLESS_KEY) !== 'false';
         try {
           this.state.branching = getBranching(props.catalogMinBranches, props.catalogMaxBranches);
         } catch (e) {
@@ -88,6 +117,28 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       },
       onUpdated(props, state) {
         this.display(props, state);
+      },
+      onToggleTagless(event) {
+        const showTagless = event.target.checked;
+        localStorage.setItem(SHOW_TAGLESS_KEY, String(showTagless));
+        this.update({ showTagless });
+      },
+      fetchNbTags(image, props) {
+        return new Promise((resolve) => {
+          const oReq = new Http({
+            onAuthentication: props.onAuthentication,
+            withCredentials: props.isRegistrySecured,
+          });
+          oReq.addEventListener('loadend', function () {
+            if (this.status === 200) {
+              resolve((JSON.parse(this.responseText).tags || []).length);
+            } else {
+              resolve(undefined);
+            }
+          });
+          oReq.open('GET', props.registryUrl + '/v2/' + image + '/tags/list');
+          oReq.send();
+        });
       },
       display(props, state) {
         if (props.registryUrl === state.registryUrl) {
@@ -129,12 +180,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           self.props.onNotify(this.getErrorMessage(), true);
         });
         oReq.addEventListener('loadend', function () {
-          self.update({
-            repositories,
-            nRepositories: repositories.length,
-            nImages,
-            loadend: true,
-          });
+          const render = () =>
+            self.update({
+              repositories,
+              nRepositories: repositories.length,
+              nImages,
+              loadend: true,
+            });
+          // Prefetch tag counts before the first paint so tagless images can be
+          // filtered out without rows appearing and then disappearing (flicker).
+          if (props.showCatalogNbTags && repositories.length > 0) {
+            const images = collectImages(repositories);
+            Promise.all(images.map((image) => self.fetchNbTags(image, props))).then((counts) => {
+              state.counts = {};
+              images.forEach((image, i) => {
+                state.counts[image] = counts[i];
+              });
+              render();
+            });
+          } else {
+            render();
+          }
         });
         oReq.open('GET', catalogUrl);
         oReq.send();
@@ -155,6 +221,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       gap: var(--space-2);
       flex-wrap: wrap;
       justify-content: flex-end;
+    }
+
+    :host .catalog-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-4);
+    }
+
+    :host .tagless-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--fs-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
     }
 
     :host .list-group {

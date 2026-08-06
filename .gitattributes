@@ -1,0 +1,15 @@
+# `dist/` is build output, but it is committed on purpose: GitHub Pages serves
+# this repository as-is (see _config.yml) and demo/index.html loads
+# ../dist/docker-registry-ui.js directly, so the committed bundle is what backs
+# the live demo. Do not untrack it.
+#
+# The riot compiler numbers template expressions from a bundle-global counter
+# and rollup's module order is not stable, so dist/ shows a diff after every
+# build even when the source is identical.
+#
+#   linguist-generated  keep the churn collapsed in review diffs
+#   -diff               show "binary files differ" instead of one 280KB line
+#   -merge              never text-merge it; on conflict keep one side and
+#                       rebuild (`npm run build && git add dist`) rather than
+#                       risk conflict markers inside a minified bundle
+dist/** linguist-generated=true -diff -merge

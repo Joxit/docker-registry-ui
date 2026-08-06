@@ -126,21 +126,21 @@ There are some examples with [docker-compose](https://docs.docker.com/compose/) 
 
 ### Theme options
 
-The default palettes follow a modern SaaS look (neutral surfaces + blue accent). The `THEME_*` variables override the corresponding design token.
+The default palettes follow a modern SaaS look (neutral surfaces + green accent). The `THEME_*` variables override the corresponding design token; defaults come from `src/styles/tokens.scss`.
 
-| Environment variable | light theme value | dark theme value |
-| --- | --- | --- |
-| `THEME_PRIMARY_TEXT` | `#1f2328` | `#e6edf3` |
-| `THEME_NEUTRAL_TEXT` | `#59636e` | `#9198a1` |
-| `THEME_BACKGROUND` | `#ffffff` | `#161b22` |
-| `THEME_HOVER_BACKGROUND` | `#f3f4f6` | `#21262d` |
-| `THEME_ACCENT_TEXT` | `#2563eb` | `#4493f8` |
-| `THEME_HEADER_TEXT` | `#ffffff` | `#ffffff` |
-| `THEME_HEADER_ACCENT_TEXT` | `#59636e` | `#9198a1` |
-| `THEME_HEADER_BACKGROUND` | `#ffffff` | `#161b22` |
-| `THEME_FOOTER_TEXT` | `#59636e` | `#9198a1` |
-| `THEME_FOOTER_NEUTRAL_TEXT` | `#8a919a` | `#6e7681` |
-| `THEME_FOOTER_BACKGROUND` | `#ffffff` | `#161b22` |
+| Environment variable | design token | light theme value | dark theme value |
+| --- | --- | --- | --- |
+| `THEME_PRIMARY_TEXT` | `--text-primary` | `#0f172a` | `#e6edf6` |
+| `THEME_NEUTRAL_TEXT` | `--text-secondary` | `#475569` | `#9fb2c8` |
+| `THEME_BACKGROUND` | `--surface` | `#ffffff` | `#111a2c` |
+| `THEME_HOVER_BACKGROUND` | `--surface-hover` | `#eaf0f4` | `#1d2b44` |
+| `THEME_ACCENT_TEXT` | `--accent` | `#15803d` | `#22c55e` |
+| `THEME_HEADER_TEXT` | `--header-text` | `#0f172a` | `#e6edf6` |
+| `THEME_HEADER_ACCENT_TEXT` | `--header-accent-text` | `#475569` | `#9fb2c8` |
+| `THEME_HEADER_BACKGROUND` | `--header-background` | `#ffffff` | `#111a2c` |
+| `THEME_FOOTER_TEXT` | `--footer-text` | `#475569` | `#9fb2c8` |
+| `THEME_FOOTER_NEUTRAL_TEXT` | `--footer-neutral-text` | `#8b96a5` | `#667b99` |
+| `THEME_FOOTER_BACKGROUND` | `--footer-background` | `#ffffff` | `#111a2c` |
 
 ## Recommended Docker Registry Usage
 

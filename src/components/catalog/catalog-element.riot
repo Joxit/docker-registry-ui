@@ -85,22 +85,41 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         } else if (props.item.images && props.item.repo) {
           state.images = props.item.images;
           state.repo = props.item.repo;
-          state.nImages = props.item.images.length;
           state.expanded = props.catalogDefaultExpanded;
         }
-        if (props.showCatalogNbTags && state.image) {
-          state.nbTags = props.counts && props.counts[state.image];
-        }
+        this.sync(props, state);
       },
       onBeforeUpdate(props, state) {
+        this.sync(props, state);
+      },
+      sync(props, state) {
         if (props.showCatalogNbTags && state.image) {
           state.nbTags = props.counts && props.counts[state.image];
         }
-        if (props.filterResults && state.images) {
-          state.nImages = state.images.filter((image) => matchSearch(props.filterResults, image)).length;
-        } else {
-          state.nImages = state.images && state.images.length;
+        state.nImages = state.images ? this.countVisibleImages(state.images, props) : undefined;
+      },
+      // Images nest: CATALOG_MAX_BRANCHES > CATALOG_MIN_BRANCHES makes a group's
+      // `images` hold sub-groups as well as image names, so walk the tree. The
+      // result drives both the badge and whether the group renders at all, so a
+      // group whose images are all filtered out disappears with them instead of
+      // sitting there empty with a count of hidden children.
+      countVisibleImages(items, props) {
+        return items.reduce((acc, item) => {
+          if (typeof item === 'string') {
+            return acc + (this.isImageVisible(item, props) ? 1 : 0);
+          }
+          return acc + (item.images ? this.countVisibleImages(item.images, props) : 0);
+        }, 0);
+      },
+      isImageVisible(image, props) {
+        if (!matchSearch(props.filterResults, image)) {
+          return false;
         }
+        if (!props.showCatalogNbTags || props.showTagless) {
+          return true;
+        }
+        const nbTags = props.counts && props.counts[image];
+        return nbTags === null || nbTags > 0;
       },
       // With "show images without tags" off, only reveal a leaf once its count
       // is known to be non-zero. Treating a pending count as visible made every
@@ -109,8 +128,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       // user. A failed count (`null`) stays visible: we could not verify it is
       // tagless, so hiding it would be a guess.
       isRowVisible(props, state) {
-        if (!props.showCatalogNbTags || props.showTagless || state.images) {
+        if (!props.showCatalogNbTags || props.showTagless) {
           return true;
+        }
+        if (state.images) {
+          return state.nImages > 0;
         }
         return state.nbTags === null || state.nbTags > 0;
       },

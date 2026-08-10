@@ -9,8 +9,6 @@
        url(fonts/material-symbols-rounded.ttf) format('truetype');
 }
 
-material-button .content i.material-icons,
-material-button[rounded=true] .content i.material-icons,
 i.material-icons {
   font-family: 'Material Symbols Rounded';
   font-weight: normal;
@@ -42,9 +40,4 @@ i.material-icons {
   -khtml-user-select: none;
   -webkit-user-select: none;
   -o-user-select: none;
-}
-
-material-button .content i.material-icons,
-material-button[rounded=true] .content i.material-icons {
-  margin: auto;
 }

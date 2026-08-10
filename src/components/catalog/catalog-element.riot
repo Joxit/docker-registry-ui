@@ -15,51 +15,65 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog-element>
-  <!-- Begin of tag -->
   <div
     class="content"
     if="{!props.filterResults || state.nImages > 0 || matchSearch(props.filterResults, state.image)}"
   >
-    <material-card
-      class="list highlight"
-      expanded="{state.expanded}"
-      onclick="{ onClick }"
-      if="{ !props.showCatalogNbTags || state.nbTags !== 0 }"
-    >
-      <a if="{ state.image }" href="{ router.taglist(state.image) }">
-        <material-waves center="true" color="#ddd"></material-waves>
-      </a>
-      <material-waves if="{ state.images }" center="true" color="#ddd"></material-waves>
-      <span>
-        <i class="material-icons">send</i>
-        { state.image || state.repo }
-        <div if="{state.images}" class="item-count right">
-          { state.nImages } images
-          <i class="material-icons animated {state.expanded ? 'expanded' : ''}">expand_more</i>
+    <div class="tree-node { state.expanded ? 'expanded' : '' }">
+      <div
+        class="list-row { state.images ? 'is-group' : 'is-leaf' }"
+        if="{ isRowVisible(props, state) }"
+        onclick="{ state.images ? onClick : null }"
+      >
+        <a if="{ state.image }" class="row-main" href="{ router.taglist(state.image) }">
+          <i class="material-icons row-icon">send</i>
+          <span class="row-label">{ state.image }</span>
+        </a>
+        <div
+          if="{ state.images }"
+          class="row-main"
+          role="button"
+          tabindex="0"
+          aria-expanded="{ state.expanded }"
+          onkeyup="{ onKeyUp }"
+        >
+          <i class="material-icons row-icon">folder</i>
+          <span class="row-label">{ state.repo }</span>
         </div>
-        <div if="{props.showCatalogNbTags && state.image}" class="item-count right">
-          { state.nbTags } tags
-          <i class="material-icons animated"></i>
-        </div>
-      </span>
-    </material-card>
-    <catalog-element
-      if="{ state.images }"
-      filter-results="{ props.filterResults }"
-      registry-url="{ props.registryUrl }"
-      on-notify="{ props.onnNotify }"
-      on-authentication="{ props.onAuthentication }"
-      show-catalog-nb-tags="{ props.showCatalogNbTags }"
-      is-registry-secured="{ props.isRegistrySecured }"
-      class="animated {!state.expanded && !props.filterResults ? 'hide' : ''} {state.expanding ? 'expanding' : ''}"
-      each="{item in state.images}"
-      z-index="{ props.zIndex - 1 }"
-      item="{ item }"
-    ></catalog-element>
+        <span class="row-meta">
+          <span if="{ state.images }" class="badge" title="{ state.nImages } images">{ state.nImages }</span>
+          <span
+            if="{ props.showCatalogNbTags && state.image }"
+            class="badge badge--accent { typeof state.nbTags === 'number' ? '' : 'is-pending' }"
+            title="{ nbTagsTitle(state.nbTags) }"
+          >
+            <i class="material-icons badge-icon">sell</i>
+            { nbTagsLabel(state.nbTags) }
+          </span>
+          <i if="{ state.images }" class="material-icons row-chevron { state.expanded ? 'expanded' : '' }">
+            expand_more
+          </i>
+        </span>
+      </div>
+      <div class="tree-children { !state.expanded && !props.filterResults ? 'collapsed' : '' }">
+        <catalog-element
+          filter-results="{ props.filterResults }"
+          registry-url="{ props.registryUrl }"
+          on-notify="{ props.onNotify }"
+          on-authentication="{ props.onAuthentication }"
+          show-catalog-nb-tags="{ props.showCatalogNbTags }"
+          show-tagless="{ props.showTagless }"
+          counts="{ props.counts }"
+          catalog-default-expanded="{ props.catalogDefaultExpanded }"
+          is-registry-secured="{ props.isRegistrySecured }"
+          each="{ item in state.images }"
+          item="{ item }"
+        ></catalog-element>
+      </div>
+    </div>
   </div>
   <script>
     import router from '../../scripts/router';
-    import { Http } from '../../scripts/http';
     import { matchSearch } from '../search-bar.riot';
 
     export default {
@@ -71,65 +85,176 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         } else if (props.item.images && props.item.repo) {
           state.images = props.item.images;
           state.repo = props.item.repo;
-          state.nImages = props.item.images.length;
           state.expanded = props.catalogDefaultExpanded;
         }
-        if (props.showCatalogNbTags && state.image) {
-          this.getNbTags(props, state);
-        }
-      },
-      onMounted(props, state) {
-        const materialCard = this.$('material-card');
-        if (materialCard) {
-          materialCard.style['z-index'] = props.zIndex;
-        }
+        this.sync(props, state);
       },
       onBeforeUpdate(props, state) {
-        if (props.filterResults && state.images) {
-          state.nImages = state.images.filter((image) => matchSearch(props.filterResults, image)).length;
-        } else {
-          state.nImages = state.images && state.images.length;
+        this.sync(props, state);
+      },
+      sync(props, state) {
+        if (props.showCatalogNbTags && state.image) {
+          state.nbTags = props.counts && props.counts[state.image];
         }
+        state.nImages = state.images ? this.countVisibleImages(state.images, props) : undefined;
+      },
+      // Images nest: CATALOG_MAX_BRANCHES > CATALOG_MIN_BRANCHES makes a group's
+      // `images` hold sub-groups as well as image names, so walk the tree. The
+      // result drives both the badge and whether the group renders at all, so a
+      // group whose images are all filtered out disappears with them instead of
+      // sitting there empty with a count of hidden children.
+      countVisibleImages(items, props) {
+        return items.reduce((acc, item) => {
+          if (typeof item === 'string') {
+            return acc + (this.isImageVisible(item, props) ? 1 : 0);
+          }
+          return acc + (item.images ? this.countVisibleImages(item.images, props) : 0);
+        }, 0);
+      },
+      isImageVisible(image, props) {
+        if (!matchSearch(props.filterResults, image)) {
+          return false;
+        }
+        if (!props.showCatalogNbTags || props.showTagless) {
+          return true;
+        }
+        const nbTags = props.counts && props.counts[image];
+        return nbTags === null || nbTags > 0;
+      },
+      // With "show images without tags" off, only reveal a leaf once its count
+      // is known to be non-zero. Treating a pending count as visible made every
+      // tagless image render and then vanish as the counts landed. Growing the
+      // list is fine; removing rows after paint shifts the layout under the
+      // user. A failed count (`null`) stays visible: we could not verify it is
+      // tagless, so hiding it would be a guess.
+      isRowVisible(props, state) {
+        if (!props.showCatalogNbTags || props.showTagless) {
+          return true;
+        }
+        if (state.images) {
+          return state.nImages > 0;
+        }
+        return state.nbTags === null || state.nbTags > 0;
+      },
+      // `undefined` is still loading, `null` means the fetch failed.
+      nbTagsLabel(nbTags) {
+        if (nbTags === undefined) {
+          return '…';
+        }
+        return nbTags === null ? '—' : nbTags;
+      },
+      nbTagsTitle(nbTags) {
+        if (nbTags === undefined) {
+          return 'Loading tag count…';
+        }
+        return nbTags === null ? 'Tag count unavailable' : nbTags + ' tags';
       },
       onClick() {
         const state = this.state;
         if (state.repo) {
           this.update({
-            expanded: !this.state.expanded,
-            expanding: true,
+            expanded: !state.expanded,
           });
-          setTimeout(() => {
-            this.update({
-              expanding: false,
-            });
-          }, 50);
         }
       },
-      getNbTags(props, state) {
-        const self = this;
-        const oReq = new Http({
-          onAuthentication: props.onAuthentication,
-          withCredentials: props.isRegistrySecured,
-        });
-        oReq.addEventListener('loadend', function () {
-          if (this.status === 200) {
-            const nbTags = (JSON.parse(this.responseText).tags || []).length;
-            self.update({ nbTags });
-          } else if (this.status === 404) {
-            props.onNotify('Server not found', true);
-          } else {
-            props.onNotify(this.responseText, true);
-          }
-        });
-        oReq.addEventListener('error', function () {
-          props.onNotify(this.getErrorMessage(), true);
-        });
-        oReq.open('GET', props.registryUrl + '/v2/' + state.image + '/tags/list');
-        oReq.send();
+      onKeyUp(event) {
+        if (event.keyCode === 13 || event.keyCode === 32) {
+          event.preventDefault();
+          this.onClick();
+        }
       },
       matchSearch,
       router,
     };
   </script>
-  <!-- End of tag -->
+  <style>
+    :host .tree-node {
+      position: relative;
+    }
+
+    :host .list-row {
+      cursor: default;
+    }
+
+    :host .list-row.is-group {
+      cursor: pointer;
+    }
+
+    :host .row-main {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex: 1;
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+    }
+
+    :host .row-main:hover {
+      color: var(--accent);
+    }
+
+    :host .row-icon {
+      font-size: 18px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    :host .row-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-size: var(--fs-md);
+    }
+
+    :host .row-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    :host .row-chevron {
+      color: var(--text-muted);
+      transition: transform var(--dur-normal) var(--ease-out);
+    }
+
+    :host .badge-icon {
+      font-size: 14px;
+    }
+
+    :host .badge.is-pending {
+      opacity: 0.7;
+      min-width: 34px;
+    }
+
+    :host .badge.is-pending .badge-icon {
+      opacity: 0.6;
+    }
+
+    :host .row-chevron.expanded {
+      transform: rotate(180deg);
+    }
+
+    :host .tree-children {
+      margin-left: var(--space-6);
+      padding-left: var(--space-2);
+      border-left: 1px solid var(--border);
+    }
+
+    :host .tree-children.collapsed {
+      display: none;
+    }
+
+    @media screen and (max-width: 700px) {
+      :host .tree-children {
+        margin-left: var(--space-3);
+        padding-left: var(--space-1);
+      }
+    }
+  </style>
 </catalog-element>

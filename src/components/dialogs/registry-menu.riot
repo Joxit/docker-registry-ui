@@ -1,0 +1,275 @@
+<!--
+ Copyright (C) 2016-2023 Jones Magloire @Joxit
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+-->
+<registry-menu>
+  <add-registry-url
+    opened="{ state.addDialog }"
+    on-close="{ onClose }"
+    on-notify="{ props.onNotify }"
+    on-server-change="{ props.onServerChange }"
+  ></add-registry-url>
+
+  <div class="registry-menu { state.open ? 'is-open' : '' }">
+    <button
+      class="registry-trigger"
+      onclick="{ toggle }"
+      aria-haspopup="menu"
+      aria-expanded="{ state.open }"
+      title="{ props.registryUrl || 'No registry selected' }"
+      type="button"
+    >
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="registry-label">{ stripHttps(props.registryUrl) || 'Registry' }</span>
+      <i class="material-icons">{ state.open ? 'expand_less' : 'expand_more' }</i>
+    </button>
+
+    <div class="registry-popover" if="{ state.open }" role="menu">
+      <div class="popover-header">Registries</div>
+      <ul class="popover-list">
+        <li each="{ url in state.registries }" class="{ url === props.registryUrl ? 'is-active' : '' }">
+          <button class="popover-item" onclick="{ () => switchRegistry(url) }" title="{ url }" type="button">
+            <i class="material-icons" if="{ url === props.registryUrl }">check</i>
+            <span>{ stripHttps(url) }</span>
+          </button>
+          <button
+            if="{ !props.readOnlyRegistries }"
+            class="btn btn--icon btn--sm popover-remove"
+            onclick="{ () => removeRegistry(url) }"
+            aria-label="Remove { url }"
+            title="Remove { url }"
+            type="button"
+          >
+            <i class="material-icons">close</i>
+          </button>
+        </li>
+      </ul>
+      <div class="popover-actions">
+        <button
+          if="{ !props.readOnlyRegistries }"
+          class="btn btn--sm"
+          onclick="{ onOpen }"
+          type="button"
+        >
+          <i class="material-icons">add</i>
+          Add registry
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="popover-overlay" if="{ state.open }" onclick="{ toggle }"></div>
+
+  <script>
+    import AddRegistryUrl from './add-registry-url.riot';
+    import { getRegistryServers, removeRegistryServers, stripHttps } from '../../scripts/utils';
+    import router from '../../scripts/router';
+
+    export default {
+      components: {
+        AddRegistryUrl,
+      },
+      onBeforeMount(props, state) {
+        state.registries = getRegistryServers();
+      },
+      onBeforeUpdate(props, state) {
+        state.registries = getRegistryServers();
+      },
+      toggle() {
+        this.update({ open: !this.state.open });
+      },
+      onOpen() {
+        this.update({ open: false, addDialog: true });
+      },
+      onClose() {
+        this.update({ addDialog: false });
+      },
+      switchRegistry(url) {
+        this.update({ open: false });
+        router.home();
+        this.props.onServerChange(url);
+        setTimeout(() => router.updateUrlQueryParam(url), 100);
+      },
+      removeRegistry(url) {
+        removeRegistryServers(url);
+        if (url === this.props.registryUrl) {
+          // Removing the active registry navigates away; close the popover
+          // rather than leaving the deleted entry on screen.
+          this.update({ open: false });
+          this.props.onServerChange(getRegistryServers(0) || window.location.origin);
+        } else {
+          this.update();
+        }
+        this.props.onNotify(`Registry \`${url}\` removed.`);
+      },
+      stripHttps,
+    };
+  </script>
+  <style>
+    :host .registry-menu {
+      position: relative;
+      display: inline-flex;
+    }
+
+    :host .registry-menu.is-open {
+      z-index: 60;
+    }
+
+    :host .registry-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-1) var(--space-3);
+      min-height: 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      background-color: var(--surface-muted);
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        background-color var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out);
+    }
+
+    :host .registry-trigger:hover {
+      background-color: var(--surface-hover);
+      border-color: var(--border-strong);
+    }
+
+    :host .registry-trigger:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    :host .registry-trigger .status-dot {
+      width: 7px;
+      height: 7px;
+    }
+
+    :host .registry-label {
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+    }
+
+    :host .registry-trigger .material-icons {
+      font-size: 18px;
+      color: var(--text-muted);
+    }
+
+    :host .registry-popover {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 280px;
+      max-width: 360px;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-2);
+      z-index: 60;
+      animation: fade-in-up var(--dur-fast) var(--ease-out);
+    }
+
+    :host .popover-header {
+      padding: var(--space-2) var(--space-3) var(--space-1);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    :host .popover-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    :host .popover-list li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      border-radius: var(--radius-md);
+    }
+
+    :host .popover-list li.is-active {
+      background-color: var(--accent-soft);
+    }
+
+    :host .popover-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: var(--fs-md);
+      text-align: left;
+      cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    :host .popover-item:hover {
+      color: var(--text-primary);
+      background-color: var(--surface-hover);
+    }
+
+    :host .popover-list li.is-active .popover-item {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    :host .popover-item .material-icons {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    :host .popover-item span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+    }
+
+    :host .popover-remove:hover {
+      color: var(--danger);
+      background-color: var(--danger-soft);
+    }
+
+    :host .popover-actions {
+      padding: var(--space-2) var(--space-1) var(--space-1);
+      border-top: 1px solid var(--border);
+      margin-top: var(--space-1);
+    }
+
+    :host .popover-actions .btn {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    :host .popover-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+    }
+  </style>
+</registry-menu>

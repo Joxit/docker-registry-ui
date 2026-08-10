@@ -1,0 +1,151 @@
+/*
+ * Copyright (C) 2016-2023 Jones Magloire @Joxit
+ *
+ * Design tokens for Docker Registry UI — "terminal-inflected devops"
+ * aesthetic: deep slate surfaces, a single registry-green accent, technical
+ * typefaces (IBM Plex), data-dense tables.
+ *
+ * The light theme is the default (`:root`); the dark theme is applied by
+ * setting `data-theme="dark"` on the root element (see `src/scripts/theme.js`).
+ *
+ * Legacy tokens (`--primary-text`, `--background`, `--accent-text`, ...) are
+ * kept as aliases so existing `THEME_*` environment variables keep working.
+ */
+:root {
+  /* ------------------------------------------------------------------ *
+   * Color                                                                *
+   * ------------------------------------------------------------------ */
+  --bg: #f5f7fa;
+  --bg-glow: rgba(21, 128, 61, 0.06);
+  --surface: #ffffff;
+  --surface-muted: #f0f3f6;
+  --surface-hover: #eaf0f4;
+  --border: #dfe3e8;
+  --border-strong: #c6ced9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #8b96a5;
+  --accent: #15803d;
+  --accent-hover: #166534;
+  --accent-soft: rgba(21, 128, 61, 0.1);
+  --accent-soft-hover: rgba(21, 128, 61, 0.16);
+  --on-accent: #ffffff;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-soft: rgba(220, 38, 38, 0.1);
+  --on-danger: #ffffff;
+  --success: #16a34a;
+  --warning: #d97706;
+  --info: #0284c7;
+  --focus-ring: rgba(21, 128, 61, 0.35);
+  --selection: rgba(21, 128, 61, 0.22);
+
+  /* ------------------------------------------------------------------ *
+   * Elevation (soft, subtle)                                             *
+   * ------------------------------------------------------------------ */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.07), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.09), 0 2px 4px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.14), 0 4px 8px rgba(15, 23, 42, 0.07);
+
+  /* ------------------------------------------------------------------ *
+   * Shape                                                                *
+   * ------------------------------------------------------------------ */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* ------------------------------------------------------------------ *
+   * Typography                                                          *
+   * ------------------------------------------------------------------ */
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-lg: 14px;
+  --fs-xl: 16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+  --fs-4xl: 28px;
+  --lh-tight: 1.25;
+  --lh-normal: 1.5;
+
+  /* ------------------------------------------------------------------ *
+   * Spacing (4px grid)                                                  *
+   * ------------------------------------------------------------------ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ------------------------------------------------------------------ *
+   * Motion                                                              *
+   * ------------------------------------------------------------------ */
+  --dur-fast: 120ms;
+  --dur-normal: 200ms;
+  --dur-slow: 300ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ------------------------------------------------------------------ *
+   * Layout                                                              *
+   * ------------------------------------------------------------------ */
+  --topbar-height: 56px;
+  --content-max-width: 1280px;
+
+  /* ------------------------------------------------------------------ *
+   * Legacy aliases (backward compatible with `THEME_*` overrides)       *
+   * ------------------------------------------------------------------ */
+  --primary-text: var(--text-primary);
+  --neutral-text: var(--text-secondary);
+  --background: var(--surface);
+  --hover-background: var(--surface-hover);
+  --accent-text: var(--accent);
+  --header-text: var(--text-primary);
+  --header-accent-text: var(--text-secondary);
+  --header-background: var(--surface);
+  --footer-text: var(--text-secondary);
+  --footer-neutral-text: var(--text-muted);
+  --footer-background: var(--surface);
+}
+
+[data-theme='dark'] {
+  --bg: #0b1220;
+  --bg-glow: rgba(34, 197, 94, 0.07);
+  --surface: #111a2c;
+  --surface-muted: #172338;
+  --surface-hover: #1d2b44;
+  --border: #25344f;
+  --border-strong: #33476b;
+  --text-primary: #e6edf6;
+  --text-secondary: #9fb2c8;
+  --text-muted: #667b99;
+  --accent: #22c55e;
+  --accent-hover: #34d399;
+  --accent-soft: rgba(34, 197, 94, 0.14);
+  --accent-soft-hover: rgba(34, 197, 94, 0.22);
+  --on-accent: #052e16;
+  --danger: #ef4444;
+  --danger-hover: #f87171;
+  --danger-soft: rgba(239, 68, 68, 0.15);
+  --on-danger: #ffffff;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --info: #38bdf8;
+  --focus-ring: rgba(34, 197, 94, 0.45);
+  --selection: rgba(34, 197, 94, 0.3);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.3);
+}

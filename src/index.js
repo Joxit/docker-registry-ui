@@ -1,38 +1,20 @@
 import { component, register } from 'riot';
 
-import {
-  MaterialCard,
-  MaterialSpinner,
-  MaterialNavbar,
-  MaterialFooter,
-  MaterialButton,
-  MaterialWaves,
-  MaterialCheckbox,
-  MaterialTabs,
-  MaterialSnackbar,
-  MaterialDropdown,
-  MaterialPopup,
-  MaterialInput,
-  MaterialSwitch,
-} from 'riot-mui';
-
 import DockerRegistryUI from './components/docker-registry-ui.riot';
+import AppDialog from './components/app-dialog.riot';
+import AppSnackbar from './components/app-snackbar.riot';
+import AppTabs from './components/app-tabs.riot';
+import AppCheckbox from './components/app-checkbox.riot';
+import TextField from './components/text-field.riot';
 
+import './styles/tokens.scss';
 import './style.scss';
 
-register('material-card', MaterialCard);
-register('material-footer', MaterialFooter);
-register('material-navbar', MaterialNavbar);
-register('material-spinner', MaterialSpinner);
-register('material-button', MaterialButton);
-register('material-waves', MaterialWaves);
-register('material-checkbox', MaterialCheckbox);
-register('material-snackbar', MaterialSnackbar);
-register('material-tabs', MaterialTabs);
-register('material-dropdown', MaterialDropdown);
-register('material-popup', MaterialPopup);
-register('material-input', MaterialInput);
-register('material-switch', MaterialSwitch);
+register('app-dialog', AppDialog);
+register('app-snackbar', AppSnackbar);
+register('app-tabs', AppTabs);
+register('app-checkbox', AppCheckbox);
+register('text-field', TextField);
 
 const createApp = component(DockerRegistryUI);
 const tags = document.getElementsByTagName('docker-registry-ui');

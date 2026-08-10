@@ -1,49 +1,32 @@
-<!--
-Copyright (C) 2016-2023 Jones Magloire @Joxit
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
--->
 <tag-history-button>
-  <material-button
-    title="{ buttonTittle() }"
-    text-color="var(--neutral-text)"
-    color="inherit"
-    waves-color="var(--hover-background)"
-    waves-center="true"
-    href="{ routeToHistory() }"
-    disabled="{ props.image.ociImage }"
-    icon
+  <button
+    if="{ props.image.ociImage }"
+    class="btn btn--icon btn--sm"
+    disabled="true"
+    title="History is unavailable on OCI index/Buildkit export cache"
+    type="button"
   >
     <i class="material-icons">history</i>
-  </material-button>
+  </button>
+  <a
+    if="{ !props.image.ociImage }"
+    class="btn btn--icon btn--sm"
+    href="{ routeToHistory() }"
+    title="This will show the history of given tag"
+    aria-label="Show history of { props.image.name }:{ props.image.tag }"
+  >
+    <i class="material-icons">history</i>
+  </a>
   <script>
     import router from '../../scripts/router';
     export default {
       onMounted(props) {
-        props.image.one('oci-image', () => {
-          this.update();
-        });
-      },
-      buttonTittle() {
-        return !this.props.image.ociImage
-          ? 'This will show the history of given tag'
-          : 'History is unavailable on OCI index/Buildkit export cache';
+        // `ociImage` is only known once `fillInfo()` has read the manifest,
+        // which happens after the first render.
+        props.image.one('oci-image', () => this.update());
       },
       routeToHistory() {
-        if (!this.props.image.ociImage) {
-          return router.history(this.props.image.name, this.props.image.tag);
-        }
+        return router.history(this.props.image.name, this.props.image.tag);
       },
     };
   </script>

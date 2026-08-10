@@ -1,34 +1,30 @@
 <version-notification>
-  <span if="{ state.tag_name && !isNewestVersion(props.version, state.tag_name) }" onclick="{ onClick }"></span>
-  <material-popup opened="{ state.open }" onClick="{ onClose }">
-    <div class="material-popup-title">Check for updates</div>
-    <div class="material-popup-content">
-      <p>The version <b>{ state.tag_name }</b> of Docker Registry UI now available.</p>
-      <p>You can download the lastest version with docker.</p>
-      <code>joxit/docker-registry-ui:{ state.tag_name }</code>
-    </div>
-    <div class="material-popup-action">
-      <material-button
-        class="dialog-button release-note"
-        waves-color="var(--hover-background)"
+  <button
+    if="{ state.tag_name && !isNewestVersion(props.version, state.tag_name) }"
+    class="btn btn--icon btn--sm"
+    onclick="{ onClick }"
+    aria-label="A new version of Docker Registry UI is available"
+    title="A new version of Docker Registry UI is available"
+    type="button"
+  >
+    <span class="rocket"></span>
+  </button>
+  <app-dialog title="Check for updates" opened="{ state.open }" on-close="{ onClose }">
+    <p>The version <b>{ state.tag_name }</b> of Docker Registry UI is now available.</p>
+    <p>You can download the latest version with docker.</p>
+    <code class="pull-command">joxit/docker-registry-ui:{ state.tag_name }</code>
+    <div slot="footer">
+      <button class="btn" onclick="{ onClose }" type="button">Close</button>
+      <a
+        class="btn btn--primary"
         href="{ state.latest && state.latest.html_url }"
-        color="inherit"
-        text-color="var(--accent-text)"
         target="_blank"
+        rel="noopener noreferrer"
       >
         Release Note
-      </material-button>
-      <material-button
-        class="dialog-button"
-        waves-color="var(--hover-background)"
-        onClick="{ onClose }"
-        color="inherit"
-        text-color="var(--primary-text)"
-      >
-        Close
-      </material-button>
+      </a>
     </div>
-  </material-popup>
+  </app-dialog>
   <script>
     import rocketIcon from '../images/rocket.svg';
     import { Http } from '../scripts/http';
@@ -48,9 +44,9 @@
         }
       },
       onUpdated(props, state) {
-        const span = this.$('span');
-        if (span) {
-          span.innerHTML = rocketIcon().firstElementChild.outerHTML;
+        const rocket = this.$('.rocket');
+        if (rocket) {
+          rocket.innerHTML = rocketIcon().firstElementChild.outerHTML;
         }
       },
       onClose() {
@@ -91,25 +87,25 @@
     };
   </script>
   <style>
-    :host {
-      display: inline;
-    }
-    :host svg {
-      margin-left: 10px;
-      cursor: pointer;
-    }
-    material-popup material-button > a:first-child {
-      display: flex;
+    :host .rocket {
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
     }
-    material-popup .material-popup-content code {
-      background-color: var(--hover-background);
-      padding: 0 5px;
-      border-radius: 4px;
-      line-height: 1.5em;
+    :host .rocket svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
     }
-    material-popup .material-popup-content b {
-      color: var(--accent-text);
+    :host .pull-command {
+      display: inline-block;
+      background-color: var(--surface-muted);
+      padding: 1px var(--space-2);
+      border-radius: var(--radius-sm);
+      font-size: var(--fs-md);
+    }
+    :host p b {
+      color: var(--accent);
     }
   </style>
 </version-notification>

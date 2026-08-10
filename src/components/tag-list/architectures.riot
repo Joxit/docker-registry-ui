@@ -33,22 +33,21 @@
     };
   </script>
   <style>
-    :host architectures {
+    :host {
       display: flex;
       flex-direction: column;
+      gap: var(--space-1);
     }
-    architectures .architecture {
-      background-color: var(--hover-background);
-      padding: 2px 4px;
-      border-radius: 12px;
-      margin: 4px 0;
+    :host .architecture {
+      background-color: var(--surface-muted);
+      color: var(--text-secondary);
+      padding: 2px var(--space-2);
+      border-radius: var(--radius-full);
       text-align: center;
-    }
-    architectures .architecture:first-child {
-      margin-top: 0;
-    }
-    architectures .architecture:last-child {
-      margin-bottom: 0;
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      line-height: var(--lh-tight);
+      white-space: nowrap;
     }
   </style>
 </architectures>

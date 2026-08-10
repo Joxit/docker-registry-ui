@@ -5,58 +5,25 @@
  it under the terms of the GNU Affero General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <confirm-delete-image>
-  <material-popup opened="{ props.opened }" onClick="{ props.onClick }">
-    <div class="material-popup-title">
-      These images will be deleted
-      <material-button
-        color="inherit"
-        text-color="var(--accent-text)"
-        target="_blank"
-        waves-color="var(--hover-background)"
-        href="https://joxit.dev/docker-registry-ui/#:~:text=Why%20when%20I%20delete%20one%20tag,%20all%20tags%20with%20the%20same%20SHA%20are%20deleted%20"
-        icon
-        ><i class="material-icons">help</i>
-      </material-button>
+  <app-dialog title="These images will be deleted" opened="{ props.opened }" on-close="{ props.onClick }">
+    <ul class="delete-list">
+      <li each="{ image in displayImagesToDelete(props.toDelete, props.tags) }">{ image.name }:{ image.tag }</li>
+    </ul>
+    <p class="warning">
+      Deleting one tag removes every tag sharing the same manifest (SHA). Run
+      <code>registry garbage-collect config.yml</code> on your registry to free the storage.
+    </p>
+    <div slot="footer">
+      <button class="btn" onclick="{ props.onClick }" type="button">Cancel</button>
+      <button class="btn btn--danger" onclick="{ deleteImages }" type="button">Delete</button>
     </div>
-    <div class="material-popup-content">
-      <ul>
-        <li each="{ image in displayImagesToDelete(props.toDelete, props.tags) }">{ image.name }:{ image.tag }</li>
-      </ul>
-    </div>
-    <div class="material-popup-action">
-      <material-button
-        class="dialog-button"
-        waves-color="var(--hover-background)"
-        onClick="{ deleteImages }"
-        color="inherit"
-        text-color="var(--primary-text)"
-      >
-        Delete
-      </material-button>
-      <material-button
-        class="dialog-button"
-        waves-color="var(--hover-background)"
-        onClick="{ props.onClick }"
-        color="inherit"
-        text-color="var(--primary-text)"
-      >
-        Cancel
-      </material-button>
-    </div>
-  </material-popup>
+  </app-dialog>
   <script>
     import { Http } from '../../scripts/http';
     import router from '../../scripts/router';
+    import { ERROR_CAN_NOT_READ_CONTENT_DIGEST } from '../../scripts/utils';
     export default {
       displayImagesToDelete(toDelete, tags) {
         const contentDigests = new Set();
@@ -136,15 +103,28 @@
     };
   </script>
   <style>
-    :host {
-      color: #000;
-      list-style-type: disc;
-      margin-block-start: 0.7em;
+    :host .delete-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      max-height: 240px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: var(--fs-md);
     }
 
-    :host material-popup .content .material-popup-content {
-      overflow-y: auto;
-      max-height: 250px;
+    :host .warning {
+      color: var(--text-secondary);
+      font-size: var(--fs-md);
+      margin: var(--space-4) 0 0;
+    }
+
+    :host .warning code {
+      background-color: var(--surface-muted);
+      padding: 1px var(--space-1);
+      border-radius: var(--radius-sm);
+      font-size: var(--fs-sm);
     }
   </style>
 </confirm-delete-image>

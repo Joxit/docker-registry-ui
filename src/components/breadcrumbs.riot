@@ -1,0 +1,62 @@
+<breadcrumbs>
+  <nav aria-label="Breadcrumb" class="breadcrumbs" if="{ state.show }">
+    <ol>
+      <li>
+        <a href="{ router.home() }" title="Repositories">
+          <i class="material-icons">view_list</i>
+          <span>Repositories</span>
+        </a>
+      </li>
+      <template each="{ part in state.namespaceParts }">
+        <li class="separator" aria-hidden="true">/</li>
+        <li><span>{ part }</span></li>
+      </template>
+      <template if="{ state.imageName }">
+        <li class="separator" aria-hidden="true">/</li>
+        <li>
+          <a href="{ router.taglist(state.image) }" title="{ state.image }">{ state.imageName }</a>
+        </li>
+      </template>
+      <template if="{ state.tag }">
+        <li class="separator" aria-hidden="true">/</li>
+        <li aria-current="page"><span>{ state.tag }</span></li>
+      </template>
+    </ol>
+  </nav>
+  <script>
+    import router from '../scripts/router';
+    import { getCurrentRoute, router as routeRouter } from '@riotjs/route';
+
+    const parseRoute = (route) => {
+      route = route || '';
+      const tagList = route.match(/taglist\/(.*)$/);
+      if (tagList) {
+        return { image: tagList[1] };
+      }
+      const tagHistory = route.match(/taghistory\/image\/(.*)\/tag\/([^/]*)\/?$/);
+      if (tagHistory) {
+        return { image: tagHistory[1], tag: tagHistory[2] };
+      }
+      return {};
+    };
+
+    export default {
+      onMounted(props, state) {
+        const update = () => {
+          const { image, tag } = parseRoute(getCurrentRoute());
+          const imageParts = (image || '').split('/').filter(Boolean);
+          this.update({
+            show: Boolean(image),
+            image,
+            tag: tag || '',
+            imageName: imageParts[imageParts.length - 1] || '',
+            namespaceParts: imageParts.slice(0, -1),
+          });
+        };
+        routeRouter.on.value(update);
+        update();
+      },
+      router,
+    };
+  </script>
+</breadcrumbs>

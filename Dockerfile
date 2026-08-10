@@ -20,7 +20,6 @@ WORKDIR /usr/share/nginx/html/
 
 ENV NGINX_PROXY_HEADER_Host '$http_host'
 ENV NGINX_LISTEN_PORT '80'
-ENV SHOW_CATALOG_NB_TAGS 'false'
 
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY bin/90-docker-registry-ui.sh /docker-entrypoint.d/90-docker-registry-ui.sh

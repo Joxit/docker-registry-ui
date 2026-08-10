@@ -12,7 +12,7 @@ This project aims to provide a simple and complete user interface for your priva
 
 You may need the [migration guide from 1.x to 2.x](https://github.com/Joxit/docker-registry-ui/wiki/Migrating-from-1.x-to-2.x) or [the 1.x readme](https://github.com/Joxit/docker-registry-ui/blob/8fe3adf12540d1316cb57628ebe86a392a703d90/README.md). The project support both [docker registry v2](https://github.com/distribution/distribution/releases/tag/v2.0.0) and [docker registry v3](https://github.com/distribution/distribution/releases/tag/v3.0.0).
 
-This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library and [riot-mui](https://github.com/kysonic/riot-mui) components.
+This web user interface uses [Riot](https://github.com/Riot/riot) the react-like user interface micro-library with a custom, dependency-free design system (modern SaaS look: sidebar shell, data tables, light/dark themes).
 
 If you like my work and want to support it, don't hesitate to [sponsor me](https://github.com/sponsors/Joxit).
 
@@ -108,7 +108,7 @@ Some env options are available for use this interface for **only one server** (w
 - `NGINX_RESOLVER`: Add [`resolver`](http://nginx.org/en/docs/http/ngx_http_core_module.html#resolver) directive to the nginx configuration for dynamic dns resolving. The value when you are using a docker network is `127.0.0.11`, you can set a custom DNS server too with a valid time. This is not needed when you are using kubernetes. (see [#333](https://github.com/Joxit/docker-registry-ui/issues/333) and [#339](https://github.com/Joxit/docker-registry-ui/issues/339)). (default: ``). Since 2.5.5
 - `DEFAULT_REGISTRIES`: List of comma separated registry URLs (e.g `http://registry.example.com,http://registry:5000`), available only when `SINGLE_REGISTRY=false` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)). (default: ` `). Since 2.1.0
 - `READ_ONLY_REGISTRIES`: Deactivate dialog for remove and add new registries, available only when `SINGLE_REGISTRY=false` (see [#219](https://github.com/Joxit/docker-registry-ui/pull/219)). (default: `false`). Since 2.1.0
-- `SHOW_CATALOG_NB_TAGS`: Show number of tags per images on catalog page and hide images with 0 tags. This will produce + nb images requests, **not recommended on large registries** (see [#161](https://github.com/Joxit/docker-registry-ui/issues/161) and [#239](https://github.com/Joxit/docker-registry-ui/pull/239)). (default: `false`). Since 2.2.0
+- `SHOW_CATALOG_NB_TAGS`: Show number of tags per image on the catalog page. Tag counts are fetched in the background and the badges fill in as each count loads. Set to `false` on very large registries to skip the extra tag-count requests and hide the badges (see [#161](https://github.com/Joxit/docker-registry-ui/issues/161) and [#239](https://github.com/Joxit/docker-registry-ui/pull/239)). (default: `true`). Since 2.2.0
 - `HISTORY_CUSTOM_LABELS`: Expose custom labels in history page, custom labels will be processed like maintainer label (see [#160](https://github.com/Joxit/docker-registry-ui/issues/160) and [#240](https://github.com/Joxit/docker-registry-ui/pull/240)). Since 2.2.0
 - `USE_CONTROL_CACHE_HEADER`: Use `Control-Cache` header and set to `no-store, no-cache`. This will avoid some issues on multi-arch images (see [#260](https://github.com/Joxit/docker-registry-ui/issues/260) and [#265](https://github.com/Joxit/docker-registry-ui/pull/265)). This option requires registry configuration: `Access-Control-Allow-Headers` with `Cache-Control`. (default: `false`). Since 2.3.0
 - `THEME`: Chose your default theme, could be `dark`, `light` or `auto` (see [#283](https://github.com/Joxit/docker-registry-ui/pull/283)). When auto is selected, you will have a switch to manually change from light to dark and vice-versa (see [#291](https://github.com/Joxit/docker-registry-ui/pull/291)). (default: `auto`). Since 2.4.0
@@ -126,21 +126,21 @@ There are some examples with [docker-compose](https://docs.docker.com/compose/) 
 
 ### Theme options
 
-This featureswas added to version 2.4.0. See more about this in [#283](https://github.com/Joxit/docker-registry-ui/pull/283).
+The default palettes follow a modern SaaS look (neutral surfaces + green accent). The `THEME_*` variables override the corresponding design token; defaults come from `src/styles/tokens.scss`.
 
-| Environment variable | light theme value | dark theme value |
-| --- | --- | --- |
-| `THEME_PRIMARY_TEXT` | `#25313b` | `#98a8bd` |
-| `THEME_NEUTRAL_TEXT` | `#777777` | `#6d7fab` |
-| `THEME_BACKGROUND` | `#ffffff` | `#22272e` |
-| `THEME_HOVER_BACKGROUND` | `#eeeeee` | `#343a4b` |
-| `THEME_ACCENT_TEXT` | `#5f7796` | `#5c88ff` |
-| `THEME_HEADER_TEXT` | `#ffffff` | `#ffffff` |
-| `THEME_HEADER_ACCENT_TEXT` | `#7b9ac2` | `#7ea1ff` |
-| `THEME_HEADER_BACKGROUND` | `#25313b` | `#333a45` |
-| `THEME_FOOTER_TEXT` | `#ffffff` | `#ffffff` |
-| `THEME_FOOTER_NEUTRAL_TEXT` | `#adbacd` | `#98afcf` |
-| `THEME_FOOTER_BACKGROUND` | `#344251` | `#344251` |
+| Environment variable | design token | light theme value | dark theme value |
+| --- | --- | --- | --- |
+| `THEME_PRIMARY_TEXT` | `--text-primary` | `#0f172a` | `#e6edf6` |
+| `THEME_NEUTRAL_TEXT` | `--text-secondary` | `#475569` | `#9fb2c8` |
+| `THEME_BACKGROUND` | `--surface` | `#ffffff` | `#111a2c` |
+| `THEME_HOVER_BACKGROUND` | `--surface-hover` | `#eaf0f4` | `#1d2b44` |
+| `THEME_ACCENT_TEXT` | `--accent` | `#15803d` | `#22c55e` |
+| `THEME_HEADER_TEXT` | `--header-text` | `#0f172a` | `#e6edf6` |
+| `THEME_HEADER_ACCENT_TEXT` | `--header-accent-text` | `#475569` | `#9fb2c8` |
+| `THEME_HEADER_BACKGROUND` | `--header-background` | `#ffffff` | `#111a2c` |
+| `THEME_FOOTER_TEXT` | `--footer-text` | `#475569` | `#9fb2c8` |
+| `THEME_FOOTER_NEUTRAL_TEXT` | `--footer-neutral-text` | `#8b96a5` | `#667b99` |
+| `THEME_FOOTER_BACKGROUND` | `--footer-background` | `#ffffff` | `#111a2c` |
 
 ## Recommended Docker Registry Usage
 

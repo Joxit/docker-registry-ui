@@ -26,107 +26,103 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     is-registry-secured="{ props.isRegistrySecured }"
     on-image-deleted="{ props.onImageDeleted }"
   ></confirm-delete-image>
-  <material-card class="taglist">
-    <table style="border: none">
-      <thead>
-        <tr>
-          <th
-            class="creation-date { (state.desc && state.orderType === 'date') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
-            onclick="{() => onPageReorder('date') }"
-          >
-            Creation date
-          </th>
-          <th
-            class="image-size { (state.desc && state.orderType === 'size') ? 'material-card-th-sorted-descending' : 'material-card-th-sorted-ascending' }"
-            onclick="{() => onPageReorder('size') }"
-          >
-            Size
-          </th>
-          <th id="image-content-digest-header" if="{ props.showContentDigest }">Content Digest</th>
 
-          <th
-            id="image-tag-header"
-            class="{ props.asc ? 'material-card-th-sorted-ascending' : 'material-card-th-sorted-descending' }"
-            onclick="{ onReverseOrder }"
-          >
-            Tag
-          </th>
-          <th class="architectures">Arch</th>
-          <th class="show-tag-history" if="{ props.showTagHistory }">History</th>
-          <th
-            class="remove-tag { state.toDelete.size > 0 && !state.singleDeleteAction ? 'delete' : '' }"
-            if="{ props.isImageRemoveActivated }"
-          >
-            <material-checkbox
-              class="indeterminate"
-              checked="{ state.multiDelete }"
-              if="{ state.toDelete.size === 0 || state.singleDeleteAction }"
-              title="Toggle multi-delete. Alt+Click to select all tags."
-              onChange="{ onRemoveImageHeaderChange }"
-            >
-            </material-checkbox>
-            <material-button
-              if="{ state.toDelete.size > 0 && !state.singleDeleteAction }"
-              waves-center="true"
-              color="inherit"
-              text-color="var(--neutral-background)"
-              waves-color="var(--hover-background)"
-              title="This will delete selected images."
-              onClick="{ deleteImages }"
-              icon
-            >
-              <i class="material-icons">delete</i>
-            </material-button>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr each="{ image in getPage(props.tags, props.page) }" if="{ matchSearch(props.filterResults, image.tag) }">
-          <td class="creation-date">
-            <image-date image="{ image }"></image-date>
-          </td>
-          <td class="image-size">
-            <image-size image="{ image }"></image-size>
-          </td>
-          <td if="{ props.showContentDigest }">
-            <image-content-digest image="{ image }"></image-content-digest>
-            <copy-to-clipboard
-              target="digest"
-              image="{ image }"
-              pull-url="{ props.pullUrl }"
-              on-notify="{ props.onNotify }"
-            ></copy-to-clipboard>
-          </td>
-          <td>
-            <image-tag image="{ image }"></image-tag>
-            <copy-to-clipboard
-              target="tag"
-              image="{ image }"
-              pull-url="{ props.pullUrl }"
-              on-notify="{ props.onNotify }"
-            ></copy-to-clipboard>
-          </td>
-          <td class="architectures">
-            <architectures image="{ image }"></architectures>
-          </td>
-          <td class="show-tag-history" if="{ props.showTagHistory }">
-            <tag-history-button image="{ image }"></tag-history-button>
-          </td>
-          <td if="{ props.isImageRemoveActivated }" class="remove-tag">
-            <remove-image
-              multi-delete="{ state.multiDelete }"
-              image="{ image }"
-              registry-url="{ props.registryUrl }"
-              handleCheckboxChange="{ onRemoveImageChange }"
-              checked="{ state.toDelete.has(image) }"
-              on-notify="{ props.onNotify }"
-              on-authentication="{ props.onAuthentication }"
-            ></remove-image>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </material-card>
+  <div class="selection-bar" if="{ state.toDelete.size > 0 && !state.singleDeleteAction }">
+    <span class="selection-count">{ state.toDelete.size } selected</span>
+    <span class="selection-actions">
+      <button class="btn btn--sm" onclick="{ clearSelection }" type="button">Clear</button>
+      <button class="btn btn--danger btn--sm" onclick="{ deleteImages }" type="button">Delete</button>
+    </span>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th class="select-col" if="{ props.isImageRemoveActivated }" aria-label="Select tags">
+          <app-checkbox
+            checked="{ state.multiDelete }"
+            indeterminate="{ state.toDelete.size > 0 }"
+            on-change="{ onRemoveImageHeaderChange }"
+            aria-label="Toggle multi-delete. Alt+Click to select all tags."
+            title="Toggle multi-delete. Alt+Click to select all tags."
+          ></app-checkbox>
+        </th>
+        <th
+          class="is-sortable { !state.orderType ? (props.asc ? 'is-sorted-asc' : 'is-sorted-desc') : '' }"
+          onclick="{ onReverseOrder }"
+          aria-sort="{ !state.orderType ? (props.asc ? 'ascending' : 'descending') : 'none' }"
+        >
+          Tag
+          <i if="{ getSortIcon('tag') }" class="material-icons sort-icon">{ getSortIcon('tag') }</i>
+        </th>
+        <th
+          class="is-sortable { state.orderType === 'date' ? (state.desc ? 'is-sorted-desc' : 'is-sorted-asc') : '' }"
+          onclick="{ () => onPageReorder('date') }"
+          aria-sort="{ state.orderType === 'date' ? (state.desc ? 'descending' : 'ascending') : 'none' }"
+        >
+          Creation date
+          <i if="{ getSortIcon('date') }" class="material-icons sort-icon">{ getSortIcon('date') }</i>
+        </th>
+        <th
+          class="is-sortable { state.orderType === 'size' ? (state.desc ? 'is-sorted-desc' : 'is-sorted-asc') : '' }"
+          onclick="{ () => onPageReorder('size') }"
+          aria-sort="{ state.orderType === 'size' ? (state.desc ? 'descending' : 'ascending') : 'none' }"
+        >
+          Size
+          <i if="{ getSortIcon('size') }" class="material-icons sort-icon">{ getSortIcon('size') }</i>
+        </th>
+        <th class="architectures">Arch</th>
+        <th class="digest-col" if="{ props.showContentDigest }">Content digest</th>
+        <th class="history-col" if="{ props.showTagHistory }">History</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr each="{ image in getPage(props.tags, props.page) }" if="{ matchSearch(props.filterResults, image.tag) }">
+        <td class="select-col" if="{ props.isImageRemoveActivated }" data-label="Select">
+          <remove-image
+            multi-delete="{ state.multiDelete }"
+            image="{ image }"
+            registry-url="{ props.registryUrl }"
+            handleCheckboxChange="{ onRemoveImageChange }"
+            checked="{ state.toDelete.has(image) }"
+            on-notify="{ props.onNotify }"
+            on-authentication="{ props.onAuthentication }"
+          ></remove-image>
+        </td>
+        <td class="tag-col" data-label="Tag">
+          <image-tag image="{ image }"></image-tag>
+          <copy-to-clipboard
+            target="tag"
+            image="{ image }"
+            pull-url="{ props.pullUrl }"
+            on-notify="{ props.onNotify }"
+          ></copy-to-clipboard>
+        </td>
+        <td class="creation-date" data-label="Creation date">
+          <image-date image="{ image }"></image-date>
+        </td>
+        <td class="image-size" data-label="Size">
+          <image-size image="{ image }"></image-size>
+        </td>
+        <td class="architectures" data-label="Arch">
+          <architectures image="{ image }"></architectures>
+        </td>
+        <td class="digest-col" if="{ props.showContentDigest }" data-label="Content digest">
+          <image-content-digest image="{ image }"></image-content-digest>
+          <copy-to-clipboard
+            target="digest"
+            image="{ image }"
+            pull-url="{ props.pullUrl }"
+            on-notify="{ props.onNotify }"
+          ></copy-to-clipboard>
+        </td>
+        <td class="history-col" if="{ props.showTagHistory }" data-label="History">
+          <tag-history-button image="{ image }"></tag-history-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   <script>
     import { getPage } from '../../scripts/utils';
     import ImageDate from './image-date.riot';
@@ -173,6 +169,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           confirmDeleteImage: true,
         });
       },
+      clearSelection() {
+        this.state.toDelete.clear();
+        this.update({
+          toDelete: this.state.toDelete,
+          multiDelete: false,
+          selectedImage: undefined,
+        });
+      },
       onConfirmDeleteImageClick() {
         if (this.state.singleDeleteAction) {
           this.state.toDelete.clear();
@@ -194,8 +198,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             selectedImage: undefined,
           });
         } else {
+          const checked = event.target.checked;
+          if (!checked) {
+            this.state.toDelete.clear();
+          }
           this.update({
-            multiDelete: event.target.checked,
+            multiDelete: checked,
+            toDelete: this.state.toDelete,
             selectedImage: undefined,
           });
         }
@@ -268,6 +277,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           desc: (this.state.orderType && this.state.orderType !== type) || !this.state.desc,
         });
       },
+      getSortIcon(column) {
+        if (column === 'tag' && !this.state.orderType) {
+          return this.props.asc ? 'arrow_upward' : 'arrow_downward';
+        }
+        if (this.state.orderType === column) {
+          return this.state.desc ? 'arrow_downward' : 'arrow_upward';
+        }
+        return '';
+      },
       getPage(tags, page) {
         const sortedTags = getPage(tags, page, this.props.tagsPerPage);
         if (this.state.orderType === 'date') {
@@ -286,8 +304,159 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     export { ACTION_CHECK_TO_DELETE, ACTION_UNCHECK_TO_DELETE, ACTION_DELETE_IMAGE };
   </script>
   <style>
-    tag-table table th.architectures {
+    :host {
+      display: block;
+      position: relative;
+    }
+
+    :host th.is-sorted-asc,
+    :host th.is-sorted-desc {
+      color: var(--text-primary);
+    }
+
+    :host th .sort-icon {
+      font-size: 15px;
+      vertical-align: middle;
+    }
+
+    :host .select-col {
+      width: 44px;
       text-align: center;
+    }
+
+    :host .tag-col {
+      max-width: 40vw;
+      font-family: var(--font-mono);
+      font-size: var(--fs-md);
+    }
+
+    :host .creation-date {
+      width: 12em;
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+    }
+
+    :host .image-size {
+      width: 7em;
+      font-family: var(--font-mono);
+      font-size: var(--fs-sm);
+    }
+
+    :host .architectures {
+      width: 10em;
+    }
+
+    :host .digest-col {
+      max-width: 24em;
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+
+    :host .history-col {
+      width: 56px;
+      text-align: center;
+    }
+
+    :host .selection-bar {
+      position: fixed;
+      bottom: var(--space-6);
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: calc(100% - var(--space-8));
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      background-color: var(--text-primary);
+      color: var(--bg);
+      box-shadow: var(--shadow-lg);
+      z-index: 50;
+    }
+
+    :host .selection-count {
+      font-size: var(--fs-lg);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    :host .selection-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    :host .selection-bar .btn--sm {
+      color: var(--bg);
+    }
+
+    :host .selection-bar .btn--sm:hover {
+      background-color: rgba(128, 128, 128, 0.2);
+      color: var(--bg);
+    }
+
+    :host .selection-bar .btn--danger {
+      color: var(--on-danger);
+    }
+
+    @media screen and (max-width: 700px) {
+      :host thead {
+        display: none;
+      }
+
+      :host tbody tr {
+        display: flex;
+        flex-direction: column;
+        padding: var(--space-3);
+        margin: var(--space-3) var(--space-2);
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+      }
+
+      :host tbody tr:hover {
+        background-color: var(--surface);
+      }
+
+      :host td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-4);
+        min-height: 36px;
+        padding: var(--space-1) var(--space-2);
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+      }
+
+      :host td:last-child {
+        border-bottom: none;
+      }
+
+      :host td::before {
+        content: attr(data-label);
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        color: var(--text-muted);
+        flex-shrink: 0;
+      }
+
+      :host .select-col {
+        position: absolute;
+        top: var(--space-2);
+        right: var(--space-2);
+        width: auto;
+      }
+
+      :host .select-col::before {
+        display: none;
+      }
+
+      :host .tag-col {
+        max-width: none;
+      }
     }
   </style>
 </tag-table>

@@ -1,0 +1,31 @@
+<text-field>
+  <div class="text-field { state.value ? 'not-empty' : '' }">
+    <span class="field-icon" if="{ props.icon }"><i class="material-icons">{ props.icon }</i></span>
+    <input
+      type="{ props.type || 'text' }"
+      value="{ props.value }"
+      onkeyup="{ onKeyUp }"
+      placeholder="{ props.placeholder }"
+      aria-label="{ props.label || props.placeholder || 'Input' }"
+    />
+  </div>
+  <script>
+    export default {
+      onBeforeMount(props, state) {
+        state.value = props.value || '';
+      },
+      onBeforeUpdate(props, state) {
+        const input = this.$('input');
+        if (input) {
+          state.value = input.value;
+        }
+      },
+      onKeyUp(event) {
+        this.update({ value: event.target.value });
+        if (this.props.onKeyUp) {
+          this.props.onKeyUp(event);
+        }
+      },
+    };
+  </script>
+</text-field>

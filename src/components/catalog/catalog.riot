@@ -15,50 +15,102 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <catalog>
-  <material-card ref="catalog-tag" class="catalog header">
-    <div class="material-card-title-action">
-      <h2>
-        Repositories of { state.registryName }
-        <div class="item-count">{ state.nImages } images in { state.nRepositories } repositories</div>
-      </h2>
+  <div class="panel catalog-header">
+    <div class="panel-header">
+      <div class="catalog-title">
+        <h2 class="panel-title">
+          Repositories
+          <span class="panel-subtitle">of { state.registryName }</span>
+        </h2>
+        <label class="tagless-toggle" if="{ props.showCatalogNbTags }">
+          <app-checkbox
+            checked="{ state.showTagless }"
+            on-change="{ onToggleTagless }"
+            aria-label="Show images without tags"
+          ></app-checkbox>
+          <span>Show images without tags</span>
+        </label>
+      </div>
+      <div class="catalog-stats">
+        <span class="badge badge--accent">{ state.nImages } images</span>
+        <span class="badge badge--neutral">{ state.nRepositories } repositories</span>
+      </div>
     </div>
-  </material-card>
-  <div if="{ !state.loadend }" class="spinner-wrapper">
-    <material-spinner></material-spinner>
   </div>
-  <catalog-element
-    each="{ item in state.repositories }"
-    item="{ item }"
-    filter-results="{ props.filterResults }"
-    registry-url="{ props.registryUrl }"
-    on-notify="{ props.onNotify }"
-    on-authentication="{ props.onAuthentication }"
-    show-catalog-nb-tags="{ props.showCatalogNbTags }"
-    catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
-    z-index="{ props.catalogMaxBranches - props.catalogMinBranches + 2 }"
-    is-registry-secured="{ props.isRegistrySecured }"
-  ></catalog-element>
+
+  <div class="panel" if="{ !state.loadend }">
+    <div class="skeleton-row" each="{ i in skeletonRows }">
+      <span class="skeleton skeleton-icon"></span>
+      <span class="skeleton skeleton-line { i % 3 === 0 ? 'wide' : '' }"></span>
+    </div>
+  </div>
+
+  <div if="{ state.loadend && state.repositories.length === 0 }" class="empty-state">
+    <span class="empty-icon"><i class="material-icons">inbox</i></span>
+    <h3>No repositories</h3>
+    <p>This registry has no repositories yet. Push your first image to get started.</p>
+  </div>
+
+  <div class="list-group" if="{ state.loadend && state.repositories.length > 0 }">
+    <catalog-element
+      each="{ item in state.repositories }"
+      item="{ item }"
+      filter-results="{ props.filterResults }"
+      registry-url="{ props.registryUrl }"
+      on-notify="{ props.onNotify }"
+      on-authentication="{ props.onAuthentication }"
+      show-catalog-nb-tags="{ props.showCatalogNbTags }"
+      show-tagless="{ state.showTagless }"
+      counts="{ state.counts }"
+      catalog-default-expanded="{ props.catalogDefaultExpanded || state.nRepositories === 1 }"
+      is-registry-secured="{ props.isRegistrySecured }"
+    ></catalog-element>
+  </div>
+
   <script>
     import CatalogElement from './catalog-element.riot';
     import { Http } from '../../scripts/http';
     import { getBranching } from '../../scripts/repositories';
     import { getRegistryServers } from '../../scripts/utils';
 
+    const SHOW_TAGLESS_KEY = 'registryUiShowTagless';
+
+    // Tag counts arrive one response at a time. Flushing them on a short
+    // interval bounds the number of full-catalog re-renders instead of doing
+    // one per repository, which is O(N^2) work on a large registry.
+    const COUNTS_FLUSH_MS = 100;
+
+    // Collect every leaf image name from the branched repository tree.
+    const collectImages = (items, out = []) => {
+      items.forEach((item) => {
+        if (typeof item === 'string') {
+          out.push(item);
+        } else if (item.images) {
+          collectImages(item.images, out);
+        }
+      });
+      return out;
+    };
+
     export default {
       components: {
         CatalogElement,
       },
+      skeletonRows: [0, 1, 2, 3, 4, 5],
       state: {
         registryName: '',
         length: 0,
         loadend: false,
         repositories: [],
         registryUrl: '',
+        counts: {},
+        showTagless: true,
       },
 
       onBeforeMount(props) {
         this.state.registryName = props.registryName;
         this.state.catalogElementsLimit = props.catalogElementsLimit;
+        this.state.showTagless = localStorage.getItem(SHOW_TAGLESS_KEY) !== 'false';
         try {
           this.state.branching = getBranching(props.catalogMinBranches, props.catalogMaxBranches);
         } catch (e) {
@@ -71,11 +123,69 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       onUpdated(props, state) {
         this.display(props, state);
       },
+      onToggleTagless(event) {
+        const showTagless = event.target.checked;
+        localStorage.setItem(SHOW_TAGLESS_KEY, String(showTagless));
+        this.update({ showTagless });
+      },
+      onBeforeUnmount() {
+        this.cancelPendingCounts();
+      },
+      cancelPendingCounts() {
+        if (this.countsTimer) {
+          clearTimeout(this.countsTimer);
+          this.countsTimer = null;
+        }
+        this.pendingCounts = null;
+      },
+      // Accumulate counts and render them in batches. `null` means the count
+      // could not be fetched, `undefined` means it is still in flight.
+      queueCount(image, count, registryUrl) {
+        if (registryUrl !== this.state.registryUrl) {
+          return;
+        }
+        this.pendingCounts = this.pendingCounts || {};
+        this.pendingCounts[image] = count;
+        if (this.countsTimer) {
+          return;
+        }
+        this.countsTimer = setTimeout(() => {
+          this.countsTimer = null;
+          const pending = this.pendingCounts;
+          this.pendingCounts = null;
+          if (pending && registryUrl === this.state.registryUrl) {
+            this.update({ counts: { ...this.state.counts, ...pending } });
+          }
+        }, COUNTS_FLUSH_MS);
+      },
+      fetchNbTags(image, props) {
+        return new Promise((resolve) => {
+          const oReq = new Http({
+            onAuthentication: props.onAuthentication,
+            withCredentials: props.isRegistrySecured,
+          });
+          oReq.addEventListener('loadend', function () {
+            if (this.status === 200) {
+              resolve({ count: (JSON.parse(this.responseText).tags || []).length });
+            } else if (this.status === 404) {
+              resolve({ error: 'Server not found' });
+            } else {
+              resolve({ error: this.responseText });
+            }
+          });
+          oReq.addEventListener('error', function () {
+            resolve({ error: this.getErrorMessage() });
+          });
+          oReq.open('GET', props.registryUrl + '/v2/' + image + '/tags/list');
+          oReq.send();
+        });
+      },
       display(props, state) {
         if (props.registryUrl === state.registryUrl) {
           return;
         }
         state.registryUrl = props.registryUrl;
+        this.cancelPendingCounts();
         let repositories = [];
         let nImages = 0;
         const self = this;
@@ -111,12 +221,33 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           self.props.onNotify(this.getErrorMessage(), true);
         });
         oReq.addEventListener('loadend', function () {
+          // Render the list immediately; tag counts are fetched in the
+          // background and the badges fill in as each count arrives.
           self.update({
             repositories,
             nRepositories: repositories.length,
             nImages,
+            counts: {},
             loadend: true,
           });
+          if (props.showCatalogNbTags && repositories.length > 0) {
+            const registryUrl = props.registryUrl;
+            // A registry that rejects `/tags/list` rejects it for every
+            // repository; report the reason once instead of N times.
+            let notified = false;
+            collectImages(repositories).forEach((image) => {
+              self.fetchNbTags(image, props).then(({ count, error }) => {
+                if (error !== undefined) {
+                  if (!notified) {
+                    notified = true;
+                    self.props.onNotify(error, true);
+                  }
+                  return self.queueCount(image, null, registryUrl);
+                }
+                self.queueCount(image, count, registryUrl);
+              });
+            });
+          }
         });
         oReq.open('GET', catalogUrl);
         oReq.send();
@@ -124,12 +255,40 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    catalog {
+    :host {
       display: block;
-      margin: auto;
     }
-    catalog > material-card {
-      width: 100%;
+
+    :host .catalog-header {
+      margin-bottom: var(--space-4);
+    }
+
+    :host .catalog-stats {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    :host .catalog-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-4);
+    }
+
+    :host .tagless-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--fs-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    :host .list-group {
+      animation: fade-in-up var(--dur-normal) var(--ease-out);
     }
   </style>
 </catalog>

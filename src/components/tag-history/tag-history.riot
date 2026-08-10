@@ -15,66 +15,61 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-history>
-  <material-card>
-    <div class="material-card-title-action">
-      <material-button
-        text-color="var(--neutral-text)"
-        color="inherit"
-        waves-color="var(--hover-background)"
-        waves-center="true"
-        rounded="true"
-        href="{ toTaglist() }"
-        icon
-      >
-        <i class="material-icons">arrow_back</i>
-      </material-button>
-      <h2>History of { props.image }:{ props.tag } <i class="material-icons">history</i></h2>
-      <material-button
-        text-color="var(--accent-text)"
-        color="inherit"
-        waves-color="var(--hover-background)"
-        waves-center="true"
-        rounded="true"
-        outlined
-        onClick="{ showDockerfile }"
-      >
-        Dockerfile
-      </material-button>
+  <div class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">
+        History
+        <span class="panel-subtitle">of { props.image }:{ props.tag }</span>
+      </h2>
+      <button class="btn" onclick="{ showDockerfile }" type="button">Dockerfile</button>
     </div>
-  </material-card>
-  <div if="{ !state.loadend }" class="spinner-wrapper">
-    <material-spinner></material-spinner>
   </div>
+
+  <div if="{ !state.loadend }" class="spinner-wrap">
+    <div class="spinner"></div>
+  </div>
+
+  <app-tabs
+    if="{ state.archs && state.loadend }"
+    tabs="{ state.archs }"
+    on-tab-changed="{ onTabChanged }"
+    aria-label="Architectures"
+  ></app-tabs>
+
   <dockerfile
     opened="{ state.showDockerfile }"
     on-close="{ onDockerfileClose }"
     elements="{ state.elements }"
   ></dockerfile>
 
-  <material-tabs
-    if="{ state.archs && state.loadend }"
-    color="var(--background)"
-    text-color="var(--primary-text)"
-    text-selected-color="var(--accent-text)"
-    line-color="var(--background)"
-    line-selected-color="var(--accent-text)"
-    useLine="{ true }"
-    tabs="{ state.archs }"
-    onTabChanged="{ onTabChanged }"
-  ></material-tabs>
-
-  <material-card each="{ element in state.elements }">
-    <tag-history-element
-      each="{ entry in element }"
-      if="{ entry.value && entry.value.length > 0}"
-      entry="{ entry }"
-    ></tag-history-element>
-  </material-card>
+  <div class="panel history-section" if="{ state.loadend }">
+    <div class="panel-header">
+      <h3 class="section-title">Image configuration</h3>
+    </div>
+    <div class="panel-body section-grid">
+      <tag-history-element
+        each="{ entry in state.elements[0] }"
+        if="{ entry.value && entry.value.length > 0}"
+        entry="{ entry }"
+      ></tag-history-element>
+    </div>
+  </div>
+  <div class="panel history-section" each="{ (element, idx) in state.elements }" if="{ idx > 0 }">
+    <div class="panel-header">
+      <h3 class="section-title">Layer { idx }</h3>
+    </div>
+    <div class="panel-body section-grid">
+      <tag-history-element
+        each="{ entry in element }"
+        if="{ entry.value && entry.value.length > 0}"
+        entry="{ entry }"
+      ></tag-history-element>
+    </div>
+  </div>
   <script>
     import { DockerImage } from '../../scripts/docker-image';
     import { bytesToSize } from '../../scripts/utils';
     import Dockerfile from '../dialogs/dockerfile.riot';
-    import router from '../../scripts/router';
     import TagHistoryElement from './tag-history-element.riot';
     export default {
       components: {
@@ -155,9 +150,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         this.update({
           archs,
         });
-      },
-      toTaglist() {
-        return router.taglist(this.props.image);
       },
       showDockerfile() {
         this.update({ showDockerfile: true });
@@ -287,14 +279,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    h2 {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
+    :host app-tabs {
+      margin: var(--space-4) 0;
     }
-    h2 .material-icons {
-      margin-left: .25em;
+
+    :host .history-section {
+      margin-bottom: var(--space-4);
+      animation: fade-in-up var(--dur-normal) var(--ease-out);
+    }
+
+    :host .section-title {
+      font-size: var(--fs-lg);
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    :host .section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-1) var(--space-6);
     }
   </style>
 </tag-history>

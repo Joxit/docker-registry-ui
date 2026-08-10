@@ -1,71 +1,37 @@
-<!--
-Copyright (C) 2016-2023 Jones Magloire @Joxit
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
--->
 <pagination>
-  <div class="container">
-    <div class="pagination-centered">
-      <material-button
-        aria-label="page-{ p.page }"
-        color="{ p.current ? 'var(--accent-text)' : 'rgba(0, 0, 0, 0 )' }"
-        text-color="{ p.current ? 'var(--accent-text)' : 'var(--primary-text)' }"
-        waves-color="rgba(158,158,158,.4)"
-        each="{ (p, idx) in props.pages}"
-        class="{ p.current ? 'current' : ''} { p['space-left'] ? 'space-left' : '' } { p['space-right'] ? 'space-right' : ''}"
-        onClick="{(e) => props.onPageUpdate(idx)}"
-        outlined
-      >
-        <i if="{ p.icon }" class="material-icons">{ p.icon }</i>
-        <template if="{ !p.icon }">{ p.page }</template>
-      </material-button>
-    </div>
+  <div class="pagination">
+    <button
+      each="{ (p, idx) in props.pages }"
+      class="btn btn--sm { p.current ? 'is-current' : '' }"
+      onclick="{(e) => props.onPageUpdate(idx)}"
+      aria-label="page-{ p.page }"
+      aria-current="{ p.current ? 'page' : null }"
+      type="button"
+    >
+      <i if="{ p.icon }" class="material-icons">{ p.icon }</i>
+      <template if="{ !p.icon }">{ p.page }</template>
+    </button>
   </div>
-  <script></script>
   <style>
-    :host .container {
+    :host .pagination {
       display: flex;
+      justify-content: center;
+      gap: 2px;
+      flex-wrap: wrap;
+      margin: var(--space-4) 0;
     }
 
-    :host .container .pagination-centered {
-      margin: auto;
+    :host .btn.is-current {
+      background-color: var(--accent-soft);
+      color: var(--accent);
     }
 
-    :host material-button > :first-child {
-      padding: 0;
-      min-width: 40px;
-      min-height: 44px;
+    :host .btn.is-current:hover {
+      background-color: var(--accent-soft-hover);
     }
 
-    :host material-button > :first-child .content {
-      display: flex;
-      align-content: center;
-      flex-direction: column;
-      font-size: 16px;
-      line-height: 42px;
-    }
-
-    :host material-button.current > :first-child.space-left {
-      margin-left: 85px;
-    }
-
-    :host material-button.current > :first-child.space-right {
-      margin-right: 85px;
-    }
-
-    :host material-button .content i.material-icons {
-      height: unset;
+    :host .btn .material-icons {
+      font-size: 18px;
     }
   </style>
 </pagination>

@@ -84,31 +84,44 @@
     :host {
       display: flex;
       flex-direction: row;
-      margin: 20px 3em;
+      margin: var(--space-5) 0;
     }
     :host .content {
       margin: auto;
       text-align: center;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-8);
+      max-width: 52em;
+    }
+    :host .content h1 {
+      margin: 0 0 var(--space-3);
+      font-size: var(--fs-4xl);
+      font-weight: 600;
+      color: var(--accent);
     }
     :host .content a {
-      color: var(--accent-text);
+      color: var(--accent);
     }
     :host .content a:visited {
-      color: var(--accent-text);
+      color: var(--accent);
     }
     :host .content p span {
-      color: var(--accent-text);
+      color: var(--accent);
       font-weight: 700;
     }
     :host .content h2 {
-      font-weight: 700;
+      font-weight: 600;
     }
     :host pre,
     code {
-      background-color: var(--hover-background);
-      font-family: 'Roboto Mono', monospace !important;
+      background-color: var(--surface-muted);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
       text-align: left;
-      border-radius: 5px;
+      border-radius: var(--radius-md);
     }
     code {
       padding: 0 0.5em;
@@ -117,7 +130,7 @@
       padding: 0.5em;
     }
     :host pre .keyword {
-      color: var(--accent-text);
+      color: var(--accent);
     }
   </style>
 </error-page>

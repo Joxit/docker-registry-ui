@@ -1,0 +1,46 @@
+<app-tabs>
+  <div class="tabs" role="tablist" aria-label="{ props.ariaLabel || 'Tabs' }">
+    <button
+      each="{ (tab, idx) in props.tabs }"
+      class="tab { idx === state.selected ? 'is-active' : '' }"
+      role="tab"
+      aria-selected="{ idx === state.selected }"
+      onclick="{ () => select(idx) }"
+      title="{ tab.title || tab }"
+      type="button"
+    >
+      { tab.title || tab }
+    </button>
+  </div>
+  <script>
+    export default {
+      onBeforeMount(props, state) {
+        state.selected = props.selected || 0;
+      },
+      // Clamp before the render so the highlighted tab is correct in this
+      // pass, then tell the parent once the DOM is settled so its own state
+      // stops describing the tab that went away.
+      onBeforeUpdate(props, state) {
+        const nTabs = (props.tabs && props.tabs.length) || 0;
+        if (state.selected >= nTabs) {
+          state.selected = 0;
+          state.notifyReset = nTabs > 0;
+        }
+      },
+      onUpdated(props, state) {
+        if (state.notifyReset) {
+          state.notifyReset = false;
+          if (props.onTabChanged) {
+            props.onTabChanged(props.tabs[state.selected], state.selected);
+          }
+        }
+      },
+      select(idx) {
+        this.update({ selected: idx });
+        if (this.props.onTabChanged) {
+          this.props.onTabChanged(this.props.tabs[idx], idx);
+        }
+      },
+    };
+  </script>
+</app-tabs>

@@ -68,51 +68,57 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     };
   </script>
   <style>
-    :host.Labels .value,
-    :host.Env .value {
-      margin-bottom: 0.5em;
-    }
-
-    :host i {
-      font-size: 20px;
-      padding: 0px;
-    }
-
-    :host.docker_version .headline .material-icons,
-    :host.docker_version .headline #docker_verion {
-      height: 24px;
-    }
-
     :host {
       display: block;
-      padding: 20px;
-      min-width: 100px;
-      min-height: 3em;
-      width: 420px;
-      float: left;
+      padding: var(--space-2) 0;
+      min-width: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    :host:last-child {
+      border-bottom: none;
+    }
+
+    :host .headline {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--fs-md);
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-1);
+    }
+
+    :host .headline i {
+      font-size: 18px;
+      color: var(--text-muted);
     }
 
     :host .content {
       overflow-x: auto;
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+      line-height: var(--lh-normal);
+      font-family: var(--font-mono);
+      word-break: break-all;
     }
 
-    :host.id .content {
-      overflow-x: initial;
+    :host .content .value {
+      padding: var(--space-1) 0;
     }
 
-    :host .headline {
-      height: 24px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      font-weight: bold;
+    :host.docker_version .headline .material-icons,
+    :host.docker_version .headline #docker_verion {
+      height: 18px;
     }
-    :host .headline * {
-      margin-right: 6px;
+
+    :host.docker_version .headline #docker_verion svg {
+      width: 18px;
+      height: 18px;
     }
 
     :host.id div.value {
-      font-size: 12px;
+      font-size: var(--fs-sm);
     }
   </style>
 </tag-history-element>

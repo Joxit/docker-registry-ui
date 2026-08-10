@@ -15,142 +15,129 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <docker-registry-ui>
-  <header>
-    <material-navbar>
-      <span class="logo">
-        <span><a href="{ router.home() }">{ props.dockerRegistryUiTitle.trim() || "Docker Registry UI" }</a></span>
+  <div class="app-shell">
+    <div class="app-main">
+      <header class="topbar">
+        <a class="brand" href="{ router.home() }" title="{ state.title }">
+          <span class="brand-icon"><i class="material-icons">view_in_ar</i></span>
+          <span class="brand-name">{ state.title }</span>
+        </a>
+        <breadcrumbs></breadcrumbs>
+        <div class="topbar-spacer"></div>
+        <search-bar on-search="{ onSearch }"></search-bar>
+        <registry-menu
+          if="{ props.singleRegistry !== 'true' }"
+          registry-url="{ state.registryUrl }"
+          read-only-registries="{ truthy(props.readOnlyRegistries) }"
+          on-notify="{ notifySnackbar }"
+          on-server-change="{ onServerChange }"
+        ></registry-menu>
         <version-notification
           if="{ falsy(props.enableVersionNotification) }"
           version="{ latest }"
           on-notify="{ notifySnackbar }"
         ></version-notification>
-      </span>
-      <div class="menu">
-        <search-bar on-search="{ onSearch }"></search-bar>
-        <dialogs-menu
-          if="{props.singleRegistry !== 'true'}"
-          on-notify="{ notifySnackbar }"
-          on-server-change="{ onServerChange }"
-          default-registries="{ props.defaultRegistries }"
-          read-only-registries="{ truthy(props.readOnlyRegistries) }"
-        ></dialogs-menu>
-      </div>
-    </material-navbar>
-  </header>
-  <main>
-    <error-page
-      if="{ state.pageError && !Array.isArray(state.pageError.errors) }"
-      code="{ state.pageError.code }"
-      status="{ state.pageError.status }"
-      message="{ state.pageError.message }"
-      url="{ state.pageError.url }"
-    ></error-page>
-    <error-page
-      if="{ state.pageError && Array.isArray(state.pageError.errors) }"
-      each="{ error in (state.pageError && state.pageError.errors) }"
-      code="{ error.code }"
-      detail="{ error.detail }"
-      message="{ error.message }"
-      url="{ state.pageError.url }"
-    ></error-page>
-    <router>
-      <route path="{baseRoute}">
-        <catalog
-          registry-url="{ state.registryUrl }"
-          registry-name="{ state.name }"
-          catalog-elements-limit="{ state.catalogElementsLimit }"
-          on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }"
-          on-authentication="{ onAuthentication }"
-          show-catalog-nb-tags="{ truthy(props.showCatalogNbTags) }"
-          catalog-default-expanded="{ truthy(props.catalogDefaultExpanded) }"
-          catalog-min-branches="{ props.catalogMinBranches }"
-          catalog-max-branches="{ props.catalogMaxBranches }"
-          is-registry-secured="{ truthy(props.isRegistrySecured) }"
-        ></catalog>
-      </route>
-      <route path="{baseRoute}taglist/(.*)">
-        <tag-list
-          registry-url="{ state.registryUrl }"
-          registry-name="{ state.name }"
-          pull-url="{ state.pullUrl }"
-          image="{ router.getTagListImage() }"
-          show-content-digest="{ truthy(props.showContentDigest) }"
-          show-tag-history="{ falsy(props.showTagHistory) }"
-          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }"
-          on-notify="{ notifySnackbar }"
-          filter-results="{ state.filter }"
-          on-authentication="{ onAuthentication }"
-          use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
-          taglist-order="{ props.taglistOrder }"
-          tags-per-page="{ props.tagsPerPage }"
-          is-registry-secured="{ truthy(props.isRegistrySecured) }"
-        ></tag-list>
-      </route>
-      <route path="{baseRoute}taghistory/(.*)">
-        <tag-history
-          registry-url="{ state.registryUrl }"
-          registry-name="{ state.name }"
-          pull-url="{ state.pullUrl }"
-          image="{ router.getTagHistoryImage() }"
-          tag="{ router.getTagHistoryTag() }"
-          is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }"
-          on-notify="{ notifySnackbar }"
-          on-authentication="{ onAuthentication }"
-          history-custom-labels="{ stringToArray(props.historyCustomLabels) }"
-          use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
-          is-registry-secured="{ truthy(props.isRegistrySecured) }"
-        ></tag-history>
-      </route>
-    </router>
-    <registry-authentication
-      realm="{ state.realm }"
-      scope="{ state.scope }"
-      service="{ state.service }"
-      on-close="{ onAuthenticationClose }"
-      on-authenticated="{ state.onAuthenticated }"
-      opened="{ state.authenticationDialogOpened }"
-    ></registry-authentication>
-    <material-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }"></material-snackbar>
-  </main>
-  <footer>
-    <material-footer mini="true">
-      <a class="material-footer-logo" href="https://joxit.github.io/docker-registry-ui/">
-        Docker Registry UI { version }
-      </a>
-      <ul>
-        <li>
-          <a href="https://github.com/Joxit/docker-registry-ui">Contribute on GitHub</a>
-        </li>
-        <li>
-          <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE">License AGPL-3.0</a>
-        </li>
-        <li if="{ props.theme === 'auto' || props.theme === '' }">
-          <material-switch
-            on-change="{ onThemeChange }"
-            checked="{ state.themeSwitch }"
-            track-selected-color="var(--accent-text)"
-            outline-selected-color="var(--accent-text)"
-          >
-            <i slot="thumb-icon" class="material-icons" style="color: white; font-size: 0.75em">wb_sunny</i>
-            <i slot="thumb-selected-icon" class="material-icons" style="color: #79747e; font-size: 0.75em">
-              brightness_2
-            </i>
-          </material-switch>
-        </li>
-      </ul>
-    </material-footer>
-  </footer>
+        <button
+          if="{ props.theme === 'auto' || props.theme === '' }"
+          class="btn btn--icon"
+          onclick="{ onThemeChange }"
+          aria-label="Toggle light/dark theme"
+          title="Toggle light/dark theme"
+          type="button"
+        >
+          <i class="material-icons">{ state.themeSwitch ? 'light_mode' : 'dark_mode' }</i>
+        </button>
+      </header>
+
+      <main class="main-content">
+        <error-page
+          if="{ state.pageError && !Array.isArray(state.pageError.errors) }"
+          code="{ state.pageError.code }"
+          status="{ state.pageError.status }"
+          message="{ state.pageError.message }"
+          url="{ state.pageError.url }"
+        ></error-page>
+        <error-page
+          if="{ state.pageError && Array.isArray(state.pageError.errors) }"
+          each="{ error in (state.pageError && state.pageError.errors) }"
+          code="{ error.code }"
+          detail="{ error.detail }"
+          message="{ error.message }"
+          url="{ state.pageError.url }"
+        ></error-page>
+        <router>
+          <route path="{baseRoute}">
+            <catalog
+              registry-url="{ state.registryUrl }"
+              registry-name="{ state.name }"
+              catalog-elements-limit="{ state.catalogElementsLimit }"
+              on-notify="{ notifySnackbar }"
+              filter-results="{ state.filter }"
+              on-authentication="{ onAuthentication }"
+              show-catalog-nb-tags="{ falsy(props.showCatalogNbTags) }"
+              catalog-default-expanded="{ truthy(props.catalogDefaultExpanded) }"
+              catalog-min-branches="{ props.catalogMinBranches }"
+              catalog-max-branches="{ props.catalogMaxBranches }"
+              is-registry-secured="{ truthy(props.isRegistrySecured) }"
+            ></catalog>
+          </route>
+          <route path="{baseRoute}taglist/(.*)">
+            <tag-list
+              registry-url="{ state.registryUrl }"
+              registry-name="{ state.name }"
+              pull-url="{ state.pullUrl }"
+              image="{ router.getTagListImage() }"
+              show-content-digest="{ truthy(props.showContentDigest) }"
+              show-tag-history="{ falsy(props.showTagHistory) }"
+              is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }"
+              on-notify="{ notifySnackbar }"
+              filter-results="{ state.filter }"
+              on-authentication="{ onAuthentication }"
+              use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
+              taglist-order="{ props.taglistOrder }"
+              tags-per-page="{ props.tagsPerPage }"
+              is-registry-secured="{ truthy(props.isRegistrySecured) }"
+            ></tag-list>
+          </route>
+          <route path="{baseRoute}taghistory/(.*)">
+            <tag-history
+              registry-url="{ state.registryUrl }"
+              registry-name="{ state.name }"
+              pull-url="{ state.pullUrl }"
+              image="{ router.getTagHistoryImage() }"
+              tag="{ router.getTagHistoryTag() }"
+              is-image-remove-activated="{ truthy(props.isImageRemoveActivated) }"
+              on-notify="{ notifySnackbar }"
+              on-authentication="{ onAuthentication }"
+              history-custom-labels="{ stringToArray(props.historyCustomLabels) }"
+              use-control-cache-header="{ truthy(props.useControlCacheHeader) }"
+              is-registry-secured="{ truthy(props.isRegistrySecured) }"
+            ></tag-history>
+          </route>
+        </router>
+      </main>
+
+      <footer class="app-footer">
+        <span>Docker Registry UI { version }</span>
+        <span class="app-footer-links">
+          <a href="https://github.com/Joxit/docker-registry-ui" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/Joxit/docker-registry-ui/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
+        </span>
+      </footer>
+    </div>
+    <app-snackbar message="{ state.snackbarMessage }" is-error="{ state.snackbarIsError }" on-dismiss="{ dismissSnackbar }"></app-snackbar>
+  </div>
   <script>
     import { version, latest } from '../../.version.json';
     import { Router, Route } from '@riotjs/route';
     import Catalog from './catalog/catalog.riot';
     import TagList from './tag-list/tag-list.riot';
     import TagHistory from './tag-history/tag-history.riot';
-    import DialogsMenu from './dialogs/dialogs-menu.riot';
+    import RegistryMenu from './dialogs/registry-menu.riot';
     import SearchBar from './search-bar.riot';
     import ErrorPage from './error-page.riot';
     import VersionNotification from './version-notification.riot';
+    import Breadcrumbs from './breadcrumbs.riot';
     import { stripHttps, getRegistryServers, setRegistryServers, truthy, falsy, stringToArray } from '../scripts/utils';
     import router from '../scripts/router';
     import { loadTheme } from '../scripts/theme';
@@ -160,16 +147,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Catalog,
         TagList,
         TagHistory,
-        DialogsMenu,
+        RegistryMenu,
         SearchBar,
         Router,
         Route,
         ErrorPage,
         VersionNotification,
-      },
-      onUpdated(props, state) {
-        state.snackbarIsError = false;
-        state.snackbarMessage = undefined;
+        Breadcrumbs,
       },
       onBeforeMount(props) {
         if (
@@ -181,7 +165,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         window.onselectstart = (e) => {
           if (e.target && e.target.className && typeof e.target.className.indexOf === 'function') {
-            return !['checkbox', 'checkmark', 'remove-tag'].find((elt) => e.target.className.indexOf(elt) >= 0);
+            return !['checkbox', 'remove-tag'].find((elt) => e.target.className.indexOf(elt) >= 0);
           }
         };
 
@@ -191,6 +175,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           (props.singleRegistry === 'true' ? undefined : router.getUrlQueryParam() || getRegistryServers(0)) ||
           window.location.origin + window.location.pathname.replace(/\/+$/, '');
         this.state.registryUrl = registryUrl.replace(/\/$/, '').replace(/index(\.html?)?$/, '');
+        this.state.title = (props.dockerRegistryUiTitle || '').trim() || 'Docker Registry UI';
         this.state.name = props.name || stripHttps(props.registryUrl);
         this.state.catalogElementsLimit = props.catalogElementsLimit || 1000;
         this.state.pullUrl = this.pullUrl(this.state.registryUrl, props.pullUrl);
@@ -225,11 +210,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           onAuthenticated();
         }
       },
-      onAuthenticationClose() {
-        this.update({
-          authenticationDialogOpened: false,
-        });
-      },
       pullUrl(registryUrl, pullUrl) {
         const url = pullUrl || (registryUrl && registryUrl.length > 0 && registryUrl) || window.location.host;
         return stripHttps(url);
@@ -252,15 +232,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
           });
         }
       },
+      dismissSnackbar() {
+        this.update({
+          snackbarMessage: undefined,
+        });
+      },
       onSearch(value) {
         this.update({
           filter: value,
         });
       },
-      onThemeChange(e) {
-        const theme = e.target.checked ? 'dark' : 'light';
+      onThemeChange() {
+        const theme = this.state.themeSwitch ? 'light' : 'dark';
         loadTheme({ ...this.props, theme }, this.root.parentNode.style);
-        this.update({ themeSwitch: e.target.checked });
+        this.update({ themeSwitch: theme === 'dark' });
       },
       baseRoute: '([^#]*?)/(\\?[^#]*?)?(#!)?(/?)',
       router,
@@ -271,53 +256,4 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
       stringToArray,
     };
   </script>
-  <style>
-    :host {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    :host main {
-      flex-grow: 1;
-      margin: 0.5em 0;
-    }
-    material-navbar {
-      height: 64px;
-      color: var(--header-text);
-      background-color: var(--header-background);
-    }
-
-    material-navbar .menu {
-      display: flex;
-    }
-
-    material-navbar .nav-wrapper .menu {
-      flex-shrink: 1;
-    }
-
-    material-navbar .nav-wrapper .logo {
-      display: flex;
-      align-items: center;
-      flex-direction: row;
-    }
-
-    material-navbar .nav-wrapper .logo a {
-      text-decoration: none;
-    }
-    material-navbar .nav-wrapper .logo a:hover {
-      text-decoration: underline;
-    }
-
-    material-footer {
-      color: var(--footer-neutral-text);
-      background-color: var(--footer-background);
-    }
-    material-footer .material-footer-logo {
-      color: var(--footer-text);
-    }
-
-    material-switch i {
-      user-select: none;
-    }
-  </style>
 </docker-registry-ui>

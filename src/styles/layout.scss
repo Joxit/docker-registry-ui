@@ -1,0 +1,241 @@
+/*
+ * Copyright (C) 2016-2023 Jones Magloire @Joxit
+ *
+ * Application shell layout: topbar, content area, breadcrumbs, footer.
+ */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  flex: 1;
+}
+
+/* ------------------------------------------------------------------ *
+ * Topbar                                                              *
+ * ------------------------------------------------------------------ */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--topbar-height);
+  padding: 0 var(--space-5);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.topbar .topbar-spacer {
+  flex: 1;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.brand .brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background-color: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 0 14px var(--accent-soft);
+  flex-shrink: 0;
+}
+
+.brand .brand-icon .material-icons {
+  font-size: 18px;
+}
+
+.brand .brand-name {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ *
+ * Content                                                             *
+ * ------------------------------------------------------------------ */
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-5);
+}
+
+/* ------------------------------------------------------------------ *
+ * Footer                                                              *
+ * ------------------------------------------------------------------ */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.app-footer a {
+  color: var(--text-secondary);
+}
+
+.app-footer a:hover {
+  color: var(--accent);
+}
+
+.app-footer-links {
+  display: inline-flex;
+  gap: var(--space-4);
+}
+
+/* ------------------------------------------------------------------ *
+ * Breadcrumbs                                                         *
+ * ------------------------------------------------------------------ */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.breadcrumbs ol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.breadcrumbs li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-lg);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.breadcrumbs li a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 2px 4px;
+}
+
+.breadcrumbs li a:hover {
+  color: var(--accent);
+  background-color: var(--surface-muted);
+  text-decoration: none;
+}
+
+.breadcrumbs li.separator {
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.breadcrumbs li[aria-current='page'] span {
+  color: var(--text-primary);
+  font-weight: 600;
+  max-width: 16em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.breadcrumbs li .material-icons {
+  font-size: 16px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Search in the topbar                                                *
+ * ------------------------------------------------------------------ */
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.search-field .text-field {
+  width: 200px;
+  background-color: var(--surface-muted);
+  border-color: transparent;
+  transition:
+    width var(--dur-normal) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.search-field .text-field:focus-within {
+  background-color: var(--surface);
+  border-color: var(--accent);
+}
+
+.search-field .search-toggle {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive                                                          *
+ * ------------------------------------------------------------------ */
+@media screen and (max-width: 900px) {
+  .brand .brand-name {
+    display: none;
+  }
+
+  .breadcrumbs li:not([aria-current='page']):not(:first-child) {
+    display: none;
+  }
+
+  .search-field .search-toggle {
+    display: inline-flex;
+  }
+
+  .search-field .text-field {
+    display: none;
+  }
+
+  .search-field.is-expanded {
+    position: absolute;
+    right: var(--space-3);
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    z-index: 35;
+  }
+
+  .search-field.is-expanded .text-field {
+    display: flex;
+    width: 60vw;
+  }
+
+  .main-content {
+    padding: var(--space-4);
+  }
+}

@@ -1,0 +1,47 @@
+<app-checkbox>
+  <label class="checkbox { state.indeterminate ? 'is-indeterminate' : '' }">
+    <input
+      type="checkbox"
+      checked="{ props.checked }"
+      disabled="{ props.disabled }"
+      onchange="{ onChange }"
+      aria-label="{ props.ariaLabel }"
+    />
+    <span class="checkbox-box">
+      <i class="material-icons">{ state.indeterminate ? 'remove' : 'check' }</i>
+    </span>
+  </label>
+  <script>
+    export default {
+      onBeforeMount(props, state) {
+        this.sync(props, state);
+      },
+      onBeforeUpdate(props, state) {
+        this.sync(props, state);
+      },
+      onMounted() {
+        this.syncNode();
+      },
+      onUpdated() {
+        this.syncNode();
+      },
+      // Derived before the render so the current pass picks it up.
+      sync(props, state) {
+        state.indeterminate = Boolean(props.indeterminate);
+      },
+      // `indeterminate` has no HTML attribute; it only exists as a DOM
+      // property, so it has to be assigned once the node is rendered.
+      syncNode() {
+        const input = this.$('input');
+        if (input) {
+          input.indeterminate = this.state.indeterminate;
+        }
+      },
+      onChange(event) {
+        if (this.props.onChange) {
+          this.props.onChange(event);
+        }
+      },
+    };
+  </script>
+</app-checkbox>

@@ -15,54 +15,51 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 <tag-list>
-  <material-card class="header">
-    <div class="material-card-title-action">
-      <material-button
-        text-color="var(--neutral-text)"
-        color="inherit"
-        waves-color="var(--hover-background)"
-        waves-center="true"
-        href="{ router.home() }"
-        icon
-      >
-        <i class="material-icons">arrow_back</i>
-      </material-button>
-      <h2>
-        Tags of { props.image }
-        <div class="source-hint">Sourced from { state.registryName + '/' + props.image }</div>
-        <div class="item-count">{ state.tags.length } tags</div>
-      </h2>
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">
+          Tags
+          <span class="panel-subtitle">of { props.image }</span>
+        </h2>
+        <p class="source-hint">Sourced from { state.registryName + '/' + props.image }</p>
+      </div>
+      <span class="badge badge--accent">{ state.tags.length } tags</span>
     </div>
-  </material-card>
-
-  <div if="{ !state.loadend }" class="spinner-wrapper">
-    <material-spinner></material-spinner>
   </div>
 
-  <pagination
-    pages="{ getPageLabels(state.page, getNumPages(state.tags, props.tagsPerPage)) }"
-    onPageUpdate="{onPageUpdate}"
-  ></pagination>
+  <div class="panel" if="{ !state.loadend }">
+    <div class="skeleton-row" each="{ i in skeletonRows }">
+      <span class="skeleton skeleton-line { i % 3 === 0 ? 'wide' : '' }"></span>
+      <span class="skeleton skeleton-line short"></span>
+    </div>
+  </div>
 
-  <tag-table
-    if="{ state.loadend }"
-    tags="{state.tags}"
-    asc="{state.asc}"
-    page="{ state.page }"
-    show-content-digest="{props.showContentDigest}"
-    show-tag-history="{props.showTagHistory}"
-    is-image-remove-activated="{props.isImageRemoveActivated}"
-    onReverseOrder="{ onReverseOrder }"
-    registry-url="{ props.registryUrl }"
-    pull-url="{ props.pullUrl }"
-    on-notify="{ props.onNotify }"
-    filter-results="{ props.filterResults }"
-    on-authentication="{ props.onAuthentication }"
-    tags-per-page="{ props.tagsPerPage }"
-    is-registry-secured="{ props.isRegistrySecured }"
-    on-image-deleted="{ () => state.reload() }"
-  >
-  </tag-table>
+  <div if="{ state.loadend && !hasVisibleTags() }" class="empty-state">
+    <span class="empty-icon"><i class="material-icons">search_off</i></span>
+    <h3>No tags found</h3>
+    <p>This repository has no tags, or no tag matches the current search.</p>
+  </div>
+
+  <div class="table-wrap" if="{ state.loadend }">
+    <tag-table
+      tags="{state.tags}"
+      asc="{state.asc}"
+      page="{ state.page }"
+      show-content-digest="{props.showContentDigest}"
+      show-tag-history="{props.showTagHistory}"
+      is-image-remove-activated="{props.isImageRemoveActivated}"
+      onReverseOrder="{ onReverseOrder }"
+      registry-url="{ props.registryUrl }"
+      pull-url="{ props.pullUrl }"
+      on-notify="{ props.onNotify }"
+      filter-results="{ props.filterResults }"
+      on-authentication="{ props.onAuthentication }"
+      tags-per-page="{ props.tagsPerPage }"
+      is-registry-secured="{ props.isRegistrySecured }"
+      on-image-deleted="{ () => state.reload() }"
+    ></tag-table>
+  </div>
 
   <pagination
     pages="{ getPageLabels(state.page, getNumPages(state.tags, props.tagsPerPage)) }"
@@ -72,7 +69,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <script>
     import { Http } from '../../scripts/http';
     import { DockerImage } from '../../scripts/docker-image';
-    import { getNumPages, getPageLabels } from '../../scripts/utils';
+    import { getNumPages, getPageLabels, getPage } from '../../scripts/utils';
+    import { matchSearch } from '../search-bar.riot';
     import Pagination from './pagination.riot';
     import TagTable from './tag-table.riot';
     import router from '../../scripts/router';
@@ -83,6 +81,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         Pagination,
         TagTable,
       },
+      skeletonRows: [0, 1, 2, 3, 4, 5, 6, 7],
       onBeforeMount(props) {
         this.state = {
           registryName: props.registryName,
@@ -194,9 +193,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         }
         this.update();
       },
+      hasVisibleTags() {
+        const page = getPage(this.state.tags, this.state.page, this.props.tagsPerPage);
+        return page.some((image) => matchSearch(this.props.filterResults, image.tag));
+      },
       getPageLabels,
       getNumPages,
       router,
     };
   </script>
+  <style>
+    :host .source-hint {
+      margin: var(--space-1) 0 0;
+      font-size: var(--fs-md);
+      color: var(--text-muted);
+    }
+
+    :host .table-wrap {
+      margin-top: var(--space-4);
+    }
+  </style>
 </tag-list>

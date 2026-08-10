@@ -1,10 +1,22 @@
 <search-bar>
-  <material-input
-    label="Search in page"
-    text-color="var(--header-text)"
-    label-color="var(--header-accent-text)"
-    color="var(--header-accent-text)"
-  ></material-input>
+  <div class="search-field { state.expanded ? 'is-expanded' : '' }">
+    <div class="text-field">
+      <span class="field-icon"><i class="material-icons">search</i></span>
+      <input type="text" placeholder="Search in page" aria-label="Search in page" />
+      <button
+        if="{ state.value }"
+        class="btn btn--icon btn--sm"
+        onclick="{ clear }"
+        aria-label="Clear search"
+        type="button"
+      >
+        <i class="material-icons">close</i>
+      </button>
+    </div>
+    <button class="btn btn--icon search-toggle" onclick="{ toggle }" aria-label="Search" type="button">
+      <i class="material-icons">search</i>
+    </button>
+  </div>
   <script>
     import { router } from '@riotjs/route';
 
@@ -13,10 +25,12 @@
         const input = this.$('input');
         let value = '';
         const notify = () => {
-          if (value !== input.value) {
-            props.onSearch(input.value.toLowerCase());
+          const newValue = input.value;
+          this.update({ value: newValue });
+          if (value !== newValue) {
+            props.onSearch(newValue.toLowerCase());
           }
-          value = input.value;
+          value = newValue;
         };
         input.addEventListener('keyup', notify);
         router.on.value(() => {
@@ -31,10 +45,30 @@
               return true;
             } else {
               e.preventDefault();
+              this.update({ expanded: true });
               input.focus();
             }
           }
         });
+      },
+      clear() {
+        const input = this.$('input');
+        if (input) {
+          input.value = '';
+          this.update({ value: '' });
+          this.props.onSearch('');
+        }
+      },
+      toggle() {
+        // `update` merges into `this.state` synchronously, so `state.expanded`
+        // already holds the new value here.
+        this.update({ expanded: !this.state.expanded });
+        if (this.state.expanded) {
+          const input = this.$('input');
+          if (input) {
+            input.focus();
+          }
+        }
       },
     };
 
@@ -43,14 +77,50 @@
     }
   </script>
   <style>
-    :host material-input {
-      line-height: initial;
-      min-width: 5em;
+    :host .search-field {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
     }
 
-    @media screen and (max-width: 400px) {
-      :host material-input {
+    :host .search-field .text-field {
+      width: 220px;
+      transition: width var(--dur-normal) var(--ease-out);
+    }
+
+    :host .text-field .btn--icon {
+      margin-right: 2px;
+      width: 26px;
+      min-width: 26px;
+      min-height: 26px;
+      padding: 0;
+    }
+
+    :host .search-toggle {
+      display: none;
+    }
+
+    @media screen and (max-width: 900px) {
+      :host .search-toggle {
+        display: inline-flex;
+      }
+
+      :host .search-field .text-field {
         display: none;
+      }
+
+      :host .search-field.is-expanded {
+        position: absolute;
+        right: var(--space-3);
+        top: 0;
+        bottom: 0;
+        align-items: center;
+        z-index: 35;
+      }
+
+      :host .search-field.is-expanded .text-field {
+        display: flex;
+        width: 60vw;
       }
     }
   </style>

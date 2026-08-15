@@ -1,0 +1,37 @@
+version: '3.3'
+services:
+  registry:
+    image: registry:2
+    networks: [traefik-public]
+    volumes:
+      - <</PATH/TO/YOUR/REGISTRY/STORAGE>>:/var/lib/registry     # !!!!CHANGEME!!!! (REQUIRED)
+      - <</PATH/TO/YOUR/HTTPASSWD>>:/auth/.htpasswd:ro  # !!!!CHANGEME!!!! (REQUIRED)
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/.htpasswd
+      REGISTRY_STORAGE_DELETE_ENABLED: "no"
+      REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR: redis # OPTIONAL (see docker-compose-redis.yml) remove if not needed
+      REGISTRY_REDIS_ADDR: redis:6379              # OPTIONAL remove if not needed 
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.registry.rule=Host(`my-registry.example.com`) # !!!!CHANGEME!!!! (REQUIRED)
+        - traefik.http.routers.registry.entrypoints=https
+        - traefik.http.routers.registry.tls=true
+        - traefik.http.routers.registry.tls.certresolver=le
+        - traefik.http.services.registry.loadbalancer.server.port=5000
+        - traefik.http.services.registry.loadbalancer.passhostheader=true
+        - traefik.http.routers.registry.middlewares=compress@file,large-upload@file,registry-ratelimit@file # # !!!!CHANGEME!!!! (OPTIONAL)
+        # CORS FOR UI 
+        - traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=https://my-registry-ui.example.com # !!!!CHANGEME!!!! (REQUIRED)
+        - traefik.http.middlewares.cors.headers.accesscontrolallowmethods=HEAD,GET,OPTIONS  # ADD DELETE TO SUPPORT IMAGE DELETION
+        - traefik.http.middlewares.cors.headers.accesscontrolallowcredentials=true 
+        - traefik.http.middlewares.cors.headers.accesscontrolallowheaders=Authorization,Accept,Cache-Control
+        - traefik.http.middlewares.cors.headers.accesscontrolexposeheaders=Docker-Content-Digest
+        - traefik.http.routers.registry.middlewares=cors
+networks:
+  traefik-public:
+    external: true

@@ -1,0 +1,17 @@
+services:
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - traefik-public
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 32M
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+
+networks:
+  traefik-public:
+    external: true
